@@ -1,0 +1,39 @@
+!!!
+%html
+  %head
+    %title MBuilder
+    = stylesheet_link_tag    "application", media: "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+%body
+  .navbar.navbar-inverse.navbar-fixed-top
+    .navbar-inner
+      .container-fluid
+        %button.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse", :type => "button"}
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+        %a.brand{:href => root_path} MBuilder
+        - unless @hide_navbar
+          .nav-collapse.collapse
+            - if current_user
+              .btn-group.pull-right.user
+                %a.btn.btn-link{"data-toggle" => "dropdown", href: "#"}
+                  = current_user.email
+                  %i.ic-cog
+                %ul.dropdown-menu
+                  %li= link_to "Sign out", destroy_user_session_path, method: :delete
+
+  .container-fluid
+    - if flash[:notice].present?
+      .alert-container
+        .alert.alert-success
+          %button.close{"data-dismiss" => "alert", "type" => "button"} x
+          = flash[:notice]
+    - if flash[:alert].present?
+      .alert-container
+        .alert.alert-block
+          %button.close{"data-dismiss" => "alert", "type" => "button"} x
+          = flash[:alert]
+
+    = yield

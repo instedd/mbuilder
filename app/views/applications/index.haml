@@ -1,0 +1,16 @@
+%h3 Applications
+
+%div
+  = link_to "Create Application", new_application_path
+
+%br/
+
+%ul
+  - applications.each do |app|
+    %li
+      #{app.name}:
+      = link_to "open", app
+      |
+      = link_to "edit", edit_application_path(app)
+      |
+      = link_to "delete", app, method: :delete, confirm: "Are you sure you want to delete the application '#{app.name}'"
