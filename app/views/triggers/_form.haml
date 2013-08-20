@@ -1,19 +1,41 @@
 %form{ko(submit: :save)}
-  %div
-    %label{for: :name} Name
-    %input{ko(value: :name, valueUpdate: :afterkeydown), type: :text, name: :name, autofocus: true}
+  %div.row-fluid
+    %div.span4
+      %div
+        %label{for: :name} Name
+        %input{ko(value: :name, valueUpdate: :afterkeydown), type: :text, name: :name, autofocus: true}
 
-  /ko with: logic
-  %div
-    %label{for: :message} When a message like this
-    %textarea{ko(value: :message, valueUpdate: :afterkeydown), type: :text, name: :message}
-    %br
-    is received from any phone number
-    %br
-    on any date at any time
-  //ko
+      /ko with: logic
+      %div
+        %label{for: :message} When a message like this
+        %textarea{ko(value: :message, valueUpdate: :afterkeydown), type: :text, name: :message}
+        %br
+        is received from any phone number
+        %br
+        on any date at any time
+      //ko
 
-  %br
+    %div.span8
+      %div
+        %strong Tables
+      = ko_link_to "New table", :newTable
+
+      %div
+        /ko foreach: tables
+        %div.logic-table
+          %input{ko(value: :name, valueUpdate: :afterkeydown, hasfocus: :hasFocus), type: :text}
+
+          %div
+            %strong Fields
+          = ko_link_to "New field", :newField
+
+          %div
+            /ko foreach: fields
+            %input.input-mini{ko(value: :name, valueUpdate: :afterkeydown, hasfocus: :hasFocus), type: :text}
+            %input{ko(value: :value, valueUpdate: :afterkeydown), type: :text}
+            //ko
+        %br
+        //ko
 
   %div
     %button.btn{ko(enable: :canSave)} Save

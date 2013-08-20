@@ -16,3 +16,9 @@
 body {
   padding-top: 60px;
 }
+
+div.logic-table {
+  border: 1px solid gray;
+  padding: 10px;
+  width: 320px;
+}
