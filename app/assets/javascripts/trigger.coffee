@@ -35,8 +35,30 @@
   class Logic
     constructor: (data) ->
       @message = ko.observable(data.message)
+      @actions = ko.observableArray([])
+
       @canSave = ko.computed =>
          $.trim(@message()).length > 0
+
+    phoneNumberDragStart: (model, event) =>
+      event.originalEvent.dataTransfer.setData("pill", "phone_number")
+      true
+
+    dragOverFieldName: (model, event) =>
+      event.originalEvent.preventDefault()
+      true
+
+    dropOverFieldName: (model, event) =>
+      pillName = event.originalEvent.dataTransfer.getData("pill")
+      @actions.push new SelectOrCreate(new PillBinding(pillName), model)
+
+    dragOverFieldValue: (model, event) =>
+      event.originalEvent.preventDefault()
+      true
+
+    dropOverFieldValue: (model, event) =>
+      pillName = event.originalEvent.dataTransfer.getData("pill")
+      @actions.push new StoreValue(new PillBinding(pillName), model)
 
     toJSON: =>
       message: @message()
@@ -48,13 +70,38 @@
       @hasFocus = ko.observable(data.focus)
 
     newField: =>
-      @fields.push new Field(name: "Field #{@fields().length + 1}", focus: true)
+      @fields.push new Field(@, name: "Field #{@fields().length + 1}", focus: true)
 
   class Field
-    constructor: (data) ->
+    constructor: (table, data) ->
+      @table = table
       @name = ko.observable(data.name)
       @value = ko.observable(data.value)
       @hasFocus = ko.observable(data.focus)
+
+  class PillBinding
+    constructor: (name) ->
+      @name = ko.observable(name)
+
+  class SelectOrCreate
+    constructor: (binding, field) ->
+      @kind = 'select_or_create'
+      @binding = ko.observable(binding)
+      @field = ko.observable(field)
+
+      @tableName = ko.computed => @field().table.name()
+      @fieldName = ko.computed => @field().name()
+      @bindingName = ko.computed => @binding().name()
+
+  class StoreValue
+    constructor: (binding, field) ->
+      @kind = 'store_value'
+      @binding = ko.observable(binding)
+      @field = ko.observable(field)
+
+      @tableName = ko.computed => @field().table.name()
+      @fieldName = ko.computed => @field().name()
+      @bindingName = ko.computed => @binding().name()
 
   window.model = new Trigger(triggerData)
   ko.applyBindings window.model

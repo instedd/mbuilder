@@ -1,6 +1,6 @@
 %form{ko(submit: :save)}
   %div.row-fluid
-    %div.span4
+    %div.span6
       %div
         %label{for: :name} Name
         %input{ko(value: :name, valueUpdate: :afterkeydown), type: :text, name: :name, autofocus: true}
@@ -10,12 +10,45 @@
         %label{for: :message} When a message like this
         %textarea{ko(value: :message, valueUpdate: :afterkeydown), type: :text, name: :message}
         %br
-        is received from any phone number
+        is received from any
+        .pill{ko(event: {dragstart: :phoneNumberDragStart}), draggable: 'true'}
+          phone number
         %br
         on any date at any time
+      %br
+
+      /ko if: actions().length > 0
+      %div
+        %strong Actions
+
+        /ko foreach: actions
+        %div.action
+          /ko if: kind == 'select_or_create'
+          Select or create
+          .pill{ko(text: :tableName)}
+          where
+          .pill{ko(text: :tableName)}
+          \.
+          .pill{ko(text: :fieldName)}
+          \=
+          .pill{ko(text: :bindingName)}
+          //ko
+
+          /ko if: kind == 'store_value'
+          Store
+          .pill{ko(text: :bindingName)}
+          as
+          .pill{ko(text: :tableName)}
+          \.
+          .pill{ko(text: :fieldName)}
+          //ko
+        %br
+        //ko
       //ko
 
-    %div.span8
+      //ko
+
+    %div.span6
       %div
         %strong Tables
       = ko_link_to "New table", :newTable
@@ -31,8 +64,8 @@
 
           %div
             /ko foreach: fields
-            %input.input-mini{ko(value: :name, valueUpdate: :afterkeydown, hasfocus: :hasFocus), type: :text}
-            %input{ko(value: :value, valueUpdate: :afterkeydown), type: :text}
+            %input.input-medium{ko(value: :name, valueUpdate: :afterkeydown, hasfocus: :hasFocus, event: {dragover: '$root.logic.dragOverFieldName', drop: '$root.logic.dropOverFieldName'}), type: :text}
+            %input.input-medium{ko(value: :value, valueUpdate: :afterkeydown, event: {dragover: '$root.logic.dragOverFieldValue', drop: '$root.logic.dropOverFieldValue'}), type: :text}
             //ko
         %br
         //ko
