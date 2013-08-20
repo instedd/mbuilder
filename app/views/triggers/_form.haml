@@ -62,11 +62,11 @@
             %strong Fields
           = ko_link_to "New field", :newField
 
+          /ko foreach: fields
           %div
-            /ko foreach: fields
             %input.input-medium{ko(value: :name, valueUpdate: :afterkeydown, hasfocus: :hasFocus, event: {dragover: '$root.logic.dragOverFieldName', drop: '$root.logic.dropOverFieldName'}), type: :text}
             %input.input-medium{ko(value: :value, valueUpdate: :afterkeydown, event: {dragover: '$root.logic.dragOverFieldValue', drop: '$root.logic.dropOverFieldValue'}), type: :text}
-            //ko
+          //ko
         %br
         //ko
 

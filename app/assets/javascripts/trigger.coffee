@@ -65,6 +65,7 @@
 
   class Table
     constructor: (data) ->
+      @guid = data.guid ? window.guid()
       @name = ko.observable(data.name)
       @fields = ko.observableArray([])
       @hasFocus = ko.observable(data.focus)
@@ -75,6 +76,7 @@
   class Field
     constructor: (table, data) ->
       @table = table
+      @guid = data.guid ? window.guid()
       @name = ko.observable(data.name)
       @value = ko.observable(data.value)
       @hasFocus = ko.observable(data.focus)
@@ -105,4 +107,3 @@
 
   window.model = new Trigger(triggerData)
   ko.applyBindings window.model
-
