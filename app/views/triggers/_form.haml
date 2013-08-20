@@ -1,0 +1,12 @@
+= form_for [application, trigger] do |f|
+  - if trigger.errors.present?
+    .alert-container
+      .alert.alert-error
+        %ul
+          - trigger.errors.full_messages.each do |msg|
+            %li= msg
+
+  %div
+    = f.label :name
+    = f.text_field :name, autofocus: true
+  = f.submit class: 'btn'

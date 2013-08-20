@@ -6,11 +6,11 @@
 %br/
 
 %ul
-  - applications.each do |app|
+  - applications.each do |application|
     %li
-      #{app.name}:
-      = link_to "open", app
+      #{application.name}:
+      = link_to "view triggers", application_triggers_path(application)
       |
-      = link_to "edit", edit_application_path(app)
+      = link_to "edit", edit_application_path(application)
       |
-      = link_to "delete", app, method: :delete, confirm: "Are you sure you want to delete the application '#{app.name}'"
+      = link_to "delete", application, method: :delete, confirm: "Are you sure you want to delete the application '#{application.name}'"

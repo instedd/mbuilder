@@ -1,0 +1,15 @@
+%h3 #{application.name}'s triggers
+
+%div
+  = link_to "Create Trigger", new_application_trigger_path(application)
+%br/
+
+%ul
+  - triggers.each do |trigger|
+    %li
+      #{trigger.name}:
+      = link_to "show", application_trigger_path(application, trigger)
+      |
+      = link_to "edit", edit_application_trigger_path(application, trigger)
+      |
+      = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the trigger '#{trigger.name}'"
