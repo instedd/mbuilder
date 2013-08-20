@@ -1,77 +1,78 @@
-%form{ko(submit: :save)}
-  %div.row-fluid
-    %div.span6
-      %div
-        %label{for: :name} Name
-        %input{ko(value: :name, valueUpdate: :afterkeydown), type: :text, name: :name, autofocus: true}
+%div{'ng-app' => 'mbuilder'}
+  - angular_templates "triggers/actions"
 
-      /ko with: logic
-      %div
-        %label{for: :message} When a message like this
-        %textarea{ko(value: :message, valueUpdate: :afterkeydown), type: :text, name: :message}
-        %br
-        is received from any
-        .pill{ko(event: {dragstart: :phoneNumberDragStart}), draggable: 'true'}
-          phone number
-        %br
-        on any date at any time
-      %br
-
-      /ko if: actions().length > 0
-      %div
-        %strong Actions
-
-        /ko foreach: actions
-        %div.action
-          /ko if: kind == 'select_or_create'
-          Select or create
-          .pill{ko(text: :tableName)}
-          where
-          .pill{ko(text: :tableName)}
-          \.
-          .pill{ko(text: :fieldName)}
-          \=
-          .pill{ko(text: :bindingName)}
-          //ko
-
-          /ko if: kind == 'store_value'
-          Store
-          .pill{ko(text: :bindingName)}
-          as
-          .pill{ko(text: :tableName)}
-          \.
-          .pill{ko(text: :fieldName)}
-          //ko
-        %br
-        //ko
-      //ko
-
-      //ko
-
-    %div.span6
-      %div
-        %strong Tables
-      = ko_link_to "New table", :newTable
-
-      %div
-        /ko foreach: tables
-        %div.logic-table
-          %input{ko(value: :name, valueUpdate: :afterkeydown, hasfocus: :hasFocus), type: :text}
+  %form{'ng-controller' => 'EditTriggerController', 'ng-init' => 'tables=[]'}
+    %div.row-fluid
+      %div.span6
+        %div{'ng-controller' => 'TriggerController', 'ng-init' => "name=#{trigger.name.to_json};message=#{trigger.logic.message.to_json}"}
+          %div
+            %label{for: :name} Name
+            %input{'ng-model' => 'name', type: :text, name: :name, autofocus: true}
 
           %div
-            %strong Fields
-          = ko_link_to "New field", :newField
+            %label{for: :message} When a message like this
+            %textarea{'ng-model' => 'message', name: :message}
+            %br
+            is received from any
+            .pill{draggable: 'true', dragstart: 'phoneNumberDragStart($event)'}
+              phone number
+            %br
+            on any date at any time
+          %br
 
-          /ko foreach: fields
-          %div
-            %input.input-medium{ko(value: :name, valueUpdate: :afterkeydown, hasfocus: :hasFocus, event: {dragover: '$root.logic.dragOverFieldName', drop: '$root.logic.dropOverFieldName'}), type: :text}
-            %input.input-medium{ko(value: :value, valueUpdate: :afterkeydown, event: {dragover: '$root.logic.dragOverFieldValue', drop: '$root.logic.dropOverFieldValue'}), type: :text}
-          //ko
-        %br
-        //ko
+        %div{'ng-controller' => 'ActionsController', 'ng-init' => 'actions=[]'}
+          %div{'ng-repeat' => 'action in actions'}
+            %div(ng-include src='actionTemplateFor(action.kind)')
 
-  %div
-    %button.btn{ko(enable: :canSave)} Save
+      /   /ko if: actions().length > 0
+      /   %div
+      /     %strong Actions
 
-:javascript
-  initTrigger(#{trigger.to_json});
+      /     /ko foreach: actions
+      /     %div.action
+      /       /ko if: kind == 'select_or_create'
+      /       Select or create
+      /       .pill{ko(text: :tableName)}
+      /       where
+      /       .pill{ko(text: :tableName)}
+      /       \.
+      /       .pill{ko(text: :fieldName)}
+      /       \=
+      /       .pill{ko(text: :bindingName)}
+      /       //ko
+
+      /       /ko if: kind == 'store_value'
+      /       Store
+      /       .pill{ko(text: :bindingName)}
+      /       as
+      /       .pill{ko(text: :tableName)}
+      /       \.
+      /       .pill{ko(text: :fieldName)}
+      /       //ko
+      /     %br
+      /     //ko
+      /   //ko
+
+      /   //ko
+
+      %div.span6{'ng-controller' => 'TablesController'}
+        %div
+          %strong Tables
+        %a{'ng-click' => 'newTable()', href: 'javascript:'} New table
+
+        %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
+          %div.logic-table
+            %input{'ng-model' => 'table.name', type: :text}
+
+            %div
+              %strong Fields
+            %a{'ng-click' => 'newField()', href: 'javascript:'} New field
+
+            %div{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
+              %div
+                %input.input-medium{'ng-model' => 'field.name', dragover: 'dragOverName($event)', drop: 'dropOverName($event)', type: :text}
+                %input.input-medium{type: :text}
+          %br
+
+  // :javascript
+  //   initTrigger(#{trigger.to_json});

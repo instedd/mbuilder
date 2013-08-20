@@ -6,7 +6,8 @@ gem 'mysql2'
 gem 'jquery-rails'
 gem 'devise'
 gem 'haml-rails'
-gem 'knockoutjs-rails'
+gem 'angularjs-rails'
+gem 'underscore-rails'
 gem 'decent_exposure'
 
 group :assets do

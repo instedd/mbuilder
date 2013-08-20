@@ -12,7 +12,7 @@ class Trigger < ActiveRecord::Base
     {
       id: id,
       name: name,
-      logic: logic.as_json,
+      message: logic.message,
       application_id: application_id,
     }
   end
