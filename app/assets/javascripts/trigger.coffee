@@ -7,7 +7,7 @@
       @logic = new Logic(triggerData.logic ? {})
 
       @canSave = ko.computed =>
-        $.trim(@name()).length > 0 && $.trim(@logic.incomingMessage()).length > 0
+        $.trim(@name()).length > 0 && @logic.canSave()
 
     save: =>
       return unless @canSave()
@@ -30,10 +30,12 @@
 
   class Logic
     constructor: (logicData) ->
-      @incomingMessage = ko.observable(logicData.incoming_message)
+      @message = ko.observable(logicData.message)
+      @canSave = ko.computed =>
+         $.trim(@message()).length > 0
 
     toJSON: =>
-      incoming_message: @incomingMessage()
+      message: @message()
 
   window.model = new Trigger(triggerData)
   ko.applyBindings window.model

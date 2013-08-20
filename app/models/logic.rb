@@ -1,13 +1,13 @@
 class Logic
-  attr_accessor :incoming_message
+  attr_accessor :message
 
   def initialize(data = {})
-    @incoming_message = data['incoming_message']
+    @message = data['message']
   end
 
   def as_json(options = {})
     {
-      incoming_message: incoming_message,
+      message: message,
     }
   end
 end
