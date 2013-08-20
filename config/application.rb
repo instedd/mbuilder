@@ -61,5 +61,21 @@ module Mbuilder
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # See http://alisdair.mcdiarmid.org/2013/02/02/fixing-rails-auto-loading-for-serialized-objects.html
+
+    # Eager load all value objects, as they may be instantiated from
+    # YAML before the symbol is referenced
+    config.before_initialize do |app|
+      app.config.paths.add 'app/models', :eager_load => true
+    end
+
+    # Reload cached/serialized classes before every request (in development
+    # mode) or on startup (in production mode)
+    config.to_prepare do
+      Dir[ File.expand_path(Rails.root.join("app/models/**/*.rb")) ].each do |file|
+        require_dependency file
+      end
+    end
   end
 end
