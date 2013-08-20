@@ -1,12 +1,22 @@
-= form_for [application, trigger] do |f|
-  - if trigger.errors.present?
-    .alert-container
-      .alert.alert-error
-        %ul
-          - trigger.errors.full_messages.each do |msg|
-            %li= msg
+%form{ko(submit: :save)}
+  %div
+    %label{for: :name} Name
+    %input{ko(value: :name, valueUpdate: :afterkeydown), type: :text, name: :name, autofocus: true}
+
+  /ko with: logic
+  %div
+    %label{for: :incomingMessage} When a message like this
+    %textarea{ko(value: :incomingMessage, valueUpdate: :afterkeydown), type: :text, name: :incomingMessage}
+    %br
+    is received from any phone number
+    %br
+    on any date at any time
+  //ko
+
+  %br
 
   %div
-    = f.label :name
-    = f.text_field :name, autofocus: true
-  = f.submit class: 'btn'
+    %button.btn{ko(enable: :canSave)} Save
+
+:javascript
+  initTrigger(#{trigger.to_json});

@@ -1,3 +1,4 @@
-%h3 New #{application.name}'s trigger
+%h3= link_to application.name, application_triggers_path(application)
+%h4 New trigger
 
 = render 'form'

@@ -1,3 +1,4 @@
-%h3 Edit #{trigger.name}
+%h3= link_to application.name, application_triggers_path(application)
+%h4 Edit trigger #{trigger.name}
 
 = render 'form'
