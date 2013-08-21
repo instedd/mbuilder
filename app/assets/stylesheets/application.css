@@ -17,6 +17,14 @@ body {
   padding-top: 60px;
 }
 
+.message-area {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid gray;
+  padding: 10px;
+}
+
 .logic-table {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -41,6 +49,10 @@ body {
   background: #ddd;
   padding-left: 4px;
   padding-right: 4px;
+  display: inline-block;
+}
+
+.text {
   display: inline-block;
 }
 
