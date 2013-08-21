@@ -24,7 +24,7 @@ mbuilder.controller 'EditTriggerController', ['$scope', ($scope) ->
     if pill.kind == 'implicit'
       pill.name
     else
-      pill = $scope.pieces[pill.index]
+      pill = _.find $scope.pieces, (piece) -> piece.guid == pill.guid
       pill.value
 ]
 
@@ -38,7 +38,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
   addPiece = (pieces, kind, value) ->
     return if $.trim(value).length == 0
 
-    pieces.push {kind: kind, value: value, index: pieces.length}
+    pieces.push {kind: kind, value: value, index: pieces.length, guid: guid()}
 
   addSelection = (pieces, text, range) ->
     if range.startOffset > 0
@@ -127,7 +127,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
     true
 
   $scope.dragPill = (piece, event) ->
-    draggedPill = {kind: "piece", index: piece.index}
+    draggedPill = {kind: "piece", guid: piece.guid}
     event.dataTransfer.setData("Text", piece.value)
     true
 ]
