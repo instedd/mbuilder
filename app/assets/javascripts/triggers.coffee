@@ -41,13 +41,22 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
     pieces.push {kind: kind, value: value, index: pieces.length, guid: guid()}
 
   addSelection = (pieces, text, range) ->
-    if range.startOffset > 0
-      addPiece pieces, 'text', text.substring(0, range.startOffset)
+    start = range.startOffset
+    end = range.endOffset
 
-    addPiece pieces, 'pill', text.substring(range.startOffset, range.endOffset)
+    while start > 0 && text[start] != ' '
+      start -= 1
 
-    if range.endOffset < text.length
-      addPiece pieces, 'text', text.substring(range.endOffset)
+    while end < text.length && text[end] != ' '
+      end += 1
+
+    if start > 0
+      addPiece pieces, 'text', text.substring(0, start)
+
+    addPiece pieces, 'pill', text.substring(start, end)
+
+    if end < text.length
+      addPiece pieces, 'text', text.substring(end)
 
   samePieces = (pieces1, pieces2) ->
     return false if pieces1.length != pieces2.length
