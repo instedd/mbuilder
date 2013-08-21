@@ -43,14 +43,28 @@ mbuilder.controller 'FieldController', ['$scope', ($scope) ->
 
   $scope.dropOverName = (event) ->
     pillName = event.dataTransfer.getData("pill")
-
     $scope.$emit 'pillNameOverFieldName', pill: pillName, field: $scope.field, table: $scope.table
+
+  $scope.dragOverValue = (event) ->
+    event.preventDefault()
+    true
+
+  $scope.dropOverValue = (event) ->
+    pillName = event.dataTransfer.getData("pill")
+    $scope.$emit 'pillNameOverFieldValue', pill: pillName, field: $scope.field, table: $scope.table
 ]
 
 mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $rootScope) ->
   $rootScope.$on 'pillNameOverFieldName', (event, args) ->
     $scope.actions.push
-      kind: 'select_or_create'
+      kind: 'select_or_create_table'
+      pill: args.pill
+      table: args.table.guid
+      field: args.field.guid
+
+  $rootScope.$on 'pillNameOverFieldValue', (event, args) ->
+    $scope.actions.push
+      kind: 'store_value'
       pill: args.pill
       table: args.table.guid
       field: args.field.guid

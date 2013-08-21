@@ -24,37 +24,6 @@
           %div{'ng-repeat' => 'action in actions'}
             %div(ng-include src='actionTemplateFor(action.kind)')
 
-      /   /ko if: actions().length > 0
-      /   %div
-      /     %strong Actions
-
-      /     /ko foreach: actions
-      /     %div.action
-      /       /ko if: kind == 'select_or_create'
-      /       Select or create
-      /       .pill{ko(text: :tableName)}
-      /       where
-      /       .pill{ko(text: :tableName)}
-      /       \.
-      /       .pill{ko(text: :fieldName)}
-      /       \=
-      /       .pill{ko(text: :bindingName)}
-      /       //ko
-
-      /       /ko if: kind == 'store_value'
-      /       Store
-      /       .pill{ko(text: :bindingName)}
-      /       as
-      /       .pill{ko(text: :tableName)}
-      /       \.
-      /       .pill{ko(text: :fieldName)}
-      /       //ko
-      /     %br
-      /     //ko
-      /   //ko
-
-      /   //ko
-
       %div.span6{'ng-controller' => 'TablesController'}
         %div
           %strong Tables
@@ -71,8 +40,5 @@
             %div{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
               %div
                 %input.input-medium{'ng-model' => 'field.name', dragover: 'dragOverName($event)', drop: 'dropOverName($event)', type: :text}
-                %input.input-medium{type: :text}
+                %input.input-medium{dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)', type: :text}
           %br
-
-  // :javascript
-  //   initTrigger(#{trigger.to_json});
