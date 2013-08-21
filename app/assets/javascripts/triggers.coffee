@@ -61,12 +61,18 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
 
     true
 
+  # Parse message pieces from html
   $scope.parseMessage = (event) ->
     sel = window.getSelection()
     if sel.rangeCount > 0
       range = sel.getRangeAt(0)
       if range.startOffset != range.endOffset
         selNode = sel.baseNode
+
+    # We need to keep the current pill's guids.
+    # This assumes no pieces are removed after text editions.
+    currentPills = _.select $scope.pieces, (piece) -> piece.kind == 'pill'
+    currentPillIndex = 0
 
     pieces = []
     target = event.originalEvent.currentTarget
@@ -88,7 +94,11 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
           for child in children
             if child.localName == "div"
               if $(child).hasClass('pill')
-                addPiece pieces, 'pill', child.innerText
+                # Here we found an existing pill, so we reuse it
+                currentPill = currentPills[currentPillIndex]
+                currentPill.index = pieces.length
+                currentPillIndex += 1
+                pieces.push currentPill
               else if $(child).hasClass('text')
                 content = child.childNodes[0]
                 if content == selNode
@@ -100,8 +110,8 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
             else
               addPiece pieces, 'text', child.textContent
 
+    # Replace $scope.pieces' contents only if it changed
     unless samePieces($scope.pieces, pieces)
-      # Replace $scope.pieces' contents
       args = [0, $scope.pieces.length].concat(pieces)
       Array.prototype.splice.apply($scope.pieces, args)
 
