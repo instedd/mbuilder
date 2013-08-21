@@ -11,7 +11,7 @@
 
         %div
           %label{for: :message} When a message like this
-          .message-area{contenteditable: '{{contenteditable}}', 'ng-blur' => 'makeNotEditable($event)', 'ng-mouseup' => 'parseMessage($event)'}
+          .message-area{contenteditable: '{{contenteditable}}', 'ng-blur' => 'makeNotEditable($event)', 'ng-mouseup' => 'parseMessage($event)', 'ng-keydown' => 'handleMessageKey($event)'}
             %span.pill-container{'ng-repeat' => 'piece in pieces', 'ng-include' => true, 'src' => 'pieceTemplateFor(piece.kind)'}<>
 
           is received from any

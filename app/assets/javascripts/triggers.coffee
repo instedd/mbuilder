@@ -1,4 +1,4 @@
-mbuilder = angular.module('mbuilder', ['drag-and-drop', 'focus-and-blur']);
+mbuilder = angular.module('mbuilder', ['drag-and-drop', 'focus-and-blur', 'keys']);
 
 draggedPill = null
 
@@ -114,6 +114,17 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
 
   $scope.makeNotEditable = (event) ->
     $scope.contenteditable = 'false'
+
+  $scope.handleMessageKey = (event) ->
+    if event.keyCode == 8 # delete
+      sel = window.getSelection()
+      if sel.rangeCount > 0
+        range = sel.getRangeAt(0)
+        if range.startOffset == 0 || range.commonAncestorContainer.nodeName != "#text"
+          event.preventDefault()
+          return false
+
+    true
 
   $scope.dragPill = (piece, event) ->
     draggedPill = {kind: "piece", index: piece.index}
