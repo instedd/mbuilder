@@ -22,7 +22,8 @@
 
         %div{'ng-controller' => 'ActionsController', 'ng-init' => 'actions=[]'}
           %div{'ng-repeat' => 'action in actions'}
-            %div(ng-include src='actionTemplateFor(action.kind)')
+            %div.action(ng-include src='actionTemplateFor(action.kind)')
+            %br
 
       %div.span6{'ng-controller' => 'TablesController'}
         %div
@@ -40,5 +41,5 @@
             %div{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
               %div
                 %input.input-medium{'ng-model' => 'field.name', dragover: 'dragOverName($event)', drop: 'dropOverName($event)', type: :text}
-                %input.input-medium{dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)', type: :text}
+                %input.input-large{dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)', type: :text, readonly: true, value: 'New value'}
           %br
