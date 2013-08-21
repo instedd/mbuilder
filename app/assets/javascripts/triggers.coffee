@@ -1,5 +1,7 @@
 mbuilder = angular.module('mbuilder', ['drag-and-drop', 'focus-and-blur']);
 
+draggedPill = null
+
 mbuilder.controller 'EditTriggerController', ['$scope', ($scope) ->
   $scope.actionTemplateFor = (kind) ->
     "#{kind}_action"
@@ -17,17 +19,21 @@ mbuilder.controller 'EditTriggerController', ['$scope', ($scope) ->
     table = $scope.lookupTable(tableGuid)
     field = _.find table.fields, (field) -> field.guid == fieldGuid
     field.name
+
+  $scope.lookupPillName = (pill) ->
+    if pill.kind == 'implicit'
+      pill.name
+    else
+      pill = $scope.pieces[pill.index]
+      pill.value
 ]
 
 mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
   $scope.contenteditable = 'false'
-  $scope.pieces = []
 
   $scope.phoneNumberDragStart = (event) ->
-    event.dataTransfer.setData("pill", "phone number")
-
-  $scope.makeContentEditable = (event) ->
-    $scope.contenteditable = 'true'
+    draggedPill = {kind: "implicit", name: "phone number"}
+    event.dataTransfer.setData("Text", "phone number")
 
   addPiece = (pieces, kind, value) ->
     return if $.trim(value).length == 0
@@ -95,7 +101,9 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
               addPiece pieces, 'text', child.textContent
 
     unless samePieces($scope.pieces, pieces)
-      $scope.pieces = pieces
+      # Replace $scope.pieces' contents
+      args = [0, $scope.pieces.length].concat(pieces)
+      Array.prototype.splice.apply($scope.pieces, args)
 
     if selNode
       $scope.contenteditable = 'false'
@@ -107,8 +115,10 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
   $scope.makeNotEditable = (event) ->
     $scope.contenteditable = 'false'
 
-  $scope.dragPill = (event) ->
-    event.dataTransfer.setData("piece", 1)
+  $scope.dragPill = (piece, event) ->
+    draggedPill = {kind: "piece", index: piece.index}
+    event.dataTransfer.setData("Text", piece.value)
+    true
 ]
 
 mbuilder.controller 'TablesController', ['$scope', ($scope) ->
@@ -132,27 +142,25 @@ mbuilder.controller 'FieldController', ['$scope', ($scope) ->
     true
 
   $scope.dropOverName = (event) ->
-    pillName = event.dataTransfer.getData("pill")
-    $scope.$emit 'pillNameOverFieldName', pill: pillName, field: $scope.field, table: $scope.table
+    $scope.$emit 'pillOverFieldName', pill: draggedPill, field: $scope.field, table: $scope.table
 
   $scope.dragOverValue = (event) ->
     event.preventDefault()
     true
 
   $scope.dropOverValue = (event) ->
-    pillName = event.dataTransfer.getData("pill")
-    $scope.$emit 'pillNameOverFieldValue', pill: pillName, field: $scope.field, table: $scope.table
+    $scope.$emit 'pillOverFieldValue', pill: draggedPill, field: $scope.field, table: $scope.table
 ]
 
 mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $rootScope) ->
-  $rootScope.$on 'pillNameOverFieldName', (event, args) ->
+  $rootScope.$on 'pillOverFieldName', (event, args) ->
     $scope.actions.push
       kind: 'select_or_create_table'
       pill: args.pill
       table: args.table.guid
       field: args.field.guid
 
-  $rootScope.$on 'pillNameOverFieldValue', (event, args) ->
+  $rootScope.$on 'pillOverFieldValue', (event, args) ->
     $scope.actions.push
       kind: 'store_value'
       pill: args.pill

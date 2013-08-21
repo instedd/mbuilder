@@ -1,4 +1,6 @@
 class TriggersController < ApplicationController
+  before_filter :authenticate_user!
+
   expose(:application) { current_user.applications.find params[:application_id] }
   expose(:triggers) { application.triggers }
   expose(:trigger)
