@@ -189,16 +189,21 @@ mbuilder.controller 'FieldController', ['$scope', ($scope) ->
 ]
 
 mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $rootScope) ->
+  tableIsSelected = (tableGuid) ->
+    _.any $scope.actions, (action) ->
+      (action.kind == 'select_table' || action.kind == 'create_table') && action.table == tableGuid
+
   $rootScope.$on 'pillOverFieldName', (event, args) ->
     $scope.actions.push
-      kind: 'select_or_create_table'
+      kind: 'select_table'
       pill: args.pill
       table: args.table.guid
       field: args.field.guid
 
   $rootScope.$on 'pillOverFieldValue', (event, args) ->
+    kind = if tableIsSelected(args.table.guid) then 'store_value' else 'create_table'
     $scope.actions.push
-      kind: 'store_value'
+      kind: kind
       pill: args.pill
       table: args.table.guid
       field: args.field.guid
