@@ -9,7 +9,9 @@
   - applications.each do |application|
     %li
       #{application.name}:
-      = link_to "view triggers", application_triggers_path(application)
+      = link_to "channels", application_channels_path(application)
+      |
+      = link_to "triggers", application_triggers_path(application)
       |
       = link_to "edit", edit_application_path(application)
       |

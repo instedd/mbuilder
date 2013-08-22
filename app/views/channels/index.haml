@@ -1,0 +1,16 @@
+%h3= link_to application.name, application_channels_path(application)
+%h4 Channels
+
+%div
+  = form_tag(new_application_channel_path, method: :get) do
+    Create new
+    = select_tag :kind, pigeon_nuntium_channel_kinds_for_select
+    = submit_tag "Go"
+
+%ul
+  - channels.each do |channel|
+    %li
+      #{channel.name}:
+      = link_to "edit", edit_application_channel_path(application, channel)
+      |
+      = link_to "delete", [application, channel], method: :delete, confirm: "Are you sure you want to delete the channel '#{channel.name}'"

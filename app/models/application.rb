@@ -3,6 +3,7 @@ class Application < ActiveRecord::Base
 
   belongs_to :user
   has_many :triggers
+  has_many :channels
 
   validates_presence_of :user
   validates_presence_of :name

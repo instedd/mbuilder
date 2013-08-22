@@ -1,0 +1,23 @@
+= form_for [application, channel] do |f|
+  - if channel.errors.present?
+    .alert-container
+      .alert.alert-error
+        %ul
+          - channel.errors.full_messages.each do |msg|
+            %li= msg
+  - if @pigeon_channel.errors.present?
+    .alert-container
+      .alert.alert-error
+        %ul
+          - @pigeon_channel.errors.full_messages.each do |msg|
+            %li= msg
+
+  = hidden_field_tag :kind, params[:kind]
+
+  %div
+    = f.label :name
+    = f.text_field :name, autofocus: true
+
+  = pigeon_render_channel(@pigeon_channel, :channel_data).gsub("<br />", "").html_safe
+
+  = f.submit class: 'btn'
