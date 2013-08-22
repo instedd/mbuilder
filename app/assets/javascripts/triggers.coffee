@@ -100,7 +100,10 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
 
         if $(node).hasClass('pill-container')
           children = node.childNodes
-          for child in children
+
+          j = 0
+          while j < children.length
+            child = children[j]
             if child.localName == "div"
               if $(child).hasClass('pill')
                 # Here we found an existing pill, so we reuse it
@@ -114,10 +117,13 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
                   addSelection pieces, content.textContent, range
                 else
                   addPiece pieces, 'text', content.textContent
+              j += 1
             else if child == selNode
               addSelection pieces, child.textContent, range
+              node.removeChild(child)
             else
               addPiece pieces, 'text', child.textContent
+              node.removeChild(child)
 
     # Replace $scope.pieces' contents only if it changed
     unless samePieces($scope.pieces, pieces)
