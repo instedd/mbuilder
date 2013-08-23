@@ -44,6 +44,6 @@
               %div
                 %input.input-medium{'ng-model' => 'field.name', dragover: 'dragOverName($event)', drop: 'dropOverName($event)', type: :text}
                 %input.input-large{dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)', type: :text, readonly: true, value: 'New value'}
-            %br
+          %br
 
     %button.btn{'ng-click' => 'save()'} Save
