@@ -8,12 +8,8 @@ class Trigger < ActiveRecord::Base
 
   serialize :logic
 
-  def as_json(options = {})
-    {
-      id: id,
-      name: name,
-      message: logic.message,
-      application_id: application_id,
-    }
+  before_save :compile_message, if: :logic
+  def compile_message
+    self.pattern = logic.message.compile
   end
 end

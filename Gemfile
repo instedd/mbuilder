@@ -20,6 +20,10 @@ group :assets do
 end
 
 group :development, :test do
+  gem 'rspec'
+  gem 'rspec-rails'
   gem 'pry'
   gem 'pry-debugger'
+  gem 'faker'
+  gem 'machinist'
 end
