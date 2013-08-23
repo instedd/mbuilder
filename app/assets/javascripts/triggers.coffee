@@ -1,8 +1,8 @@
-mbuilder = angular.module('mbuilder', ['drag-and-drop', 'focus-and-blur', 'keys']);
+mbuilder = angular.module('mbuilder', ['drag-and-drop', 'focus-and-blur', 'keys', 'ng-rails-csrf']);
 
 draggedPill = null
 
-mbuilder.controller 'EditTriggerController', ['$scope', ($scope) ->
+mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http) ->
   $scope.actionTemplateFor = (kind) ->
     "#{kind}_action"
 
@@ -22,23 +22,44 @@ mbuilder.controller 'EditTriggerController', ['$scope', ($scope) ->
 
   $scope.lookupPillName = (pill) ->
     if pill.kind == 'implicit'
-      pill.name
+      pill.guid
     else
       pill = _.find $scope.pieces, (piece) -> piece.guid == pill.guid
-      pill.value
+      pill.text
+
+  $scope.save = ->
+    data =
+      name: $scope.name
+      tables: $scope.tables
+      message:
+        pieces: $scope.pieces
+      actions: $scope.actions
+
+    if $scope.id?
+      url = "/applications/#{$scope.applicationId}/triggers/#{$scope.id}"
+      method = "put"
+    else
+      url = "/applications/#{$scope.applicationId}/triggers"
+      method = "post"
+
+    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+
+    $http[method](url, JSON.stringify(data)).success (data, status, headers, config) =>
+      window.location = "/applications/#{$scope.applicationId}/triggers"
 ]
 
 mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
   $scope.contenteditable = 'false'
 
   $scope.phoneNumberDragStart = (event) ->
-    draggedPill = {kind: "implicit", name: "phone number"}
+    draggedPill = {kind: "implicit", guid: "phone number"}
     event.dataTransfer.setData("Text", "phone number")
 
-  addPiece = (pieces, kind, value) ->
-    return if $.trim(value).length == 0
+  addPiece = (pieces, kind, text) ->
+    text = $.trim(text)
+    return if text.length == 0
 
-    pieces.push {kind: kind, value: value, index: pieces.length, guid: guid()}
+    pieces.push {kind: kind, text: text, guid: guid()}
 
   addSelection = (pieces, text, range) ->
     start = range.startOffset
@@ -107,10 +128,8 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
             if child.localName == "div"
               if $(child).hasClass('pill')
                 # Here we found an existing pill, so we reuse it
-                currentPill = currentPills[currentPillIndex]
-                currentPill.index = pieces.length
+                pieces.push currentPills[currentPillIndex]
                 currentPillIndex += 1
-                pieces.push currentPill
               else if $(child).hasClass('text')
                 content = child.childNodes[0]
                 if content == selNode
@@ -152,8 +171,8 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
     true
 
   $scope.dragPill = (piece, event) ->
-    draggedPill = {kind: "piece", guid: piece.guid}
-    event.dataTransfer.setData("Text", piece.value)
+    draggedPill = {kind: "message_piece", guid: piece.guid}
+    event.dataTransfer.setData("Text", piece.text)
     true
 ]
 
@@ -201,10 +220,16 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
       field: args.field.guid
 
   $rootScope.$on 'pillOverFieldValue', (event, args) ->
-    kind = if tableIsSelected(args.table.guid) then 'store_value' else 'create_table'
-    $scope.actions.push
-      kind: kind
-      pill: args.pill
-      table: args.table.guid
-      field: args.field.guid
+    if tableIsSelected(args.table.guid)
+      $scope.actions.push
+        kind: 'store_value'
+        pill: args.pill
+        table: args.table.guid
+        field: args.field.guid
+    else
+      $scope.actions.push
+        kind: 'create_table'
+        pill: args.pill
+        table: args.table.guid
+        field: args.field.guid
 ]

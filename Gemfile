@@ -10,6 +10,7 @@ gem 'angularjs-rails'
 gem 'underscore-rails'
 gem 'decent_exposure'
 gem 'instedd-pigeon', :require => 'pigeon'
+gem 'ng-rails-csrf'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

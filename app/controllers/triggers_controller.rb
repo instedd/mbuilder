@@ -6,7 +6,7 @@ class TriggersController < ApplicationController
   expose(:trigger)
 
   def create
-    set_trigger_data(application.triggers.new)
+    set_trigger_data(trigger)
   end
 
   def update
@@ -22,12 +22,23 @@ class TriggersController < ApplicationController
 
   def set_trigger_data(trigger)
     data = JSON.parse request.raw_post
-    trigger_data = data['trigger']
-    logic_data = data['logic']
-    trigger.attributes = trigger_data
-    trigger.logic = Logic.new(logic_data)
-    trigger.save!
+    name = data['name']
+    message = data['message']
+    actions = data['actions']
+    tables = data['tables']
 
-    head :ok
+    message = Message.from_hash(message)
+    actions = Action.from_list(actions)
+    trigger.name = name
+    trigger.logic = Logic.new message, actions
+
+    application.tables = Table.from_list(tables)
+
+    ActiveRecord::Base.transaction do
+      application.save!
+      trigger.save!
+    end
+
+    render json: trigger.id
   end
 end

@@ -1,7 +1,9 @@
 class Logic
   attr_accessor :message
+  attr_accessor :actions
 
-  def initialize(data = {})
-    @message = data['message']
+  def initialize(message, actions)
+    @message = message
+    @actions = actions
   end
 end

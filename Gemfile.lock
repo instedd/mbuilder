@@ -84,6 +84,7 @@ GEM
     mime-types (1.24)
     multi_json (1.7.9)
     mysql2 (0.3.11)
+    ng-rails-csrf (0.1.0)
     oauth (0.4.7)
     orm_adapter (0.4.0)
     polyglot (0.3.3)
@@ -162,6 +163,7 @@ DEPENDENCIES
   instedd-pigeon
   jquery-rails
   mysql2
+  ng-rails-csrf
   pry
   pry-debugger
   rails (= 3.2.12)

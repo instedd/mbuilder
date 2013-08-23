@@ -15,5 +15,6 @@
 //= require underscore
 //= require bootstrap
 //= require angular
+//= require ng-rails-csrf
 //= require pigeon
 //= require_tree .
