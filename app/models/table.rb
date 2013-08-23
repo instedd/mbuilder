@@ -9,6 +9,10 @@ class Table
     @fields = fields
   end
 
+  def find_field(guid)
+    @fields.find { |field| field.guid == guid }
+  end
+
   def as_json
     {
       name: name,

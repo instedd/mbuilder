@@ -11,6 +11,7 @@ gem 'underscore-rails'
 gem 'decent_exposure'
 gem 'instedd-pigeon', :require => 'pigeon'
 gem 'ng-rails-csrf'
+gem "tire"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

@@ -11,7 +11,7 @@ class MessagePiece
 
   def append_pattern(pattern)
     if kind == "text"
-      pattern << text
+      pattern << Regexp.escape(text)
     else
       pattern << "("
       case infer_pattern

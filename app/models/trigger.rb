@@ -12,4 +12,10 @@ class Trigger < ActiveRecord::Base
   def compile_message
     self.pattern = logic.message.compile
   end
+
+  def execute(context)
+    logic.actions.each do |action|
+      action.execute(context)
+    end
+  end
 end

@@ -41,4 +41,13 @@ describe Message do
     })
     msg.compile.should eq("\\A\\s*register\\s+(\\d+\\.\\d+)\\s*\\Z")
   end
+
+  it "compiles message and escapes text" do
+    msg = Message.from_hash({
+      'pieces' => [
+        {'kind' => 'text', 'text' => "."},
+      ]
+    })
+    msg.compile.should eq("\\A\\s*\\.\\s*\\Z")
+  end
 end

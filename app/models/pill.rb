@@ -7,6 +7,14 @@ class Pill
     @guid = guid
   end
 
+  def value_in(context)
+    if kind == 'implicit'
+      context.implicit_value(guid)
+    else
+      binding.pry
+    end
+  end
+
   def self.from_hash(hash)
     new hash['kind'], hash['guid']
   end

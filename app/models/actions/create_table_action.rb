@@ -9,6 +9,11 @@ class Actions::CreateTableAction < Action
     @pill = pill
   end
 
+  def execute(context)
+    entity = context.new_entity(table)
+    entity[field] = pill.value_in(context)
+  end
+
   def self.from_hash(hash)
     new hash['table'], hash['field'], Pill.from_hash(hash['pill'])
   end
