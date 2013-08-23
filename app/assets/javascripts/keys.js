@@ -12,7 +12,6 @@ module.directive('ngKeydown', ['$parse', function($parse) {
 
 module.directive('ngKeyup', ['$parse', function($parse) {
   return function(scope, element, attr) {
-    console.log("KEYUP");
     var fn = $parse(attr['ngKeyup']);
     element.bind('keyup', function(event) {
       scope.$apply(function() {
