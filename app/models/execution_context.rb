@@ -14,7 +14,23 @@ class ExecutionContext
   end
 
   def new_entity(table)
-    @entities[table] ||= NewEntity.new(self, table)
+    @entities[table] ||= Entity.new(self, table, nil)
+  end
+
+  def find_entity(table, field, value)
+    search = application.tire_search(table)
+    search.filter :term, field => value
+    results = search.perform.results
+    result = results[0]
+
+    entity = Entity.new(self, table, result.id)
+    @entities[table] ||= entity
+
+    result.properties.to_hash.each do |prop_name, prop_value|
+      entity[prop_name] = prop_value
+    end
+
+    entity
   end
 
   def entity(table)
@@ -36,6 +52,12 @@ class ExecutionContext
   def insert(table, properties)
     index = application.tire_index
     index.store type: table, properties: properties
+    index.refresh
+  end
+
+  def update(table, id, properties)
+    index = application.tire_index
+    index.store type: table, id: id, properties: properties
     index.refresh
   end
 

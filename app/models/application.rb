@@ -20,11 +20,17 @@ class Application < ActiveRecord::Base
     index
   end
 
-  def tire_search
-    Tire::Search::Search.new(tire_name)
+  def tire_search(table)
+    Tire::Search::Search.new tire_name, type: table
   end
 
-  def tire_name
-    "mbuilder_application_#{id}"
+  if Rails.env.test?
+    def tire_name
+      "mbuilder_test_application_#{id}"
+    end
+  else
+    def tire_name
+      "mbuilder_application_#{id}"
+    end
   end
 end

@@ -9,6 +9,11 @@ class Actions::SelectEntityAction < Action
     @pill = pill
   end
 
+  def execute(context)
+    value = pill.value_in(context)
+    context.find_entity(table, field, value)
+  end
+
   def self.from_hash(hash)
     new hash['table'], hash['field'], Pill.from_hash(hash['pill'])
   end
