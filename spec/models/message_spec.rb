@@ -19,7 +19,7 @@ describe Message do
         {'kind' => 'text', 'text' => 'as user'},
       ]
     })
-    msg.compile.should eq("\\A\\s*register\\s+([\\w\\s]+)\\s+as user\\s*\\Z")
+    msg.compile.should eq("\\A\\s*register\\s+([\\w\\s]+)\\s+as\\ user\\s*\\Z")
   end
 
   it "compiles message with integer" do

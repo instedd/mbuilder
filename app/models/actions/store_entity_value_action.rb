@@ -1,4 +1,4 @@
-class Actions::CreateTableAction < Action
+class Actions::StoreEntityValueAction < Action
   attr_accessor :pill
   attr_accessor :table
   attr_accessor :field
@@ -10,7 +10,7 @@ class Actions::CreateTableAction < Action
   end
 
   def execute(context)
-    entity = context.new_entity(table)
+    entity = context.entity(table)
     entity[field] = pill.value_in(context)
   end
 

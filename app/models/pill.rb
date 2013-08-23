@@ -11,7 +11,7 @@ class Pill
     if kind == 'implicit'
       context.implicit_value(guid)
     else
-      binding.pry
+      context.piece_value(guid)
     end
   end
 

@@ -1,4 +1,4 @@
-class Actions::StoreValueAction < Action
+class Actions::SelectEntityAction < Action
   attr_accessor :pill
   attr_accessor :table
   attr_accessor :field

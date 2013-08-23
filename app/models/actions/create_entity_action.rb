@@ -1,4 +1,4 @@
-class Actions::SelectTableAction < Action
+class Actions::CreateEntityAction < Action
   attr_accessor :pill
   attr_accessor :table
   attr_accessor :field
@@ -7,6 +7,11 @@ class Actions::SelectTableAction < Action
     @table = table
     @field = field
     @pill = pill
+  end
+
+  def execute(context)
+    entity = context.new_entity(table)
+    entity[field] = pill.value_in(context)
   end
 
   def self.from_hash(hash)
