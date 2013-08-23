@@ -27,4 +27,6 @@ group :development, :test do
   gem 'pry-debugger'
   gem 'faker'
   gem 'machinist'
+  gem 'capistrano'
+  gem 'rvm-capistrano'
 end
