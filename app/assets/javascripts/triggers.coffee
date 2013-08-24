@@ -133,7 +133,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
       else
         i += 1
 
-        if $(node).hasClass('piece-container')
+        if $(node).hasClass('pill-container')
           children = node.childNodes
 
           j = 0
@@ -146,22 +146,17 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
                 currentPillIndex += 1
               else if $(child).hasClass('text')
                 content = child.childNodes[0]
-                if content
-                  if content == selNode
-                    addSelection pieces, content.textContent, range
-                  else
-                    addPiece pieces, 'text', content.textContent
+                if content == selNode
+                  addSelection pieces, content.textContent, range
+                else
+                  addPiece pieces, 'text', content.textContent
               j += 1
+            else if child == selNode
+              addSelection pieces, child.textContent, range
+              node.removeChild(child)
             else
-              if child == selNode
-                addSelection pieces, child.textContent, range
-                node.removeChild(child)
-              else
-                addPiece pieces, 'text', child.textContent
-                node.removeChild(child)
-
-    if pieces.length > 0 && $scope.pieces[$scope.pieces.length - 1].kind == 'pill'
-      pieces.push kind: 'text', text: ' '
+              addPiece pieces, 'text', child.textContent
+              node.removeChild(child)
 
     # Replace $scope.pieces' contents only if it changed
     unless samePieces($scope.pieces, pieces)
