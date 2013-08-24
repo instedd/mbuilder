@@ -57,7 +57,31 @@ body {
   display: inline-block;
 }
 
+.empty-field {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 8px;
+  border: 1px dashed #ddd;
+  color: #aaa;
+}
+
 .text {
   display: inline-block;
+}
+
+table.fields, table.fields th, table.fields td {
+  border: 1px solid #ddd;
+}
+
+table.fields th, table.fields td {
+  padding: 4px;
+}
+
+table.fields input {
+  margin: 0px;
+}
+
+table.fields .input-small {
+  width: 120px;
 }
 

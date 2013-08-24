@@ -20,6 +20,13 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     field = _.find table.fields, (field) -> field.guid == fieldGuid
     field.name
 
+  $scope.lookupFieldValue = (table, field) ->
+    for action in $scope.actions
+      if action.table == table.guid && action.field == field.guid
+        return $scope.lookupPillName(action.pill)
+
+    null
+
   $scope.lookupPillName = (pill) ->
     if pill.kind == 'implicit'
       pill.guid

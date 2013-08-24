@@ -36,14 +36,22 @@
           %div.logic-table
             %input{'ng-model' => 'table.name', type: :text}
 
-            %div
-              %strong Fields
-            %a{'ng-click' => 'newField()', href: 'javascript:'} New field
+            %table.fields
+              %tr
+                %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
+                  %input.input-small{'ng-model' => 'field.name', dragover: 'dragOverName($event)', drop: 'dropOverName($event)', type: :text}
+                %td
+                  %a{'ng-click' => 'newField()', href: 'javascript:'} New column
 
-            %div{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
-              %div
-                %input.input-medium{'ng-model' => 'field.name', dragover: 'dragOverName($event)', drop: 'dropOverName($event)', type: :text}
-                %input.input-large{dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)', type: :text, readonly: true, value: 'New value'}
+              %tr
+                %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
+                  .empty-field{'ng-hide' => 'lookupFieldValue(table, field)'}
+                    new value
+                  .pill{'ng-show' => 'lookupFieldValue(table, field)'}
+                    {{lookupFieldValue(table, field)}}
+
+              / %div
+              /   %input.input-large{dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)', type: :text, readonly: true, value: "{{lookupFieldValue(table, field)}}"}
           %br
 
     %button.btn{'ng-click' => 'save()'} Save
