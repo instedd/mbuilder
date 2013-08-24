@@ -45,13 +45,10 @@
 
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
-                  .empty-field{'ng-hide' => 'lookupFieldValue(table, field)'}
+                  .empty-field{'ng-hide' => 'lookupFieldValue(table.guid, field.guid)'}
                     new value
-                  .pill{'ng-show' => 'lookupFieldValue(table, field)'}
-                    {{lookupFieldValue(table, field)}}
-
-              / %div
-              /   %input.input-large{dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)', type: :text, readonly: true, value: "{{lookupFieldValue(table, field)}}"}
+                  .pill{'ng-show' => 'lookupFieldValue(table.guid, field.guid)'}
+                    {{lookupFieldValue(table.guid, field.guid)}}
           %br
 
     %button.btn{'ng-click' => 'save()'} Save

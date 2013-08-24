@@ -20,10 +20,17 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     field = _.find table.fields, (field) -> field.guid == fieldGuid
     field.name
 
-  $scope.lookupFieldValue = (table, field) ->
+  $scope.lookupFieldAction = (tableGuid, fieldGuid) ->
     for action in $scope.actions
-      if action.table == table.guid && action.field == field.guid
-        return $scope.lookupPillName(action.pill)
+      if action.table == tableGuid && action.field == fieldGuid
+        return action
+
+    null
+
+  $scope.lookupFieldValue = (tableGuid, fieldGuid) ->
+    action = $scope.lookupFieldAction(tableGuid, fieldGuid)
+    if action
+      return $scope.lookupPillName(action.pill)
 
     null
 
@@ -219,24 +226,23 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
     _.any $scope.actions, (action) ->
       (action.kind == 'select_entity' || action.kind == 'create_entity') && action.table == tableGuid
 
+  createTableFieldAction = (kind, args) ->
+    action = $scope.lookupFieldAction(args.table.guid, args.field.guid)
+    if action
+      action.pill = args.pill
+    else
+      $scope.actions.push
+        kind: kind
+        pill: args.pill
+        table: args.table.guid
+        field: args.field.guid
+
   $rootScope.$on 'pillOverFieldName', (event, args) ->
-    $scope.actions.push
-      kind: 'select_entity'
-      pill: args.pill
-      table: args.table.guid
-      field: args.field.guid
+    createTableFieldAction 'select_entity', args
 
   $rootScope.$on 'pillOverFieldValue', (event, args) ->
     if tableIsSelected(args.table.guid)
-      $scope.actions.push
-        kind: 'store_entity_value'
-        pill: args.pill
-        table: args.table.guid
-        field: args.field.guid
+      createTableFieldAction 'store_entity_value', args
     else
-      $scope.actions.push
-        kind: 'create_entity'
-        pill: args.pill
-        table: args.table.guid
-        field: args.field.guid
+      createTableFieldAction 'create_entity', args
 ]
