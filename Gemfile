@@ -5,6 +5,8 @@ gem 'mysql2'
 
 gem 'jquery-rails'
 gem 'devise'
+gem 'omniauth'
+gem 'omniauth-openid'
 gem 'haml-rails'
 gem 'angularjs-rails'
 gem 'underscore-rails'
