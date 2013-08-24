@@ -100,7 +100,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
     while i < pieces1.length
       piece1 = pieces1[i]
       piece2 = pieces2[i]
-      return false if piece1.kind != piece2.kind || piece1.value != piece2.value
+      return false if piece1.kind != piece2.kind || piece1.text != piece2.text
       i += 1
 
     true
@@ -133,7 +133,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
       else
         i += 1
 
-        if $(node).hasClass('pill-container')
+        if $(node).hasClass('piece-container')
           children = node.childNodes
 
           j = 0
@@ -146,17 +146,22 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
                 currentPillIndex += 1
               else if $(child).hasClass('text')
                 content = child.childNodes[0]
-                if content == selNode
-                  addSelection pieces, content.textContent, range
-                else
-                  addPiece pieces, 'text', content.textContent
+                if content
+                  if content == selNode
+                    addSelection pieces, content.textContent, range
+                  else
+                    addPiece pieces, 'text', content.textContent
               j += 1
-            else if child == selNode
-              addSelection pieces, child.textContent, range
-              node.removeChild(child)
             else
-              addPiece pieces, 'text', child.textContent
-              node.removeChild(child)
+              if child == selNode
+                addSelection pieces, child.textContent, range
+                node.removeChild(child)
+              else
+                addPiece pieces, 'text', child.textContent
+                node.removeChild(child)
+
+    if pieces.length > 0 && $scope.pieces[$scope.pieces.length - 1].kind == 'pill'
+      pieces.push kind: 'text', text: ' '
 
     # Replace $scope.pieces' contents only if it changed
     unless samePieces($scope.pieces, pieces)
@@ -245,4 +250,8 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
       createTableFieldAction 'store_entity_value', args
     else
       createTableFieldAction 'create_entity', args
+
+  $scope.addSendMessageAction = ->
+    $scope.actions.push
+      kind: 'send_message'
 ]

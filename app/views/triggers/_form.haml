@@ -26,6 +26,9 @@
           %div{'ng-repeat' => 'action in actions'}
             %div.action(ng-include src='actionTemplateFor(action.kind)')
             %br
+          %div.new-action
+            %a{'ng-click' => 'addSendMessageAction()', href: 'javascript:'} [+] Add "Send message" step
+          %br
 
       %div.span6{'ng-controller' => 'TablesController'}
         %div
