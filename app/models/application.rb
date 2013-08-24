@@ -2,8 +2,8 @@ class Application < ActiveRecord::Base
   attr_accessible :name, :user_id
 
   belongs_to :user
-  has_many :triggers
-  has_many :channels
+  has_many :triggers, dependent: :destroy
+  has_many :channels, dependent: :destroy
 
   validates_presence_of :user
   validates_presence_of :name
