@@ -120,6 +120,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
 
     pieces = []
     target = event.originalEvent.currentTarget
+    foundLastPiece = false
 
     i = 0
     while i < target.childNodes.length
@@ -133,7 +134,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
       else
         i += 1
 
-        if $(node).hasClass('pill-container')
+        if $(node).hasClass('piece-container')
           children = node.childNodes
 
           j = 0
@@ -142,7 +143,9 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
             if child.localName == "div"
               if $(child).hasClass('pill')
                 # Here we found an existing pill, so we reuse it
-                pieces.push currentPills[currentPillIndex]
+                currentPill = currentPills[currentPillIndex]
+                currentPill.text = child.innerText
+                pieces.push currentPill
                 currentPillIndex += 1
               else if $(child).hasClass('text')
                 content = child.childNodes[0]
@@ -157,6 +160,24 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
             else
               addPiece pieces, 'text', child.textContent
               node.removeChild(child)
+        else if $(node).hasClass('last-piece')
+          foundLastPiece = true
+          children = node.childNodes
+
+          j = 0
+          while j < children.length
+            child = children[j]
+            if child.nodeName == "#text"
+              addPiece pieces, 'text', child.textContent
+              unless child.textContent.length == 1 && child.textContent.charCodeAt(160)
+                child.textContent = String.fromCharCode(160)
+            j += 1
+
+    unless foundLastPiece
+      span = document.createElement("span")
+      span.className = "last-piece"
+      span.innerText = String.fromCharCode(160)
+      target.appendChild(span)
 
     # Replace $scope.pieces' contents only if it changed
     unless samePieces($scope.pieces, pieces)
@@ -171,6 +192,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
     true
 
   $scope.makeNotEditable = (event) ->
+    $scope.parseMessage(event)
     $scope.contenteditable = 'false'
 
   $scope.handleMessageKey = (event) ->
@@ -178,9 +200,14 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
       sel = window.getSelection()
       if sel.rangeCount > 0
         range = sel.getRangeAt(0)
-        if range.startOffset == 0 || range.commonAncestorContainer.nodeName != "#text"
+        if range.startOffset == 0
           event.preventDefault()
           return false
+        else
+          parent = $(sel.extentNode.parentNode)
+          if parent.hasClass('pill') && parent.text().length == 1
+            event.preventDefault()
+            return false
 
     true
 
