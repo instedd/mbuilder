@@ -1,0 +1,23 @@
+development:
+  url: http://nuntium.manas.com.ar
+  account: manas
+  application: mbuilder
+  password: mbuilder
+  incoming_username: mbuilder
+  incoming_password: mbuilder
+
+production:
+  url: http://nuntium.manas.com.ar
+  account: manas
+  application: mbuilder
+  password: mbuilder
+  incoming_username: mbuilder
+  incoming_password: mbuilder
+
+test:
+  url: http://nuntium.manas.com.ar
+  account: manas
+  application: mbuilder
+  password: mbuilder
+  incoming_username: mbuilder
+  incoming_password: mbuilder

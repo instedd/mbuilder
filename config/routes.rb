@@ -6,5 +6,7 @@ Mbuilder::Application.routes.draw do
     resources :triggers
   end
 
+  match '/nuntium/receive_at' => 'nuntium#receive_at'
+
   root :to => 'applications#index'
 end
