@@ -266,4 +266,15 @@ mbuilder.controller 'SendMessageController', ['$scope', ($scope) ->
   $scope.dropOverMessage = (event) ->
     $scope.action.message.push draggedPill
     true
+
+  $scope.handleMessageKey = (event) ->
+    if event.keyCode == 8 # delete
+      sel = window.getSelection()
+      if sel.rangeCount > 0
+        range = sel.getRangeAt(0)
+        if range.startOffset == 0
+          event.preventDefault()
+          return false
+
+    true
 ]

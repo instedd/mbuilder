@@ -1,7 +1,7 @@
 %div{'ng-controller' => 'SendMessageController'}
   Send this mesasge
   %br
-  .message-area{contenteditable: '{{action.contenteditable}}', 'ng-blur' => 'makeNotEditable($event)', 'ng-click' => 'makeEditable($event)', dragover: 'dragOverMessage($event)', drop: 'dropOverMessage($event)'}
+  .message-area{contenteditable: '{{action.contenteditable}}', 'ng-blur' => 'makeNotEditable($event)', 'ng-click' => 'makeEditable($event)', dragover: 'dragOverMessage($event)', drop: 'dropOverMessage($event)', 'ng-keydown' => 'handleMessageKey($event)'}
     %span.piece-container{'ng-repeat' => 'binding in action.message', 'ng-include' => true, 'src' => 'bindingTemplateFor(binding.kind)'}<>
     %span.last-piece<> &nbsp;
   %br
