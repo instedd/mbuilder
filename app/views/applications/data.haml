@@ -1,0 +1,15 @@
+%h3= link_to application.name, applications_path
+%h4 Data
+
+- @data.each do |table, rows|
+  %table.table.table-striped.table-bordered{style: "width: 400px"}
+    %tr
+      %th{colspan: table.fields.length, style: 'text-align: center'}= table.name
+    %tr
+      - table.fields.each do |field|
+        %th= field.name
+    - rows.each do |properties|
+      %tr
+        - table.fields.each do |field|
+          %td= properties[field.guid]
+

@@ -21,7 +21,7 @@ class Application < ActiveRecord::Base
   end
 
   def tire_search(table)
-    Tire::Search::Search.new tire_name, type: table
+    Tire::Search::Search.new tire_index.name, type: table
   end
 
   if Rails.env.test?

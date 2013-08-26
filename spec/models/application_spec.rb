@@ -40,9 +40,9 @@ describe Application do
 
     results = application.tire_search("users").perform.results
     results.length.should eq(1)
-    result = results[0]
-    result.type.should eq("users")
-    result.properties["phone"].should eq("1234")
+    result = results[0]["_source"]
+    result["type"].should eq("users")
+    result["properties"]["phone"].should eq("1234")
   end
 
   it "accepts message and creates entity with a stored value" do
@@ -69,10 +69,10 @@ describe Application do
 
     results = application.tire_search("users").perform.results
     results.length.should eq(1)
-    result = results[0]
-    result.type.should eq("users")
-    result.properties["phone"].should eq("1234")
-    result.properties["name"].should eq("Peter")
+    result = results[0]["_source"]
+    result["type"].should eq("users")
+    result["properties"]["phone"].should eq("1234")
+    result["properties"]["name"].should eq("Peter")
   end
 
   it "accepts message and updates entity with a stored value" do
@@ -102,9 +102,9 @@ describe Application do
 
     results = application.tire_search("users").perform.results
     results.length.should eq(1)
-    result = results[0]
-    result.type.should eq("users")
-    result.properties["phone"].should eq("1234")
-    result.properties["name"].should eq("Peter")
+    result = results[0]["_source"]
+    result["type"].should eq("users")
+    result["properties"]["phone"].should eq("1234")
+    result["properties"]["name"].should eq("Peter")
   end
 end

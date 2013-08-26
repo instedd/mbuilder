@@ -9,7 +9,7 @@ class NuntiumController < ApplicationController
   end
 
   def receive_at
-    channel = Channel.find_by_name params[:channel]
+    channel = Channel.find_by_pigeon_name params[:channel]
     channel.application.accept_message params
     head :ok
   end

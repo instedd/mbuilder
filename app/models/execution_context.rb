@@ -23,10 +23,10 @@ class ExecutionContext
     results = search.perform.results
     result = results[0]
 
-    entity = Entity.new(self, table, result.id)
+    entity = Entity.new(self, table, result["_id"])
     @entities[table] ||= entity
 
-    result.properties.to_hash.each do |prop_name, prop_value|
+    result["_source"]["properties"].each do |prop_name, prop_value|
       entity[prop_name] = prop_value
     end
 

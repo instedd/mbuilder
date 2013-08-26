@@ -4,6 +4,7 @@ Mbuilder::Application.routes.draw do
   resources :applications do
     resources :channels
     resources :triggers
+    get :data
   end
 
   match '/nuntium/receive_at' => 'nuntium#receive_at'

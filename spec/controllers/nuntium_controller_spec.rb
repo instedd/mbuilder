@@ -16,7 +16,7 @@ describe NuntiumController do
     ])
     application.save!
 
-    application.channels.create! name: 'channel_name'
+    application.channels.create! name: 'channel_name', pigeon_name: 'pigeon_channel_name'
 
     message = Message.from_hash({
       'pieces' => [
@@ -37,15 +37,15 @@ describe NuntiumController do
   it "accepts message and creates entity" do
     @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("#{Nuntium::Config['incoming_username']}:#{Nuntium::Config['incoming_password']}")
 
-    get :receive_at, channel: 'channel_name', from: 'sms://1234', body: 'register Peter'
+    get :receive_at, channel: 'pigeon_channel_name', from: 'sms://1234', body: 'register Peter'
 
     index = application.tire_index
     index.exists?.should be_true
 
     results = application.tire_search("users").perform.results
     results.length.should eq(1)
-    result = results[0]
-    result.type.should eq("users")
-    result.properties["phone"].should eq("1234")
+    result = results[0]["_source"]
+    result["type"].should eq("users")
+    result["properties"]["phone"].should eq("1234")
   end
 end

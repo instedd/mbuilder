@@ -13,6 +13,8 @@
       |
       = link_to "triggers", application_triggers_path(application)
       |
+      = link_to "data", application_data_path(application)
+      |
       = link_to "edit", edit_application_path(application)
       |
       = link_to "delete", application, method: :delete, confirm: "Are you sure you want to delete the application '#{application.name}'"

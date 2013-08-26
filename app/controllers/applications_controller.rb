@@ -24,4 +24,12 @@ class ApplicationsController < ApplicationController
     application.destroy
     redirect_to applications_path
   end
+
+  def data
+    @data = application.tables.map do |table|
+      results = application.tire_search(table.guid).perform.results
+      properties = results.map { |result| result["_source"]["properties"] }
+      [table, properties]
+    end
+  end
 end

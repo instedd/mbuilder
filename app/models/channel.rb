@@ -1,5 +1,5 @@
 class Channel < ActiveRecord::Base
-  attr_accessible :application_id, :name
+  attr_accessible :application_id, :name, :pigeon_name
 
   belongs_to :application
 
