@@ -23,7 +23,7 @@ namespace :deploy do
   end
 
   task :symlink_configs, :roles => :app do
-    %W(database.yml).each do |file|
+    %W(database.yml nuntium.yml).each do |file|
       run "test -e #{shared_path}/#{file} && ln -nfs #{shared_path}/#{file} #{release_path}/config/"
     end
   end
