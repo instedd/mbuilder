@@ -1,6 +1,7 @@
 Create
-.pill {{lookupTableName(action.table)}}
+.dead-pill {{lookupTableName(action.table)}}
 with
-.pill {{lookupPillName(action.pill)}}
+.pill{draggable: 'true', dragstart: 'bindingDragStart(action.pill)'}
+  {{lookupPillName(action.pill)}}
 as
-.pill {{lookupFieldName(action.table, action.field)}}
+.dead-pill {{lookupFieldName(action.table, action.field)}}

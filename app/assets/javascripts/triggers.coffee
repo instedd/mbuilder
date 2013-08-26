@@ -44,6 +44,13 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
       pill = _.find $scope.pieces, (piece) -> piece.guid == pill.guid
       pill.text
 
+  $scope.fieldBindingDragStart = (tableGuid, fieldGuid) ->
+    $scope.bindingDragStart($scope.lookupFieldAction(tableGuid, fieldGuid).pill)
+
+  $scope.bindingDragStart = (pill) ->
+    draggedPill = pill
+    event.dataTransfer.setData("Text", $scope.lookupPillName(pill))
+
   $scope.save = ->
     data =
       name: $scope.name
