@@ -77,10 +77,6 @@ body {
   display: inline-block;
 }
 
-table.fields, table.fields th, table.fields td {
-  border: 1px solid #ddd;
-}
-
 table.fields th, table.fields td {
   padding: 4px;
 }

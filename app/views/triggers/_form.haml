@@ -34,18 +34,20 @@
       %div.span6{'ng-controller' => 'TablesController'}
         %div
           %strong Tables
-        %a{'ng-click' => 'newTable()', href: 'javascript:'} New table
+          %br
+          %a{'ng-click' => 'newTable()', href: 'javascript:'} (+) New table
+        %br
 
         %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
           %div.logic-table
             %input{'ng-model' => 'table.name', type: :text}
 
-            %table.fields
+            %table.table.table-bordered.fields
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
                   %input.input-small{'ng-model' => 'field.name', dragover: 'dragOverName($event)', drop: 'dropOverName($event)', type: :text}
                 %td
-                  %a{'ng-click' => 'newField()', href: 'javascript:'} New column
+                  %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
 
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
@@ -53,6 +55,7 @@
                     new value
                   .pill{'ng-show' => 'lookupFieldValue(table.guid, field.guid)'}
                     {{lookupFieldValue(table.guid, field.guid)}}
+                %td
           %br
 
     %button.btn{'ng-click' => 'save()'} Save
