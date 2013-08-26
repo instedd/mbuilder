@@ -1,5 +1,4 @@
-%h3= link_to application.name, application_channels_path(application)
-%h4 Channels
+= render 'shared/application_tabs'
 
 %div
   = form_tag(new_application_channel_path, method: :get) do

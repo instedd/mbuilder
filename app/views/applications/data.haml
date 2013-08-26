@@ -1,5 +1,4 @@
-%h3= link_to application.name, applications_path
-%h4 Data
+= render 'shared/application_tabs'
 
 - @data.each do |table, rows|
   %table.table.table-striped.table-bordered{style: "width: 400px"}

@@ -1,5 +1,6 @@
 class TriggersController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :set_tab
 
   expose(:application) { current_user.applications.find params[:application_id] }
   expose(:triggers) { application.triggers }
@@ -43,5 +44,9 @@ class TriggersController < ApplicationController
     rescue ActiveRecord::RecordInvalid
       render json: trigger.errors.full_messages.join("\n"), status: 402
     end
+  end
+
+  def set_tab
+    @application_tab = :triggers
   end
 end

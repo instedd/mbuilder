@@ -1,0 +1,13 @@
+%h3= application.name
+
+%ul.nav.nav-tabs
+  %li{class: @application_tab == :overview ? 'active' : nil}
+    = link_to "Overview", application
+  %li{class: @application_tab == :triggers ? 'active' : nil}
+    = link_to "Triggers", application_triggers_path(application)
+  %li{class: @application_tab == :channels ? 'active' : nil}
+    = link_to "Channels", application_channels_path(application)
+  %li{class: @application_tab == :data ? 'active' : nil}
+    = link_to "Data", application_data_path(application)
+  %li{class: @application_tab == :settings ? 'active' : nil}
+    = link_to "Settings", edit_application_path(application)
