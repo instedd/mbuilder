@@ -26,7 +26,7 @@ class ApplicationsController < ApplicationController
   end
 
   def data
-    @data = application.tables.map do |table|
+    @data = (application.tables || []).map do |table|
       results = application.tire_search(table.guid).perform.results
       properties = results.map { |result| result["_source"]["properties"] }
       [table, properties]
