@@ -9,6 +9,9 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
   $scope.pieceTemplateFor = (kind) ->
     "#{kind}_piece"
 
+  $scope.bindingTemplateFor = (kind) ->
+    "#{kind}_binding"
+
   $scope.lookupTable = (guid) ->
     _.find $scope.tables, (table) -> table.guid == guid
 
@@ -72,11 +75,11 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
     draggedPill = {kind: "implicit", guid: "phone number"}
     event.dataTransfer.setData("Text", "phone number")
 
-  addPiece = (pieces, kind, text) ->
+  addPiece = (pieces, kind, text, guid = window.guid()) ->
     text = $.trim(text)
     return if text.length == 0
 
-    pieces.push {kind: kind, text: text, guid: guid()}
+    pieces.push kind: kind, text: text, guid: guid
 
   addSelection = (pieces, text, range) ->
     start = range.startOffset
@@ -116,11 +119,6 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
       if range.startOffset != range.endOffset
         selNode = sel.baseNode
 
-    # We need to keep the current pill's guids.
-    # This assumes no pieces are removed after text editions.
-    currentPills = _.select $scope.pieces, (piece) -> piece.kind == 'pill'
-    currentPillIndex = 0
-
     pieces = []
     target = event.originalEvent.currentTarget
     foundLastPiece = false
@@ -145,11 +143,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
             child = children[j]
             if child.localName == "div"
               if $(child).hasClass('pill')
-                # Here we found an existing pill, so we reuse it
-                currentPill = currentPills[currentPillIndex]
-                currentPill.text = child.innerText
-                pieces.push currentPill
-                currentPillIndex += 1
+                addPiece pieces, 'pill', $(child).text(), $(child).data('guid')
               else if $(child).hasClass('text')
                 content = child.childNodes[0]
                 if content == selNode
@@ -279,4 +273,84 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
   $scope.addSendMessageAction = ->
     $scope.actions.push
       kind: 'send_message'
+      messageBindings: []
+      contenteditable: 'true'
+]
+
+mbuilder.controller 'SendMessageController', ['$scope', ($scope) ->
+  addBinding = (bindings, kind, guid) ->
+    guid = $.trim(guid)
+    return if guid.length == 0
+
+    bindings.push kind: kind, guid: guid
+
+  $scope.parseMessage = (event) ->
+    bindings = []
+    target = event.originalEvent.currentTarget
+    foundLastPiece = false
+
+    i = 0
+    while i < target.childNodes.length
+      node = target.childNodes[i]
+      if node.nodeName == "#text"
+        addBinding bindings, 'text', node.textContent
+        target.removeChild(node)
+      else
+        i += 1
+
+        if $(node).hasClass('binding-container')
+          children = node.childNodes
+
+          j = 0
+          while j < children.length
+            child = children[j]
+            if child.localName == "div"
+              if $(child).hasClass('pill')
+                addBinding bindings, $(child).data('kind'), $(child).data('guid')
+              else if $(child).hasClass('text')
+                content = child.childNodes[0]
+                addBinding bindings, 'text', content.textContent
+              j += 1
+            else
+              addBinding bindings, 'text', child.textContent
+              node.removeChild(child)
+        else if $(node).hasClass('last-piece')
+          foundLastPiece = true
+          children = node.childNodes
+
+          j = 0
+          while j < children.length
+            child = children[j]
+            if child.nodeName == "#text"
+              addBinding bindings, 'text', child.textContent
+              unless child.textContent.length == 1 && child.textContent.charCodeAt(160)
+                child.textContent = String.fromCharCode(160)
+            j += 1
+
+    unless foundLastPiece
+      span = document.createElement("span")
+      span.className = "last-piece"
+      span.innerText = String.fromCharCode(160)
+      target.appendChild(span)
+
+    # Replace $scope.messageBindings' contents
+    args = [0, $scope.action.messageBindings.length].concat(bindings)
+    Array.prototype.splice.apply($scope.action.messageBindings, args)
+
+    console.log($scope.action.messageBindings)
+
+  $scope.makeNotEditable = (event) ->
+    $scope.parseMessage(event)
+    $scope.action.contenteditable = 'false'
+
+  $scope.makeEditable = (event) ->
+    $scope.action.contenteditable = 'true'
+
+  $scope.dragOverMessage = (event) ->
+    event.preventDefault()
+    true
+
+  $scope.dropOverMessage = (event) ->
+    $scope.action.messageBindings.push draggedPill
+    true
 ]

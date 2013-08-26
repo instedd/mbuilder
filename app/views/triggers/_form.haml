@@ -1,5 +1,6 @@
 %div{'ng-app' => 'mbuilder'}
   - angular_templates "triggers/actions"
+  - angular_templates "triggers/bindings"
   - angular_templates "triggers/pieces"
 
   %div{'ng-controller' => 'EditTriggerController', 'ng-init' => trigger_to_angular(application, trigger)}
