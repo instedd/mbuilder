@@ -34,11 +34,14 @@ class TriggersController < ApplicationController
 
     application.tables = Table.from_list(tables)
 
-    ActiveRecord::Base.transaction do
-      application.save!
-      trigger.save!
+    begin
+      ActiveRecord::Base.transaction do
+        application.save!
+        trigger.save!
+      end
+      render json: trigger.id
+    rescue ActiveRecord::RecordInvalid
+      render json: trigger.errors.full_messages.join("\n"), status: 402
     end
-
-    render json: trigger.id
   end
 end

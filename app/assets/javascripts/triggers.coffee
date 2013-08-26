@@ -58,8 +58,11 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
 
     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
 
-    $http[method](url, JSON.stringify(data)).success (data, status, headers, config) =>
+    call = $http[method](url, JSON.stringify(data))
+    call.success (data, status, headers, config) =>
       window.location = "/applications/#{$scope.applicationId}/triggers"
+    call.error (data, status, headers, config) =>
+      alert "Error: #{data}"
 ]
 
 mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
