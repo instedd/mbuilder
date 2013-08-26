@@ -8,7 +8,7 @@ class Actions::SendMessageAction < Action
   end
 
   def self.from_hash(hash)
-    new hash['message'], hash['recipient']
+    new(MessageBinding.from_list(hash['message']), hash['recipient'])
   end
 
   def as_json

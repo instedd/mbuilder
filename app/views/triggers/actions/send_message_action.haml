@@ -2,7 +2,7 @@
   Send this mesasge
   %br
   .message-area{contenteditable: '{{action.contenteditable}}', 'ng-blur' => 'makeNotEditable($event)', 'ng-click' => 'makeEditable($event)', dragover: 'dragOverMessage($event)', drop: 'dropOverMessage($event)'}
-    %span.binding-container{'ng-repeat' => 'binding in action.messageBindings', 'ng-include' => true, 'src' => 'bindingTemplateFor(binding.kind)'}<>
+    %span.piece-container{'ng-repeat' => 'binding in action.message', 'ng-include' => true, 'src' => 'bindingTemplateFor(binding.kind)'}<>
     %span.last-piece<> &nbsp;
   %br
   to

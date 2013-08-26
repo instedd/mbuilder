@@ -111,77 +111,25 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
 
     true
 
-  # Parse message pieces from html
   $scope.parseMessage = (event) ->
-    sel = window.getSelection()
-    if sel.rangeCount > 0
-      range = sel.getRangeAt(0)
-      if range.startOffset != range.endOffset
-        selNode = sel.baseNode
-
     pieces = []
-    target = event.originalEvent.currentTarget
-    foundLastPiece = false
 
-    i = 0
-    while i < target.childNodes.length
-      node = target.childNodes[i]
-      if node.nodeName == "#text"
-        if node == selNode
-          addSelection pieces, node.textContent, range
-        else
-          addPiece pieces, 'text', node.textContent
-        target.removeChild(node)
+    parser = new MessageParser(event.originalEvent.currentTarget)
+    parser.onText (text, hasSelection) ->
+      if hasSelection
+        addSelection pieces, text, parser.range
       else
-        i += 1
-
-        if $(node).hasClass('piece-container')
-          children = node.childNodes
-
-          j = 0
-          while j < children.length
-            child = children[j]
-            if child.localName == "div"
-              if $(child).hasClass('pill')
-                addPiece pieces, 'pill', $(child).text(), $(child).data('guid')
-              else if $(child).hasClass('text')
-                content = child.childNodes[0]
-                if content == selNode
-                  addSelection pieces, content.textContent, range
-                else
-                  addPiece pieces, 'text', content.textContent
-              j += 1
-            else if child == selNode
-              addSelection pieces, child.textContent, range
-              node.removeChild(child)
-            else
-              addPiece pieces, 'text', child.textContent
-              node.removeChild(child)
-        else if $(node).hasClass('last-piece')
-          foundLastPiece = true
-          children = node.childNodes
-
-          j = 0
-          while j < children.length
-            child = children[j]
-            if child.nodeName == "#text"
-              addPiece pieces, 'text', child.textContent
-              unless child.textContent.length == 1 && child.textContent.charCodeAt(160)
-                child.textContent = String.fromCharCode(160)
-            j += 1
-
-    unless foundLastPiece
-      span = document.createElement("span")
-      span.className = "last-piece"
-      span.innerText = String.fromCharCode(160)
-      target.appendChild(span)
+        addPiece pieces, 'text', text
+    parser.onPill (node) ->
+      addPiece pieces, 'pill', node.text(), node.data('guid')
+    parser.parse()
 
     # Replace $scope.pieces' contents only if it changed
     unless samePieces($scope.pieces, pieces)
       args = [0, $scope.pieces.length].concat(pieces)
       Array.prototype.splice.apply($scope.pieces, args)
 
-    if selNode
+    if parser.selNode
       $scope.contenteditable = 'false'
     else
       $scope.contenteditable = 'true'
@@ -273,7 +221,7 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
   $scope.addSendMessageAction = ->
     $scope.actions.push
       kind: 'send_message'
-      messageBindings: []
+      message: []
       contenteditable: 'true'
 ]
 
@@ -286,58 +234,16 @@ mbuilder.controller 'SendMessageController', ['$scope', ($scope) ->
 
   $scope.parseMessage = (event) ->
     bindings = []
-    target = event.originalEvent.currentTarget
-    foundLastPiece = false
+    parser = new MessageParser(event.originalEvent.currentTarget)
+    parser.onText (text) ->
+      addBinding bindings, 'text', text
+    parser.onPill (node) ->
+      addBinding bindings, node.data('kind'), node.data('guid')
+    parser.parse()
 
-    i = 0
-    while i < target.childNodes.length
-      node = target.childNodes[i]
-      if node.nodeName == "#text"
-        addBinding bindings, 'text', node.textContent
-        target.removeChild(node)
-      else
-        i += 1
-
-        if $(node).hasClass('binding-container')
-          children = node.childNodes
-
-          j = 0
-          while j < children.length
-            child = children[j]
-            if child.localName == "div"
-              if $(child).hasClass('pill')
-                addBinding bindings, $(child).data('kind'), $(child).data('guid')
-              else if $(child).hasClass('text')
-                content = child.childNodes[0]
-                addBinding bindings, 'text', content.textContent
-              j += 1
-            else
-              addBinding bindings, 'text', child.textContent
-              node.removeChild(child)
-        else if $(node).hasClass('last-piece')
-          foundLastPiece = true
-          children = node.childNodes
-
-          j = 0
-          while j < children.length
-            child = children[j]
-            if child.nodeName == "#text"
-              addBinding bindings, 'text', child.textContent
-              unless child.textContent.length == 1 && child.textContent.charCodeAt(160)
-                child.textContent = String.fromCharCode(160)
-            j += 1
-
-    unless foundLastPiece
-      span = document.createElement("span")
-      span.className = "last-piece"
-      span.innerText = String.fromCharCode(160)
-      target.appendChild(span)
-
-    # Replace $scope.messageBindings' contents
-    args = [0, $scope.action.messageBindings.length].concat(bindings)
-    Array.prototype.splice.apply($scope.action.messageBindings, args)
-
-    console.log($scope.action.messageBindings)
+    # Replace $scope.message' contents
+    args = [0, $scope.action.message.length].concat(bindings)
+    Array.prototype.splice.apply($scope.action.message, args)
 
   $scope.makeNotEditable = (event) ->
     $scope.parseMessage(event)
@@ -351,6 +257,6 @@ mbuilder.controller 'SendMessageController', ['$scope', ($scope) ->
     true
 
   $scope.dropOverMessage = (event) ->
-    $scope.action.messageBindings.push draggedPill
+    $scope.action.message.push draggedPill
     true
 ]

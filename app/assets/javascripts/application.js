@@ -21,4 +21,5 @@
 //= require guid
 //= require ng-rails-csrf
 //= require pigeon
+//= require message_parser
 //= require_tree .
