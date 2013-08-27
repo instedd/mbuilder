@@ -1,7 +1,8 @@
 Select
 .dead-pill {{lookupTableName(action.table)}}
 where
-.pill{draggable: 'true', dragstart: 'bindingDragStart(action.pill)'}
+.dead-pill
   {{lookupFieldName(action.table, action.field)}}
 is
-.dead-pill {{lookupPillName(action.pill)}}
+.pill{draggable: 'true', dragstart: 'bindingDragStart(action.pill)'}
+  {{lookupPillName(action.pill)}}
