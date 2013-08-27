@@ -4,8 +4,4 @@ class Nuntium
   def self.new_from_config
     Nuntium.new Config['url'], Config['account'], Config['application'], Config['password']
   end
-
-  def add_contact(email)
-    xmpp_add_contact Config['channel'], email
-  end
 end
