@@ -11,7 +11,7 @@ class Application < ActiveRecord::Base
   serialize :tables
 
   def accept_message(message)
-    Executor.new(self).execute(message)
+    Executor.new(self).execute(message).messages
   end
 
   def tire_index

@@ -7,6 +7,12 @@ class Actions::SendMessageAction < Action
     @recipient = recipient
   end
 
+  def execute(context)
+    recipient = @recipient.solve(context)
+    message = @message.map { |binding| binding.solve(context) }.join " "
+    context.send_message(recipient, message)
+  end
+
   def self.from_hash(hash)
     new(MessageBinding.from_list(hash['message']), MessageBinding.from_hash(hash['recipient']))
   end

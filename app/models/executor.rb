@@ -14,7 +14,7 @@ class Executor
         context = ExecutionContext.new(@application, trigger, message, match)
         trigger.execute(context)
         context.finish
-        return
+        return context
       end
     end
   end

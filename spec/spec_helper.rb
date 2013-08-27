@@ -70,18 +70,13 @@ RSpec.configure do |config|
 
     def message(text)
       pieces = []
-      pos = 0
-      idx = text.index("{", pos)
-      while idx
-        pieces.push({'kind' => 'text', 'text' => text[pos ... idx].strip})
-        other_idx = text.index("}", idx + 1)
-        name = text[idx + 1 ... other_idx].strip
-        pieces.push({'kind' => 'pill', 'text' => name, 'guid' => name.downcase})
-        pos = other_idx + 1
-        idx = text.index("{", pos)
+      parse_message(text) do |kind, text|
+        if text == 'text'
+          pieces.push 'kind' => 'text', 'text' => text
+        else
+          pieces.push 'kind' => 'pill', 'text' => text, 'guid' => text.downcase
+        end
       end
-      rest = text[pos .. -1].strip
-      pieces.push({'kind' => 'text', 'text' => rest}) if rest.length > 0
       @message = Message.from_hash({'pieces' => pieces})
     end
 
@@ -106,6 +101,26 @@ RSpec.configure do |config|
       else
         raise "Wrong action text: #{text}"
       end
+    end
+
+    def send_message(recipient, text)
+      case recipient
+      when /text (.+)/
+        recipient = {'kind' => 'text', 'guid' => $1}
+      else
+        raise "Uknonw recipient: #{recipient}"
+      end
+
+      bindings = []
+      parse_message(text) do |kind, msg_text|
+        if kind == 'text'
+          bindings.push 'kind' => 'text', 'guid' => msg_text
+        else
+          bindings.push message_binding(msg_text)
+        end
+      end
+
+      @actions << Actions::SendMessageAction.from_hash('message' => bindings, 'recipient' => recipient)
     end
 
     def trigger
@@ -151,6 +166,14 @@ RSpec.configure do |config|
     end
   end
 
+  def message_binding(text)
+    if text =~ /implicit (.+)/
+      {'kind' => 'implicit', 'guid' => $1.strip}
+    else
+      {'kind' => 'message_piece', 'guid' => text.strip}
+    end
+  end
+
   def accept_message(from, body)
     application.accept_message(from: from, body: body)
   end
@@ -173,6 +196,24 @@ RSpec.configure do |config|
       result = result["_source"]
       result["type"].should eq(table)
       result["properties"].should eq(data[i])
+    end
+  end
+
+  def parse_message(text)
+    pieces = []
+    pos = 0
+    idx = text.index("{", pos)
+    while idx
+      yield 'text', text[pos ... idx].strip
+      other_idx = text.index("}", idx + 1)
+      name = text[idx + 1 ... other_idx].strip
+      yield 'pill', name
+      pos = other_idx + 1
+      idx = text.index("{", pos)
+    end
+    rest = text[pos .. -1].strip
+    if rest.length > 0
+      yield 'text', rest
     end
   end
 end

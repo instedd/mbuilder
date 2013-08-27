@@ -10,9 +10,10 @@ class MessagePiece
   end
 
   def append_pattern(pattern)
-    if kind == "text"
+    case kind
+    when "text"
       pattern << Regexp.escape(text)
-    else
+    when "pill"
       pattern << "("
       case infer_pattern
       when :float
@@ -25,6 +26,8 @@ class MessagePiece
         pattern << "\\w+"
       end
       pattern << ")"
+    else
+      raise "Unknown message piece kind: #{kind}"
     end
   end
 
