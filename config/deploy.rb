@@ -31,3 +31,5 @@ end
 
 before "deploy:start", "deploy:migrate"
 before "deploy:restart", "deploy:migrate"
+
+after "deploy:update_code", "deploy:symlink_configs"
