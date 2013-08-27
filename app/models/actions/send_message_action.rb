@@ -10,6 +10,11 @@ class Actions::SendMessageAction < Action
   def execute(context)
     recipient = @recipient.solve(context)
     message = @message.map { |binding| binding.solve(context) }.join " "
+
+    # TODO: maybe this is wrong
+    message.gsub!(" .", ".")
+    message.gsub!(" ,", ",")
+
     context.send_message(recipient, message)
   end
 

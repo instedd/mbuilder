@@ -41,4 +41,13 @@ describe Application do
     messages = accept_message "sms://1234", "register Peter"
     messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter from 1234"}])
   end
+
+  it "accepts message and send message with dot" do
+    new_trigger do
+      message "register {Name}"
+      send_message "text 5678", "Hello {name}. Your number is: {implicit phone number}"
+    end
+    messages = accept_message "sms://1234", "register Peter"
+    messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: 1234"}])
+  end
 end
