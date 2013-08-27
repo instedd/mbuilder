@@ -243,7 +243,9 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
     $scope.actions.push
       kind: 'send_message'
       message: []
-      contenteditable: 'true'
+      recipient: {kind: 'text', guid: ''}
+      messageEditable: 'false'
+      recipientEditable: 'false'
 ]
 
 mbuilder.controller 'SendMessageController', ['$scope', ($scope) ->
@@ -268,12 +270,12 @@ mbuilder.controller 'SendMessageController', ['$scope', ($scope) ->
     args = [0, $scope.action.message.length].concat(bindings)
     Array.prototype.splice.apply($scope.action.message, args)
 
-  $scope.makeNotEditable = (event) ->
+  $scope.makeMessageNotEditable = (event) ->
     $scope.parseMessage(event)
-    $scope.action.contenteditable = 'false'
+    $scope.action.messageEditable = 'false'
 
-  $scope.makeEditable = (event) ->
-    $scope.action.contenteditable = 'true'
+  $scope.makeMessageEditable = (event) ->
+    $scope.action.messageEditable = 'true'
 
   $scope.dragOverMessage = (event) ->
     event.preventDefault()
@@ -296,6 +298,52 @@ mbuilder.controller 'SendMessageController', ['$scope', ($scope) ->
         if range.startOffset == 0
           event.preventDefault()
           return false
+
+    true
+
+  $scope.parseRecipient = (event) ->
+    parser = new MessageParser(event.originalEvent.currentTarget)
+    parser.onText (text) ->
+      text = $.trim(text)
+      if text.length > 0
+        $scope.action.recipient = {kind: 'text', guid: text}
+    parser.onPill (node) ->
+      $scope.action.recipient = {kind: node.data('kind'), guid: node.data('guid')}
+    parser.lastPieceNeeded ->
+      $scope.action.recipient.kind != 'text'
+    parser.parse()
+
+  $scope.makeRecipientNotEditable = (event) ->
+    $scope.parseRecipient(event)
+    $scope.action.recipientEditable = 'false'
+
+  $scope.makeRecipientEditable = (event) ->
+    $scope.action.recipientEditable = 'true'
+
+  $scope.dragOverRecipient = (event) ->
+    event.preventDefault()
+    true
+
+  $scope.dropOverRecipient = (event) ->
+    $scope.action.recipient = draggedPill
+    MessageParser.appendLastPieceTo(event.target)
+    true
+
+  $scope.handleRecipientKey = (event) ->
+    hasPill = $scope.action.recipient.kind != 'text'
+
+    if event.keyCode == 8 # delete
+      if hasPill
+        $scope.action.recipient = {kind: 'text', guid: ''}
+        event.preventDefault()
+        return false
+
+      if $.trim(event.originalEvent.target.innerText).length == 0
+        event.preventDefault()
+        return false
+    else if hasPill
+      event.preventDefault()
+      return false
 
     true
 ]

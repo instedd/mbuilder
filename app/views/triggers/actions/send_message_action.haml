@@ -1,9 +1,10 @@
 %div{'ng-controller' => 'SendMessageController'}
   Send this mesasge
   %br
-  .message-area{contenteditable: '{{action.contenteditable}}', 'ng-blur' => 'makeNotEditable($event)', 'ng-mousedown' => 'makeEditable($event)', dragover: 'dragOverMessage($event)', drop: 'dropOverMessage($event)', 'ng-keydown' => 'handleMessageKey($event)'}
+  .message-area{contenteditable: '{{action.messageEditable}}', 'ng-blur' => 'makeMessageNotEditable($event)', 'ng-mousedown' => 'makeMessageEditable($event)', dragover: 'dragOverMessage($event)', drop: 'dropOverMessage($event)', 'ng-keydown' => 'handleMessageKey($event)'}
     %span{contenteditable: 'false'}
     %span.piece-container{'ng-repeat' => 'binding in action.message', 'ng-include' => true, 'src' => 'bindingTemplateFor(binding.kind)'}<>
-  %br
   to
-  %input{'ng-model' => "action.recipient"}
+  .message-input{contenteditable: '{{action.recipientEditable}}', 'ng-blur' => 'makeRecipientNotEditable($event)', 'ng-mousedown' => 'makeRecipientEditable($event)', dragover: 'dragOverRecipient($event)', drop: 'dropOverRecipient($event)', 'ng-keydown' => 'handleRecipientKey($event)'}
+    %span{contenteditable: 'false'}
+    %span.piece-container{'ng-repeat' => 'binding in [action.recipient]', 'ng-include' => true, 'src' => 'bindingTemplateFor(binding.kind)'}<>
