@@ -10,14 +10,19 @@ class @MessageParser
     @onPill = fun
     this
 
+  lastPieceNeeded: (fun) ->
+    @lastPieceNeeded = fun
+
   parse: ->
     sel = window.getSelection()
     if sel.rangeCount > 0
       @range = sel.getRangeAt(0)
       if @range.startOffset != @range.endOffset
-        @selNode = sel.baseNode
+        @selNode = sel.anchorNode
+        if @selNode.nodeName == "#text" && $.trim(@selNode.textContent).length == 0
+          @selNode = sel.focusNode
 
-    foundLastPiece = false
+    lastPiece = null
 
     i = 0
     while i < @element.childNodes.length
@@ -29,11 +34,9 @@ class @MessageParser
         i += 1
 
         if $(node).hasClass('piece-container')
-          children = node.childNodes
-
           j = 0
-          while j < children.length
-            child = children[j]
+          while j < node.childNodes.length
+            child = node.childNodes[j]
             if child.localName == "div"
               $child = $(child)
               if $child.hasClass('pill')
@@ -46,20 +49,26 @@ class @MessageParser
               @onText(child.textContent, child == @selNode)
               node.removeChild(child)
         else if $(node).hasClass('last-piece')
-          foundLastPiece = true
-          children = node.childNodes
+          lastPiece = node
 
           j = 0
-          while j < children.length
-            child = children[j]
+          while j < node.childNodes.length
+            child = node.childNodes[j]
             if child.nodeName == "#text"
-              @onText(child.textContent, false)
+              @onText(child.textContent, child == @selNode)
               unless child.textContent.length == 1 && child.textContent.charCodeAt(160)
                 child.textContent = String.fromCharCode(160)
             j += 1
 
-    unless foundLastPiece
-      span = document.createElement("span")
-      span.className = "last-piece"
-      span.innerText = String.fromCharCode(160)
-      @element.appendChild(span)
+    lastPieceNeeded = @lastPieceNeeded()
+    if lastPiece && !lastPieceNeeded
+      lastPiece.parentNode.removeChild(lastPiece)
+    else if !lastPiece && lastPieceNeeded
+      MessageParser.appendLastPieceTo(@element)
+
+  @appendLastPieceTo: (element) ->
+    span = document.createElement("span")
+    span.className = "last-piece"
+    span.innerText = String.fromCharCode(160)
+    element.appendChild(span)
+

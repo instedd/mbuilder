@@ -91,6 +91,10 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
   addSelection = (pieces, text, range) ->
     start = range.startOffset
     end = range.endOffset
+    if start > end
+      tmp = start
+      start = end
+      end = tmp
 
     while start > 0 && text[start] != ' '
       start -= 1
@@ -129,6 +133,8 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
         addPiece pieces, 'text', text
     parser.onPill (node) ->
       addPiece pieces, 'pill', node.text(), node.data('guid')
+    parser.lastPieceNeeded ->
+      pieces.length > 0 && pieces[pieces.length - 1].kind != 'text'
     parser.parse()
 
     # Replace $scope.pieces' contents only if it changed
@@ -147,8 +153,16 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
     $scope.parseMessage(event)
     $scope.contenteditable = 'false'
 
+  $scope.makeEditable = (event) ->
+    unless $(event.originalEvent.target).hasClass('pill')
+      $scope.contenteditable = 'true'
+
   $scope.handleMessageKey = (event) ->
     if event.keyCode == 8 # delete
+      if $.trim(event.originalEvent.target.innerText).length == 0
+        event.preventDefault()
+        return false
+
       sel = window.getSelection()
       if sel.rangeCount > 0
         range = sel.getRangeAt(0)
@@ -246,6 +260,8 @@ mbuilder.controller 'SendMessageController', ['$scope', ($scope) ->
       addBinding bindings, 'text', text
     parser.onPill (node) ->
       addBinding bindings, node.data('kind'), node.data('guid')
+    parser.lastPieceNeeded ->
+      bindings.length > 0 && bindings[bindings.length - 1].kind != 'text'
     parser.parse()
 
     # Replace $scope.message' contents
@@ -265,6 +281,7 @@ mbuilder.controller 'SendMessageController', ['$scope', ($scope) ->
 
   $scope.dropOverMessage = (event) ->
     $scope.action.message.push draggedPill
+    MessageParser.appendLastPieceTo(event.target)
     true
 
   $scope.handleMessageKey = (event) ->
