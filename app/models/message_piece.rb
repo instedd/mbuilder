@@ -21,9 +21,9 @@ class MessagePiece
       when :integer
         pattern << "\\d+"
       when :multiple_word
-        pattern << "[\\w\\s]+"
+        pattern << "[\\S\\s]+"
       when :single_word
-        pattern << "\\w+"
+        pattern << "\\S+"
       end
       pattern << ")"
     else

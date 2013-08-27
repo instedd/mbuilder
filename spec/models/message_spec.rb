@@ -8,7 +8,7 @@ describe Message do
         {'kind' => 'pill', 'text' => 'John'},
       ]
     })
-    msg.compile.should eq("\\A\\s*register\\s+(\\w+)\\s*\\Z")
+    msg.compile.should eq("\\A\\s*register\\s+(\\S+)\\s*\\Z")
   end
 
   it "compiles message with multiple word" do
@@ -19,7 +19,7 @@ describe Message do
         {'kind' => 'text', 'text' => 'as user'},
       ]
     })
-    msg.compile.should eq("\\A\\s*register\\s+([\\w\\s]+)\\s+as\\ user\\s*\\Z")
+    msg.compile.should eq("\\A\\s*register\\s+([\\S\\s]+)\\s+as\\ user\\s*\\Z")
   end
 
   it "compiles message with integer" do

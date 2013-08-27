@@ -22,6 +22,16 @@ describe Application do
     assert_data "users", {"phone" => "1234", "name" => "Peter"}
   end
 
+  it "accepts message and creates entity with a stored value when value is number" do
+    new_trigger do
+      message "register {Name}"
+      create_entity "users.phone = implicit phone number"
+      store_entity_value "users.name = name"
+    end
+    accept_message 'sms://1234', 'register 5678'
+    assert_data "users", {"phone" => "1234", "name" => "5678"}
+  end
+
   it "accepts message and updates entity with a stored value" do
     add_data "users", {"phone" => "1234", "name" => "John"}
     new_trigger do
