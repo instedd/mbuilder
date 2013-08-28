@@ -56,8 +56,11 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     if pill.kind == 'implicit'
       pill.guid
     else
-      pill = _.find $scope.pieces, (piece) -> piece.guid == pill.guid
+      pill = $scope.lookupPill(pill.guid)
       pill?.text
+
+  $scope.lookupPill = (guid) ->
+      _.find $scope.pieces, (piece) -> piece.guid == guid
 
   $scope.fieldBindingDragStart = (tableGuid, fieldGuid) ->
     $scope.bindingDragStart($scope.lookupFieldAction(tableGuid, fieldGuid).pill)
@@ -232,8 +235,14 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
   createTableFieldAction = (kind, args) ->
     action = $scope.lookupFieldAction(args.table.guid, args.field.guid)
     if action
-      debugger
-      action.pill = args.pill
+      status = $scope.lookupPillStatus(action.pill)
+      if status == "unbound"
+        # If the current field is unbound, we make the piece have
+        # the guid of the unbound piece, so everything will be connected again.
+        pill = $scope.lookupPill(args.pill.guid)
+        pill.guid = action.pill.guid
+      else
+        action.pill = args.pill
     else
       $scope.actions.push
         kind: kind
