@@ -74,12 +74,7 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     true
 
   $scope.dropOverUnboundPill = (pill, event) ->
-    pillGuid = pill.guid
-
-    $scope.visitPills (otherPill) ->
-      if otherPill.guid == pillGuid
-        otherPill.kind = draggedPill.kind
-        otherPill.guid = draggedPill.guid
+    $scope.replacePills(pill.guid, draggedPill)
 
     event.stopPropagation()
 
@@ -92,6 +87,12 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
         for binding in action.message
           fun(binding)
         fun(action.recipient)
+
+  $scope.replacePills = (guid, newPill) ->
+    $scope.visitPills (otherPill) ->
+      if otherPill.guid == guid
+        otherPill.kind = newPill.kind
+        otherPill.guid = newPill.guid
 
   $scope.save = ->
     data =
@@ -261,10 +262,8 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
     if action
       status = $scope.lookupPillStatus(action.pill)
       if status == "unbound"
-        # If the current field is unbound, we make the piece have
-        # the guid of the unbound piece, so everything will be connected again.
-        pill = $scope.lookupPill(args.pill.guid)
-        pill.guid = action.pill.guid
+        actionGuid = action.pill.guid
+        $scope.replacePills(actionGuid, args.pill)
       else
         action.pill = args.pill
     else
