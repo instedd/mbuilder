@@ -6,5 +6,5 @@ where
 is
 .pill{'ng-show' => 'lookupPillStatus(action.pill) == "bound"', draggable: 'true', dragstart: 'bindingDragStart(action.pill)'}
   {{lookupPillName(action.pill)}}
-.unbound-pill{'ng-show' => 'lookupPillStatus(action.pill) == "unbound"', draggable: 'true', dragstart: 'bindingDragStart(action.pill)'}
+.unbound-pill{'ng-show' => 'lookupPillStatus(action.pill) == "unbound"', draggable: 'true', dragstart: 'bindingDragStart(action.pill)', dragover: 'dragOverUnboundPill(action.pill, $event)', drop: 'dropOverUnboundPill(action.pill, $event)'}
   ???

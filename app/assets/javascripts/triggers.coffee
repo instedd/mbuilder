@@ -69,6 +69,30 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     draggedPill = pill
     event.dataTransfer.setData("Text", $scope.lookupPillName(pill))
 
+  $scope.dragOverUnboundPill = (pill, event) ->
+    event.preventDefault()
+    true
+
+  $scope.dropOverUnboundPill = (pill, event) ->
+    pillGuid = pill.guid
+
+    $scope.visitPills (otherPill) ->
+      if otherPill.guid == pillGuid
+        otherPill.kind = draggedPill.kind
+        otherPill.guid = draggedPill.guid
+
+    event.stopPropagation()
+
+  $scope.visitPills = (fun) ->
+    for action in $scope.actions
+      if action.pill
+        fun(action.pill)
+
+      if action.kind == 'send_message'
+        for binding in action.message
+          fun(binding)
+        fun(action.recipient)
+
   $scope.save = ->
     data =
       name: $scope.name
