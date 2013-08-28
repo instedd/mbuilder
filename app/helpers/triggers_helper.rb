@@ -13,15 +13,11 @@ module TriggersHelper
       str << "actions=[];"
     end
 
-
     if application.tables
       str << "tables=#{application.tables.map(&:as_json).to_json};"
     else
       str << "tables=[];"
     end
     str
-  end
-
-  def actions_to_angular(actions)
   end
 end

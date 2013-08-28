@@ -4,5 +4,7 @@ where
 .dead-pill
   {{lookupFieldName(action.table, action.field)}}
 is
-.pill{draggable: 'true', dragstart: 'bindingDragStart(action.pill)'}
+.pill{'ng-show' => 'lookupPillStatus(action.pill) == "bound"', draggable: 'true', dragstart: 'bindingDragStart(action.pill)'}
   {{lookupPillName(action.pill)}}
+.unbound-pill{'ng-show' => 'lookupPillStatus(action.pill) == "unbound"', draggable: 'true', dragstart: 'bindingDragStart(action.pill)'}
+  ???

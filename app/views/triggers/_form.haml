@@ -51,9 +51,11 @@
 
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
-                  .empty-field{'ng-hide' => 'lookupFieldValue(table.guid, field.guid)'}
+                  .empty-field{'ng-show' => 'lookupFieldStatus(table.guid, field.guid) == "empty"'}
                     new value
-                  .pill{'ng-show' => 'lookupFieldValue(table.guid, field.guid)', draggable: 'true', dragstart: 'fieldBindingDragStart(table.guid, field.guid)'}
+                  .unbound-pill{'ng-show' => 'lookupFieldStatus(table.guid, field.guid) == "unbound"'}
+                    ???
+                  .pill{'ng-show' => 'lookupFieldStatus(table.guid, field.guid) == "bound"', draggable: 'true', dragstart: 'fieldBindingDragStart(table.guid, field.guid)'}
                     {{lookupFieldValue(table.guid, field.guid)}}
                 %td
           %br

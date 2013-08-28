@@ -21,7 +21,7 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
   $scope.lookupFieldName = (tableGuid, fieldGuid) ->
     table = $scope.lookupTable(tableGuid)
     field = _.find table.fields, (field) -> field.guid == fieldGuid
-    field.name
+    field?.name
 
   $scope.lookupFieldAction = (tableGuid, fieldGuid) ->
     for action in $scope.actions
@@ -30,6 +30,13 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
 
     null
 
+  $scope.lookupFieldStatus = (tableGuid, fieldGuid) ->
+    action = $scope.lookupFieldAction(tableGuid, fieldGuid)
+    if action
+      return $scope.lookupPillStatus(action.pill)
+
+    'empty'
+
   $scope.lookupFieldValue = (tableGuid, fieldGuid) ->
     action = $scope.lookupFieldAction(tableGuid, fieldGuid)
     if action
@@ -37,12 +44,20 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
 
     null
 
+  $scope.lookupPillStatus = (pill) ->
+    return 'bound' if pill.kind == 'implicit'
+
+    pill = _.find $scope.pieces, (piece) -> piece.guid == pill.guid
+    return 'bound' if pill
+
+    'unbound'
+
   $scope.lookupPillName = (pill) ->
     if pill.kind == 'implicit'
       pill.guid
     else
       pill = _.find $scope.pieces, (piece) -> piece.guid == pill.guid
-      pill.text
+      pill?.text
 
   $scope.fieldBindingDragStart = (tableGuid, fieldGuid) ->
     $scope.bindingDragStart($scope.lookupFieldAction(tableGuid, fieldGuid).pill)
@@ -169,11 +184,6 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
         if range.startOffset == 0
           event.preventDefault()
           return false
-        else
-          parent = $(sel.extentNode.parentNode)
-          if parent.hasClass('pill') && parent.text().length == 1
-            event.preventDefault()
-            return false
 
     true
 
@@ -222,6 +232,7 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
   createTableFieldAction = (kind, args) ->
     action = $scope.lookupFieldAction(args.table.guid, args.field.guid)
     if action
+      debugger
       action.pill = args.pill
     else
       $scope.actions.push
