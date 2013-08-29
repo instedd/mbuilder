@@ -196,10 +196,14 @@ RSpec.configure do |config|
     results = application.tire_search(table).perform.results
     results.length.should eq(data.length)
 
-    results.each_with_index do |result, i|
-      result = result["_source"]
-      result["type"].should eq(table)
-      result["properties"].should eq(data[i])
+    results = results.map { |result| result["_source"]["properties"] }
+
+    results.each do |result|
+      result_count = results.count(result)
+      data_count = data.count(result)
+      if result_count != data_count
+        fail("'#{result}' found #{data_count} times in expected results, but was found #{result_count} in actual results")
+      end
     end
   end
 

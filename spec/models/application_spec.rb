@@ -33,20 +33,27 @@ describe Application do
   end
 
   it "accepts message and updates one entity with a stored value" do
-    add_data "users", {"phone" => "1234", "name" => "John"}
+    add_data "users", [
+      {"phone" => "1234", "name" => "John"},
+      {"phone" => "5678", "name" => "Doe"},
+    ]
     new_trigger do
       message "register {Name}"
       select_entity "users.phone = implicit phone number"
       store_entity_value "users.name = name"
     end
     accept_message "sms://1234", "register Peter"
-    assert_data "users", {"phone" => "1234", "name" => "Peter"}
+    assert_data "users", [
+      {"phone" => "1234", "name" => "Peter"},
+      {"phone" => "5678", "name" => "Doe"},
+    ]
   end
 
   it "accepts message and updates many entities with a stored value" do
     add_data "users", [
       {"phone" => "1234", "name" => "John"},
       {"phone" => "1234", "name" => "Doe"},
+      {"phone" => "5678", "name" => "Foo"},
     ]
     new_trigger do
       message "register {Name}"
@@ -57,6 +64,23 @@ describe Application do
     assert_data "users", [
       {"phone" => "1234", "name" => "Peter"},
       {"phone" => "1234", "name" => "Peter"},
+      {"phone" => "5678", "name" => "Foo"},
+    ]
+  end
+
+  it "accepts message and updates all entities with a stored value" do
+    add_data "users", [
+      {"phone" => "1234", "name" => "John"},
+      {"phone" => "5678", "name" => "Doe"},
+    ]
+    new_trigger do
+      message "register {Name}"
+      store_entity_value "users.name = name"
+    end
+    accept_message "sms://1234", "register Peter"
+    assert_data "users", [
+      {"phone" => "1234", "name" => "Peter"},
+      {"phone" => "5678", "name" => "Peter"},
     ]
   end
 

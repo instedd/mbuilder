@@ -293,6 +293,9 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
       recipient: {kind: 'text', guid: ''}
       messageEditable: 'false'
       recipientEditable: 'false'
+
+  $scope.deleteAction = (index) ->
+    $scope.actions.splice(index, 1)
 ]
 
 mbuilder.controller 'SendMessageController', ['$scope', ($scope) ->

@@ -24,7 +24,7 @@ class ExecutionContext
   end
 
   def entity(table)
-    @entities[table]
+    @entities[table] ||= EntitySelection.new(self, table)
   end
 
   def implicit_value(name)
@@ -40,14 +40,10 @@ class ExecutionContext
   end
 
   def insert(table, properties)
-    index = application.tire_index
-    index.store type: table, properties: properties
-    index.refresh
-  end
+    now = Tire.format_date(Time.now)
 
-  def update(table, id, properties)
     index = application.tire_index
-    index.store type: table, id: id, properties: properties
+    index.store type: table, properties: properties, created_at: now, updated_at: now
     index.refresh
   end
 
@@ -58,9 +54,12 @@ class ExecutionContext
     yield search
 
     results = search.perform.results
+
+    now = Tire.format_date(Time.now)
+
     results.each do |result|
       new_properties = result["_source"]["properties"].merge(properties)
-      index.store type: table, id: result["_id"], properties: new_properties
+      index.store type: table, id: result["_id"], properties: new_properties, updated_at: now
     end
 
     index.refresh
