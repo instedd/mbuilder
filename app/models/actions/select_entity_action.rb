@@ -11,7 +11,7 @@ class Actions::SelectEntityAction < Action
 
   def execute(context)
     value = pill.value_in(context)
-    context.find_entity(table, field, value)
+    context.select_entities(table, field, value)
   end
 
   def self.from_hash(hash)

@@ -16,23 +16,11 @@ class ExecutionContext
   end
 
   def new_entity(table)
-    @entities[table] ||= Entity.new(self, table, nil)
+    @entities[table] = NewEntity.new(self, table)
   end
 
-  def find_entity(table, field, value)
-    search = application.tire_search(table)
-    search.filter :term, field => value
-    results = search.perform.results
-    result = results[0]
-
-    entity = Entity.new(self, table, result["_id"])
-    @entities[table] ||= entity
-
-    result["_source"]["properties"].each do |prop_name, prop_value|
-      entity[prop_name] = prop_value
-    end
-
-    entity
+  def select_entities(table, field, value)
+    @entities[table] = EntitySelection.new(self, table).eq(field, value)
   end
 
   def entity(table)
@@ -60,6 +48,21 @@ class ExecutionContext
   def update(table, id, properties)
     index = application.tire_index
     index.store type: table, id: id, properties: properties
+    index.refresh
+  end
+
+  def update_many(table, properties)
+    index = application.tire_index
+    search = application.tire_search(table)
+
+    yield search
+
+    results = search.perform.results
+    results.each do |result|
+      new_properties = result["_source"]["properties"].merge(properties)
+      index.store type: table, id: result["_id"], properties: new_properties
+    end
+
     index.refresh
   end
 

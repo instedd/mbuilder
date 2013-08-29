@@ -179,6 +179,8 @@ RSpec.configure do |config|
   end
 
   def add_data(table, *data)
+    data = data[0] if data.length == 1 && data[0].is_a?(Array)
+
     data.each do |properties|
       application.tire_index.store type: table, properties: properties
     end
@@ -186,6 +188,8 @@ RSpec.configure do |config|
   end
 
   def assert_data(table, *data)
+    data = data[0] if data.length == 1 && data[0].is_a?(Array)
+
     index = application.tire_index
     index.exists?.should be_true
 

@@ -32,7 +32,7 @@ describe Application do
     assert_data "users", {"phone" => "1234", "name" => "5678"}
   end
 
-  it "accepts message and updates entity with a stored value" do
+  it "accepts message and updates one entity with a stored value" do
     add_data "users", {"phone" => "1234", "name" => "John"}
     new_trigger do
       message "register {Name}"
@@ -43,7 +43,24 @@ describe Application do
     assert_data "users", {"phone" => "1234", "name" => "Peter"}
   end
 
-  it "accepts message and send message" do
+  it "accepts message and updates many entities with a stored value" do
+    add_data "users", [
+      {"phone" => "1234", "name" => "John"},
+      {"phone" => "1234", "name" => "Doe"},
+    ]
+    new_trigger do
+      message "register {Name}"
+      select_entity "users.phone = implicit phone number"
+      store_entity_value "users.name = name"
+    end
+    accept_message "sms://1234", "register Peter"
+    assert_data "users", [
+      {"phone" => "1234", "name" => "Peter"},
+      {"phone" => "1234", "name" => "Peter"},
+    ]
+  end
+
+  it "accepts message and sends message" do
     new_trigger do
       message "register {Name}"
       send_message "text 5678", "Hello {name} from {implicit phone number}"
@@ -52,7 +69,7 @@ describe Application do
     messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter from 1234"}])
   end
 
-  it "accepts message and send message with dot" do
+  it "accepts message and sends message with dot" do
     new_trigger do
       message "register {Name}"
       send_message "text 5678", "Hello {name}. Your number is: {implicit phone number}"
