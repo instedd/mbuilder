@@ -18,4 +18,8 @@ class Trigger < ActiveRecord::Base
       action.execute(context)
     end
   end
+
+  def generate_from_number
+    "+1-(234)-567-8912"
+  end
 end

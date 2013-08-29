@@ -1,7 +1,9 @@
 class Message
+  attr_accessor :from
   attr_accessor :pieces
 
-  def initialize(pieces)
+  def initialize(from, pieces)
+    @from = from
     @pieces = pieces
   end
 
@@ -19,6 +21,6 @@ class Message
     pieces = hash['pieces'].map do |piece|
       MessagePiece.from_hash(piece)
     end
-    new pieces
+    new hash['from'], pieces
   end
 end

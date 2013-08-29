@@ -54,13 +54,16 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
 
   $scope.lookupPillName = (pill) ->
     if pill.kind == 'implicit'
-      pill.guid
+      $scope.lookupImplicitBinding(pill.guid)
     else
       pill = $scope.lookupPill(pill.guid)
       pill?.text
 
   $scope.lookupPill = (guid) ->
-      _.find $scope.pieces, (piece) -> piece.guid == guid
+    _.find $scope.pieces, (piece) -> piece.guid == guid
+
+  $scope.lookupImplicitBinding = (guid) ->
+    $scope.from
 
   $scope.fieldBindingDragStart = (tableGuid, fieldGuid) ->
     $scope.bindingDragStart($scope.lookupFieldAction(tableGuid, fieldGuid).pill)
@@ -99,6 +102,7 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
       name: $scope.name
       tables: $scope.tables
       message:
+        from: $scope.from
         pieces: $scope.pieces
       actions: $scope.actions
 
@@ -123,7 +127,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
 
   $scope.phoneNumberDragStart = (event) ->
     draggedPill = {kind: "implicit", guid: "phone number"}
-    event.dataTransfer.setData("Text", "phone number")
+    event.dataTransfer.setData("Text", $scope.lookupImplicitBinding(draggedPill.guid))
 
   addPiece = (pieces, kind, text, guid = window.guid()) ->
     text = $.trim(text)

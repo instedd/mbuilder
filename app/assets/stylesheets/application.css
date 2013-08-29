@@ -18,6 +18,18 @@ body {
   padding-top: 60px;
 }
 
+.message-container {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid gray;
+  padding: 10px;
+}
+
+.message-container .from {
+  margin-bottom: 10px;
+}
+
 .message-area {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
