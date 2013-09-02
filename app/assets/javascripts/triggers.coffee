@@ -43,6 +43,14 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
   $scope.bindingTemplateFor = (kind) ->
     "#{kind}_binding"
 
+  $scope.pillTemplateFor = (pill) ->
+    status = $scope.lookupPillStatus(pill)
+    "#{status}_pill"
+
+  $scope.fieldTemplateFor = (tableGuid, fieldGuid) ->
+    status = $scope.lookupFieldStatus(tableGuid, fieldGuid)
+    "#{status}_field"
+
   $scope.lookupTable = (guid) ->
     _.find $scope.tables, (table) -> table.guid == guid
 
@@ -53,6 +61,12 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     table = $scope.lookupTable(tableGuid)
     field = _.find table.fields, (field) -> field.guid == fieldGuid
     field?.name
+
+  $scope.lookupJoinedFieldName = (tableFieldGuid) ->
+    [tableGuid, fieldGuid] = tableFieldGuid.split(';')
+    tableName = $scope.lookupTableName(tableGuid)
+    fieldName = $scope.lookupFieldName(tableGuid, fieldGuid)
+    "#{tableName} #{fieldName}"
 
   $scope.lookupFieldAction = (tableGuid, fieldGuid) ->
     for action in $scope.actions
@@ -80,19 +94,26 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     null
 
   $scope.lookupPillStatus = (pill) ->
-    return 'bound' if pill.kind == 'implicit'
+    switch pill.kind
+      when 'implicit'
+        return 'bound'
+      when 'field'
+        return 'field'
+      else
+        pill = _.find $scope.pieces, (piece) -> piece.guid == pill.guid
+        return 'bound' if pill
 
-    pill = _.find $scope.pieces, (piece) -> piece.guid == pill.guid
-    return 'bound' if pill
-
-    'unbound'
+        'unbound'
 
   $scope.lookupPillName = (pill) ->
-    if pill.kind == 'implicit'
-      $scope.lookupImplicitBinding(pill.guid)
-    else
-      pill = $scope.lookupPill(pill.guid)
-      pill?.text
+    switch pill.kind
+      when 'implicit'
+        $scope.lookupImplicitBinding(pill.guid)
+      when 'field'
+        $scope.lookupJoinedFieldName(pill.guid)
+      else
+        pill = $scope.lookupPill(pill.guid)
+        pill?.text
 
   $scope.lookupPill = (guid) ->
     _.find $scope.pieces, (piece) -> piece.guid == guid
@@ -101,11 +122,19 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     $scope.from
 
   $scope.fieldBindingDragStart = (tableGuid, fieldGuid) ->
-    $scope.bindingDragStart($scope.lookupFieldAction(tableGuid, fieldGuid).pill)
+    action = $scope.lookupFieldAction(tableGuid, fieldGuid)
+    if action
+      $scope.bindingDragStart(action.pill)
+    else
+      $scope.fieldValueDragStart(tableGuid, fieldGuid)
 
   $scope.bindingDragStart = (pill) ->
     draggedPill = pill
     event.dataTransfer.setData("Text", $scope.lookupPillName(pill))
+
+  $scope.fieldValueDragStart = (tableGuid, fieldGuid) ->
+    draggedPill = {kind: 'field', guid: "#{tableGuid};#{fieldGuid}"}
+    event.dataTransfer.setData("Text", $scope.lookupFieldName(tableGuid, fieldGuid))
 
   $scope.dragOverUnboundPill = (pill, event) ->
     event.preventDefault()
