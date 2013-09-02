@@ -130,6 +130,25 @@ body {
   display: inline-block;
 }
 
+table.fields {
+  min-width: 300px;
+  width: auto;
+}
+
+table.fields td {
+  min-width: 80px;
+}
+
+table.fields td div {
+  min-height: 30px;
+  padding-top: 1px;
+  padding-left: 1px;
+}
+
+table.fields input {
+  padding: 0px;
+}
+
 table.fields th, table.fields td {
   padding: 4px;
 }

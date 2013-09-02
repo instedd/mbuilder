@@ -2,6 +2,37 @@ mbuilder = angular.module('mbuilder', ['drag-and-drop', 'focus-and-blur', 'keys'
 
 draggedPill = null
 
+mbuilder.directive 'editableInput', ->
+  restrict: 'E'
+  scope: {
+    model: '='
+    editable: '='
+    focus: '='
+    dragover: '&'
+    drop: '&'
+  }
+  link: (scope, elem, attrs) ->
+    if scope.focus
+      window.setTimeout (-> $('input', elem).focus()), 0
+
+    scope.makeEditable = ->
+      scope.editable = true
+      window.setTimeout (-> $('input', elem).focus()), 0
+
+    scope.makeNotEditable = ->
+      scope.editable = false
+
+    scope.checkEnter = (event) ->
+      if event.originalEvent.keyCode == 13
+        scope.editable = false
+      true
+
+    scope.size = ->
+      len = scope.model.length
+      if len == 0 then 1 else len
+
+  templateUrl: 'editable_input'
+
 mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http) ->
   $scope.actionTemplateFor = (kind) ->
     "#{kind}_action"
@@ -112,8 +143,6 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     else
       url = "/applications/#{$scope.applicationId}/triggers"
       method = "post"
-
-    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
 
     call = $http[method](url, JSON.stringify(data))
     call.success (data, status, headers, config) =>
@@ -231,6 +260,8 @@ mbuilder.controller 'TablesController', ['$scope', ($scope) ->
       guid: window.guid()
       name: "Table #{$scope.tables.length + 1}"
       fields: []
+      editable: true
+      focus: true
 ]
 
 mbuilder.controller 'TableController', ['$scope', ($scope) ->
@@ -238,6 +269,8 @@ mbuilder.controller 'TableController', ['$scope', ($scope) ->
     $scope.table.fields.push
       guid: window.guid()
       name: "Field #{$scope.table.fields.length + 1}"
+      editable: true
+      focus: true
 ]
 
 mbuilder.controller 'FieldController', ['$scope', ($scope) ->

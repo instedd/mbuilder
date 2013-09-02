@@ -1,4 +1,5 @@
 %div{'ng-app' => 'mbuilder'}
+  - angular_templates "shared/angular"
   - angular_templates "triggers/actions"
   - angular_templates "triggers/bindings"
   - angular_templates "triggers/pieces"
@@ -45,12 +46,13 @@
 
         %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
           %div.logic-table
-            %input{'ng-model' => 'table.name', type: :text}
+            %editable-input{'model' => 'table.name', 'editable' => 'table.editable', 'focus' => 'table.focus'}
 
             %table.table.table-bordered.fields
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
-                  %input.input-small{'ng-model' => 'field.name', dragover: 'dragOverName($event)', drop: 'dropOverName($event)', type: :text}
+                  %editable-input{'model' => 'field.name', 'editable' => 'field.editable', 'focus' => 'field.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
+                  / %input.input-small{'ng-model' => 'field.name', type: :text}
                 %td
                   %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
 
