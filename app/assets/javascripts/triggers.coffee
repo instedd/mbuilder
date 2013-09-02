@@ -66,7 +66,11 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     if action
       return $scope.lookupPillStatus(action.pill)
 
-    'empty'
+    tableAction = _.find $scope.actions, (action) -> action.table == tableGuid
+    if tableAction?.kind == 'select_entity'
+      return 'existing'
+
+    'new'
 
   $scope.lookupFieldValue = (tableGuid, fieldGuid) ->
     action = $scope.lookupFieldAction(tableGuid, fieldGuid)
