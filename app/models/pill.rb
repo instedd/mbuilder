@@ -9,6 +9,8 @@ class Pill
 
   def value_in(context)
     case kind
+    when 'text'
+      guid
     when 'implicit'
       context.implicit_value(guid)
     when 'piece'
@@ -18,6 +20,12 @@ class Pill
       context.entity_field_values(table, field)
     else
       raise "Unkonwn pill kind: #{kind}"
+    end
+  end
+
+  def self.from_list(list)
+    list.map do |hash|
+      from_hash hash
     end
   end
 

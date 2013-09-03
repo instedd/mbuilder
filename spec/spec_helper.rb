@@ -178,7 +178,7 @@ RSpec.configure do |config|
     when /([^\.]+)\.([^\.]+)/
       {'kind' => 'field', 'guid' => "#{$1};#{$2}"}
     else
-      {'kind' => 'message_piece', 'guid' => text.strip}
+      {'kind' => 'piece', 'guid' => text.strip}
     end
   end
 

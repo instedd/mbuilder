@@ -282,7 +282,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
     true
 
   $scope.dragPill = (piece, event) ->
-    draggedPill = {kind: "message_piece", guid: piece.guid}
+    draggedPill = {kind: "piece", guid: piece.guid}
     event.dataTransfer.setData("Text", piece.text)
     true
 ]

@@ -9,29 +9,29 @@ class Actions::SendMessageAction < Action
 
   def execute(context)
     message = @message.map do |binding|
-      solved = binding.solve(context)
-      Array(solved).join ", "
+      value = binding.value_in(context)
+      Array(value).join ", "
     end.join " "
 
     # TODO: maybe this is wrong
     message.gsub!(" .", ".")
     message.gsub!(" ,", ",")
 
-    recipients = @recipient.solve(context)
+    recipients = @recipient.value_in(context)
     Array(recipients).each do |recipient|
       context.send_message(recipient, message)
     end
   end
 
   def self.from_hash(hash)
-    new(MessageBinding.from_list(hash['message']), MessageBinding.from_hash(hash['recipient']))
+    new(Pill.from_list(hash['message']), Pill.from_hash(hash['recipient']))
   end
 
   def as_json
     {
       kind: kind,
-      message: message,
-      recipient: recipient,
+      message: message.as_json,
+      recipient: recipient.as_json,
     }
   end
 end
