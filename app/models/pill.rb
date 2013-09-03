@@ -13,6 +13,9 @@ class Pill
       context.implicit_value(guid)
     when 'piece'
       context.piece_value(guid)
+    when 'field'
+      table, field = guid.split ';'
+      context.entity_field_values(table, field)
     else
       raise "Unkonwn pill kind: #{kind}"
     end

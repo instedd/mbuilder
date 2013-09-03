@@ -11,13 +11,13 @@ class MessageBinding
     case kind
     when 'text'
       guid
-    when 'message_piece'
-      context.piece_value(guid)
     when 'implicit'
       context.implicit_value(guid)
+    when 'message_piece'
+      context.piece_value(guid)
     when 'field'
       table, field = guid.split ';'
-      values = context.entity_field_values(table, field)
+      context.entity_field_values(table, field)
     else
       raise "Uknown message binding kind: #{kind}"
     end

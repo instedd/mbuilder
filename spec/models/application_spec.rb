@@ -3,7 +3,7 @@ require "spec_helper"
 describe Application do
   let(:application) { new_application("Users: Phone, Name") }
 
-  it "accepts message and creates entity" do
+  it "creates entity" do
     new_trigger do
       message "register {Name}"
       create_entity "users.phone = implicit phone number"
@@ -12,7 +12,7 @@ describe Application do
     assert_data "users", {"phone" => "1234"}
   end
 
-  it "accepts message and creates entity with a stored value" do
+  it "creates entity with a stored value" do
     new_trigger do
       message "register {Name}"
       create_entity "users.phone = implicit phone number"
@@ -22,7 +22,7 @@ describe Application do
     assert_data "users", {"phone" => "1234", "name" => "Peter"}
   end
 
-  it "accepts message and creates entity with a stored value when value is number" do
+  it "creates entity with a stored value when value is number" do
     new_trigger do
       message "register {Name}"
       create_entity "users.phone = implicit phone number"
@@ -32,7 +32,7 @@ describe Application do
     assert_data "users", {"phone" => "1234", "name" => "5678"}
   end
 
-  it "accepts message and updates one entity with a stored value" do
+  it "updates one entity with a stored value" do
     add_data "users", [
       {"phone" => "1234", "name" => "John"},
       {"phone" => "5678", "name" => "Doe"},
@@ -49,7 +49,7 @@ describe Application do
     ]
   end
 
-  it "accepts message and updates many entities with a stored value" do
+  it "updates many entities with a stored value" do
     add_data "users", [
       {"phone" => "1234", "name" => "John"},
       {"phone" => "1234", "name" => "Doe"},
@@ -68,7 +68,7 @@ describe Application do
     ]
   end
 
-  it "accepts message and updates all entities with a stored value" do
+  it "updates all entities with a stored value" do
     add_data "users", [
       {"phone" => "1234", "name" => "John"},
       {"phone" => "5678", "name" => "Doe"},
@@ -84,7 +84,7 @@ describe Application do
     ]
   end
 
-  it "accepts message and sends message" do
+  it "sends message" do
     new_trigger do
       message "register {Name}"
       send_message "text 5678", "Hello {name} from {implicit phone number}"
@@ -93,7 +93,7 @@ describe Application do
     messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter from 1234"}])
   end
 
-  it "accepts message and sends message with dot" do
+  it "sends message with dot" do
     new_trigger do
       message "register {Name}"
       send_message "text 5678", "Hello {name}. Your number is: {implicit phone number}"
@@ -102,7 +102,7 @@ describe Application do
     messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: 1234"}])
   end
 
-  it "accepts message and sends message to many recipients" do
+  it "sends message to many recipients" do
     add_data "users", [
       {"phone" => "1234", "name" => "John"},
       {"phone" => "5678", "name" => "John"},
@@ -121,7 +121,7 @@ describe Application do
     ]
   end
 
-  it "accepts message and sends message with many values" do
+  it "sends message with many values" do
     add_data "users", [
       {"phone" => "1234", "name" => "John"},
       {"phone" => "5678", "name" => "John"},
@@ -134,8 +134,49 @@ describe Application do
     end
     messages = accept_message "sms://1234", "alert John"
 
+    (messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 1234, 5678"}] ||
+     messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 5678, 1234"}]).should be_true
+  end
+
+  it "sends message with many values" do
+    add_data "users", [
+      {"phone" => "1234", "name" => "John"},
+      {"phone" => "5678", "name" => "John"},
+      {"phone" => "9012", "name" => "Foo"},
+    ]
+    new_trigger do
+      message "alert {Name}"
+      select_entity "users.name = name"
+      send_message "text 1111", "The message: {users.phone}"
+    end
+    messages = accept_message "sms://1234", "alert John"
 
     (messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 1234, 5678"}] ||
      messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 5678, 1234"}]).should be_true
+  end
+
+  it "filters by many values" do
+    add_data "users", [
+      {"phone" => "1234", "name" => "John"},
+      {"phone" => "5678", "name" => "John"},
+      {"phone" => "9012", "name" => "Foo"},
+    ]
+    add_data "friends", [
+      {"from" => "1234", "to" => "1111"},
+      {"from" => "1234", "to" => "2222"},
+      {"from" => "5678", "to" => "3333"},
+    ]
+    new_trigger do
+      message "alert {Name}"
+      select_entity "users.name = name"
+      select_entity "friends.from = users.phone"
+      send_message "friends.to", "Watch out!"
+    end
+    messages = accept_message "sms://9999", "alert John"
+    assert_sets_equal messages, [
+      {from: "app://mbuilder", to: "sms://1111", body: "Watch out!"},
+      {from: "app://mbuilder", to: "sms://2222", body: "Watch out!"},
+      {from: "app://mbuilder", to: "sms://3333", body: "Watch out!"},
+    ]
   end
 end

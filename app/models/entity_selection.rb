@@ -32,7 +32,12 @@ class EntitySelection
       search.query do
         case restriction[:op]
         when :eq
-          match restriction[:field], restriction[:value]
+          values = Array(restriction[:value])
+          boolean do
+            values.each do |value|
+              should { match restriction[:field], value }
+            end
+          end
         end
       end
     end

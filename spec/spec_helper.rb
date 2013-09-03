@@ -161,8 +161,11 @@ RSpec.configure do |config|
   end
 
   def pill(text)
-    if text =~ /implicit (.+)/
+    case text
+    when /implicit (.+)/
       {'kind' => 'implicit', 'guid' => $1.strip}
+    when /([^\.]+)\.([^\.]+)/
+      {'kind' => 'field', 'guid' => "#{$1};#{$2}"}
     else
       {'kind' => 'piece', 'guid' => text.strip}
     end
@@ -207,6 +210,7 @@ RSpec.configure do |config|
   end
 
   def assert_sets_equal(actual_results, expected_results)
+    expected_results.length.should eq(actual_results.length)
     actual_results.each do |result|
       actual_results_count = actual_results.count(result)
       expected_results_count = expected_results.count(result)
