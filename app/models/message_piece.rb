@@ -59,4 +59,15 @@ class MessagePiece
   def self.from_hash(hash)
     new hash['kind'], hash['text'], hash['guid']
   end
+
+  def to_s
+    case kind
+    when 'text'
+      text
+    when 'pill'
+      "{#{guid}}"
+    else
+      raise "Unknown message piece kind: #{kind}"
+    end
+  end
 end

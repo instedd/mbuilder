@@ -13,6 +13,7 @@ class ExecutionContext
     @entities = {}
     @pieces = @trigger.logic.message.pieces.select { |piece| piece.kind == 'pill' }
     @messages = []
+    @index = application.tire_index
   end
 
   def new_entity(table)
@@ -39,30 +40,44 @@ class ExecutionContext
     match[index + 1]
   end
 
+  def entity_field_values(table, field)
+    entity = entity(table)
+    entity.field_values(field)
+  end
+
   def insert(table, properties)
     now = Tire.format_date(Time.now)
 
-    index = application.tire_index
-    index.store type: table, properties: properties, created_at: now, updated_at: now
-    index.refresh
+    @index.store type: table, properties: properties, created_at: now, updated_at: now
+    @index.refresh
   end
 
-  def update_many(table, properties)
-    index = application.tire_index
-    search = application.tire_search(table)
-
-    yield search
-
-    results = search.perform.results
+  def update_many(table, properties, &block)
+    results = perform_search(table, &block)
 
     now = Tire.format_date(Time.now)
 
     results.each do |result|
       new_properties = result["_source"]["properties"].merge(properties)
-      index.store type: table, id: result["_id"], properties: new_properties, updated_at: now
+      @index.store type: table, id: result["_id"], properties: new_properties, updated_at: now
     end
 
-    index.refresh
+    @index.refresh
+  end
+
+  def select_table_field(table, field, &block)
+    results = perform_search(table, &block)
+    results.map do |result|
+      result["_source"]["properties"][field]
+    end
+  end
+
+  def perform_search(table, &block)
+    search = application.tire_search(table)
+
+    block.call search
+
+    search.perform.results
   end
 
   def send_message(to, body)

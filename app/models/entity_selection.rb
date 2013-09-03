@@ -15,14 +15,41 @@ class EntitySelection
     @properties[field.to_s] = value
   end
 
+  def field_values(field)
+    @context.select_table_field(@table, field) do |search|
+      apply_search_restrictions(search)
+    end
+  end
+
   def save
     @context.update_many(@table, @properties) do |search|
-      @restrictions.each do |restriction|
+      apply_search_restrictions(search)
+    end
+  end
+
+  def apply_search_restrictions(search)
+    @restrictions.each do |restriction|
+      search.query do
         case restriction[:op]
         when :eq
-          search.filter :term, restriction[:field] => restriction[:value]
+          match restriction[:field], restriction[:value]
         end
       end
     end
+  end
+
+  def to_s
+    str = "select #{@table}"
+    if @restrictions.present?
+      str << " where "
+      @restrictions.each_with_index do |res, i|
+        str << " and " if i > 0
+        case res[:op]
+        when :eq
+          str << "#{res[:field]} = #{res[:value]}"
+        end
+      end
+    end
+    str
   end
 end

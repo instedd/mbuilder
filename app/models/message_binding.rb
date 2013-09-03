@@ -15,6 +15,9 @@ class MessageBinding
       context.piece_value(guid)
     when 'implicit'
       context.implicit_value(guid)
+    when 'field'
+      table, field = guid.split ';'
+      values = context.entity_field_values(table, field)
     else
       raise "Uknown message binding kind: #{kind}"
     end
@@ -28,5 +31,9 @@ class MessageBinding
 
   def self.from_hash(hash)
     new hash['kind'], hash['guid']
+  end
+
+  def to_s
+    "#{kind}: #{guid}"
   end
 end

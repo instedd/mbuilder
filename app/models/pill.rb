@@ -8,10 +8,13 @@ class Pill
   end
 
   def value_in(context)
-    if kind == 'implicit'
+    case kind
+    when 'implicit'
       context.implicit_value(guid)
-    else
+    when 'piece'
       context.piece_value(guid)
+    else
+      raise "Unkonwn pill kind: #{kind}"
     end
   end
 

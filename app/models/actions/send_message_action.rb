@@ -8,14 +8,19 @@ class Actions::SendMessageAction < Action
   end
 
   def execute(context)
-    recipient = @recipient.solve(context)
-    message = @message.map { |binding| binding.solve(context) }.join " "
+    message = @message.map do |binding|
+      solved = binding.solve(context)
+      Array(solved).join ", "
+    end.join " "
 
     # TODO: maybe this is wrong
     message.gsub!(" .", ".")
     message.gsub!(" ,", ",")
 
-    context.send_message(recipient, message)
+    recipients = @recipient.solve(context)
+    Array(recipients).each do |recipient|
+      context.send_message(recipient, message)
+    end
   end
 
   def self.from_hash(hash)

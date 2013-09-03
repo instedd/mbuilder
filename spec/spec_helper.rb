@@ -71,7 +71,7 @@ RSpec.configure do |config|
     def message(text)
       pieces = []
       parse_message(text) do |kind, text|
-        if text == 'text'
+        if kind == 'text'
           pieces.push 'kind' => 'text', 'text' => text
         else
           pieces.push 'kind' => 'pill', 'text' => text, 'guid' => text.downcase
@@ -107,6 +107,8 @@ RSpec.configure do |config|
       case recipient
       when /text (.+)/
         recipient = {'kind' => 'text', 'guid' => $1}
+      when /([^\.]+)\.([^\.]+)/
+        recipient = {'kind' => 'field', 'guid' => "#{$1};#{$2}"}
       else
         raise "Uknonw recipient: #{recipient}"
       end
@@ -167,8 +169,11 @@ RSpec.configure do |config|
   end
 
   def message_binding(text)
-    if text =~ /implicit (.+)/
+    case text
+    when /implicit (.+)/
       {'kind' => 'implicit', 'guid' => $1.strip}
+    when /([^\.]+)\.([^\.]+)/
+      {'kind' => 'field', 'guid' => "#{$1};#{$2}"}
     else
       {'kind' => 'message_piece', 'guid' => text.strip}
     end
@@ -198,11 +203,15 @@ RSpec.configure do |config|
 
     results = results.map { |result| result["_source"]["properties"] }
 
-    results.each do |result|
-      result_count = results.count(result)
-      data_count = data.count(result)
-      if result_count != data_count
-        fail("'#{result}' found #{data_count} times in expected results, but was found #{result_count} in actual results")
+    assert_sets_equal results, data
+  end
+
+  def assert_sets_equal(actual_results, expected_results)
+    actual_results.each do |result|
+      actual_results_count = actual_results.count(result)
+      expected_results_count = expected_results.count(result)
+      if actual_results_count != expected_results_count
+        fail("'#{result}' found #{expected_results_count} times in expected results, but was found #{actual_results_count} in actual results")
       end
     end
   end
