@@ -9,7 +9,7 @@ class MessagePiece
     @guid = guid
   end
 
-  def append_pattern(pattern)
+  def append_pattern(pattern, index, total)
     case kind
     when "text"
       pattern << Regexp.escape(text)
@@ -21,9 +21,13 @@ class MessagePiece
       when :integer
         pattern << "\\d+"
       when :multiple_word
-        pattern << "[\\S\\s]+"
+        pattern << ".+"
       when :single_word
-        pattern << "\\S+"
+        if index == total - 1
+          pattern << ".+"
+        else
+          pattern << "\\S+"
+        end
       end
       pattern << ")"
     else

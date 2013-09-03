@@ -15,6 +15,6 @@ describe Trigger do
     trigger.save!
 
     trigger.reload
-    trigger.pattern.should eq("\\A\\s*register\\s+(\\S+)\\s*\\Z")
+    trigger.pattern.should eq("\\A\\s*register\\s+(.+)\\s*\\Z")
   end
 end

@@ -6,9 +6,20 @@ describe Message do
       'pieces' => [
         {'kind' => 'text', 'text' => 'register'},
         {'kind' => 'pill', 'text' => 'John'},
+        {'kind' => 'text', 'text' => 'now'},
       ]
     })
-    msg.compile.should eq("\\A\\s*register\\s+(\\S+)\\s*\\Z")
+    msg.compile.should eq("\\A\\s*register\\s+(\\S+)\\s+now\\s*\\Z")
+  end
+
+  it "compiles message with single word at the end" do
+    msg = Message.from_hash({
+      'pieces' => [
+        {'kind' => 'text', 'text' => 'register'},
+        {'kind' => 'pill', 'text' => 'John'},
+      ]
+    })
+    msg.compile.should eq("\\A\\s*register\\s+(.+)\\s*\\Z")
   end
 
   it "compiles message with multiple word" do
@@ -19,7 +30,7 @@ describe Message do
         {'kind' => 'text', 'text' => 'as user'},
       ]
     })
-    msg.compile.should eq("\\A\\s*register\\s+([\\S\\s]+)\\s+as\\ user\\s*\\Z")
+    msg.compile.should eq("\\A\\s*register\\s+(.+)\\s+as\\ user\\s*\\Z")
   end
 
   it "compiles message with integer" do

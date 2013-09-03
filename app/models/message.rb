@@ -11,7 +11,7 @@ class Message
     pattern = "\\A\\s*"
     pieces.each_with_index do |piece, i|
       pattern << "\\s+" if i > 0
-      piece.append_pattern(pattern)
+      piece.append_pattern(pattern, i, pieces.length)
     end
     pattern << "\\s*\\Z"
     pattern
