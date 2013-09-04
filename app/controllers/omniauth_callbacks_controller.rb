@@ -1,7 +1,9 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def google
     generic do |auth|
-      {email: auth.info['email'], name: auth.info['name']}
+      {email: auth.info['email']
+        #, name: auth.info['name']
+      }
     end
   end
 
