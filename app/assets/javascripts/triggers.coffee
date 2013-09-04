@@ -337,11 +337,22 @@ mbuilder.controller 'ActionsController', ['$scope', '$rootScope', ($scope, $root
       else
         action.pill = args.pill
     else
-      $scope.actions.push
+      newAction =
         kind: kind
         pill: args.pill
         table: args.table.guid
         field: args.field.guid
+
+      # Put the action before the first "send message" action, if any
+      i = $scope.actions.length - 1
+      while i >= 0
+        action = $scope.actions[i]
+        if action.kind != 'send_message'
+          $scope.actions.splice(i + 1, 0, newAction)
+          return
+        i -= 1
+
+      $scope.actions.splice(0, 0, newAction)
 
   $rootScope.$on 'pillOverFieldName', (event, args) ->
     createTableFieldAction 'select_entity', args

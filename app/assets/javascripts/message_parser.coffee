@@ -40,6 +40,10 @@ class @MessageParser
             if child.localName == "div"
               $child = $(child)
               if $child.hasClass('pill')
+                if $child.css('display') == 'none'
+                  j += 1
+                  continue
+
                 @onPill($child)
               else if $(child).hasClass('text')
                 content = child.childNodes[0]

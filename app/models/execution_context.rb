@@ -31,7 +31,7 @@ class ExecutionContext
   def implicit_value(name)
     case name
     when 'phone number'
-      message[:from].without_protocol
+      message['from'].without_protocol
     end
   end
 

@@ -1,0 +1,22 @@
+= render 'shared/application_tabs'
+
+%h4 Send message
+
+%div{'ng-app' => 'mbuilder-messages'}
+  %div{'ng-controller' => 'MessagesController', 'ng-init' => "applicationId=#{application.id}"}
+    %div.row-fluid
+      %div.span6
+        %form
+          %div
+            %label{for: :from} From
+            %input{'ng-model' => 'from', type: :text, name: :from, autofocus: true}
+          %div
+            %label{for: :body} Message
+            %textarea{'ng-model' => 'body'}
+          %button.btn{'ng-click' => 'send()'} Send
+      %div.span6{'ng-show' => 'messages.length > 0'}
+        %h5 Response messages
+
+        %ul
+          %li{'ng-repeat' => 'message in messages'}
+            <strong>{{message.to}}</strong>: {{message.body}}

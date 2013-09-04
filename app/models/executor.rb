@@ -5,7 +5,7 @@ class Executor
   end
 
   def execute(message)
-    body = message[:body]
+    body = message['body']
 
     @triggers.each do |trigger|
       pattern = /#{trigger.pattern}/
@@ -17,6 +17,8 @@ class Executor
         return context
       end
     end
+
+    nil
   end
 end
 

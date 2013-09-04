@@ -183,7 +183,7 @@ RSpec.configure do |config|
   end
 
   def accept_message(from, body)
-    application.accept_message(from: from, body: body)
+    application.accept_message('from' => from, 'body' => body)
   end
 
   def add_data(table, *data)
