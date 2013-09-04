@@ -10,8 +10,12 @@ class MessagesController < ApplicationController
   def create
     message = JSON.parse request.raw_post
     message['from'] = message['from'].with_protocol 'sms'
-    messages = application.accept_message message
-    render json: messages
+    context = application.accept_message message
+    if context
+      render json: {messages: context.messages, actions: context.logger.actions_as_strings}
+    else
+      render json: false
+    end
   end
 
   private

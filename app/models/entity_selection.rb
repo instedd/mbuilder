@@ -22,6 +22,8 @@ class EntitySelection
   end
 
   def save
+    return if @properties.empty?
+
     @context.update_many(@table, @properties) do |search|
       apply_search_restrictions(search)
     end

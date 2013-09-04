@@ -14,9 +14,18 @@
             %label{for: :body} Message
             %textarea{'ng-model' => 'body'}
           %button.btn{'ng-click' => 'send()'} Send
-      %div.span6{'ng-show' => 'messages.length > 0'}
-        %h5 Response messages
+      %div.span6
+        %div{'ng-show' => 'actions.length'}
+          %h5 Actions
 
-        %ul
-          %li{'ng-repeat' => 'message in messages'}
-            <strong>{{message.to}}</strong>: {{message.body}}
+          %ul
+            %li{'ng-repeat' => 'action in actions'}
+              {{action}}
+
+
+        %div{'ng-show' => 'messages.length'}
+          %h5 Response messages
+
+          %ul
+            %li{'ng-repeat' => 'message in messages'}
+              <strong>{{message.to}}</strong>: {{message.body}}

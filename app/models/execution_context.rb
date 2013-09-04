@@ -4,6 +4,7 @@ class ExecutionContext
   attr_reader :message
   attr_reader :match
   attr_reader :messages
+  attr_reader :logger
 
   def initialize(application, trigger, message, match)
     @application = application
@@ -13,6 +14,7 @@ class ExecutionContext
     @entities = {}
     @pieces = @trigger.logic.message.pieces.select { |piece| piece.kind == 'pill' }
     @messages = []
+    @logger = ExecutionLogger.new(@application)
     @index = application.tire_index
   end
 
@@ -50,6 +52,8 @@ class ExecutionContext
 
     @index.store type: table, properties: properties, created_at: now, updated_at: now
     @index.refresh
+
+    @logger.insert(table, properties)
   end
 
   def update_many(table, properties, &block)
@@ -58,8 +62,12 @@ class ExecutionContext
     now = Tire.format_date(Time.now)
 
     results.each do |result|
-      new_properties = result["_source"]["properties"].merge(properties)
+      old_properties = result["_source"]["properties"]
+      new_properties = old_properties.merge(properties)
+
       @index.store type: table, id: result["_id"], properties: new_properties, updated_at: now
+
+      @logger.update(table, result["_id"], old_properties, new_properties)
     end
 
     @index.refresh

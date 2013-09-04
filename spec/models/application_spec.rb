@@ -89,8 +89,8 @@ describe Application do
       message "register {Name}"
       send_message "text 5678", "Hello {name} from {implicit phone number}"
     end
-    messages = accept_message "sms://1234", "register Peter"
-    messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter from 1234"}])
+    ctx = accept_message "sms://1234", "register Peter"
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter from 1234"}])
   end
 
   it "sends message with dot" do
@@ -98,8 +98,8 @@ describe Application do
       message "register {Name}"
       send_message "text 5678", "Hello {name}. Your number is: {implicit phone number}"
     end
-    messages = accept_message "sms://1234", "register Peter"
-    messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: 1234"}])
+    ctx = accept_message "sms://1234", "register Peter"
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: 1234"}])
   end
 
   it "sends message with quotes" do
@@ -107,8 +107,8 @@ describe Application do
       message "register {Name}"
       send_message "text 5678", "Hello {name}. Your number is: \"{implicit phone number}\""
     end
-    messages = accept_message "sms://1234", "register Peter"
-    messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: \"1234\""}])
+    ctx = accept_message "sms://1234", "register Peter"
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: \"1234\""}])
   end
 
   it "sends message to many recipients" do
@@ -122,9 +122,9 @@ describe Application do
       select_entity "users.name = name"
       send_message "users.phone", "The message: {message}"
     end
-    messages = accept_message "sms://1234", "alert John with Hello"
+    ctx = accept_message "sms://1234", "alert John with Hello"
 
-    assert_sets_equal messages, [
+    assert_sets_equal ctx.messages, [
       {from: "app://mbuilder", to: "sms://1234", body: "The message: Hello"},
       {from: "app://mbuilder", to: "sms://5678", body: "The message: Hello"},
     ]
@@ -141,10 +141,10 @@ describe Application do
       select_entity "users.name = name"
       send_message "text 1111", "The message: {users.phone}"
     end
-    messages = accept_message "sms://1234", "alert John"
+    ctx = accept_message "sms://1234", "alert John"
 
-    (messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 1234, 5678"}] ||
-     messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 5678, 1234"}]).should be_true
+    (ctx.messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 1234, 5678"}] ||
+     ctx.messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 5678, 1234"}]).should be_true
   end
 
   it "sends message with many values" do
@@ -158,10 +158,10 @@ describe Application do
       select_entity "users.name = name"
       send_message "text 1111", "The message: {users.phone}"
     end
-    messages = accept_message "sms://1234", "alert John"
+    ctx = accept_message "sms://1234", "alert John"
 
-    (messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 1234, 5678"}] ||
-     messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 5678, 1234"}]).should be_true
+    (ctx.messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 1234, 5678"}] ||
+     ctx.messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 5678, 1234"}]).should be_true
   end
 
   it "filters by many values" do
@@ -181,8 +181,8 @@ describe Application do
       select_entity "friends.from = users.phone"
       send_message "friends.to", "Watch out!"
     end
-    messages = accept_message "sms://9999", "alert John"
-    assert_sets_equal messages, [
+    ctx = accept_message "sms://9999", "alert John"
+    assert_sets_equal ctx.messages, [
       {from: "app://mbuilder", to: "sms://1111", body: "Watch out!"},
       {from: "app://mbuilder", to: "sms://2222", body: "Watch out!"},
       {from: "app://mbuilder", to: "sms://3333", body: "Watch out!"},

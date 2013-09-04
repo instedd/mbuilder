@@ -11,8 +11,11 @@ class Application < ActiveRecord::Base
   serialize :tables
 
   def accept_message(message)
-    context = Executor.new(self).execute(message)
-    context && context.messages
+    Executor.new(self).execute(message)
+  end
+
+  def find_table(guid)
+    tables.find { |table| table.guid == guid }
   end
 
   def tire_index
