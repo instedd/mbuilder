@@ -8,8 +8,8 @@ mbuilder.directive 'editableInput', ->
     model: '='
     editable: '='
     focus: '='
-    dragover: '&'
-    drop: '&'
+    dragover: '='
+    drop: '='
   }
   link: (scope, elem, attrs) ->
     if scope.focus
