@@ -52,7 +52,8 @@
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
                   %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
-                  %editable-input{'model' => 'field.name', 'editable' => 'field.editable', 'focus' => 'field.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
+                  .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(table.guid, field.guid, $event)'}
+                    %editable-input{'model' => 'field.name', 'editable' => 'field.editable', 'focus' => 'field.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
                 %td
                   %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
 

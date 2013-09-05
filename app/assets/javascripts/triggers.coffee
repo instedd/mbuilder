@@ -157,6 +157,10 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     draggedPill = {kind: 'table_ref', guid: tableGuid}
     event.dataTransfer.setData("Text", $scope.lookupTableName(tableGuid))
 
+  $scope.fieldDragStart = (tableGuid, fieldGuid, event) ->
+    draggedPill = {kind: 'field_ref', guid: "#{tableGuid};#{fieldGuid}"}
+    event.dataTransfer.setData("Text", $scope.lookupFieldName(tableGuid, fieldGuid))
+
   $scope.dragOverUnboundPill = (pill, event) ->
     event.preventDefault()
     true
@@ -176,6 +180,24 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     for action in $scope.actions
       if action.table == tableGuid
         action.table = draggedPill.guid
+
+    event.stopPropagation()
+
+
+  $scope.dragOverUnboundField = (tableGuid, fieldGuid, event) ->
+    return false if draggedPill.kind != 'field_ref'
+
+    event.preventDefault()
+    true
+
+  $scope.dropOverUnboundField = (tableGuid, fieldGuid, event) ->
+    [pillTable, pillField] = draggedPill.guid.split ';'
+
+    for action in $scope.actions
+      if action.table == tableGuid
+        action.table = pillTable
+        if action.field == fieldGuid
+          action.field = pillField
 
     event.stopPropagation()
 
