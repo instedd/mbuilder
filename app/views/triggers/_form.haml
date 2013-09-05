@@ -44,11 +44,14 @@
 
         %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
           %div.logic-table
-            %editable-input{'model' => 'table.name', 'editable' => 'table.editable', 'focus' => 'table.focus'}
+            %a.delete{href: 'javascript:', 'ng-click' => 'deleteTable($index)'} x
+            .logic-table-name
+              %editable-input{'model' => 'table.name', 'editable' => 'table.editable', 'focus' => 'table.focus'}
 
             %table.table.table-bordered.fields
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
+                  %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
                   %editable-input{'model' => 'field.name', 'editable' => 'field.editable', 'focus' => 'field.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
                 %td
                   %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column

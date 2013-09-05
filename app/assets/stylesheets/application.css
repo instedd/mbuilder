@@ -73,69 +73,55 @@ body {
   padding: 10px;
 }
 
-.action .delete {
+a.delete {
   float: right;
 }
 
-.pill.bound {
+.pill {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  border: 1px solid #ddd;
-  background: #ddd;
   padding-left: 4px;
   padding-right: 4px;
-  margin-left: 4px;
-  margin-right: 4px;
   display: inline-block;
 }
 
-.pill.dead {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+.pill.bound {
   border: 1px solid #ddd;
-  background: #f9f9f9;
-  padding-left: 4px;
-  padding-right: 4px;
+  background: #ddd;
   margin-left: 4px;
   margin-right: 4px;
-  display: inline-block;
 }
 
 .pill.new {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 8px;
   border: 1px dashed #ddd;
   color: #aaa;
-  padding-left: 4px;
-  padding-right: 4px;
-  display: inline-block;
 }
 
 .pill.field {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 8px;
   border: 1px dashed #ddd;
   color: #999;
   background: #f3f3f3;
-  padding-left: 4px;
-  padding-right: 4px;
-  display: inline-block;
 }
 
 .pill.unbound {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 8px;
   border: 1px dashed red;
   color: #ff6666;
   background-color: #ffeeee;
-  padding-left: 4px;
-  padding-right: 4px;
-  display: inline-block;
+}
+
+.pill.table-ref {
+  border: 1px solid #999;
+  background: #f9f9f9;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.pill.field-ref {
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .text {
@@ -157,8 +143,13 @@ table.fields td div {
   padding-left: 1px;
 }
 
-table.fields input {
-  padding: 0px;
+.logic-table input {
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+.logic-table-name {
+  margin-bottom: 8px;
 }
 
 table.fields th, table.fields td {

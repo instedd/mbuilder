@@ -1,7 +1,6 @@
 Select
-.pill.dead {{lookupTableName(action.table)}}
+= render 'triggers/table'
 where
-.pill.dead
-  {{lookupFieldName(action.table, action.field)}}
+= render 'triggers/field'
 is
 = render 'triggers/pill'

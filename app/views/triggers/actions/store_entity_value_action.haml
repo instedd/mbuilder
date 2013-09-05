@@ -1,7 +1,6 @@
 Store
 = render 'triggers/pill'
 as
-.pill.dead
-  {{lookupFieldName(action.table, action.field)}}
+= render 'triggers/field'
 of
-.pill.dead {{lookupTableName(action.table)}}
+= render 'triggers/table'

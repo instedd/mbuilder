@@ -93,6 +93,21 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
 
     null
 
+  $scope.fieldExists = (tableGuid, fieldGuid) ->
+    table = $scope.lookupTable(tableGuid)
+    return false unless table
+
+    field = _.find table.fields, (field) -> field.guid == fieldGuid
+    return false unless field
+
+    true
+
+  $scope.tableExists = (tableGuid) ->
+    table = $scope.lookupTable(tableGuid)
+    return false unless table
+
+    true
+
   $scope.lookupPillStatus = (pill) ->
     switch pill.kind
       when 'implicit'
@@ -295,6 +310,9 @@ mbuilder.controller 'TablesController', ['$scope', ($scope) ->
       fields: []
       editable: true
       focus: true
+
+  $scope.deleteTable = (index) ->
+    $scope.tables.splice(index, 1)
 ]
 
 mbuilder.controller 'TableController', ['$scope', ($scope) ->
@@ -304,6 +322,9 @@ mbuilder.controller 'TableController', ['$scope', ($scope) ->
       name: "Field #{$scope.table.fields.length + 1}"
       editable: true
       focus: true
+
+  $scope.deleteField = (index) ->
+    $scope.table.fields.splice(index, 1)
 ]
 
 mbuilder.controller 'FieldController', ['$scope', ($scope) ->
