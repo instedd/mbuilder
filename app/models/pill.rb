@@ -1,26 +1,23 @@
 class Pill
-  attr_accessor :kind
-  attr_accessor :guid
-
-  def initialize(kind, guid)
-    @kind = kind
-    @guid = guid
+  def value_in(context)
+    subclass_responsibility
   end
 
-  def value_in(context)
-    case kind
-    when 'text'
-      guid
-    when 'implicit'
-      context.implicit_value(guid)
-    when 'piece'
-      context.piece_value(guid)
-    when 'field_value'
-      table, field = guid.split ';'
-      context.entity_field_values(table, field)
-    else
-      raise "Unkonwn pill kind: #{kind}"
-    end
+  def as_json
+    {
+      kind: kind,
+      guid: guid
+    }
+  end
+
+  def kind
+    self.class.kind
+  end
+
+  def self.kind
+    kind = name.split("::").last.underscore
+    kind = kind[0 .. -6] if kind.end_with?('_pill')
+    kind
   end
 
   def self.from_list(list)
@@ -30,13 +27,11 @@ class Pill
   end
 
   def self.from_hash(hash)
-    new hash['kind'], hash['guid']
-  end
-
-  def as_json
-    {
-      kind: kind,
-      guid: guid,
-    }
+    kind = hash['kind']
+    SuitableClassFinder.find_leaf_subclass_of(self,
+      if_found: lambda{|pill| pill.from_hash hash},
+      if_none: proc{raise "Unkonwn pill kind: #{kind}"}) do |subclass|
+        subclass.kind == kind
+      end
   end
 end
