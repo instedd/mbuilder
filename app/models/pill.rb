@@ -3,6 +3,10 @@ class Pill
     subclass_responsibility
   end
 
+  def guid
+    subclass_responsibility
+  end
+
   def as_json
     {
       kind: kind,

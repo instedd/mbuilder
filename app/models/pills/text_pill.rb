@@ -1,5 +1,5 @@
 class Pills::TextPill < Pill
-  attr_accessor :guid
+  attr_reader :guid
 
   def initialize(guid)
     @guid = guid

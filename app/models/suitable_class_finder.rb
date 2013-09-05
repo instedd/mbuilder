@@ -25,6 +25,11 @@ class SuitableClassFinder
     @if_none_do_block = params[:if_none] || self.class.default_if_none_block
     @if_multiple_do_block = params[:if_multiple] || self.class.default_if_multiple_block
     @if_found_do_block = params[:if_found] || self.class.default_if_found_block
+    @collaborators = if params[:suitable_for].is_an? Array
+        params[:suitable_for]
+      else
+        [params[:suitable_for]]
+      end
   end
 
   def self.default_can_handle_message
