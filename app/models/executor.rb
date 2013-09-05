@@ -13,7 +13,7 @@ class Executor
       if match
         context = ExecutionContext.new(@application, trigger, message, match)
         trigger.execute(context)
-        context.finish
+        context.save
         return context
       end
     end

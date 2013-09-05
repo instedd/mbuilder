@@ -92,7 +92,7 @@ class ExecutionContext
     @messages.push({from: "app://mbuilder", to: to.with_protocol("sms"), body: body})
   end
 
-  def finish
+  def save
     @entities.values.each(&:save)
   end
 end

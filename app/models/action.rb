@@ -7,13 +7,9 @@ class Action
 
   def self.from_hash(hash)
     kind = hash['kind']
-    subclasses.each do |action|
-      if action.kind == kind
-        return action.from_hash hash
-      end
-    end
-
-    raise "Unknown action for '#{kind}' kind"
+    SuitableClassFinder.find_leaf_subclass_of(self,
+      if_found: proc{|action| action.from_hash hash},
+      if_none: proc{raise "Unknown action for '#{kind}' kind"}) {|subclass| subclass.kind == kind}
   end
 
   def self.kind
