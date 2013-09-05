@@ -55,10 +55,12 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     _.find $scope.tables, (table) -> table.guid == guid
 
   $scope.lookupTableName = (guid) ->
-    $scope.lookupTable(guid).name
+    $scope.lookupTable(guid)?.name
 
   $scope.lookupFieldName = (tableGuid, fieldGuid) ->
     table = $scope.lookupTable(tableGuid)
+    return "" unless table
+
     field = _.find table.fields, (field) -> field.guid == fieldGuid
     field?.name
 
@@ -112,8 +114,8 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     switch pill.kind
       when 'implicit'
         return 'bound'
-      when 'field'
-        return 'field'
+      when 'field_value'
+        return 'field_value'
       else
         pill = _.find $scope.pieces, (piece) -> piece.guid == pill.guid
         return 'bound' if pill
@@ -124,7 +126,7 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     switch pill.kind
       when 'implicit'
         $scope.lookupImplicitBinding(pill.guid)
-      when 'field'
+      when 'field_value'
         $scope.lookupJoinedFieldName(pill.guid)
       else
         pill = $scope.lookupPill(pill.guid)
@@ -148,8 +150,12 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     event.dataTransfer.setData("Text", $scope.lookupPillName(pill))
 
   $scope.fieldValueDragStart = (tableGuid, fieldGuid) ->
-    draggedPill = {kind: 'field', guid: "#{tableGuid};#{fieldGuid}"}
+    draggedPill = {kind: 'field_value', guid: "#{tableGuid};#{fieldGuid}"}
     event.dataTransfer.setData("Text", $scope.lookupFieldName(tableGuid, fieldGuid))
+
+  $scope.tableDragStart = (tableGuid, event) ->
+    draggedPill = {kind: 'table_ref', guid: tableGuid}
+    event.dataTransfer.setData("Text", $scope.lookupTableName(tableGuid))
 
   $scope.dragOverUnboundPill = (pill, event) ->
     event.preventDefault()
@@ -157,6 +163,19 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
 
   $scope.dropOverUnboundPill = (pill, event) ->
     $scope.replacePills(pill.guid, draggedPill)
+
+    event.stopPropagation()
+
+  $scope.dragOverUnboundTable = (tableGuid, event) ->
+    return false if draggedPill.kind != 'table_ref'
+
+    event.preventDefault()
+    true
+
+  $scope.dropOverUnboundTable = (tableGuid, event) ->
+    for action in $scope.actions
+      if action.table == tableGuid
+        action.table = draggedPill.guid
 
     event.stopPropagation()
 

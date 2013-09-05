@@ -1,2 +1,2 @@
 %input{'ng-model' => 'model', 'ng-show' => 'editable', 'ng-blur' => 'makeNotEditable()', 'ng-keydown' => 'checkEnter($event)', type: 'text', size: "{{size()}}", style: 'width:auto'}
-%div{'ng-bind' => 'model', 'ng-hide' => 'editable', 'ng-mouseup' => 'makeEditable()', dragover: 'dragover($event)', drop: 'drop($event)'}
+%span{'ng-bind' => 'model', 'ng-hide' => 'editable', 'ng-mouseup' => 'makeEditable()', dragover: 'dragover($event)', drop: 'drop($event)'}

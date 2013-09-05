@@ -108,7 +108,7 @@ RSpec.configure do |config|
       when /text (.+)/
         recipient = {'kind' => 'text', 'guid' => $1}
       when /([^\.]+)\.([^\.]+)/
-        recipient = {'kind' => 'field', 'guid' => "#{$1};#{$2}"}
+        recipient = {'kind' => 'field_value', 'guid' => "#{$1};#{$2}"}
       else
         raise "Uknonw recipient: #{recipient}"
       end
@@ -165,7 +165,7 @@ RSpec.configure do |config|
     when /implicit (.+)/
       {'kind' => 'implicit', 'guid' => $1.strip}
     when /([^\.]+)\.([^\.]+)/
-      {'kind' => 'field', 'guid' => "#{$1};#{$2}"}
+      {'kind' => 'field_value', 'guid' => "#{$1};#{$2}"}
     else
       {'kind' => 'piece', 'guid' => text.strip}
     end
@@ -176,7 +176,7 @@ RSpec.configure do |config|
     when /implicit (.+)/
       {'kind' => 'implicit', 'guid' => $1.strip}
     when /([^\.]+)\.([^\.]+)/
-      {'kind' => 'field', 'guid' => "#{$1};#{$2}"}
+      {'kind' => 'field_value', 'guid' => "#{$1};#{$2}"}
     else
       {'kind' => 'piece', 'guid' => text.strip}
     end

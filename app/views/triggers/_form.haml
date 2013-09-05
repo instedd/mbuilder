@@ -45,7 +45,7 @@
         %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
           %div.logic-table
             %a.delete{href: 'javascript:', 'ng-click' => 'deleteTable($index)'} x
-            .logic-table-name
+            .logic-table-name{draggable: 'true', dragstart: 'tableDragStart(table.guid, $event)'}
               %editable-input{'model' => 'table.name', 'editable' => 'table.editable', 'focus' => 'table.focus'}
 
             %table.table.table-bordered.fields

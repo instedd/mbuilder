@@ -15,7 +15,7 @@ class Pill
       context.implicit_value(guid)
     when 'piece'
       context.piece_value(guid)
-    when 'field'
+    when 'field_value'
       table, field = guid.split ';'
       context.entity_field_values(table, field)
     else
