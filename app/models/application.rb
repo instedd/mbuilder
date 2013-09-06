@@ -28,6 +28,21 @@ class Application < ActiveRecord::Base
     Tire::Search::Search.new tire_index.name, type: table
   end
 
+  def rebind_tables_and_fields(table_and_field_rebinds)
+    triggers = self.triggers.all
+    triggers.each do |trigger|
+      table_and_field_rebinds.each do |rebind|
+        case rebind['kind']
+        when 'table'
+          trigger.rebind_table(rebind['fromTable'], rebind['toTable'])
+        when 'field'
+          trigger.rebind_field(rebind['fromTable'], rebind['fromField'], rebind['toTable'], rebind['toField'])
+        end
+      end
+    end
+    triggers.each(&:save!)
+  end
+
   if Rails.env.test?
     def tire_name
       "mbuilder_test_application_#{id}"

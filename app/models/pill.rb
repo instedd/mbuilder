@@ -24,6 +24,14 @@ class Pill
     kind
   end
 
+  def rebind_table(from_table, to_table)
+    # Nothing to do
+  end
+
+  def rebind_field(from_table, from_field, to_table, to_field)
+    # Nothing to do
+  end
+
   def self.from_list(list)
     list.map do |hash|
       from_hash hash

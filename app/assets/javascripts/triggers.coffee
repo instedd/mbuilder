@@ -34,6 +34,8 @@ mbuilder.directive 'editableInput', ->
   templateUrl: 'editable_input'
 
 mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http) ->
+  $scope.tableAndFieldRebinds = []
+
   $scope.actionTemplateFor = (kind) ->
     "#{kind}_action"
 
@@ -177,6 +179,8 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
     true
 
   $scope.dropOverUnboundTable = (tableGuid, event) ->
+    $scope.tableAndFieldRebinds.push kind: 'table', from: tableGuid, to: draggedPill.guid
+
     for action in $scope.actions
       if action.table == tableGuid
         action.table = draggedPill.guid
@@ -192,6 +196,8 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
 
   $scope.dropOverUnboundField = (tableGuid, fieldGuid, event) ->
     [pillTable, pillField] = draggedPill.guid.split ';'
+
+    $scope.tableAndFieldRebinds.push kind: 'field', fromTable: tableGuid, toTable: pillTable, fromField: fieldGuid, toField: pillField
 
     for action in $scope.actions
       if action.table == tableGuid
@@ -225,6 +231,7 @@ mbuilder.controller 'EditTriggerController', ['$scope', '$http', ($scope, $http)
         from: $scope.from
         pieces: $scope.pieces
       actions: $scope.actions
+      tableAndFieldRebinds: $scope.tableAndFieldRebinds
 
     if $scope.id?
       url = "/applications/#{$scope.applicationId}/triggers/#{$scope.id}"

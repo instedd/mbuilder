@@ -24,6 +24,20 @@ class Actions::SendMessageAction < Action
     end
   end
 
+  def rebind_table(from_table, to_table)
+    recipient.rebind_table(from_table, to_table)
+    message.each do |binding|
+      binding.rebind_table(from_table, to_table)
+    end
+  end
+
+  def rebind_field(from_table, from_field, to_table, to_field)
+    recipient.rebind_field(from_table, from_field, to_table, to_field)
+    message.each do |binding|
+      binding.rebind_field(from_table, from_field, to_table, to_field)
+    end
+  end
+
   def self.from_hash(hash)
     new(Pill.from_list(hash['message']), Pill.from_hash(hash['recipient']))
   end

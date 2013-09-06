@@ -22,4 +22,16 @@ class Trigger < ActiveRecord::Base
   def generate_from_number
     "+1-(234)-567-8912"
   end
+
+  def rebind_table(from_table, to_table)
+    logic.actions.each do |action|
+      action.rebind_table(from_table, to_table)
+    end
+  end
+
+  def rebind_field(from_table, from_field, to_table, to_field)
+    logic.actions.each do |action|
+      action.rebind_field(from_table, from_field, to_table, to_field)
+    end
+  end
 end

@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Application do
-  let(:application) { new_application("Users: Phone, Name") }
+  let(:application) { new_application "Users: Phone, Name" }
 
   it "creates entity" do
     new_trigger do
@@ -187,5 +187,50 @@ describe Application do
       {from: "app://mbuilder", to: "sms://2222", body: "Watch out!"},
       {from: "app://mbuilder", to: "sms://3333", body: "Watch out!"},
     ]
+  end
+
+  describe "rebinding" do
+    before(:each) do
+      @trigger = new_trigger do
+        message "alert {Name}"
+        select_entity "users.name = name"
+        create_entity "users.name = name"
+        store_entity_value "users.name = name"
+        send_message "users.phone", "The message: {message}"
+      end
+    end
+
+    it "rebinds tables" do
+      application.rebind_tables_and_fields([
+        {'kind' => 'table', 'fromTable' => 'users', 'toTable' => 'friends'},
+      ])
+
+      @trigger.reload
+      actions = @trigger.logic.actions
+      actions[0].table.should eq("friends")
+      actions[1].table.should eq("friends")
+      actions[2].table.should eq("friends")
+      actions[3].recipient.guid.should eq("friends;phone")
+    end
+
+    it "rebinds fields" do
+      application.rebind_tables_and_fields([
+        {'kind' => 'field', 'fromTable' => 'users', 'fromField' => 'name', 'toTable' => 'friends', 'toField' => 'display_name'},
+        {'kind' => 'field', 'fromTable' => 'friends', 'fromField' => 'phone', 'toTable' => 'friends', 'toField' => 'telephone'},
+      ])
+
+      @trigger.reload
+      actions = @trigger.logic.actions
+      actions[0].table.should eq("friends")
+      actions[1].field.should eq("display_name")
+
+      actions[1].table.should eq("friends")
+      actions[1].field.should eq("display_name")
+
+      actions[2].table.should eq("friends")
+      actions[2].field.should eq("display_name")
+
+      actions[3].recipient.guid.should eq("friends;telephone")
+    end
   end
 end

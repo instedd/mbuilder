@@ -27,6 +27,7 @@ class TriggersController < ApplicationController
     message = data['message']
     actions = data['actions']
     tables = data['tables']
+    table_and_field_rebinds = data['tableAndFieldRebinds']
 
     message = Message.from_hash(message)
     actions = Action.from_list(actions)
@@ -39,6 +40,10 @@ class TriggersController < ApplicationController
       ActiveRecord::Base.transaction do
         application.save!
         trigger.save!
+
+        if table_and_field_rebinds
+          application.rebind_tables_and_fields(table_and_field_rebinds)
+        end
       end
       render json: trigger.id
     rescue ActiveRecord::RecordInvalid
