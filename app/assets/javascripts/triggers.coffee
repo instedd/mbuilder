@@ -277,7 +277,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
     if start > 0
       addPiece pieces, 'text', text.substring(0, start)
 
-    addPiece pieces, 'pill', text.substring(start, end)
+    addPiece pieces, 'placeholder', text.substring(start, end)
 
     if end < text.length
       addPiece pieces, 'text', text.substring(end)
@@ -304,7 +304,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
       else
         addPiece pieces, 'text', text
     parser.onPill (node) ->
-      addPiece pieces, 'pill', node.text(), node.data('guid')
+      addPiece pieces, 'placeholder', node.text(), node.data('guid')
     parser.lastPieceNeeded ->
       pieces.length > 0 && pieces[pieces.length - 1].kind != 'text'
     parser.parse()
@@ -345,7 +345,7 @@ mbuilder.controller 'TriggerController', ['$scope', ($scope) ->
     true
 
   $scope.dragPill = (piece, event) ->
-    draggedPill = {kind: "piece", guid: piece.guid}
+    draggedPill = {kind: "placeholder", guid: piece.guid}
     event.dataTransfer.setData("Text", piece.text)
     true
 ]

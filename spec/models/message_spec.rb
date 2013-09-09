@@ -5,7 +5,7 @@ describe Message do
     msg = Message.from_hash({
       'pieces' => [
         {'kind' => 'text', 'text' => 'register'},
-        {'kind' => 'pill', 'text' => 'John'},
+        {'kind' => 'placeholder', 'text' => 'John'},
         {'kind' => 'text', 'text' => 'now'},
       ]
     })
@@ -16,7 +16,7 @@ describe Message do
     msg = Message.from_hash({
       'pieces' => [
         {'kind' => 'text', 'text' => 'register'},
-        {'kind' => 'pill', 'text' => 'John'},
+        {'kind' => 'placeholder', 'text' => 'John'},
       ]
     })
     msg.compile.should eq("\\A\\s*register\\s+(.+)\\s*\\Z")
@@ -26,7 +26,7 @@ describe Message do
     msg = Message.from_hash({
       'pieces' => [
         {'kind' => 'text', 'text' => 'register'},
-        {'kind' => 'pill', 'text' => 'John Doe'},
+        {'kind' => 'placeholder', 'text' => 'John Doe'},
         {'kind' => 'text', 'text' => 'as user'},
       ]
     })
@@ -37,7 +37,7 @@ describe Message do
     msg = Message.from_hash({
       'pieces' => [
         {'kind' => 'text', 'text' => 'register'},
-        {'kind' => 'pill', 'text' => '1234'},
+        {'kind' => 'placeholder', 'text' => '1234'},
       ]
     })
     msg.compile.should eq("\\A\\s*register\\s+(\\d+)\\s*\\Z")
@@ -47,7 +47,7 @@ describe Message do
     msg = Message.from_hash({
       'pieces' => [
         {'kind' => 'text', 'text' => 'register'},
-        {'kind' => 'pill', 'text' => '1234.56'},
+        {'kind' => 'placeholder', 'text' => '1234.56'},
       ]
     })
     msg.compile.should eq("\\A\\s*register\\s+(\\d+\\.\\d+)\\s*\\Z")

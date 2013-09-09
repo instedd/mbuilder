@@ -12,7 +12,7 @@ class ExecutionContext
     @message = message
     @match = match
     @entities = {}
-    @pieces = @trigger.logic.message.pieces.select { |piece| piece.kind == 'pill' }
+    @pieces = @trigger.logic.message.pieces.select { |piece| piece.kind == 'placeholder' }
     @messages = []
     @logger = ExecutionLogger.new(@application)
     @index = application.tire_index

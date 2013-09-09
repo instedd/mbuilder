@@ -13,7 +13,7 @@ class MessagePiece
     case kind
     when "text"
       pattern << Regexp.escape(text)
-    when "pill"
+    when "placeholder"
       pattern << "("
       case infer_pattern
       when :float
@@ -66,9 +66,9 @@ class MessagePiece
 
   def to_s
     case kind
-    when 'text'
+    when "text"
       text
-    when 'pill'
+    when "placeholder"
       "{#{guid}}"
     else
       raise "Unknown message piece kind: #{kind}"

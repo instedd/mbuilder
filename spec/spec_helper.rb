@@ -74,7 +74,7 @@ RSpec.configure do |config|
         if kind == 'text'
           pieces.push 'kind' => 'text', 'text' => text
         else
-          pieces.push 'kind' => 'pill', 'text' => text, 'guid' => text.downcase
+          pieces.push 'kind' => 'placeholder', 'text' => text, 'guid' => text.downcase
         end
       end
       @message = Message.from_hash({'pieces' => pieces})
@@ -118,7 +118,7 @@ RSpec.configure do |config|
         if kind == 'text'
           bindings.push 'kind' => 'text', 'guid' => msg_text
         else
-          bindings.push message_binding(msg_text)
+          bindings.push pill(msg_text)
         end
       end
 
@@ -167,18 +167,7 @@ RSpec.configure do |config|
     when /([^\.]+)\.([^\.]+)/
       {'kind' => 'field_value', 'guid' => "#{$1};#{$2}"}
     else
-      {'kind' => 'piece', 'guid' => text.strip}
-    end
-  end
-
-  def message_binding(text)
-    case text
-    when /implicit (.+)/
-      {'kind' => 'implicit', 'guid' => $1.strip}
-    when /([^\.]+)\.([^\.]+)/
-      {'kind' => 'field_value', 'guid' => "#{$1};#{$2}"}
-    else
-      {'kind' => 'piece', 'guid' => text.strip}
+      {'kind' => 'placeholder', 'guid' => text.strip}
     end
   end
 

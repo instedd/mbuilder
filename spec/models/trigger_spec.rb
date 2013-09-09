@@ -7,7 +7,7 @@ describe Trigger do
     message = Message.from_hash({
       'pieces' => [
         {'kind' => 'text', 'text' => 'register'},
-        {'kind' => 'pill', 'text' => 'John'},
+        {'kind' => 'placeholder', 'text' => 'John'},
       ]
     })
 

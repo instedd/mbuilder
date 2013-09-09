@@ -12,9 +12,4 @@ class Pills::PlaceholderPill < Pill
   def self.from_hash(hash)
     new hash['guid']
   end
-
-  def self.kind
-    # TODO: this will be removed once this kind of pill is renamed to 'placeholder'
-    'piece'
-  end
 end
