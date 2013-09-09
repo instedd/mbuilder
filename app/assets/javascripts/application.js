@@ -17,6 +17,7 @@
 //= require angular
 //= require drag_and_drop
 //= require focus_and_blur
+//= require editable_input
 //= require keys
 //= require guid
 //= require ng-rails-csrf
