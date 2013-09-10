@@ -162,8 +162,6 @@ RSpec.configure do |config|
 
   def pill(text)
     case text
-    when /implicit (.+)/
-      {'kind' => 'implicit', 'guid' => $1.strip}
     when /([^\.]+)\.([^\.]+)/
       {'kind' => 'field_value', 'guid' => "#{$1};#{$2}"}
     else

@@ -5,6 +5,12 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
 
     bindings.push kind: kind, guid: guid
 
+  $scope.bindingTemplateFor = (kind) ->
+    if kind == "text"
+      "text_binding"
+    else
+      "placeholder_binding"
+
   $scope.parseMessage = (event) ->
     bindings = []
     parser = new MessageParser(event.originalEvent.currentTarget)

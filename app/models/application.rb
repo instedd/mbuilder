@@ -36,6 +36,7 @@ class Application < ActiveRecord::Base
         when 'table'
           trigger.rebind_table(rebind['fromTable'], rebind['toTable'])
         when 'field'
+          # TODO: look for the table guid here instead of sending it from the client
           trigger.rebind_field(rebind['fromTable'], rebind['fromField'], rebind['toTable'], rebind['toField'])
         end
       end

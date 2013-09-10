@@ -1,4 +1,5 @@
 module Actions::TableFieldAction
+  # TODO Change this into an abstract class with classic inheritance
   extend ActiveSupport::Concern
 
   included do

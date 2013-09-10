@@ -10,7 +10,7 @@ describe NuntiumController do
   it "accepts message and creates entity" do
     new_trigger do
       message "register {Name}"
-      create_entity "users.phone = implicit phone number"
+      create_entity "users.phone = phone number"
     end
 
     @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("#{Nuntium::Config['incoming_username']}:#{Nuntium::Config['incoming_password']}")

@@ -1,4 +1,4 @@
-.pill.field-ref{'ng-show' => 'fieldExists(action.table, action.field)'}
-  {{lookupFieldName(action.table, action.field)}}
-.pill.unbound{'ng-hide' => 'fieldExists(action.table, action.field)', 'dragover' => 'dragOverUnboundField(action.table, action.field, $event)', 'drop' => 'dropOverUnboundField(action.table, action.field, $event)'}
+.pill.field-ref{'ng-show' => 'fieldExists(action.field)'}
+  {{lookupFieldName(action.field)}}
+.pill.unbound{'ng-hide' => 'fieldExists(action.field)', 'dragover' => 'dragOverUnboundField(action.table, action.field, $event)', 'drop' => 'dropOverUnboundField(action.table, action.field, $event)'}
   ???

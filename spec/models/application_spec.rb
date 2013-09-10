@@ -6,7 +6,7 @@ describe Application do
   it "creates entity" do
     new_trigger do
       message "register {Name}"
-      create_entity "users.phone = implicit phone number"
+      create_entity "users.phone = phone number"
     end
     accept_message 'sms://1234', 'register Peter'
     assert_data "users", {"phone" => "1234"}
@@ -15,7 +15,7 @@ describe Application do
   it "creates entity with a stored value" do
     new_trigger do
       message "register {Name}"
-      create_entity "users.phone = implicit phone number"
+      create_entity "users.phone = phone number"
       store_entity_value "users.name = name"
     end
     accept_message 'sms://1234', 'register Peter'
@@ -25,7 +25,7 @@ describe Application do
   it "creates entity with a stored value when value is number" do
     new_trigger do
       message "register {Name}"
-      create_entity "users.phone = implicit phone number"
+      create_entity "users.phone = phone number"
       store_entity_value "users.name = name"
     end
     accept_message 'sms://1234', 'register 5678'
@@ -39,7 +39,7 @@ describe Application do
     ]
     new_trigger do
       message "register {Name}"
-      select_entity "users.phone = implicit phone number"
+      select_entity "users.phone = phone number"
       store_entity_value "users.name = name"
     end
     accept_message "sms://1234", "register Peter"
@@ -57,7 +57,7 @@ describe Application do
     ]
     new_trigger do
       message "register {Name}"
-      select_entity "users.phone = implicit phone number"
+      select_entity "users.phone = phone number"
       store_entity_value "users.name = name"
     end
     accept_message "sms://1234", "register Peter"
@@ -87,7 +87,7 @@ describe Application do
   it "sends message" do
     new_trigger do
       message "register {Name}"
-      send_message "text 5678", "Hello {name} from {implicit phone number}"
+      send_message "text 5678", "Hello {name} from {phone number}"
     end
     ctx = accept_message "sms://1234", "register Peter"
     ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter from 1234"}])
@@ -96,7 +96,7 @@ describe Application do
   it "sends message with dot" do
     new_trigger do
       message "register {Name}"
-      send_message "text 5678", "Hello {name}. Your number is: {implicit phone number}"
+      send_message "text 5678", "Hello {name}. Your number is: {phone number}"
     end
     ctx = accept_message "sms://1234", "register Peter"
     ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: 1234"}])
@@ -105,7 +105,7 @@ describe Application do
   it "sends message with quotes" do
     new_trigger do
       message "register {Name}"
-      send_message "text 5678", "Hello {name}. Your number is: \"{implicit phone number}\""
+      send_message "text 5678", "Hello {name}. Your number is: \"{phone number}\""
     end
     ctx = accept_message "sms://1234", "register Peter"
     ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: \"1234\""}])

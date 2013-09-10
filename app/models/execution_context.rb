@@ -30,16 +30,14 @@ class ExecutionContext
     @entities[table] ||= EntitySelection.new(self, table)
   end
 
-  def implicit_value(name)
-    case name
+  def piece_value(guid)
+    case guid
     when 'phone number'
       message['from'].without_protocol
+    else
+      index = @pieces.index { |piece| piece.guid == guid }
+      match[index + 1]
     end
-  end
-
-  def piece_value(guid)
-    index = @pieces.index { |piece| piece.guid == guid }
-    match[index + 1]
   end
 
   def entity_field_values(table, field)

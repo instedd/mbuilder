@@ -2,8 +2,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', ($scope) -
   $scope.contenteditable = 'false'
 
   $scope.phoneNumberDragStart = (event) ->
-    window.draggedPill = {kind: "implicit", guid: "phone number"}
-    event.dataTransfer.setData("Text", $scope.lookupImplicitBinding(window.draggedPill.guid))
+    window.draggedPill = {kind: "placeholder", guid: "phone number"}
+    event.dataTransfer.setData("Text", $scope.from)
 
   addPiece = (pieces, kind, text, guid = window.guid()) ->
     text = $.trim(text)
@@ -93,10 +93,5 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', ($scope) -
           event.preventDefault()
           return false
 
-    true
-
-  $scope.dragPill = (piece, event) ->
-    window.draggedPill = {kind: "placeholder", guid: piece.guid}
-    event.dataTransfer.setData("Text", piece.text)
     true
 ]

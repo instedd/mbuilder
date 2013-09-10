@@ -1,10 +1,10 @@
 angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScope', ($scope, $rootScope) ->
-  tableIsSelected = (tableGuid) ->
+  tableIsUsedInAnAction = (tableGuid) ->
     _.any $scope.actions, (action) ->
       (action.kind == 'select_entity' || action.kind == 'create_entity') && action.table == tableGuid
 
   createTableFieldAction = (kind, args) ->
-    action = $scope.lookupFieldAction(args.table.guid, args.field.guid)
+    action = $scope.lookupFieldAction(args.field.guid)
     if action
       status = $scope.lookupPillStatus(action.pill)
       if status == "unbound"
@@ -34,7 +34,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     createTableFieldAction 'select_entity', args
 
   $rootScope.$on 'pillOverFieldValue', (event, args) ->
-    if tableIsSelected(args.table.guid)
+    if tableIsUsedInAnAction(args.table.guid)
       createTableFieldAction 'store_entity_value', args
     else
       createTableFieldAction 'create_entity', args
@@ -49,4 +49,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
   $scope.deleteAction = (index) ->
     $scope.actions.splice(index, 1)
+
+  $scope.actionTemplateFor = (kind) ->
+    "#{kind}_action"
 ]

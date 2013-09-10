@@ -52,14 +52,14 @@
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
                   %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
-                  .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(table.guid, field.guid, $event)'}
+                  .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(field.guid, $event)'}
                     %editable-input{'model' => 'field.name', 'editable' => 'field.editable', 'focus' => 'field.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
                 %td
                   %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
 
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
-                  %span(ng-include src='fieldTemplateFor(table.guid, field.guid)')
+                  %span(ng-include src='fieldTemplateFor(field.guid)')
                 %td
           %br
 
