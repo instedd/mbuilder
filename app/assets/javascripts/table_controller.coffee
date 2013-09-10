@@ -18,7 +18,6 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
     if action
       return $scope.lookupPillStatus(action.pill)
 
-
     tableGuid = $scope.lookupTableByField(fieldGuid).guid
 
     tableAction = _.find $scope.actions, (action) -> action.table == tableGuid
@@ -27,19 +26,17 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
 
     'new'
 
-  $scope.lookupFieldValue = (fieldGuid) ->
-    action = $scope.lookupFieldAction(fieldGuid)
+  $scope.lookupPillName = (field) ->
+    action = $scope.lookupFieldAction(field.guid)
     if action
-      unless action.pill
-        console.log action
-      return $scope.lookupPillName(action.pill)
-
-    null
-
-  $scope.fieldBindingDragStart = (fieldGuid) ->
-    action = $scope.lookupFieldAction(fieldGuid)
-    if action
-      $scope.dragPill(action.pill)
+      return $scope.$parent.lookupPillName(action.pill)
     else
-      $scope.fieldValueDragStart(fieldGuid)
+      $scope.lookupJoinedFieldName(field.guid)
+
+  $scope.dragPill = (pill) ->
+    action = $scope.lookupFieldAction(pill.guid)
+    if action
+      $scope.$parent.dragPill(action.pill)
+    else
+      $scope.fieldValueDragStart(pill.guid)
 ]

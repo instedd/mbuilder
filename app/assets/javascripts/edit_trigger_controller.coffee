@@ -26,7 +26,7 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
     "#{$scope.lookupTableByField(fieldGuid)?.name} #{$scope.lookupFieldName(fieldGuid)}"
 
   $scope.lookupPill = (guid) ->
-    _.find $scope.allPills(), (piece) -> piece.guid == guid
+    _.find $scope.allPills(), (pill) -> pill.guid == guid
 
   $scope.allPills = ->
     $scope.pieces.concat $scope.implicitPills()
@@ -50,8 +50,6 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
     field = _.find table.fields, (field) -> field.guid == fieldGuid
     field?.name
 
-
-
   $scope.lookupFieldAction = (fieldGuid) ->
     for action in $scope.actions
       if action.field == fieldGuid
@@ -59,15 +57,12 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
     null
 
   $scope.lookupPillStatus = (pill) ->
-    pill = if pill.kind == 'field_value'
-      $scope.fieldExists(pill.guid)
+    if pill.kind == 'field_value'
+      return 'field_value' if $scope.fieldExists(pill.guid)
     else
-      $scope.lookupPill(pill.guid)
-
-    if pill
-      'bound'
-    else
-      'unbound'
+      console.log pill.guid
+      return 'placeholder' if $scope.lookupPill(pill.guid)
+    'unbound'
 
   $scope.fieldExists = (fieldGuid) ->
     !!$scope.lookupTableByField(fieldGuid)
@@ -111,7 +106,6 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
         action.table = window.draggedPill.guid
 
     event.stopPropagation()
-
 
   $scope.dragOverUnboundField = (fieldGuid, event) ->
     return false if window.draggedPill.kind != 'field_ref'

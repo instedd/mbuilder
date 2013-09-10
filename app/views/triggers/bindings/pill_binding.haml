@@ -1,0 +1,6 @@
+.pill.field{'ng-show' => 'lookupPillStatus(binding) == "field_value"', 'data-kind' => "{{binding.kind}}", 'data-guid' => "{{binding.guid}}", draggable: 'true', dragstart: 'dragPill(binding)'}<>
+  {{lookupPillName(binding)}}
+.pill.bound{'ng-show' => 'lookupPillStatus(binding) == "placeholder"', 'data-kind' => "{{binding.kind}}", 'data-guid' => "{{binding.guid}}", draggable: 'true', dragstart: 'dragPill(binding)'}<>
+  {{lookupPillName(binding)}}
+.pill.unbound{'ng-show' => 'lookupPillStatus(binding) == "unbound"', 'data-kind' => "{{binding.kind}}", 'data-guid' => "{{binding.guid}}", draggable: 'true', dragstart: 'dragPill(binding)', dragover: 'dragOverUnboundPill(binding, $event)', drop: 'dropOverUnboundPill(binding, $event)'}<>
+  ???

@@ -9,7 +9,7 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     if kind == "text"
       "text_binding"
     else
-      "placeholder_binding"
+      "pill_binding"
 
   $scope.parseMessage = (event) ->
     bindings = []
@@ -31,7 +31,8 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     $scope.action.messageEditable = 'false'
 
   $scope.makeMessageEditable = (event) ->
-    $scope.action.messageEditable = 'true'
+    unless $(event.originalEvent.target).hasClass('pill')
+      $scope.action.messageEditable = 'true'
 
   $scope.dragOverMessage = (event) ->
     event.preventDefault()
