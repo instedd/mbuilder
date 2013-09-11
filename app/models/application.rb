@@ -36,12 +36,19 @@ class Application < ActiveRecord::Base
         when 'table'
           trigger.rebind_table(rebind['fromTable'], rebind['toTable'])
         when 'field'
-          # TODO: look for the table guid here instead of sending it from the client
-          trigger.rebind_field(rebind['fromTable'], rebind['fromField'], rebind['toTable'], rebind['toField'])
+          trigger.rebind_field(rebind['fromField'], table_of(rebind['toField']).guid, rebind['toField'])
         end
       end
     end
     triggers.each(&:save!)
+  end
+
+  def table_of field_guid
+    tables.detect(proc{raise "Table not found for #{field_guid} #{tables}"}) do |table|
+      table.fields.any? do |field|
+        field.guid == field_guid
+      end
+    end
   end
 
   if Rails.env.test?

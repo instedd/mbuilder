@@ -1,1 +1,2 @@
-%span(ng-include src='pillTemplateFor(action.pill)')
+%span{'ng-repeat' => 'field in [action.pill]'}
+  %span(ng-include src='pillTemplateFor(field)')

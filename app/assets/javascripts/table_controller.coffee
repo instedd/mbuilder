@@ -9,20 +9,21 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
   $scope.deleteField = (index) ->
     $scope.table.fields.splice(index, 1)
 
-  $scope.fieldTemplateFor = (fieldGuid) ->
-    status = $scope.lookupFieldStatus(fieldGuid)
-    "#{status}_field"
+  $scope.fieldTemplateFor = (field) ->
+    # This is repeated here because of the "self problem". The controllers scope are built with composition, not inheritance
+    status = $scope.lookupPillStatus(field)
+    $scope.fieldNameFor(status)
 
-  $scope.lookupFieldStatus = (fieldGuid) ->
-    action = $scope.lookupFieldAction(fieldGuid)
+  $scope.lookupPillStatus = (field) ->
+    action = $scope.lookupFieldAction(field.guid)
     if action
       return $scope.lookupPillStatus(action.pill)
 
-    tableGuid = $scope.lookupTableByField(fieldGuid).guid
+    tableGuid = $scope.lookupTableByField(field.guid).guid
 
     tableAction = _.find $scope.actions, (action) -> action.table == tableGuid
     if tableAction?.kind == 'select_entity'
-      return 'existing'
+      return 'field_value'
 
     'new'
 
@@ -39,4 +40,11 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
       $scope.$parent.dragPill(action.pill)
     else
       $scope.fieldValueDragStart(pill.guid)
+
+  $scope.dropOverUnboundPill = (pill, event) ->
+    action = $scope.lookupFieldAction(pill.guid)
+    if action
+      $scope.$parent.dropOverUnboundPill(action.pill, event)
+    else
+      debugger # wtf!
 ]

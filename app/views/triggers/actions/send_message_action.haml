@@ -3,8 +3,8 @@
   %br
   .message-area{contenteditable: '{{action.messageEditable}}', 'ng-blur' => 'makeMessageNotEditable($event)', 'ng-mousedown' => 'makeMessageEditable($event)', dragover: 'dragOverMessage($event)', drop: 'dropOverMessage($event)', 'ng-keydown' => 'handleMessageKey($event)'}
     %span{contenteditable: 'false'}
-    %span.piece-container{'ng-repeat' => 'binding in action.message', 'ng-include' => true, 'src' => 'bindingTemplateFor(binding.kind)'}<>
+    %span.piece-container{'ng-repeat' => 'field in action.message', 'ng-include' => true, 'src' => 'fieldTemplateFor(field)'}<>
   to
   .message-input{contenteditable: '{{action.recipientEditable}}', 'ng-blur' => 'makeRecipientNotEditable($event)', 'ng-mousedown' => 'makeRecipientEditable($event)', dragover: 'dragOverRecipient($event)', drop: 'dropOverRecipient($event)', 'ng-keydown' => 'handleRecipientKey($event)'}
     %span{contenteditable: 'false'}
-    %span.piece-container{'ng-repeat' => 'binding in [action.recipient]', 'ng-include' => true, 'src' => 'bindingTemplateFor(binding.kind)'}<>
+    %span.piece-container{'ng-repeat' => 'field in [action.recipient]', 'ng-include' => true, 'src' => 'fieldTemplateFor(field)'}<>

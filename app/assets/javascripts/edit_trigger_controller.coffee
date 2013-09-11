@@ -6,7 +6,7 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
 
   $scope.pillTemplateFor = (pill) ->
     status = $scope.lookupPillStatus(pill)
-    "#{status}_pill"
+    "#{status}_field"
 
   $scope.tableExists = (tableGuid) ->
     table = $scope.lookupTable(tableGuid)
@@ -60,9 +60,15 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
     if pill.kind == 'field_value'
       return 'field_value' if $scope.fieldExists(pill.guid)
     else
-      console.log pill.guid
       return 'placeholder' if $scope.lookupPill(pill.guid)
     'unbound'
+
+  $scope.fieldTemplateFor = (field) ->
+    status = $scope.lookupPillStatus(field)
+    $scope.fieldNameFor(status)
+
+  $scope.fieldNameFor = (status) ->
+    "#{status}_field"
 
   $scope.fieldExists = (fieldGuid) ->
     !!$scope.lookupTableByField(fieldGuid)
@@ -89,7 +95,6 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
 
   $scope.dropOverUnboundPill = (pill, event) ->
     $scope.replacePills(pill.guid, window.draggedPill)
-
     event.stopPropagation()
 
   $scope.dragOverUnboundTable = (tableGuid, event) ->
@@ -116,16 +121,14 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
   $scope.dropOverUnboundField = (destinationPillGuid, event) ->
     draggedPillGuid = window.draggedPill.guid
 
-    destinationTableGuid = $scope.lookupTableByField(destinationPillGuid).guid
     draggedPillTableGuid = $scope.lookupTableByField(draggedPillGuid).guid
 
-    $scope.tableAndFieldRebinds.push kind: 'field', fromTable: destinationTableGuid, toTable: draggedPillTableGuid, fromField: destinationPillGuid, toField: draggedPillGuid
+    $scope.tableAndFieldRebinds.push kind: 'field', fromField: destinationPillGuid, toField: draggedPillGuid
 
     for action in $scope.actions
-      if action.table == destinationTableGuid
-        action.table = draggedPillTableGuid
         if action.field == destinationPillGuid
           action.field = draggedPillGuid
+          action.table = draggedPillTableGuid
 
     event.stopPropagation()
 

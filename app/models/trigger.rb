@@ -29,9 +29,9 @@ class Trigger < ActiveRecord::Base
     end
   end
 
-  def rebind_field(from_table, from_field, to_table, to_field)
+  def rebind_field(from_field, to_table, to_field)
     logic.actions.each do |action|
-      action.rebind_field(from_table, from_field, to_table, to_field)
+      action.rebind_field(from_field, to_table, to_field)
     end
   end
 end

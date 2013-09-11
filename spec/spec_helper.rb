@@ -57,7 +57,7 @@ RSpec.configure do |config|
       {
         'name' => name,
         'guid' => name.downcase,
-        'fields' => fields.map { |field| {'name' => name, 'guid' => name.downcase} },
+        'fields' => fields.map { |field| {'name' => field, 'guid' => field.underscore} },
       }
     )
   end

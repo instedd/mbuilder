@@ -28,7 +28,7 @@ class Pill
     # Nothing to do
   end
 
-  def rebind_field(from_table, from_field, to_table, to_field)
+  def rebind_field(from_field, to_table, to_field)
     # Nothing to do
     # TODO subclass_responsibility in rebindable module
   end

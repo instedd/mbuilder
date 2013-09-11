@@ -190,6 +190,8 @@ describe Application do
   end
 
   describe "rebinding" do
+let(:application) { new_application "Users: Phone, Name; Friends: Telephone, DisplayName" }
+
     before(:each) do
       @trigger = new_trigger do
         message "alert {Name}"
@@ -215,8 +217,8 @@ describe Application do
 
     it "rebinds fields" do
       application.rebind_tables_and_fields([
-        {'kind' => 'field', 'fromTable' => 'users', 'fromField' => 'name', 'toTable' => 'friends', 'toField' => 'display_name'},
-        {'kind' => 'field', 'fromTable' => 'friends', 'fromField' => 'phone', 'toTable' => 'friends', 'toField' => 'telephone'},
+        {'kind' => 'field', 'fromField' => 'name', 'toField' => 'display_name'},
+        {'kind' => 'field', 'fromField' => 'phone', 'toField' => 'telephone'},
       ])
 
       @trigger.reload

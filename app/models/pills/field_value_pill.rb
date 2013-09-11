@@ -17,14 +17,12 @@ class Pills::FieldValuePill < Pill
     end
   end
 
-  def rebind_field(from_table, from_field, to_table, to_field)
+  def rebind_field(from_field, to_table, to_field)
     table, field = table_and_field
-    if table == from_table
-      if field == from_field
-        @guid = "#{to_table};#{to_field}"
-      else
-        @guid = "#{to_table};#{field}"
-      end
+    if field == from_field
+      @guid = "#{to_table};#{to_field}"
+    else
+      @guid = "#{to_table};#{field}"
     end
   end
 

@@ -31,10 +31,10 @@ class Actions::SendMessageAction < Action
     end
   end
 
-  def rebind_field(from_table, from_field, to_table, to_field)
-    recipient.rebind_field(from_table, from_field, to_table, to_field)
+  def rebind_field(from_field, to_table, to_field)
+    recipient.rebind_field(from_field, to_table, to_field)
     message.each do |binding|
-      binding.rebind_field(from_table, from_field, to_table, to_field)
+      binding.rebind_field(from_field, to_table, to_field)
     end
   end
 

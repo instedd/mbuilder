@@ -18,12 +18,10 @@ module Actions::TableFieldAction
     @table = to_table if @table == from_table
   end
 
-  def rebind_field(from_table, from_field, to_table, to_field)
-    if @table == from_table
+  def rebind_field(from_field, to_table, to_field)
+    if @field == from_field
       @table = to_table
-      if @field == from_field
-        @field = to_field
-      end
+      @field = to_field
     end
   end
 

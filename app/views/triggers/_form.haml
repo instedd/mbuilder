@@ -3,7 +3,6 @@
   - angular_templates "triggers/actions"
   - angular_templates "triggers/bindings"
   - angular_templates "triggers/pieces"
-  - angular_templates "triggers/pills"
   - angular_templates "triggers/fields"
 
   %div{'ng-controller' => 'EditTriggerController', 'ng-init' => trigger_to_angular(application, trigger)}
@@ -59,7 +58,7 @@
 
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
-                  %span(ng-include src='fieldTemplateFor(field.guid)')
+                  %span(ng-include src='fieldTemplateFor(field)')
                 %td
           %br
 
