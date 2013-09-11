@@ -1,4 +1,6 @@
 class Pill
+  include Rebindable
+
   def value_in(context)
     subclass_responsibility
   end
@@ -14,6 +16,14 @@ class Pill
     }
   end
 
+  def rebind_table(from_table, to_table)
+    # By default, do nothing
+  end
+
+  def rebind_field(from_field, to_table, to_field)
+    # By default, do nothing
+  end
+
   def kind
     self.class.kind
   end
@@ -22,15 +32,6 @@ class Pill
     kind = name.split("::").last.underscore
     kind = kind[0 .. -6] if kind.end_with?('_pill')
     kind
-  end
-
-  def rebind_table(from_table, to_table)
-    # Nothing to do
-  end
-
-  def rebind_field(from_field, to_table, to_field)
-    # Nothing to do
-    # TODO subclass_responsibility in rebindable module
   end
 
   def self.from_list(list)

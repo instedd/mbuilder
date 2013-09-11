@@ -1,12 +1,7 @@
-module Actions::TableFieldAction
-  # TODO Change this into an abstract class with classic inheritance
-  extend ActiveSupport::Concern
-
-  included do
-    attr_accessor :pill
-    attr_accessor :table
-    attr_accessor :field
-  end
+class Actions::TableFieldAction < Action
+  attr_accessor :pill
+  attr_accessor :table
+  attr_accessor :field
 
   def initialize(table, field, pill)
     @table = table
@@ -34,9 +29,7 @@ module Actions::TableFieldAction
     }
   end
 
-  module ClassMethods
-    def from_hash(hash)
-      new hash['table'], hash['field'], Pill.from_hash(hash['pill'])
-    end
+  def self.from_hash(hash)
+    new hash['table'], hash['field'], Pill.from_hash(hash['pill'])
   end
 end

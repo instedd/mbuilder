@@ -1,4 +1,6 @@
 class Action
+  include Rebindable
+
   def self.from_list(list)
     list.map do |hash|
       from_hash hash
