@@ -7,7 +7,7 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
       true
 
   $scope.dropOverName = (event) ->
-    $scope.$emit 'pillOverFieldName', pill: window.draggedPill, field: $scope.field, table: $scope.table
+    $scope.$emit 'pillOverFieldName', pill: window.draggedPill, field: $scope.pill, table: $scope.table
 
   $scope.dragOverValue = (event) ->
     if window.draggedPill.kind == 'field_ref' || window.draggedPill.kind == 'table_ref'
@@ -17,5 +17,8 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
       true
 
   $scope.dropOverValue = (event) ->
-    $scope.$emit 'pillOverFieldValue', pill: window.draggedPill, field: $scope.field, table: $scope.table
+    $scope.$emit 'pillOverFieldValue', pill: window.draggedPill, field: $scope.pill, table: $scope.table
+
+  $scope.addNewValue = ->
+    $scope.$emit 'pillOverFieldValue', pill: {kind: 'literal', guid: window.guid(), text: '', editable: true}, field: $scope.pill, table: $scope.table
 ]

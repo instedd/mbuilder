@@ -48,16 +48,16 @@
 
             %table.table.table-bordered.fields
               %tr
-                %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController'}
+                %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController'}
                   %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
-                  .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(field.guid, $event)'}
-                    %editable-input{'model' => 'field.name', 'editable' => 'field.editable', 'focus' => 'field.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
+                  .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)'}
+                    %editable-input{'model' => 'pill.name', 'editable' => 'pill.editable', 'focus' => 'pill.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
                 %td
                   %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
 
               %tr
-                %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
-                  %span(ng-include src='pillTemplateFor(field)')
+                %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
+                  %span(ng-include src='pillTemplateFor(pill)')
                 %td
           %br
 

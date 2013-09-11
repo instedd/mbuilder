@@ -12,14 +12,17 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
       when 'field_value'
         $scope.lookupJoinedFieldName(pill.guid)
       else
-        pill = $scope.lookupPill(pill.guid)
+        pill = $scope.lookupPillByGuid(pill.guid)
         pill?.text
 
   $scope.lookupJoinedFieldName = (fieldGuid) ->
     "#{$scope.lookupTableByField(fieldGuid)?.name} #{$scope.lookupFieldName(fieldGuid)}"
 
-  $scope.lookupPill = (guid) ->
+  $scope.lookupPillByGuid = (guid) ->
     _.find $scope.allPills(), (pill) -> pill.guid == guid
+
+  $scope.lookupPill = (pill) ->
+    pill
 
   $scope.allPills = ->
     $scope.pieces.concat $scope.implicitPills()
@@ -50,10 +53,13 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
     null
 
   $scope.lookupPillStatus = (pill) ->
-    if pill.kind == 'field_value'
-      return 'field_value' if $scope.fieldExists(pill.guid)
-    else
-      return 'placeholder' if $scope.lookupPill(pill.guid)
+    switch pill.kind
+      when 'literal'
+        return 'literal'
+      when 'field_value'
+        return 'field_value' if $scope.fieldExists(pill.guid)
+      else
+        return 'placeholder' if $scope.lookupPillByGuid(pill.guid)
     'unbound'
 
   $scope.pillTemplateFor = (field) ->
