@@ -124,6 +124,13 @@ a.delete {
   margin-right: 4px;
 }
 
+.pill.literal {
+  border: 1px solid #ddd;
+  background: #f1FFf1;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
 .text {
   display: inline-block;
 }
