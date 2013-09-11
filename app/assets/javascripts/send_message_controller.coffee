@@ -5,7 +5,7 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
 
     bindings.push kind: kind, guid: guid
 
-  $scope.fieldTemplateFor = (pill) ->
+  $scope.pillTemplateFor = (pill) ->
     $scope.fieldNameFor(pill.kind)
 
   $scope.parseMessage = (event) ->

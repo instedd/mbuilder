@@ -1,13 +1,6 @@
 angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http', ($scope, $http) ->
   $scope.tableAndFieldRebinds = []
 
-  $scope.pieceTemplateFor = (kind) ->
-    "#{kind}_piece"
-
-  $scope.pillTemplateFor = (pill) ->
-    status = $scope.lookupPillStatus(pill)
-    "#{status}_field"
-
   $scope.tableExists = (tableGuid) ->
     table = $scope.lookupTable(tableGuid)
     return false unless table
@@ -32,7 +25,7 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
     $scope.pieces.concat $scope.implicitPills()
 
   $scope.implicitPills = ->
-    [{text: $scope.from, guid:"phone number"}]
+    [{text: $scope.from, guid:"phone_number"}]
 
   $scope.lookupTable = (guid) ->
     _.find $scope.tables, (table) -> table.guid == guid
@@ -63,12 +56,15 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
       return 'placeholder' if $scope.lookupPill(pill.guid)
     'unbound'
 
-  $scope.fieldTemplateFor = (field) ->
+  $scope.pillTemplateFor = (field) ->
     status = $scope.lookupPillStatus(field)
     $scope.fieldNameFor(status)
 
+  $scope.pieceTemplateFor = (kind) ->
+    "#{kind}_piece"
+
   $scope.fieldNameFor = (status) ->
-    "#{status}_field"
+    "#{status}_pill"
 
   $scope.fieldExists = (fieldGuid) ->
     !!$scope.lookupTableByField(fieldGuid)

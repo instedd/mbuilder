@@ -2,7 +2,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', ($scope) -
   $scope.contenteditable = 'false'
 
   $scope.phoneNumberDragStart = (event) ->
-    window.draggedPill = {kind: "placeholder", guid: "phone number"}
+    window.draggedPill = {kind: "placeholder", guid: "phone_number"}
     event.dataTransfer.setData("Text", $scope.from)
 
   addPiece = (pieces, kind, text, guid = window.guid()) ->

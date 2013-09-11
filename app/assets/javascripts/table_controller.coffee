@@ -9,15 +9,16 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
   $scope.deleteField = (index) ->
     $scope.table.fields.splice(index, 1)
 
-  $scope.fieldTemplateFor = (field) ->
+  $scope.pillTemplateFor = (field) ->
     # This is repeated here because of the "self problem". The controllers scope are built with composition, not inheritance
     status = $scope.lookupPillStatus(field)
     $scope.fieldNameFor(status)
 
   $scope.lookupPillStatus = (field) ->
+    console.log field.guid
     action = $scope.lookupFieldAction(field.guid)
     if action
-      return $scope.lookupPillStatus(action.pill)
+      return $scope.$parent.lookupPillStatus(action.pill)
 
     tableGuid = $scope.lookupTableByField(field.guid).guid
 

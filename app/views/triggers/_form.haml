@@ -1,9 +1,8 @@
 %div{'ng-app' => 'mbuilder'}
   - angular_templates "shared/angular"
   - angular_templates "triggers/actions"
-  - angular_templates "triggers/bindings"
   - angular_templates "triggers/pieces"
-  - angular_templates "triggers/fields"
+  - angular_templates "triggers/pills"
 
   %div{'ng-controller' => 'EditTriggerController', 'ng-init' => trigger_to_angular(application, trigger)}
     %div.row-fluid
@@ -58,7 +57,7 @@
 
               %tr
                 %td{'ng-repeat' => 'field in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
-                  %span(ng-include src='fieldTemplateFor(field)')
+                  %span(ng-include src='pillTemplateFor(field)')
                 %td
           %br
 

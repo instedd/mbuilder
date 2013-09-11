@@ -32,7 +32,7 @@ class ExecutionContext
 
   def piece_value(guid)
     case guid
-    when 'phone number'
+    when 'phone_number'
       message['from'].without_protocol
     else
       index = @pieces.index { |piece| piece.guid == guid }
