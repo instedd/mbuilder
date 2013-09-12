@@ -6,31 +6,19 @@ class Pills::FieldValuePill < Pill
   end
 
   def value_in(context)
-    table, field = table_and_field
-    context.entity_field_values(table, field)
+    #TODO move this into the creation and rebinding of the pill
+    context.entity_field_values(context.application.table_of(guid).guid, guid)
   end
 
   def rebind_table(from_table, to_table)
-    table, field = table_and_field
-    if table == from_table
-      @guid = "#{to_table};#{field}"
-    end
+    # nothing to do?
   end
 
   def rebind_field(from_field, to_table, to_field)
-    table, field = table_and_field
-    if field == from_field
-      @guid = "#{to_table};#{to_field}"
-    else
-      @guid = "#{to_table};#{field}"
-    end
+    @guid = to_field
   end
 
   def self.from_hash(hash)
     new hash['guid']
-  end
-
-  def table_and_field
-    guid.split ';'
   end
 end

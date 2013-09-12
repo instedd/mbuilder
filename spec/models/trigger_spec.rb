@@ -1,6 +1,9 @@
 require "spec_helper"
 
 describe Trigger do
+
+  after(:all) { Tire.index('*test*').delete }
+
   it "compiles pattern before save" do
     trigger = Trigger.make_unsaved
 

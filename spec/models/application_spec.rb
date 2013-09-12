@@ -3,10 +3,12 @@ require "spec_helper"
 describe Application do
   let(:application) { new_application "Users: Phone, Name" }
 
+  after(:all) { Tire.index('*test*').delete }
+
   it "creates entity" do
     new_trigger do
       message "register {Name}"
-      create_entity "users.phone = phone_number"
+      create_entity "users.phone = {phone_number}"
     end
     accept_message 'sms://1234', 'register Peter'
     assert_data "users", {"phone" => "1234"}
@@ -15,18 +17,27 @@ describe Application do
   it "creates entity with a stored value" do
     new_trigger do
       message "register {Name}"
-      create_entity "users.phone = phone_number"
-      store_entity_value "users.name = name"
+      create_entity "users.phone = {phone_number}"
+      store_entity_value "users.name = {name}"
     end
     accept_message 'sms://1234', 'register Peter'
     assert_data "users", {"phone" => "1234", "name" => "Peter"}
   end
 
+  it "creates entity with a literal value" do
+    new_trigger do
+      message "register {Name}"
+      create_entity "users.phone = 'hello'"
+    end
+    accept_message 'sms://1234', 'register Peter'
+    assert_data "users", {"phone" => "hello"}
+  end
+
   it "creates entity with a stored value when value is number" do
     new_trigger do
       message "register {Name}"
-      create_entity "users.phone = phone_number"
-      store_entity_value "users.name = name"
+      create_entity "users.phone = {phone_number}"
+      store_entity_value "users.name = {name}"
     end
     accept_message 'sms://1234', 'register 5678'
     assert_data "users", {"phone" => "1234", "name" => "5678"}
@@ -39,8 +50,8 @@ describe Application do
     ]
     new_trigger do
       message "register {Name}"
-      select_entity "users.phone = phone_number"
-      store_entity_value "users.name = name"
+      select_entity "users.phone = {phone_number}"
+      store_entity_value "users.name = {name}"
     end
     accept_message "sms://1234", "register Peter"
     assert_data "users", [
@@ -57,8 +68,8 @@ describe Application do
     ]
     new_trigger do
       message "register {Name}"
-      select_entity "users.phone = phone_number"
-      store_entity_value "users.name = name"
+      select_entity "users.phone = {phone_number}"
+      store_entity_value "users.name = {name}"
     end
     accept_message "sms://1234", "register Peter"
     assert_data "users", [
@@ -75,7 +86,7 @@ describe Application do
     ]
     new_trigger do
       message "register {Name}"
-      store_entity_value "users.name = name"
+      store_entity_value "users.name = {name}"
     end
     accept_message "sms://1234", "register Peter"
     assert_data "users", [
@@ -87,7 +98,7 @@ describe Application do
   it "sends message" do
     new_trigger do
       message "register {Name}"
-      send_message "text 5678", "Hello {name} from {phone_number}"
+      send_message "'5678'", "Hello {{name}} from {{phone_number}}"
     end
     ctx = accept_message "sms://1234", "register Peter"
     ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter from 1234"}])
@@ -96,7 +107,7 @@ describe Application do
   it "sends message with dot" do
     new_trigger do
       message "register {Name}"
-      send_message "text 5678", "Hello {name}. Your number is: {phone_number}"
+      send_message "'5678'", "Hello {{name}}. Your number is: {{phone_number}}"
     end
     ctx = accept_message "sms://1234", "register Peter"
     ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: 1234"}])
@@ -105,7 +116,7 @@ describe Application do
   it "sends message with quotes" do
     new_trigger do
       message "register {Name}"
-      send_message "text 5678", "Hello {name}. Your number is: \"{phone_number}\""
+      send_message "'5678'", "Hello {{name}}. Your number is: \"{{phone_number}}\""
     end
     ctx = accept_message "sms://1234", "register Peter"
     ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: \"1234\""}])
@@ -119,8 +130,8 @@ describe Application do
     ]
     new_trigger do
       message "alert {Name} with {Message}"
-      select_entity "users.name = name"
-      send_message "users.phone", "The message: {message}"
+      select_entity "users.name = {name}"
+      send_message "*phone", "The message: {{message}}"
     end
     ctx = accept_message "sms://1234", "alert John with Hello"
 
@@ -138,8 +149,8 @@ describe Application do
     ]
     new_trigger do
       message "alert {Name}"
-      select_entity "users.name = name"
-      send_message "text 1111", "The message: {users.phone}"
+      select_entity "users.name = {name}"
+      send_message "'1111'", "The message: {*phone}"
     end
     ctx = accept_message "sms://1234", "alert John"
 
@@ -155,8 +166,8 @@ describe Application do
     ]
     new_trigger do
       message "alert {Name}"
-      select_entity "users.name = name"
-      send_message "text 1111", "The message: {users.phone}"
+      select_entity "users.name = {name}"
+      send_message "'1111'", "The message: {*phone}"
     end
     ctx = accept_message "sms://1234", "alert John"
 
@@ -170,6 +181,7 @@ describe Application do
       {"phone" => "5678", "name" => "John"},
       {"phone" => "9012", "name" => "Foo"},
     ]
+    add_table "Friends: From, To"
     add_data "friends", [
       {"from" => "1234", "to" => "1111"},
       {"from" => "1234", "to" => "2222"},
@@ -177,9 +189,9 @@ describe Application do
     ]
     new_trigger do
       message "alert {Name}"
-      select_entity "users.name = name"
-      select_entity "friends.from = users.phone"
-      send_message "friends.to", "Watch out!"
+      select_entity "users.name = {name}"
+      select_entity "friends.from = *phone"
+      send_message "*to", "Watch out!"
     end
     ctx = accept_message "sms://9999", "alert John"
     assert_sets_equal ctx.messages, [
@@ -190,15 +202,15 @@ describe Application do
   end
 
   describe "rebinding" do
-let(:application) { new_application "Users: Phone, Name; Friends: Telephone, DisplayName" }
+    let(:application) { new_application "Users: Phone, Name; Friends: Telephone, DisplayName" }
 
     before(:each) do
       @trigger = new_trigger do
         message "alert {Name}"
-        select_entity "users.name = name"
-        create_entity "users.name = name"
-        store_entity_value "users.name = name"
-        send_message "users.phone", "The message: {message}"
+        select_entity "users.name = *name"
+        create_entity "users.name = *name"
+        store_entity_value "users.name = *name"
+        send_message "*phone", "The message: {{message}}"
       end
     end
 
@@ -212,7 +224,7 @@ let(:application) { new_application "Users: Phone, Name; Friends: Telephone, Dis
       actions[0].table.should eq("friends")
       actions[1].table.should eq("friends")
       actions[2].table.should eq("friends")
-      actions[3].recipient.guid.should eq("friends;phone")
+      actions[3].recipient.guid.should eq("phone")
     end
 
     it "rebinds fields" do
@@ -232,7 +244,7 @@ let(:application) { new_application "Users: Phone, Name; Friends: Telephone, Dis
       actions[2].table.should eq("friends")
       actions[2].field.should eq("display_name")
 
-      actions[3].recipient.guid.should eq("friends;telephone")
+      actions[3].recipient.guid.should eq("telephone")
     end
   end
 end

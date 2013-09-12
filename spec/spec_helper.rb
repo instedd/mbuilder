@@ -56,8 +56,8 @@ RSpec.configure do |config|
     Table.from_hash(
       {
         'name' => name,
-        'guid' => name.downcase,
-        'fields' => fields.map { |field| {'name' => field, 'guid' => field.underscore} },
+        'guid' => "#{name.downcase}",
+        'fields' => fields.map { |field| {'name' => field, 'guid' => "#{field.underscore}"} },
       }
     )
   end
@@ -74,7 +74,7 @@ RSpec.configure do |config|
         if kind == 'text'
           pieces.push 'kind' => 'text', 'text' => text
         else
-          pieces.push 'kind' => 'placeholder', 'text' => text, 'guid' => text.downcase
+          pieces.push 'kind' => 'placeholder', 'text' => text, 'guid' => "placeholder_#{text.downcase}"
         end
       end
       @message = Message.from_hash({'pieces' => pieces})
@@ -97,7 +97,7 @@ RSpec.configure do |config|
         table = $1
         field = $2
         pill = pill($3)
-        @actions << Action.from_hash({'kind' => kind, 'table' => table, 'field' => field, 'pill' => pill})
+        @actions << Action.from_hash({'kind' => kind, 'table' => "#{table}", 'field' => "#{field}", 'pill' => pill})
       else
         raise "Wrong action text: #{text}"
       end
@@ -105,12 +105,12 @@ RSpec.configure do |config|
 
     def send_message(recipient, text)
       case recipient
-      when /text (.+)/
+      when /'(.+)'/
         recipient = {'kind' => 'text', 'guid' => $1}
-      when /([^\.]+)\.([^\.]+)/
-        recipient = {'kind' => 'field_value', 'guid' => "#{$1};#{$2}"}
+      when /\*(.+)/
+        recipient = {'kind' => 'field_value', 'guid' => $1}
       else
-        raise "Uknonw recipient: #{recipient}"
+        raise "Unknown recipient: #{recipient}"
       end
 
       bindings = []
@@ -140,37 +140,30 @@ RSpec.configure do |config|
     helper.trigger
   end
 
-  def actions(text)
-    actions = text.split(',').map(&:strip)
-    actions.map { |action_text| action(action_text) }
-  end
-
-  def action(text)
-    case text
-    when /(create entity|select entity|store entity value) (\w+)\.(\w+) = (.+)/
-      kind = $1
-      table = $2
-      field = $3
-      pill = pill($4)
-      hash = {'kind' => kind.gsub(' ', '_'), 'table' => table, 'field' => field, 'pill' => pill}
-    else
-      raise "Unknown action: #{text}"
-    end
-
-    Action.from_hash(hash)
-  end
-
   def pill(text)
     case text
-    when /([^\.]+)\.([^\.]+)/
-      {'kind' => 'field_value', 'guid' => "#{$1};#{$2}"}
+    when /\*(.+)/
+      {'kind' => 'field_value', 'guid' => "#{$1}"}
+    when /'(.+)'/
+      {'kind' => 'literal', 'guid' => "literal_#{$1}", 'text' => $1}
+    when "{phone_number}"
+      {'kind' => 'placeholder', 'guid' => "phone_number"}
+    when /\{(.+)\}/
+      {'kind' => 'placeholder', 'guid' => "placeholder_#{$1}"}
     else
-      {'kind' => 'placeholder', 'guid' => text.strip}
+      puts text
+      raise 'wtf?'
     end
   end
 
   def accept_message(from, body)
     application.accept_message('from' => from, 'body' => body)
+  end
+
+  def add_table(table)
+    name, fields = table.split(':').map(&:strip)
+    fields = fields.split(',').map(&:strip)
+    application.tables << table(name, fields)
   end
 
   def add_data(table, *data)
@@ -197,7 +190,7 @@ RSpec.configure do |config|
   end
 
   def assert_sets_equal(actual_results, expected_results)
-    expected_results.length.should eq(actual_results.length)
+    actual_results.length.should eq(expected_results.length)
     actual_results.each do |result|
       actual_results_count = actual_results.count(result)
       expected_results_count = expected_results.count(result)
@@ -208,20 +201,21 @@ RSpec.configure do |config|
   end
 
   def parse_message(text)
-    pieces = []
-    pos = 0
-    idx = text.index("{", pos)
-    while idx
-      yield 'text', text[pos ... idx].strip
-      other_idx = text.index("}", idx + 1)
-      name = text[idx + 1 ... other_idx].strip
-      yield 'pill', name
-      pos = other_idx + 1
-      idx = text.index("{", pos)
-    end
-    rest = text[pos .. -1].strip
-    if rest.length > 0
-      yield 'text', rest
+    case text
+    when /(.*?)\{(.+)\}(.*?)\{(.+)\}(.*)/
+      v1, v2, v3, v4, v5= $1, $2, $3, $4, $5
+      yield 'text', v1.strip
+      yield 'pill', v2
+      yield 'text', v3.strip if v3.present?
+      yield 'pill', v4
+      yield 'text', v5.strip if v5.present?
+    when /(.*?)\{(.+)\}(.*)/
+      v1, v2, v3 = $1, $2, $3
+      yield 'text', v1.strip
+      yield 'pill', v2
+      yield 'text', v3.strip if v3.present?
+    else
+      yield 'text', text.try(:strip)
     end
   end
 end
