@@ -2,5 +2,8 @@ Select
 = render 'triggers/table'
 where
 = render 'triggers/field'
-is
+%span{'ng-show' => "action.pill.kind == 'field_value'"}
+  is one of the
+%span{'ng-hide' => "action.pill.kind == 'field_value'"}
+  is
 = render 'triggers/pill'
