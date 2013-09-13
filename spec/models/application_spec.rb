@@ -33,6 +33,25 @@ describe Application do
     assert_data "users", {"phone" => "hello"}
   end
 
+  it "updates entities with a literal value" do
+    add_data "users", [
+      {"phone" => "1234", "name" => "John"},
+      {"phone" => "1234", "name" => "Peter"},
+      {"phone" => "5678", "name" => "Doe"},
+    ]
+    new_trigger do
+      message "rename {Phone}"
+      select_entity "users.phone = {phone}"
+      store_entity_value "users.name = 'NewName'"
+    end
+    accept_message 'sms://1234', 'rename 1234'
+    assert_data "users", [
+      {"phone" => "1234", "name" => "NewName"},
+      {"phone" => "1234", "name" => "NewName"},
+      {"phone" => "5678", "name" => "Doe"},
+    ]
+  end
+
   it "creates entity with a stored value when value is number" do
     new_trigger do
       message "register {Name}"
