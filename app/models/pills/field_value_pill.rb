@@ -6,8 +6,7 @@ class Pills::FieldValuePill < Pill
   end
 
   def value_in(context)
-    #TODO move this into the creation and rebinding of the pill
-    context.entity_field_values(context.application.table_of(guid).guid, guid)
+    context.entity_field_values(guid)
   end
 
   def rebind_table(from_table, to_table)

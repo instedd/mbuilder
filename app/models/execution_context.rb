@@ -40,8 +40,8 @@ class ExecutionContext
     end
   end
 
-  def entity_field_values(table, field)
-    entity = entity(table)
+  def entity_field_values(field)
+    entity = entity(application.table_of(field).guid)
     entity.field_values(field)
   end
 
