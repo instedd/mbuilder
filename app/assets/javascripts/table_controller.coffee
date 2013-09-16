@@ -56,5 +56,18 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
       debugger # wtf!
 
   $scope.selectedTableRows = (table) ->
-    $scope.db[table.guid]
+    rows = $scope.db[table.guid]
+
+    action = $scope.lookupTableAction table.guid
+    if action && action.kind == 'select_entity'
+      if action.pill.kind == 'field_value'
+        other_table = $scope.lookupTableByField(action.pill.guid)
+        other_rows = $scope.selectedTableRows(other_table)
+        other_values = _.map other_rows, (row) -> row[action.pill.guid]
+        rows = _.select rows, (row) -> row[action.field] in other_values
+      else
+        text = $scope.$parent.lookupPillName(action.pill)
+        rows = _.select rows, (row) -> row[action.field] == text
+
+    rows
 ]

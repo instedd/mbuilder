@@ -46,6 +46,12 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
     field = _.find table.fields, (field) -> field.guid == fieldGuid
     field?.name
 
+  $scope.lookupTableAction = (tableGuid) ->
+    for action in $scope.actions
+      if action.table == tableGuid
+        return action
+    null
+
   $scope.lookupFieldAction = (fieldGuid) ->
     for action in $scope.actions
       if action.field == fieldGuid
