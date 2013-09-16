@@ -37,6 +37,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
+  config.after(:all) { Tire.index('*test*').delete }
+
   def new_application(tables)
     tables = tables.split(";").map(&:strip)
     tables = tables.map do |table|
