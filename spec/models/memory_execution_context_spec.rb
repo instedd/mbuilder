@@ -97,6 +97,11 @@ describe MemoryExecutionContext do
 
     db = application.simulate_triggers_execution
 
+    db.each do |key, table|
+      table.each do |row|
+        row.delete "id"
+      end
+    end
     assert_data "users"
 
     assert_sets_equal db['users'], [

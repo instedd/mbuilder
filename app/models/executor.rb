@@ -11,7 +11,7 @@ class Executor
       pattern = /#{trigger.pattern}/
       match = pattern.match(body)
       if match
-        return ExecutionContext.execute(@application, trigger, message, match)
+        return TireExecutionContext.execute(@application, trigger, message, match)
       end
     end
 
