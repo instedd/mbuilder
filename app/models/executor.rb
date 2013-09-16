@@ -11,10 +11,7 @@ class Executor
       pattern = /#{trigger.pattern}/
       match = pattern.match(body)
       if match
-        context = ExecutionContext.new(@application, trigger, message, match)
-        trigger.execute(context)
-        context.save
-        return context
+        return ExecutionContext.execute(@application, trigger, message, match)
       end
     end
 

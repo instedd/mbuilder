@@ -70,7 +70,7 @@ RSpec.configure do |config|
       @actions = []
     end
 
-    def message(text)
+    def message(text, options = {})
       pieces = []
       parse_message(text) do |kind, text|
         if kind == 'text'
@@ -80,6 +80,7 @@ RSpec.configure do |config|
         end
       end
       @message = Message.from_hash({'pieces' => pieces})
+      @message.from = options[:from]
     end
 
     def create_entity(text)

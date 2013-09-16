@@ -16,33 +16,13 @@ class EntitySelection
   end
 
   def field_values(field)
-    @context.select_table_field(@table, field) do |search|
-      apply_search_restrictions(search)
-    end
+    @context.select_table_field(@table, @restrictions, field)
   end
 
   def save
     return if @properties.empty?
 
-    @context.update_many(@table, @properties) do |search|
-      apply_search_restrictions(search)
-    end
-  end
-
-  def apply_search_restrictions(search)
-    @restrictions.each do |restriction|
-      search.query do
-        case restriction[:op]
-        when :eq
-          values = Array(restriction[:value])
-          boolean do
-            values.each do |value|
-              should { match restriction[:field], value }
-            end
-          end
-        end
-      end
-    end
+    @context.update_many(@table, @restrictions, @properties)
   end
 
   def to_s

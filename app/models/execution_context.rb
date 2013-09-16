@@ -1,8 +1,5 @@
 class ExecutionContext
   attr_reader :application
-  attr_reader :trigger
-  attr_reader :message
-  attr_reader :match
   attr_reader :messages
   attr_reader :logger
 
@@ -16,6 +13,17 @@ class ExecutionContext
     @messages = []
     @logger = ExecutionLogger.new(@application)
     @index = application.tire_index
+  end
+
+  def self.execute(application, trigger, message, match)
+    context = new application, trigger, message, match
+    context.execute trigger
+    context
+  end
+
+  def execute(trigger)
+    @trigger.execute self
+    save
   end
 
   def new_entity(table)
@@ -33,10 +41,10 @@ class ExecutionContext
   def piece_value(guid)
     case guid
     when 'phone_number'
-      message['from'].without_protocol
+      @message['from'].without_protocol
     else
       index = @pieces.index { |piece| piece.guid == guid }
-      match[index + 1]
+      @match[index + 1]
     end
   end
 
@@ -54,8 +62,8 @@ class ExecutionContext
     @logger.insert(table, properties)
   end
 
-  def update_many(table, properties, &block)
-    results = perform_search(table, &block)
+  def update_many(table, restrictions, properties)
+    results = perform_search(table, restrictions)
 
     now = Tire.format_date(Time.now)
 
@@ -71,17 +79,29 @@ class ExecutionContext
     @index.refresh
   end
 
-  def select_table_field(table, field, &block)
-    results = perform_search(table, &block)
+  def select_table_field(table, restrictions, field)
+    results = perform_search(table, restrictions)
     results.map do |result|
       result["_source"]["properties"][field]
     end
   end
 
-  def perform_search(table, &block)
+  def perform_search(table, restrictions)
     search = application.tire_search(table)
 
-    block.call search
+    restrictions.each do |restriction|
+      search.query do
+        case restriction[:op]
+        when :eq
+          values = Array(restriction[:value])
+          boolean do
+            values.each do |value|
+              should { match restriction[:field], value }
+            end
+          end
+        end
+      end
+    end
 
     search.perform.results
   end

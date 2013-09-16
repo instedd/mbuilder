@@ -14,6 +14,12 @@ class Application < ActiveRecord::Base
     Executor.new(self).execute(message)
   end
 
+  def simulate_triggers_execution
+    context = MemoryExecutionContext.new(self)
+    triggers.each { |trigger| context.execute trigger }
+    context.db
+  end
+
   def find_table(guid)
     tables.find { |table| table.guid == guid }
   end
