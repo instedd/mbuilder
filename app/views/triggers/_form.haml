@@ -54,6 +54,10 @@
                     %editable-input{'model' => 'pill.name', 'editable' => 'pill.editable', 'focus' => 'pill.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
                 %td
                   %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
+              %tr{'ng-repeat' => 'row in selectedTableRows(table)'}
+                %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
+                  {{ row[pill.guid] }}
+                %td
 
               %tr
                 %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}

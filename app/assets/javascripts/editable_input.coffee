@@ -28,7 +28,7 @@ mbuilder.directive 'editableInput', ->
       true
 
     scope.size = ->
-      len = scope.model.length
+      len = scope.model?.length
       if len == 0 then 1 else len
 
   templateUrl: 'editable_input'

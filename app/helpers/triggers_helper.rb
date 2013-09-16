@@ -23,6 +23,10 @@ module TriggersHelper
     else
       str << "tables=[];"
     end
+
+    db = application.simulate_triggers_execution_excluding trigger
+
+    str << "db=#{db.to_json};"
     str
   end
 end

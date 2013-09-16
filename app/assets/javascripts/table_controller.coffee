@@ -54,4 +54,7 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
       $scope.$parent.dropOverUnboundPill(action.pill, event)
     else
       debugger # wtf!
+
+  $scope.selectedTableRows = (table) ->
+    $scope.db[table.guid]
 ]

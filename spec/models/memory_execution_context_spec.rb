@@ -106,4 +106,29 @@ describe MemoryExecutionContext do
       {"phone" => "2345"},
     ]
   end
+
+  it "simulates triggers excluding" do
+    new_trigger do
+      message "register {Name}", from: "1234"
+      create_entity "users.phone = {phone_number}"
+    end
+
+    trigger = new_trigger do
+      message "register {Name}", from: "2345"
+      create_entity "users.phone = {phone_number}"
+    end
+
+    db = application.simulate_triggers_execution_excluding trigger
+
+    db.each do |key, table|
+      table.each do |row|
+        row.delete "id"
+      end
+    end
+    assert_data "users"
+
+    assert_sets_equal db['users'], [
+      {"phone" => "1234"}
+    ]
+  end
 end
