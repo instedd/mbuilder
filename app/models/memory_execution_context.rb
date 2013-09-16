@@ -33,15 +33,8 @@ class MemoryExecutionContext < ExecutionContext
   def update_many(table, restrictions, properties)
     rows = @db[table]
 
-    matcher = restrictions.inject(lambda { |item| true }) do |matcher, restriction|
-      case restriction[:op]
-      when :eq
-        values = Array(restriction[:value])
-        lambda { |item| values.include?(item[restriction[:field]]) && matcher.call(item) }
-      end
-    end
+    result_rows = rows.select &(matcher_from restrictions)
 
-    result_rows = rows.select &matcher
     result_rows.each do |row|
       row.merge!(properties)
       @logger.update(table, properties['id'], row, properties)
@@ -56,5 +49,25 @@ class MemoryExecutionContext < ExecutionContext
 
   def next_id
     @next_id += 1
+  end
+
+  def select_table_field(table, restrictions, field)
+    rows = @db[table]
+
+    result_rows = rows.select &(matcher_from restrictions)
+
+    result_rows.map do |result|
+      result[field]
+    end
+  end
+
+  def matcher_from restrictions
+    restrictions.inject(lambda { |item| true }) do |matcher, restriction|
+      case restriction[:op]
+      when :eq
+        values = Array(restriction[:value])
+        lambda { |item| values.include?(item[restriction[:field]]) && matcher.call(item) }
+      end
+    end
   end
 end

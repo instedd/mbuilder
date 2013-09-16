@@ -94,7 +94,7 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
     event.dataTransfer.setData("Text", $scope.lookupTableName(tableGuid))
 
   $scope.fieldDragStart = (fieldGuid, event) ->
-    window.draggedPill = {kind: 'field_ref', guid: fieldGuid}
+    window.draggedPill = {kind: 'field_value', guid: fieldGuid}
     event.dataTransfer.setData("Text", $scope.lookupFieldName(fieldGuid))
 
   $scope.dragOverUnboundPill = (pill, event) ->

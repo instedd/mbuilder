@@ -75,7 +75,6 @@ describe MemoryExecutionContext do
       send_message "'5678'", "Hello {{name}} from {{phone_number}}"
     end
 
-
     context.execute(trigger)
 
     context.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Name from 1234"}])
@@ -155,5 +154,31 @@ describe MemoryExecutionContext do
     assert_sets_equal db['users'], [
       {"phone" => "1234"},
     ]
+  end
+
+  it "sends message to multiple users" do
+    new_trigger do
+      message "register {John}", from: "1234"
+      create_entity "users.phone = {phone_number}"
+      store_entity_value "users.name = {john}"
+    end
+
+    new_trigger do
+      message "register {Peter}", from: "2345"
+      create_entity "users.phone = {phone_number}"
+      store_entity_value "users.name = {peter}"
+    end
+
+    new_trigger do
+      message "Alert", from: "1234"
+      send_message "*phone", "Hello {*name}"
+    end
+
+    context.execute_many application.triggers
+
+    context.messages.should eq([
+      {from: "app://mbuilder", to: "sms://1234", body: "Hello John, Peter"},
+      {from: "app://mbuilder", to: "sms://2345", body: "Hello John, Peter"}
+    ])
   end
 end

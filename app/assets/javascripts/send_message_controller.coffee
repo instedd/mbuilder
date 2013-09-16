@@ -15,10 +15,8 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     bindings = []
     parser = new MessageParser(event.originalEvent.currentTarget)
     parser.onText (text) ->
-      console.log(text)
       addBinding bindings, 'text', text
     parser.onPill (node) ->
-      console.log(node)
       addBinding bindings, node.data('kind'), node.data('guid'), node.data('text')
     parser.lastPieceNeeded ->
       bindings.length > 0 && bindings[bindings.length - 1].kind != 'text'
