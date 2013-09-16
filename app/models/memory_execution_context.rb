@@ -1,5 +1,4 @@
 class MemoryExecutionContext < ExecutionContext
-  attr_reader :db
 
   def initialize(application)
     super
@@ -10,6 +9,11 @@ class MemoryExecutionContext < ExecutionContext
   def execute(trigger)
     @trigger = trigger
     super
+  end
+
+  def execute_many triggers
+    triggers.each { |trigger| execute trigger }
+    @db
   end
 
   def piece_value(guid)

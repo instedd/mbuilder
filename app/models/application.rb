@@ -15,9 +15,16 @@ class Application < ActiveRecord::Base
   end
 
   def simulate_triggers_execution
+    simulate_execution_of triggers
+  end
+
+  def simulate_execution_of triggers
     context = MemoryExecutionContext.new(self)
-    triggers.each { |trigger| context.execute trigger }
-    context.db
+    context.execute_many triggers
+  end
+
+  def simulate_triggers_execution_excluding trigger
+    simulate_execution_of(triggers - [trigger])
   end
 
   def find_table(guid)

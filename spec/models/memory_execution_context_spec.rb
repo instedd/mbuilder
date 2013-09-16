@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe MemoryExecutionContext do
   let(:application) { new_application "Users: Phone, Name" }
+  let(:context) { MemoryExecutionContext.new(application) }
 
   it "creates entity" do
     trigger = new_trigger do
@@ -9,12 +10,11 @@ describe MemoryExecutionContext do
       create_entity "users.phone = {phone_number}"
     end
 
-    memory_context = MemoryExecutionContext.new(application)
-    memory_context.execute(trigger)
+    context.execute(trigger)
 
     assert_data "users"
 
-    data = memory_context.data_for("users")
+    data = context.data_for("users")
     assert_sets_equal data, [{"phone" => "1234"}]
   end
 
@@ -25,10 +25,9 @@ describe MemoryExecutionContext do
       store_entity_value "users.name = {john}"
     end
 
-    memory_context = MemoryExecutionContext.new(application)
-    memory_context.execute(trigger)
+    context.execute(trigger)
 
-    data = memory_context.data_for("users")
+    data = context.data_for("users")
     assert_sets_equal data, [{"phone" => "1234", "name" => "John"}]
   end
 
@@ -38,15 +37,13 @@ describe MemoryExecutionContext do
       create_entity "users.phone = 'hello'"
     end
 
-    memory_context = MemoryExecutionContext.new(application)
-    memory_context.execute(trigger)
+    context.execute(trigger)
 
-    data = memory_context.data_for("users")
+    data = context.data_for("users")
     assert_sets_equal data, [{"phone" => "hello"}]
   end
 
   it "updates one entity with a stored value" do
-    memory_context = MemoryExecutionContext.new(application)
 
     [["John", "1234"], ["Doe", "5678"]].each do |name, from|
       trigger = new_trigger do
@@ -54,7 +51,7 @@ describe MemoryExecutionContext do
         create_entity "users.phone = {phone_number}"
         store_entity_value "users.name = {#{name.downcase}}"
       end
-      memory_context.execute trigger
+      context.execute trigger
     end
 
     trigger = new_trigger do
@@ -63,9 +60,9 @@ describe MemoryExecutionContext do
       store_entity_value "users.name = {peter}"
     end
 
-    memory_context.execute trigger
+    context.execute trigger
 
-    data = memory_context.data_for("users")
+    data = context.data_for("users")
     assert_sets_equal data, [
       {"phone" => "1234", "name" => "Peter"},
       {"phone" => "5678", "name" => "Doe"},
@@ -78,10 +75,10 @@ describe MemoryExecutionContext do
       send_message "'5678'", "Hello {{name}} from {{phone_number}}"
     end
 
-    memory_context = MemoryExecutionContext.new(application)
-    memory_context.execute(trigger)
 
-    memory_context.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Name from 1234"}])
+    context.execute(trigger)
+
+    context.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Name from 1234"}])
   end
 
   it "simulates all triggers execution" do
