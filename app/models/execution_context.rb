@@ -50,5 +50,6 @@ class ExecutionContext
 
   def save
     @entities.values.each(&:save)
+    @entities = {}
   end
 end

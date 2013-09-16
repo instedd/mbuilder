@@ -131,4 +131,29 @@ describe MemoryExecutionContext do
       {"phone" => "1234"}
     ]
   end
+
+  it "clears entities between executions" do
+    new_trigger do
+      message "register {Name}", from: "1234"
+      create_entity "users.phone = {phone_number}"
+    end
+
+    new_trigger do
+      message "register {Name}", from: "2345"
+      send_message "'1234'", "Hello"
+    end
+
+    db = application.simulate_triggers_execution
+
+    db.each do |key, table|
+      table.each do |row|
+        row.delete "id"
+      end
+    end
+    assert_data "users"
+
+    assert_sets_equal db['users'], [
+      {"phone" => "1234"},
+    ]
+  end
 end
