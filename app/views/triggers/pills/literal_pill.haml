@@ -1,2 +1,2 @@
-.pill.literal{draggable: 'true', dragstart: 'dragPill(pill)', 'ng-repeat' => 'literal in [lookupPill(pill)]'}
+.pill.literal{draggable: 'true', dragstart: 'dragPill(pill)', 'ng-repeat' => 'literal in [lookupPill(pill)]', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}', text: '{{pill.text}}'}}
   %editable-input{'model' => 'literal.text', 'editable' => 'literal.editable', 'focus' => 'literal.focus'}

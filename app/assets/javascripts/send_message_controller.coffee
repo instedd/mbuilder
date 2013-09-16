@@ -1,20 +1,25 @@
 angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scope) ->
-  addBinding = (bindings, kind, guid) ->
+  addBinding = (bindings, kind, guid, text) ->
     guid = $.trim(guid)
     return if guid.length == 0
 
-    bindings.push kind: kind, guid: guid
+    bindings.push kind: kind, guid: guid, text: text
 
   $scope.pillTemplateFor = (pill) ->
-    $scope.fieldNameFor(pill.kind)
+    if pill.kind == 'text'
+      $scope.fieldNameFor(pill.kind)
+    else
+      $scope.$parent.pillTemplateFor(pill)
 
   $scope.parseMessage = (event) ->
     bindings = []
     parser = new MessageParser(event.originalEvent.currentTarget)
     parser.onText (text) ->
+      console.log(text)
       addBinding bindings, 'text', text
     parser.onPill (node) ->
-      addBinding bindings, node.data('kind'), node.data('guid')
+      console.log(node)
+      addBinding bindings, node.data('kind'), node.data('guid'), node.data('text')
     parser.lastPieceNeeded ->
       bindings.length > 0 && bindings[bindings.length - 1].kind != 'text'
     parser.parse()

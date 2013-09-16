@@ -49,6 +49,9 @@ class @MessageParser
                 content = child.childNodes[0]
                 @onText(content.textContent, content == @selNode)
               j += 1
+            else if child.nodeName == "#comment"
+              # Skip
+              j += 1
             else
               @onText(child.textContent, child == @selNode)
               node.removeChild(child)

@@ -1,2 +1,2 @@
-.pill.field{draggable: 'true', dragstart: 'dragPill(pill)', 'ng-click' => 'addNewValue()'}
+.pill.field{draggable: 'true', dragstart: 'dragPill(pill)', 'ng-click' => 'addNewValue()', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}'}}
   {{lookupPillName(pill)}}
