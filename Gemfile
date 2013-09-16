@@ -15,6 +15,10 @@ gem 'instedd-pigeon', :require => 'pigeon'
 gem 'ng-rails-csrf'
 gem "tire"
 
+gem "ice_cube"
+gem 'delayed_job'
+gem 'delayed_job_active_record'
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
