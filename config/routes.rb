@@ -4,6 +4,7 @@ Mbuilder::Application.routes.draw do
   resources :applications do
     resources :channels
     resources :triggers
+    resources :periodic_tasks
     resources :messages
     get :data
   end

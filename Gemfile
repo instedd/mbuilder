@@ -35,4 +35,5 @@ group :development, :test do
   gem 'machinist'
   gem 'capistrano'
   gem 'rvm-capistrano'
+  gem 'timecop'
 end

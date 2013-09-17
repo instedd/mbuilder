@@ -1,14 +1,9 @@
 class MemoryExecutionContext < ExecutionContext
 
-  def initialize(application)
+  def initialize(application, placeholder_solver)
     super
     @db = Hash.new { |hash, table_name| hash[table_name] = [] }
     @next_id = 0
-  end
-
-  def execute(trigger)
-    @trigger = trigger
-    super
   end
 
   def execute_many triggers
@@ -17,12 +12,7 @@ class MemoryExecutionContext < ExecutionContext
   end
 
   def piece_value(guid)
-    case guid
-    when 'phone_number'
-      @trigger.logic.message.from
-    else
-      @trigger.logic.message.pieces.find { |piece| piece.guid == guid }.text
-    end
+    @placeholder_solver.piece_value guid, @trigger
   end
 
   def insert(table, properties)

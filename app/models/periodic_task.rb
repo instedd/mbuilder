@@ -1,5 +1,6 @@
-class Trigger < ActiveRecord::Base
+class PeriodicTask < ActiveRecord::Base
   include Rebindable
+
   attr_accessible :name
 
   belongs_to :application
@@ -9,16 +10,28 @@ class Trigger < ActiveRecord::Base
 
   serialize :logic
 
-  before_save :compile_message, if: :logic
+  after_save :schedule_job, if: :logic
 
-  def compile_message
-    self.pattern = logic.message.compile
+  def schedule_job
+    schedule_job_for Time.now
+  end
+
+  def schedule_job_for scheduled_time, run_at=nil
+    run_at ||= scheduled_time
+    Delayed::Job.enqueue WakeUpEvent.new(self.id, scheduled_time),
+      :run_at => run_at
   end
 
   def execute(context)
     logic.actions.each do |action|
       action.execute(context)
     end
+  end
+
+  def execute_at scheduled_time
+    context = TireExecutionContext.new(application, NullPlaceholderSolver.new)
+    execute context
+    context
   end
 
   def generate_from_number

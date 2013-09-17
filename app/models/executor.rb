@@ -11,11 +11,10 @@ class Executor
       pattern = /#{trigger.pattern}/
       match = pattern.match(body)
       if match
-        return TireExecutionContext.execute(@application, trigger, message, match)
+        return TireExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(message, trigger, match))
       end
     end
 
     nil
   end
 end
-

@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe MemoryExecutionContext do
   let(:application) { new_application "Users: Phone, Name" }
-  let(:context) { MemoryExecutionContext.new(application) }
+  let(:context) { MemoryExecutionContext.new(application, TriggerPlaceholderSolver.new) }
 
   it "creates entity" do
     trigger = new_trigger do

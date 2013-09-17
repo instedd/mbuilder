@@ -26,3 +26,7 @@ Trigger.blueprint do
   name
 end
 
+PeriodicTask.blueprint do
+  application
+  name
+end

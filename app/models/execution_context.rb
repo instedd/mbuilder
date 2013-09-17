@@ -3,14 +3,16 @@ class ExecutionContext
   attr_reader :messages
   attr_reader :logger
 
-  def initialize(application)
+  def initialize(application, placeholder_solver)
     @application = application
+    @placeholder_solver = placeholder_solver
     @entities = {}
     @messages = []
     @logger = ExecutionLogger.new(@application)
   end
 
   def execute(trigger)
+    @trigger = trigger
     @trigger.execute self
     save
   end

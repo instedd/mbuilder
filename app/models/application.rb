@@ -3,6 +3,7 @@ class Application < ActiveRecord::Base
 
   belongs_to :user
   has_many :triggers, dependent: :destroy
+  has_many :periodic_tasks, dependent: :destroy
   has_many :channels, dependent: :destroy
 
   validates_presence_of :user
@@ -19,7 +20,7 @@ class Application < ActiveRecord::Base
   end
 
   def simulate_execution_of triggers
-    context = MemoryExecutionContext.new(self)
+    context = MemoryExecutionContext.new self, TriggerPlaceholderSolver.new
     context.execute_many triggers
   end
 

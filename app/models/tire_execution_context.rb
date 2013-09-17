@@ -1,28 +1,18 @@
 class TireExecutionContext < ExecutionContext
 
-  def initialize(application, trigger, message, match)
-    super application
-    @trigger = trigger
-    @message = message
-    @match = match
-    @pieces = @trigger.logic.message.pieces.select { |piece| piece.kind == 'placeholder' }
+  def initialize(application, placeholder_solver)
+    super
     @index = application.tire_index
   end
 
-  def self.execute(application, trigger, message, match)
-    context = new application, trigger, message, match
+  def self.execute(application, trigger, placeholder_solver)
+    context = new application, placeholder_solver
     context.execute trigger
     context
   end
 
   def piece_value(guid)
-    case guid
-    when 'phone_number'
-      @message['from'].without_protocol
-    else
-      index = @pieces.index { |piece| piece.guid == guid }
-      @match[index + 1]
-    end
+    @placeholder_solver.piece_value(guid, @trigger)
   end
 
   def insert(table, properties)
