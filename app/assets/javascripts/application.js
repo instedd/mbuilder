@@ -15,12 +15,9 @@
 //= require underscore
 //= require bootstrap
 //= require angular
-//= require drag_and_drop
-//= require focus_and_blur
-//= require editable_input
-//= require keys
-//= require guid
+//= require_tree ./angular/
 //= require ng-rails-csrf
+//= require guid
 //= require pigeon
 //= require message_parser
 //= require_tree .
