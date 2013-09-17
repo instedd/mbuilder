@@ -1,2 +1,3 @@
-.pill.field{draggable: 'true', dragstart: 'dragPill(pill)', 'ng-click' => 'addNewValue()', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}'}}
+.pill.field{draggable: 'true', dragstart: 'dragPill(pill)', 'ng-click' => 'addNewValue()', 'ng-right-click' => 'showAggregateFunctions(pill, $event)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}', fun: '{{pill.fun}}'}}
+  %span.fun {{funLabel(pill.fun)}}
   {{lookupPillName(pill)}}

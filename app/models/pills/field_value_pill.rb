@@ -1,8 +1,10 @@
 class Pills::FieldValuePill < Pill
   attr_reader :guid
+  attr_reader :fun
 
-  def initialize(guid)
+  def initialize(guid, fun)
     @guid = guid
+    @fun = fun
   end
 
   def value_in(context)
@@ -18,6 +20,14 @@ class Pills::FieldValuePill < Pill
   end
 
   def self.from_hash(hash)
-    new hash['guid']
+    new hash['guid'], hash['fun']
+  end
+
+  def as_json
+    {
+      kind: kind,
+      guid: guid,
+      fun: fun,
+    }
   end
 end

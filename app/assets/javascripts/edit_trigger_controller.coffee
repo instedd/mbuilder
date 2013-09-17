@@ -1,5 +1,15 @@
 angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http', ($scope, $http) ->
   $scope.tableAndFieldRebinds = []
+  $scope.aggregateFunctionPopup = { pill: null }
+
+  $scope.functions = [
+    {id: null, name: 'List of values', ''},
+    {id: 'count', name: 'Count of values', desc: 'count of'},
+    {id: 'sum', name: 'Sum of values', desc: 'sum of'},
+    {id: 'avg', name: 'Average of values', desc: 'average of'},
+    {id: 'max', name: 'Maximum of values', desc: 'maximum of'},
+    {id: 'min', name: 'Minimum of values', desc: 'minimum of'},
+  ]
 
   $scope.data = (node) ->
     newData = {}
@@ -145,6 +155,17 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
           action.table = draggedPillTableGuid
 
     event.stopPropagation()
+
+  $scope.hidePopupus = ->
+    $('.popup').hide()
+
+  $(window.document).click $scope.hidePopupus
+  $(window.document).keydown (event) ->
+    if event.keyCode = 27 # Esc
+      $scope.hidePopupus()
+
+  $scope.funLabel = (fun) ->
+    _.find($scope.functions, (f) -> f.id == fun).desc
 
   $scope.visitPills = (fun) ->
     for action in $scope.actions

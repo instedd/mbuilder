@@ -17,7 +17,12 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     parser.onText (text) ->
       addBinding bindings, kind: 'text', guid: text
     parser.onPill (node) ->
-      addBinding bindings, $scope.data(node)
+      guid = node.data('guid')
+      pill = _.find $scope.action.message, (p) -> p.guid == guid
+      if pill
+        bindings.push pill
+      else
+        addBinding bindings, $scope.data(node)
     parser.lastPieceNeeded ->
       bindings.length > 0 && bindings[bindings.length - 1].kind != 'text'
     parser.parse()
@@ -65,7 +70,8 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
       if text.length > 0
         $scope.action.recipient = {kind: 'text', guid: text}
     parser.onPill (node) ->
-      $scope.action.recipient = $scope.data(node)
+      unless $scope.action.recipient?.guid == node.data('guid')
+        $scope.action.recipient = $scope.data(node)
     parser.lastPieceNeeded ->
       $scope.action.recipient.kind != 'text'
     parser.parse()
@@ -103,4 +109,14 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
       return false
 
     true
+
+  $scope.showAggregateFunctions = (pill, event) ->
+    $scope.aggregateFunctionPopup.pill = pill
+
+    div = $('#aggregate-functions')
+    div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
+    div.show()
+
+    event.preventDefault()
+    event.stopPropagation()
 ]

@@ -66,3 +66,8 @@
           %br
 
     %button.btn{'ng-click' => 'save()'} Save
+
+    %div#aggregate-functions.popup{'ng-controller' => 'AggregateFunctionsController'}
+      %div{'ng-repeat' => 'fun in functions'}
+        %a{'href' => 'javascript:', 'ng-hide' => 'aggregateFunctionPopup.pill.fun == fun.id', 'ng-click' => 'select(fun)'} {{fun.name}}
+        %strong{'ng-show' => 'aggregateFunctionPopup.pill.fun == fun.id'} {{fun.name}}

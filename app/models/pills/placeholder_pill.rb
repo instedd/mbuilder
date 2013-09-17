@@ -12,4 +12,11 @@ class Pills::PlaceholderPill < Pill
   def self.from_hash(hash)
     new hash['guid']
   end
+
+  def as_json
+    {
+      kind: kind,
+      guid: guid,
+    }
+  end
 end

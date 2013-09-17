@@ -10,10 +10,7 @@ class Pill
   end
 
   def as_json
-    {
-      kind: kind,
-      guid: guid
-    }
+    subclass_responsibility
   end
 
   def rebind_table(from_table, to_table)
