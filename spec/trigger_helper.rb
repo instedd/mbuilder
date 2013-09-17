@@ -17,8 +17,8 @@ class TriggerHelper
     @message.from = options[:from]
   end
 
-  def rule rule
-    @schedule = IceCube::Schedule.new
+  def rule rule, options={}
+    @schedule = IceCube::Schedule.new(options[:at])
     @schedule.add_recurrence_rule rule
   end
 

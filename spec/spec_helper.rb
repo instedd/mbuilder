@@ -162,7 +162,7 @@ RSpec.configure do |config|
 
   RSpec::Matchers.define :be_near_of do |expected|
     match do |actual|
-      actual.to_date == expected.utc.to_date && actual.seconds_since_midnight.to_i == expected.utc.seconds_since_midnight.to_i
+      actual.utc.to_date == expected.utc.to_date && actual.utc.seconds_since_midnight.to_i == expected.utc.seconds_since_midnight.to_i
     end
   end
 end
