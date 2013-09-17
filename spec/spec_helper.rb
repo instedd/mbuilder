@@ -145,8 +145,10 @@ RSpec.configure do |config|
 
   def pill(text)
     case text
+    when /\*(\w+)\((.+)\)/
+      {'kind' => 'field_value', 'guid' => $2, 'fun' => $1}
     when /\*(.+)/
-      {'kind' => 'field_value', 'guid' => "#{$1}"}
+      {'kind' => 'field_value', 'guid' => $1}
     when /'(.+)'/
       {'kind' => 'literal', 'guid' => "literal_#{$1}", 'text' => $1}
     when "{phone_number}"

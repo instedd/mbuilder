@@ -8,7 +8,23 @@ class Pills::FieldValuePill < Pill
   end
 
   def value_in(context)
-    context.entity_field_values(guid)
+    values = Array(context.entity_field_values(guid))
+    case fun
+    when 'count'
+      values.length
+    when 'sum'
+      to_num values.sum(&:to_f)
+    when 'avg'
+      sum = values.sum(&:to_f)
+      len = values.length
+      to_num(len == 0 ? 0 : sum / len)
+    when 'max'
+      to_num values.map(&:to_f).max
+    when 'min'
+      to_num values.map(&:to_f).min
+    else
+      values.join ", "
+    end
   end
 
   def rebind_table(from_table, to_table)
@@ -21,6 +37,11 @@ class Pills::FieldValuePill < Pill
 
   def self.from_hash(hash)
     new hash['guid'], hash['fun']
+  end
+
+  def to_num(num)
+    num = num.to_i if num.to_i == num.to_f
+    num
   end
 
   def as_json
