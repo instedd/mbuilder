@@ -1,15 +1,15 @@
 class Pills::FieldValuePill < Pill
   attr_reader :guid
-  attr_reader :fun
+  attr_reader :aggregate
 
-  def initialize(guid, fun)
+  def initialize(guid, aggregate)
     @guid = guid
-    @fun = fun
+    @aggregate = aggregate
   end
 
   def value_in(context)
     values = Array(context.entity_field_values(guid))
-    case fun
+    case aggregate
     when 'count'
       values.length
     when 'sum'
@@ -36,7 +36,7 @@ class Pills::FieldValuePill < Pill
   end
 
   def self.from_hash(hash)
-    new hash['guid'], hash['fun']
+    new hash['guid'], hash['aggregate']
   end
 
   def to_num(num)
@@ -48,7 +48,7 @@ class Pills::FieldValuePill < Pill
     {
       kind: kind,
       guid: guid,
-      fun: fun,
+      aggregate: aggregate,
     }
   end
 end

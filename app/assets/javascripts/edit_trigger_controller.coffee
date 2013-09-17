@@ -2,7 +2,7 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
   $scope.tableAndFieldRebinds = []
   $scope.aggregateFunctionPopup = { pill: null }
 
-  $scope.functions = [
+  $scope.aggregates = [
     {id: null, name: 'List of values', ''},
     {id: 'count', name: 'Count of values', desc: 'count of'},
     {id: 'sum', name: 'Sum of values', desc: 'sum of'},
@@ -163,10 +163,6 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
   $(window.document).keydown (event) ->
     if event.keyCode = 27 # Esc
       $scope.hidePopupus()
-
-  $scope.funLabel = (fun) ->
-    return '' unless fun
-    _.find($scope.functions, (f) -> f.id == fun).desc
 
   $scope.visitPills = (fun) ->
     for action in $scope.actions
