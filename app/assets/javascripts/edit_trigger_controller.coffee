@@ -165,6 +165,7 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
       $scope.hidePopupus()
 
   $scope.funLabel = (fun) ->
+    return '' unless fun
     _.find($scope.functions, (f) -> f.id == fun).desc
 
   $scope.visitPills = (fun) ->
