@@ -1,9 +1,9 @@
 angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scope) ->
-  addBinding = (bindings, kind, guid, text) ->
-    guid = $.trim(guid)
+  addBinding = (bindings, properties) ->
+    guid = $.trim(properties.guid)
     return if guid.length == 0
 
-    bindings.push kind: kind, guid: guid, text: text
+    bindings.push properties
 
   $scope.pillTemplateFor = (pill) ->
     if pill.kind == 'text'
@@ -15,9 +15,9 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     bindings = []
     parser = new MessageParser(event.originalEvent.currentTarget)
     parser.onText (text) ->
-      addBinding bindings, 'text', text
+      addBinding bindings, kind: 'text', guid: text
     parser.onPill (node) ->
-      addBinding bindings, node.data('kind'), node.data('guid'), node.data('text')
+      addBinding bindings, $scope.data(node)
     parser.lastPieceNeeded ->
       bindings.length > 0 && bindings[bindings.length - 1].kind != 'text'
     parser.parse()
@@ -65,7 +65,7 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
       if text.length > 0
         $scope.action.recipient = {kind: 'text', guid: text}
     parser.onPill (node) ->
-      $scope.action.recipient = {kind: node.data('kind'), guid: node.data('guid')}
+      $scope.action.recipient = $scope.data(node)
     parser.lastPieceNeeded ->
       $scope.action.recipient.kind != 'text'
     parser.parse()

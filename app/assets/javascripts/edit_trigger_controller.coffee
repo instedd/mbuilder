@@ -1,6 +1,12 @@
 angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http', ($scope, $http) ->
   $scope.tableAndFieldRebinds = []
 
+  $scope.data = (node) ->
+    newData = {}
+    for key, value of node.data()
+      newData[key] = value unless key[0] == '$'
+    newData
+
   $scope.tableExists = (tableGuid) ->
     table = $scope.lookupTable(tableGuid)
     return false unless table
