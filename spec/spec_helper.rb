@@ -120,14 +120,16 @@ RSpec.configure do |config|
     data = data[0] if data.length == 1 && data[0].is_a?(Array)
 
     index = application.tire_index
-    index.exists?.should be_true
+    if index.exists?
+      results = application.tire_search(table).perform.results
+      results.length.should eq(data.length)
 
-    results = application.tire_search(table).perform.results
-    results.length.should eq(data.length)
+      results = results.map { |result| result["_source"]["properties"] }
 
-    results = results.map { |result| result["_source"]["properties"] }
-
-    assert_sets_equal results, data
+      assert_sets_equal results, data
+    else
+      data.lentgh.should eq(0)
+    end
   end
 
   def assert_sets_equal(actual_results, expected_results)
