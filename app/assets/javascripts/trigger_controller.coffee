@@ -50,7 +50,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', ($scope) -
 
     parser = new MessageParser(event.originalEvent.currentTarget)
     parser.onText (text, hasSelection) ->
-      if hasSelection
+      if hasSelection && parser.range.startContainer == parser.range.endContainer
         addSelection pieces, text, parser.range
       else
         addPiece pieces, 'text', text
