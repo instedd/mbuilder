@@ -8,7 +8,11 @@ class Pills::FieldValuePill < Pill
   end
 
   def value_in(context)
-    values = Array(context.entity_field_values(guid))
+    value = context.entity_field_values(guid)
+    return value unless aggregate.present?
+
+    values = Array(value)
+
     case aggregate
     when 'count'
       values.length
@@ -23,7 +27,7 @@ class Pills::FieldValuePill < Pill
     when 'min'
       to_num values.map(&:to_f).min
     else
-      values.join ", "
+      raise "Unknown aggregate function: #{aggregate}"
     end
   end
 

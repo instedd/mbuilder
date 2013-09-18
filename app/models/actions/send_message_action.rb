@@ -8,7 +8,10 @@ class Actions::SendMessageAction < Action
   end
 
   def execute(context)
-    message = @message.map { |binding| binding.value_in(context) }.join(" ").strip
+    message = @message.map do |binding|
+      values = Array(binding.value_in(context))
+      values.join ", "
+    end.join(" ").strip
 
     # TODO: maybe this is wrong
     message.gsub!(" .", ".")
