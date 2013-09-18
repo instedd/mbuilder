@@ -48,7 +48,7 @@
 
             %table.table.table-bordered.fields
               %tr
-                %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController'}
+                %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)'}
                   %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
                   .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)'}
                     %editable-input{'model' => 'pill.name', 'editable' => 'pill.editable', 'focus' => 'pill.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
@@ -71,3 +71,10 @@
       %div{'ng-repeat' => 'aggregate in aggregates'}
         %a{'href' => 'javascript:', 'ng-hide' => 'aggregateFunctionPopup.pill.aggregate == aggregate.id', 'ng-click' => 'select(aggregate)'} {{aggregate.name}}
         %strong{'ng-show' => 'aggregateFunctionPopup.pill.aggregate == aggregate.id'} {{aggregate.name}}
+
+    %div#valid-values.popup{'ng-controller' => 'ValidValuesController'}
+      %label{for: 'valid-values'} Valid values for {{lookupFieldName(validValuesPopup.field.guid)}}:
+      %div
+        %input{name: 'valid-values', 'ng-model' => 'validValuesPopup.field.valid_values', 'ng-keydown' => 'keydown($event)'}
+      %div{style: 'margin-top: 8px'}
+        %button.btn{'ng-click' => 'hidePopups()'} Close

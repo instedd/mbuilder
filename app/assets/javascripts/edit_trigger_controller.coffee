@@ -1,7 +1,7 @@
 angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http', ($scope, $http) ->
   $scope.tableAndFieldRebinds = []
-  $scope.aggregateFunctionPopup = { pill: null }
 
+  $scope.aggregateFunctionPopup = { pill: null }
   $scope.aggregates = [
     {id: null, name: 'List of values', ''},
     {id: 'count', name: 'Count of values', desc: 'count of'},
@@ -10,6 +10,8 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
     {id: 'max', name: 'Maximum of values', desc: 'maximum of'},
     {id: 'min', name: 'Minimum of values', desc: 'minimum of'},
   ]
+
+  $scope.validValuesPopup = { field: null }
 
   $scope.data = (node) ->
     newData = {}
@@ -156,13 +158,16 @@ angular.module('mbuilder').controller 'EditTriggerController', ['$scope', '$http
 
     event.stopPropagation()
 
-  $scope.hidePopupus = ->
+  $scope.hidePopups = ->
     $('.popup').hide()
 
-  $(window.document).click $scope.hidePopupus
+  $(window.document).click (event) ->
+    unless $(event.target).closest($('.popup')).length > 0
+      $scope.hidePopups()
+
   $(window.document).keydown (event) ->
-    if event.keyCode = 27 # Esc
-      $scope.hidePopupus()
+    if event.keyCode == 27 # Esc
+      $scope.hidePopups()
 
   $scope.visitPills = (fun) ->
     for action in $scope.actions

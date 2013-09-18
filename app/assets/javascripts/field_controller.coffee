@@ -21,4 +21,17 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
 
   $scope.addNewValue = ->
     $scope.$emit 'pillOverFieldValue', pill: {kind: 'literal', guid: window.guid(), text: '', editable: true}, field: $scope.pill, table: $scope.table
+
+  $scope.showValidValuesPopup = (field, event) ->
+    $scope.validValuesPopup.field = field
+
+    div = $('#valid-values')
+    div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
+    div.show()
+
+    window.setTimeout (-> $('#valid-values input').focus()), 0
+
+    event.preventDefault()
+    event.stopPropagation()
+
 ]

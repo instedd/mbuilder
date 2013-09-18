@@ -3,6 +3,7 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
     $scope.table.fields.push
       guid: window.guid()
       name: "Field #{$scope.table.fields.length + 1}"
+      valid_values: ""
       editable: true
       focus: true
 

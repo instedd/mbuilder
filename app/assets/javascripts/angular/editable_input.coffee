@@ -15,7 +15,9 @@ mbuilder.directive 'editableInput', ->
     if scope.focus
       window.setTimeout (-> $('input', elem).focus()), 0
 
-    scope.makeEditable = ->
+    scope.makeEditable = (event) ->
+      return unless event.originalEvent.button == 0
+
       scope.editable = true
       window.setTimeout (-> $('input', elem).focus()), 0
 
