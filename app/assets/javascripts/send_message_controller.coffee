@@ -3,6 +3,8 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     guid = $.trim(properties.guid)
     return if guid.length == 0
 
+    properties.guid = guid
+
     bindings.push properties
 
   $scope.pillTemplateFor = (pill) ->
@@ -46,21 +48,6 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
   $scope.dropOverMessage = (event) ->
     $scope.action.message.push window.draggedPill
     MessageParser.appendLastPieceTo(event.target)
-    true
-
-  $scope.handleMessageKey = (event) ->
-    if event.keyCode == 8 # delete
-      if $.trim(event.originalEvent.target.innerText).length == 0
-        event.preventDefault()
-        return false
-
-      sel = window.getSelection()
-      if sel.rangeCount > 0
-        range = sel.getRangeAt(0)
-        if range.startOffset == 0
-          event.preventDefault()
-          return false
-
     true
 
   $scope.parseRecipient = (event) ->

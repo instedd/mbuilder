@@ -1,10 +1,8 @@
 %div{'ng-controller' => 'SendMessageController'}
   Send this message
   %br
-  .message-area{contenteditable: '{{action.messageEditable}}', 'ng-blur' => 'makeMessageNotEditable($event)', 'ng-mousedown' => 'makeMessageEditable($event)', dragover: 'dragOverMessage($event)', drop: 'dropOverMessage($event)', 'ng-keydown' => 'handleMessageKey($event)'}
-    %span{contenteditable: 'false'}
+  .message-area{contenteditable: '{{action.messageEditable}}', 'ng-blur' => 'makeMessageNotEditable($event)', 'ng-mousedown' => 'makeMessageEditable($event)', dragover: 'dragOverMessage($event)', drop: 'dropOverMessage($event)', 'preserve-ng-repeat' => true}
     %span.piece-container{'ng-repeat' => 'pill in action.message', 'ng-include' => true, 'src' => 'pillTemplateFor(pill)'}<>
   to
   .message-input{contenteditable: '{{action.recipientEditable}}', 'ng-blur' => 'makeRecipientNotEditable($event)', 'ng-mousedown' => 'makeRecipientEditable($event)', dragover: 'dragOverRecipient($event)', drop: 'dropOverRecipient($event)', 'ng-keydown' => 'handleRecipientKey($event)'}
-    %span{contenteditable: 'false'}
     %span.piece-container{'ng-repeat' => 'pill in [action.recipient]', 'ng-include' => true, 'src' => 'pillTemplateFor(pill)'}<>

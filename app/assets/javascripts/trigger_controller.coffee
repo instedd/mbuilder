@@ -79,19 +79,4 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', ($scope) -
   $scope.makeEditable = (event) ->
     unless $(event.originalEvent.target).hasClass('pill')
       $scope.contenteditable = 'true'
-
-  $scope.handleMessageKey = (event) ->
-    if event.keyCode == 8 # delete
-      if $.trim(event.originalEvent.target.innerText).length == 0
-        event.preventDefault()
-        return false
-
-      sel = window.getSelection()
-      if sel.rangeCount > 0
-        range = sel.getRangeAt(0)
-        if range.startOffset == 0
-          event.preventDefault()
-          return false
-
-    true
 ]

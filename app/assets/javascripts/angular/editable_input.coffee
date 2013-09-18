@@ -1,4 +1,4 @@
-mbuilder = angular.module('mbuilder', ['drag-and-drop', 'focus-and-blur', 'keys', 'right-click', 'ng-rails-csrf']);
+mbuilder = angular.module('mbuilder', ['drag-and-drop', 'focus-and-blur', 'keys', 'right-click', 'ng-rails-csrf', 'preserve-ng-repeat']);
 
 window.draggedPill = null
 
