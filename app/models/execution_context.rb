@@ -2,7 +2,6 @@ class ExecutionContext
   attr_reader :application
   attr_reader :messages
   attr_reader :logger
-  attr_accessor :placeholder_solver
 
   def initialize(application, placeholder_solver)
     @application = application
@@ -16,6 +15,15 @@ class ExecutionContext
     @trigger = trigger
     @trigger.execute self
     save
+    self
+  rescue InvalidValueException => ex
+    validation_trigger = application.validation_triggers.find_by_field_guid(ex.field_guid)
+    if validation_trigger
+      context = self.class.new(application, InvalidValuePlaceholderSolver.new(@placeholder_solver, ex.value))
+      context.execute(validation_trigger)
+    else
+      self
+    end
   end
 
   def new_entity(table)

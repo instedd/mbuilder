@@ -8,7 +8,6 @@ class TireExecutionContext < ExecutionContext
   def self.execute(application, trigger, placeholder_solver)
     context = new application, placeholder_solver
     context.execute trigger
-    context
   end
 
   def piece_value(guid)

@@ -18,12 +18,6 @@ class Trigger < ActiveRecord::Base
 
   def execute(context)
     logic.execute(context)
-  rescue InvalidValueException => ex
-    validation_trigger = application.validation_triggers.find_by_field_guid(ex.field_guid)
-    if validation_trigger
-      context.placeholder_solver = InvalidValuePlaceholderSolver.new(context.placeholder_solver, ex.value)
-      context.execute(validation_trigger)
-    end
   end
 
   def generate_from_number
