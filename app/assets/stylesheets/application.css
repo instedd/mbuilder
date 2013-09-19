@@ -193,3 +193,7 @@ table.fields .input-small {
 .aggregate {
   font-style: italic;
 }
+
+input.small {
+  width: 40px;
+}

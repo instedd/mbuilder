@@ -3,24 +3,20 @@
   - angular_templates "shared/actions"
   - angular_templates "shared/pieces"
   - angular_templates "shared/pills"
+  - angular_templates "shared/schedules"
 
-  %div{'ng-controller' => 'EditTriggerController', 'ng-init' => trigger_to_angular(application, trigger)}
+  %div{'ng-controller' => 'EditPeriodicTaskController', 'ng-init' => trigger_to_angular(application, trigger)}
     %div.row-fluid
       %div.span6
         %div
           %label{for: :name} Name
           %input{'ng-model' => 'name', type: :text, name: :name, autofocus: true}
 
-        %div{'ng-controller' => 'TriggerController'}
+        %div{'ng-controller' => 'ScheduleController'}
           %div
-            %label{for: :message} When a message like this is received:
-            .message-container
-              .from
-                %strong From:
-                .pill.bound{draggable: 'true', dragstart: 'phoneNumberDragStart($event)'}
-                  {{from}}
-              .message-area{contenteditable: '{{contenteditable}}', 'ng-blur' => 'makeNotEditable($event)', 'ng-mousedown' => 'makeEditable($event)', 'ng-mouseup' => 'parseMessage($event)', 'preserve-ng-repeat' => true}
-                %span.piece-container{'ng-repeat' => 'piece in pieces', 'ng-include' => true, 'src' => 'pieceTemplateFor(piece.kind)'}<>
+            This trigger will run:
+            %select{ 'ng-model' => "scheduleGranularity", 'ng-options' => "granularity.name for granularity in granularities"}
+            %div(ng-include src='scheduleTemplate()')
           %br
 
         %div{'ng-controller' => 'ActionsController'}
@@ -48,7 +44,7 @@
 
             %table.table.table-bordered.fields
               %tr
-                %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)'}
+                %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController'}
                   %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
                   .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)'}
                     %editable-input{'model' => 'pill.name', 'editable' => 'pill.editable', 'focus' => 'pill.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
@@ -71,10 +67,3 @@
       %div{'ng-repeat' => 'aggregate in aggregates'}
         %a{'href' => 'javascript:', 'ng-hide' => 'aggregateFunctionPopup.pill.aggregate == aggregate.id', 'ng-click' => 'select(aggregate)'} {{aggregate.name}}
         %strong{'ng-show' => 'aggregateFunctionPopup.pill.aggregate == aggregate.id'} {{aggregate.name}}
-
-    %div#valid-values.popup{'ng-controller' => 'ValidValuesController'}
-      %label{for: 'valid-values'} Valid values for {{lookupFieldName(validValuesPopup.field.guid)}}:
-      %div
-        %input{name: 'valid-values', 'ng-model' => 'validValuesPopup.field.valid_values', 'ng-keydown' => 'keydown($event)'}
-      %div{style: 'margin-top: 8px'}
-        %button.btn{'ng-click' => 'hidePopups()'} Close

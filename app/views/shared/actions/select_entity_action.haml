@@ -1,9 +1,9 @@
 Select
-= render 'triggers/table'
+= render 'shared/table'
 where
-= render 'triggers/field'
+= render 'shared/field'
 %span{'ng-show' => "action.pill.kind == 'field_value'"}
   is one of the
 %span{'ng-hide' => "action.pill.kind == 'field_value'"}
   is
-= render 'triggers/pill'
+= render 'shared/pill'

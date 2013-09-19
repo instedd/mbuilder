@@ -3,8 +3,8 @@ class PeriodicTasksController < TriggersController
   before_filter :set_tab
 
   expose(:application) { current_user.applications.find params[:application_id] }
-  expose(:triggers) { application.triggers }
-  expose(:trigger)
+  expose(:periodic_tasks) { application.periodic_tasks }
+  expose(:periodic_task)
 
   def create
     set_trigger_data(trigger)
@@ -24,15 +24,13 @@ class PeriodicTasksController < TriggersController
   def set_trigger_data(trigger)
     data = JSON.parse request.raw_post
     name = data['name']
-    message = data['message']
     actions = data['actions']
     tables = data['tables']
     table_and_field_rebinds = data['tableAndFieldRebinds']
 
-    message = Message.from_hash(message)
     actions = Action.from_list(actions)
     trigger.name = name
-    trigger.logic = Logic.new message, actions
+    trigger.logic = ScheduleLogic.new build_schedule_from(data['schedule']), actions
 
     application.tables = Table.from_list(tables)
 
@@ -51,6 +49,19 @@ class PeriodicTasksController < TriggersController
     end
   end
 
+  def build_schedule_from data
+    schedule = IceCube::Schedule.new(data['time'])
+
+    rule = IceCube::Rule.send(data['granularity'], data['every']) #weekly(2) -> every 2 weeks
+
+    data['onUnit'] ||= 'day'
+
+    rule.send(data['onUnit'], data['on']) #day(:sunday)
+
+    schedule.add_recurrence_rule rule
+
+    schedule
+  end
   def set_tab
     @application_tab = :triggers
   end
