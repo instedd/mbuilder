@@ -1,3 +1,14 @@
+GIT
+  remote: https://github.com/nekron/recurring_select
+  revision: 48ef4b3417044d336a4c7ae040cede02a804f2b1
+  specs:
+    recurring_select (1.2.1.rc1)
+      coffee-rails (>= 3.1)
+      ice_cube (>= 0.11)
+      jquery-rails (>= 3.0)
+      rails (>= 3.2)
+      sass-rails (>= 3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -238,6 +249,7 @@ DEPENDENCIES
   pry
   pry-debugger
   rails (= 3.2.12)
+  recurring_select!
   rspec
   rspec-rails
   rvm-capistrano

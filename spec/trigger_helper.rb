@@ -79,7 +79,8 @@ class TriggerHelper
 
   def periodic_task
     periodic_task = @application.periodic_tasks.make_unsaved
-    periodic_task.logic = ScheduleLogic.new @schedule, @actions
+    periodic_task.schedule = @schedule
+    periodic_task.logic = ScheduleLogic.new @actions
     periodic_task.save!
 
     periodic_task

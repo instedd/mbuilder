@@ -106,7 +106,7 @@ describe "PeriodicTask" do
 
     new_schedule = IceCube::Schedule.new(Time.now.utc + 3600)
     new_schedule.add_recurrence_rule IceCube::Rule.weekly.day(:sunday)
-    task.logic.schedule = new_schedule
+    task.schedule = new_schedule
 
     task.save
 

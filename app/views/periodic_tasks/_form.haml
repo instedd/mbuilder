@@ -5,7 +5,7 @@
   - angular_templates "shared/pills"
   - angular_templates "shared/schedules"
 
-  %div{'ng-controller' => 'EditPeriodicTaskController', 'ng-init' => trigger_to_angular(application, trigger)}
+  %div{'ng-controller' => 'EditPeriodicTaskController', 'ng-init' => periodic_task_to_angular(application, periodic_task)}
     %div.row-fluid
       %div.span6
         %div
@@ -13,12 +13,10 @@
           %input{'ng-model' => 'name', type: :text, name: :name, autofocus: true}
 
         %div{'ng-controller' => 'ScheduleController'}
-          %div
+          = form_for [application, periodic_task] do |f|
             This trigger will run:
-            %select{ 'ng-model' => "scheduleGranularity", 'ng-options' => "granularity.name for granularity in granularities"}
-            %div(ng-include src='scheduleTemplate()')
+            = f.select_recurring :rule, [periodic_task.rule], {allow_blank: false}, {'id' => 'schedule_rule'}
           %br
-
         %div{'ng-controller' => 'ActionsController'}
           %div{'ng-repeat' => 'action in actions'}
             .action

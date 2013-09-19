@@ -11,42 +11,6 @@ angular.module('mbuilder').controller 'EditPeriodicTaskController', ['$scope', '
     {id: 'min', name: 'Minimum of values', desc: 'minimum of'},
   ]
 
-  $scope.granularities = [
-    {id: 'weekly', name: 'Weekly'},
-    {id: 'daily', name: 'Daily'},
-    {id: 'monthly', name: 'Monthly'},
-    {id: 'yearly', name: 'Yearly'}
-  ]
-
-  $scope.scheduleGranularity = $scope.granularities[0];
-
-  $scope.weekDays = [
-    {id: 'monday', name: 'Monday'},
-    {id: 'tuesday', name: 'Tuesday'},
-    {id: 'wednesday', name: 'Wednesday'},
-    {id: 'thursday', name: 'Thursday'},
-    {id: 'friday', name: 'Friday'},
-    {id: 'saturday', name: 'Saturday'},
-    {id: 'sunday', name: 'Sunday'}
-  ]
-
-  $scope.scheduleOn = $scope.weekDays[0];
-
-  $scope.months = [
-    {id: 'january', name: 'January'},
-    {id: 'february', name: 'February'},
-    {id: 'march', name: 'March'},
-    {id: 'april', name: 'April'},
-    {id: 'may', name: 'May'},
-    {id: 'june', name: 'June'},
-    {id: 'july', name: 'July'},
-    {id: 'august', name: 'August'},
-    {id: 'september', name: 'September'},
-    {id: 'october', name: 'October'},
-    {id: 'november', name: 'November'},
-    {id: 'december', name: 'December'}
-  ]
-
   $scope.data = (node) ->
     newData = {}
     for key, value of node.data()
@@ -216,18 +180,11 @@ angular.module('mbuilder').controller 'EditPeriodicTaskController', ['$scope', '
         otherPill.kind = newPill.kind
         otherPill.guid = newPill.guid
 
-
-  # TODO: Complete the schedule mapping
   $scope.save = ->
     data =
       name: $scope.name
       tables: $scope.tables
-      schedule:
-        granularity: $scope.scheduleGranularity.id
-        time: $scope.scheduleTime
-        every: $scope.scheduleEvery
-        onUnit: $scope.scheduleOnUnit
-        on: $scope.scheduleOn.id
+      schedule: $('#schedule_rule').val()
 
       actions: $scope.actions
       tableAndFieldRebinds: $scope.tableAndFieldRebinds

@@ -4,6 +4,7 @@ class TriggersController < ApplicationController
 
   expose(:application) { current_user.applications.find params[:application_id] }
   expose(:triggers) { application.triggers }
+  expose(:periodic_tasks) { application.periodic_tasks }
   expose(:trigger)
 
   expose(:validation_triggers) do

@@ -1,11 +1,8 @@
 class ScheduleLogic
   include Rebindable
-
-  attr_accessor :schedule
   attr_accessor :actions
 
-  def initialize(schedule, actions)
-    @schedule = schedule
+  def initialize(actions)
     @actions = actions
   end
 

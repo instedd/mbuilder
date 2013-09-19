@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130919144308) do
+ActiveRecord::Schema.define(:version => 20130919200600) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(:version => 20130919144308) do
     t.text     "logic"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.text     "schedule"
   end
 
   create_table "triggers", :force => true do |t|
