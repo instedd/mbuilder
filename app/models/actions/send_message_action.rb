@@ -17,6 +17,7 @@ class Actions::SendMessageAction < Action
     message.gsub!(" .", ".")
     message.gsub!(" ,", ",")
     message.gsub!(/"\s*(.+?)\s*"/, '"\1"')
+    message.gsub!(/'\s*(.+?)\s*'/, '\'\1\'')
 
     recipients = @recipient.value_in(context)
     Array(recipients).each do |recipient|

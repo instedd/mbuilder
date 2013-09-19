@@ -66,18 +66,22 @@ RSpec.configure do |config|
   end
 
   def new_trigger(&block)#(message, *actions)
-    helper = TriggerHelper.new(application)
-    helper.instance_eval(&block)
-    helper.trigger
+    instance_eval_trigger_helper(&block).trigger
   end
-
 
   def new_periodic_task(&block)#(message, *actions)
-    helper = TriggerHelper.new(application)
-    helper.instance_eval(&block)
-    helper.periodic_task
+    instance_eval_trigger_helper(&block).periodic_task
   end
 
+  def new_validation_trigger(field_guid, &block)
+    instance_eval_trigger_helper(&block).validation_trigger(field_guid)
+  end
+
+  def instance_eval_trigger_helper(&block)
+    helper = TriggerHelper.new(application)
+    helper.instance_eval(&block)
+    helper
+  end
 
   def pill(text)
     case text
@@ -87,13 +91,12 @@ RSpec.configure do |config|
       {'kind' => 'field_value', 'guid' => $1}
     when /'(.+)'/
       {'kind' => 'literal', 'guid' => "literal_#{$1}", 'text' => $1}
-    when "{phone_number}"
-      {'kind' => 'placeholder', 'guid' => "phone_number"}
+    when /\{(phone_number|invalid_value)\}/
+      {'kind' => 'placeholder', 'guid' => $1}
     when /\{(.+)\}/
       {'kind' => 'placeholder', 'guid' => "placeholder_#{$1}"}
     else
-      puts text
-      raise 'wtf?'
+      raise "Uknown pill helper: #{text}"
     end
   end
 

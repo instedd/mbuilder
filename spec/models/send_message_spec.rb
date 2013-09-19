@@ -21,6 +21,15 @@ describe "Send message" do
     ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: 1234"}])
   end
 
+  it "sends message to phone number" do
+    new_trigger do
+      message "register {Name}"
+      send_message "{phone_number}", "Hello {{name}}. Your number is: {{phone_number}}"
+    end
+    ctx = accept_message "sms://1234", "register Peter"
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1234", body: "Hello Peter. Your number is: 1234"}])
+  end
+
   it "sends message with quotes" do
     new_trigger do
       message "register {Name}"

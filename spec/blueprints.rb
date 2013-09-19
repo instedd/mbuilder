@@ -30,3 +30,7 @@ PeriodicTask.blueprint do
   application
   name
 end
+
+ValidationTrigger.blueprint do
+  application
+end

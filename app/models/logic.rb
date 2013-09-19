@@ -9,6 +9,12 @@ class Logic
     @actions = actions
   end
 
+  def execute(context)
+    actions.each do |action|
+      action.execute(context)
+    end
+  end
+
   def rebind_table(from_table, to_table)
     actions.each do |action|
       action.rebind_table(from_table, to_table)

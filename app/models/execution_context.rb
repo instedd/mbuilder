@@ -2,6 +2,7 @@ class ExecutionContext
   attr_reader :application
   attr_reader :messages
   attr_reader :logger
+  attr_accessor :placeholder_solver
 
   def initialize(application, placeholder_solver)
     @application = application
@@ -48,6 +49,16 @@ class ExecutionContext
 
   def send_message(to, body)
     @messages.push({from: "app://mbuilder", to: to.with_protocol("sms"), body: body})
+  end
+
+  def check_valid_value!(table_guid, field_guid, value)
+    table = application.find_table(table_guid)
+    field = table.find_field(field_guid)
+
+    unless field.valid_value?(value)
+      @logger.invalid_value(table_guid, field_guid, value)
+      raise InvalidValueException.new(field_guid, value)
+    end
   end
 
   def save

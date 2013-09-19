@@ -10,6 +10,10 @@ class ValidationTrigger < ActiveRecord::Base
 
   serialize :logic
 
+  def execute(context)
+    logic.execute(context)
+  end
+
   def table
     application.table_of field_guid
   end

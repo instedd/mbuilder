@@ -51,6 +51,8 @@ class TriggerHelper
       recipient = {'kind' => 'text', 'guid' => $1}
     when /\*(.+)/
       recipient = {'kind' => 'field_value', 'guid' => $1}
+    when /\{(phone_number|invalid_value)\}/
+      recipient = {'kind' => 'placeholder', 'guid' => $1}
     else
       raise "Unknown recipient: #{recipient}"
     end
@@ -81,5 +83,13 @@ class TriggerHelper
     periodic_task.save!
 
     periodic_task
+  end
+
+  def validation_trigger(field_guid)
+    validation_trigger = @application.validation_triggers.make_unsaved field_guid: field_guid
+    validation_trigger.logic = ValidationLogic.new 'from', 'invalid_value', @actions
+    validation_trigger.save!
+
+    validation_trigger
   end
 end
