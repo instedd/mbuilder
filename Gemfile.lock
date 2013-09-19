@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/nekron/recurring_select
-  revision: 48ef4b3417044d336a4c7ae040cede02a804f2b1
+  revision: 9c3299232763f8725b2b2bbdefd02377ebf53b76
   specs:
     recurring_select (1.2.1.rc1)
       coffee-rails (>= 3.1)
