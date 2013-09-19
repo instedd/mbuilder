@@ -44,18 +44,23 @@ class Application < ActiveRecord::Base
   end
 
   def rebind_tables_and_fields(table_and_field_rebinds)
-    triggers = self.triggers.all
-    triggers.each do |trigger|
-      table_and_field_rebinds.each do |rebind|
-        case rebind['kind']
-        when 'table'
-          trigger.rebind_table(rebind['fromTable'], rebind['toTable'])
-        when 'field'
-          trigger.rebind_field(rebind['fromField'], table_of(rebind['toField']).guid, rebind['toField'])
-        end
+    all_triggers = triggers.all + validation_triggers.all + periodic_tasks.all
+
+    table_and_field_rebinds.each do |rebind|
+      case rebind['kind']
+      when 'table'
+        from_table = rebind['fromTable']
+        to_table = rebind['toTable']
+        all_triggers.each { |trigger| trigger.rebind_table from_table, to_table }
+      when 'field'
+        from_field = rebind['fromField']
+        to_table = table_of(rebind['toField']).guid
+        to_field = rebind['toField']
+        all_triggers.each { |trigger| trigger.rebind_field from_field, to_table, to_field }
       end
     end
-    triggers.each(&:save!)
+
+    all_triggers.each(&:save!)
   end
 
   def table_of field_guid

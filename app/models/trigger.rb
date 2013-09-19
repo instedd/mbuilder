@@ -1,5 +1,6 @@
 class Trigger < ActiveRecord::Base
   include Rebindable
+
   attr_accessible :name
 
   belongs_to :application
@@ -26,14 +27,10 @@ class Trigger < ActiveRecord::Base
   end
 
   def rebind_table(from_table, to_table)
-    logic.actions.each do |action|
-      action.rebind_table(from_table, to_table)
-    end
+    logic.rebind_table(from_table, to_table)
   end
 
   def rebind_field(from_field, to_table, to_field)
-    logic.actions.each do |action|
-      action.rebind_field(from_field, to_table, to_field)
-    end
+    logic.rebind_field(from_field, to_table, to_field)
   end
 end

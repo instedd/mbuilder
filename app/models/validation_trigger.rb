@@ -1,4 +1,6 @@
 class ValidationTrigger < ActiveRecord::Base
+  include Rebindable
+
   attr_accessible :application_id, :field_guid, :logic
 
   belongs_to :application
@@ -33,5 +35,13 @@ class ValidationTrigger < ActiveRecord::Base
 
   def generate_from_number
     "+1-(234)-567-8912"
+  end
+
+  def rebind_table(from_table, to_table)
+    logic.rebind_table(from_table, to_table)
+  end
+
+  def rebind_field(from_field, to_table, to_field)
+    logic.rebind_field(from_field, to_table, to_field)
   end
 end
