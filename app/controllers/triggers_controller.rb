@@ -6,6 +6,12 @@ class TriggersController < ApplicationController
   expose(:triggers) { application.triggers }
   expose(:trigger)
 
+  expose(:validation_triggers) do
+    validation_triggers = application.validation_triggers.all
+    validation_triggers.each { |t| t.application = application }
+    validation_triggers
+  end
+
   def create
     set_trigger_data(trigger)
   end

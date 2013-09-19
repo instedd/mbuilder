@@ -6,6 +6,8 @@
   = link_to "Create Periodic Task", new_application_periodic_task_path(application)
 %br/
 
+%h4 Triggers
+
 %ul
   - triggers.each do |trigger|
     %li
@@ -13,3 +15,14 @@
       = link_to "edit", edit_application_trigger_path(application, trigger)
       |
       = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the trigger '#{trigger.name}'"
+
+- if validation_triggers.present?
+  %h4 Validation triggers
+
+  %ul
+    - validation_triggers.each do |trigger|
+      %li
+        #{trigger.table_name} #{trigger.field_name}:
+        = link_to "edit", application_validation_trigger_path(application, trigger.field_guid)
+        |
+        = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the validation trigger for '#{trigger.table_name} #{trigger.field_name}'"

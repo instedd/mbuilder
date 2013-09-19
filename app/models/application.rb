@@ -4,6 +4,7 @@ class Application < ActiveRecord::Base
   belongs_to :user
   has_many :triggers, dependent: :destroy
   has_many :periodic_tasks, dependent: :destroy
+  has_many :validation_triggers, dependent: :destroy
   has_many :channels, dependent: :destroy
 
   validates_presence_of :user
