@@ -13,8 +13,10 @@ class PeriodicTask < Trigger
 
   after_initialize :set_default_schedule
 
+  after_destroy :remove_existing_jobs
+
   def remove_existing_jobs
-    Delayed::Job.where(:task_id => self.id).first.delete
+    Delayed::Job.where(:task_id => self.id).delete_all
   end
 
   def schedule_job

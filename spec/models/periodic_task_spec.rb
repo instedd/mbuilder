@@ -135,4 +135,15 @@ describe "PeriodicTask" do
     wake_up_event.scheduled_time.should be_near_of(Time.now.utc)
     job.run_at.should be_near_of(Time.now.utc)
   end
+
+  it "should delete job when deleting task" do
+    task = new_periodic_task do
+      rule IceCube::Rule.weekly.day(:friday)
+      create_entity "users.phone = '1234'"
+    end
+
+    task.destroy
+
+    Delayed::Job.count.should eq(0)
+  end
 end
