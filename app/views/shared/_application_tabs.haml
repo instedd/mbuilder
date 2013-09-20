@@ -4,7 +4,7 @@
   %li{class: @application_tab == :overview ? 'active' : nil}
     = link_to "Overview", application
   %li{class: @application_tab == :triggers ? 'active' : nil}
-    = link_to "Triggers", application_triggers_path(application)
+    = link_to "Triggers", application_message_triggers_path(application)
   %li{class: @application_tab == :channels ? 'active' : nil}
     = link_to "Channels", application_channels_path(application)
   %li{class: @application_tab == :messages ? 'active' : nil}

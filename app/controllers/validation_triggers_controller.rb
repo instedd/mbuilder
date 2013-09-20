@@ -1,4 +1,4 @@
-class ValidationTriggersController < TriggersController
+class ValidationTriggersController < ApplicationController
   before_filter :authenticate_user!
   before_filter :set_tab
 
@@ -42,7 +42,7 @@ class ValidationTriggersController < TriggersController
   def destroy
     trigger = application.validation_triggers.find params[:id]
     trigger.destroy
-    redirect_to application_triggers_path(application)
+    redirect_to application_message_triggers_path(application)
   end
 
   private

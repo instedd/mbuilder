@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130919200600) do
+ActiveRecord::Schema.define(:version => 20130920184255) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -54,6 +54,15 @@ ActiveRecord::Schema.define(:version => 20130919200600) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "message_triggers", :force => true do |t|
+    t.integer  "application_id"
+    t.string   "name"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.text     "logic"
+    t.string   "pattern"
+  end
+
   create_table "periodic_tasks", :force => true do |t|
     t.integer  "application_id"
     t.string   "name"
@@ -61,15 +70,6 @@ ActiveRecord::Schema.define(:version => 20130919200600) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.text     "schedule"
-  end
-
-  create_table "triggers", :force => true do |t|
-    t.integer  "application_id"
-    t.string   "name"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.text     "logic"
-    t.string   "pattern"
   end
 
   create_table "users", :force => true do |t|

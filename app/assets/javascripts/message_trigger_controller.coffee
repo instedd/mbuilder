@@ -97,15 +97,15 @@ angular.module('mbuilder').controller 'MessageTriggerController', ['$scope', '$h
       tableAndFieldRebinds: $scope.tableAndFieldRebinds
 
     if $scope.id?
-      url = "/applications/#{$scope.applicationId}/triggers/#{$scope.id}"
+      url = "/applications/#{$scope.applicationId}/message_triggers/#{$scope.id}"
       method = "put"
     else
-      url = "/applications/#{$scope.applicationId}/triggers"
+      url = "/applications/#{$scope.applicationId}/message_triggers"
       method = "post"
 
     call = $http[method](url, JSON.stringify(data))
     call.success (data, status, headers, config) =>
-      window.location = "/applications/#{$scope.applicationId}/triggers"
+      window.location = "/applications/#{$scope.applicationId}/message_triggers"
     call.error (data, status, headers, config) =>
       alert "Error: #{data}"
 ]

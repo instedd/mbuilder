@@ -4,7 +4,7 @@
   - angular_templates "shared/pieces"
   - angular_templates "shared/pills"
 
-  %div{'ng-controller' => 'MessageTriggerController', 'ng-init' => trigger_to_angular(application, trigger)}
+  %div{'ng-controller' => 'MessageTriggerController', 'ng-init' => message_trigger_to_angular(application, message_trigger)}
     %div{'ng-controller' => 'TriggerController'}
       %div.row-fluid
         %div.span6

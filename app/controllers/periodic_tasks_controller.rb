@@ -1,4 +1,4 @@
-class PeriodicTasksController < TriggersController
+class PeriodicTasksController < ApplicationController
   before_filter :authenticate_user!
   before_filter :set_tab
 

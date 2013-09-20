@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe Trigger do
+describe MessageTrigger do
 
   after(:all) { Tire.index('*test*').delete }
 
   it "compiles pattern before save" do
-    trigger = Trigger.make_unsaved
+    trigger = MessageTrigger.make_unsaved
 
     message = Message.from_hash({
       'pieces' => [

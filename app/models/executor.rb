@@ -1,7 +1,7 @@
 class Executor
   def initialize(application)
     @application = application
-    @triggers = application.triggers.all
+    @triggers = application.message_triggers.all
   end
 
   def execute(message)

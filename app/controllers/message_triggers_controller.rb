@@ -1,11 +1,11 @@
-class TriggersController < ApplicationController
+class MessageTriggersController < ApplicationController
   before_filter :authenticate_user!
   before_filter :set_tab
 
   expose(:application) { current_user.applications.find params[:application_id] }
-  expose(:triggers) { application.triggers }
+  expose(:message_triggers) { application.message_triggers }
+  expose(:message_trigger)
   expose(:periodic_tasks) { application.periodic_tasks }
-  expose(:trigger)
 
   expose(:validation_triggers) do
     validation_triggers = application.validation_triggers.all
@@ -14,21 +14,21 @@ class TriggersController < ApplicationController
   end
 
   def create
-    set_trigger_data(trigger)
+    set_message_trigger_data(message_trigger)
   end
 
   def update
-    set_trigger_data(trigger)
+    set_message_trigger_data(message_trigger)
   end
 
   def destroy
-    trigger.destroy
-    redirect_to application_triggers_path(application)
+    message_trigger.destroy
+    redirect_to application_message_triggers_path(application)
   end
 
   private
 
-  def set_trigger_data(trigger)
+  def set_message_trigger_data(trigger)
     data = JSON.parse request.raw_post
     name = data['name']
     message = data['message']

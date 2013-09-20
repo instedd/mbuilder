@@ -70,7 +70,7 @@ class TriggerHelper
   end
 
   def trigger
-    trigger = @application.triggers.make_unsaved
+    trigger = @application.message_triggers.make_unsaved
     trigger.logic = Logic.new @message, @actions
     trigger.save!
 

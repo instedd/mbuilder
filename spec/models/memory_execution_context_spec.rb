@@ -174,7 +174,7 @@ describe MemoryExecutionContext do
       send_message "*phone", "Hello {*name}"
     end
 
-    context.execute_many application.triggers
+    context.execute_many application.message_triggers
 
     context.messages.should eq([
       {from: "app://mbuilder", to: "sms://1234", body: "Hello John, Peter"},

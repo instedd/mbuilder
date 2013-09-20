@@ -1,18 +1,18 @@
 = render 'shared/application_tabs'
 
 %div
-  = link_to "Create Trigger", new_application_trigger_path(application)
+  = link_to "Create Message Trigger", new_application_message_trigger_path(application)
 %div
   = link_to "Create Periodic Task", new_application_periodic_task_path(application)
 %br/
 
-%h4 Triggers
+%h4 Message Triggers
 
 %ul
-  - triggers.each do |trigger|
+  - message_triggers.each do |trigger|
     %li
       #{trigger.name}:
-      = link_to "edit", edit_application_trigger_path(application, trigger)
+      = link_to "edit", edit_application_message_trigger_path(application, trigger)
       |
       = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the trigger '#{trigger.name}'"
 

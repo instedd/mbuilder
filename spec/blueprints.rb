@@ -21,7 +21,7 @@ Application.blueprint do
   name
 end
 
-Trigger.blueprint do
+MessageTrigger.blueprint do
   application
   name
 end

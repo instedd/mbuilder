@@ -1,4 +1,4 @@
-class Trigger < ActiveRecord::Base
+class MessageTrigger < ActiveRecord::Base
   include Rebindable
 
   attr_accessible :name

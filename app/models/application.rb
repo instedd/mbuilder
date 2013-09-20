@@ -2,7 +2,7 @@ class Application < ActiveRecord::Base
   attr_accessible :name, :user_id
 
   belongs_to :user
-  has_many :triggers, dependent: :destroy
+  has_many :message_triggers, dependent: :destroy
   has_many :periodic_tasks, dependent: :destroy
   has_many :validation_triggers, dependent: :destroy
   has_many :channels, dependent: :destroy
@@ -17,7 +17,7 @@ class Application < ActiveRecord::Base
   end
 
   def simulate_triggers_execution
-    simulate_execution_of triggers
+    simulate_execution_of message_triggers
   end
 
   def simulate_execution_of triggers
@@ -26,7 +26,7 @@ class Application < ActiveRecord::Base
   end
 
   def simulate_triggers_execution_excluding trigger
-    simulate_execution_of(triggers - [trigger])
+    simulate_execution_of(message_triggers - [trigger])
   end
 
   def find_table(guid)
@@ -44,7 +44,7 @@ class Application < ActiveRecord::Base
   end
 
   def rebind_tables_and_fields(table_and_field_rebinds)
-    all_triggers = triggers.all + validation_triggers.all + periodic_tasks.all
+    all_triggers = message_triggers.all + validation_triggers.all + periodic_tasks.all
 
     table_and_field_rebinds.each do |rebind|
       case rebind['kind']

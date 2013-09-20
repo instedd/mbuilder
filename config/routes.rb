@@ -3,7 +3,7 @@ Mbuilder::Application.routes.draw do
 
   resources :applications do
     resources :channels
-    resources :triggers
+    resources :message_triggers
     resources :periodic_tasks
     resources :validation_triggers
     resources :messages

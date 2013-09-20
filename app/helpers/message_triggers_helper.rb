@@ -1,5 +1,5 @@
-module TriggersHelper
-  def trigger_to_angular(application, trigger)
+module MessageTriggersHelper
+  def message_trigger_to_angular(application, trigger)
     str = ""
     str << "applicationId=#{trigger.application_id.to_json};"
     str << "id=#{trigger.id.to_json};"
