@@ -108,6 +108,7 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     event.stopPropagation()
 
   $scope.aggregateLabel = (aggregate) ->
+    aggregate = null unless aggregate
     _.find($scope.aggregates, (a) -> a.id == aggregate).desc
 
 ]
