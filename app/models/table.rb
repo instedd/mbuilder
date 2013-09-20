@@ -17,7 +17,7 @@ class Table
     {
       name: name,
       guid: guid,
-      fields: fields.map(&:as_json),
+      fields: fields.map(&:as_json)
     }
   end
 

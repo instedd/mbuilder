@@ -31,7 +31,7 @@ class PeriodicTasksController < TriggersController
     actions = Action.from_list(actions)
     periodic_task.name = name
 
-    periodic_task.rule = IceCube::Rule.from_hash JSON.parse data['schedule']
+    periodic_task.updateRule IceCube::Rule.from_hash(JSON.parse data['schedule']), Time.parse(data['scheduleTime'])
 
     periodic_task.logic = ScheduleLogic.new actions
 

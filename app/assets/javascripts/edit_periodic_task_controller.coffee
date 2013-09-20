@@ -184,7 +184,8 @@ angular.module('mbuilder').controller 'EditPeriodicTaskController', ['$scope', '
     data =
       name: $scope.name
       tables: $scope.tables
-      schedule: $('#schedule_rule').val()
+      schedule: $('#scheduleRule').val()
+      scheduleTime: $scope.scheduleTime
 
       actions: $scope.actions
       tableAndFieldRebinds: $scope.tableAndFieldRebinds

@@ -1,5 +1,6 @@
 module PeriodicTasksHelper
   def periodic_task_to_angular(application, trigger)
+
     str = ""
     str << "applicationId=#{trigger.application_id.to_json};"
     str << "id=#{trigger.id.to_json};"
@@ -10,6 +11,8 @@ module PeriodicTasksHelper
     else
       str << "actions=[];"
     end
+
+    str << "scheduleTime = #{trigger.schedule.start_time.strftime("%H:%M:%S").to_json};"
 
     if application.tables
       str << "tables=#{application.tables.map(&:as_json).to_json};"

@@ -55,8 +55,8 @@ class PeriodicTask < ActiveRecord::Base
     schedule.recurrence_rules.first
   end
 
-  def rule=rule
-    s = IceCube::Schedule.new
+  def updateRule(rule, time)
+    s = IceCube::Schedule.new(time)
     s.add_recurrence_rule rule
     self.schedule = s
   end
