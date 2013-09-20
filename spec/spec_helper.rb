@@ -122,7 +122,7 @@ RSpec.configure do |config|
   def assert_data(table, *data)
     data = data[0] if data.length == 1 && data[0].is_a?(Array)
 
-    index = application.tire_index
+    index = application.tire_index(false)
     if index.exists?
       results = application.tire_search(table).perform.results
       results.length.should eq(data.length)
@@ -131,7 +131,7 @@ RSpec.configure do |config|
 
       assert_sets_equal results, data
     else
-      data.lentgh.should eq(0)
+      data.length.should eq(0)
     end
   end
 

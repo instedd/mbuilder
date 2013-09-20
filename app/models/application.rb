@@ -33,9 +33,9 @@ class Application < ActiveRecord::Base
     tables.find { |table| table.guid == guid }
   end
 
-  def tire_index
+  def tire_index(create_if_not_exists = true)
     index = Tire::Index.new(tire_name)
-    index.create unless index.exists?
+    index.create if create_if_not_exists && !index.exists?
     index
   end
 
