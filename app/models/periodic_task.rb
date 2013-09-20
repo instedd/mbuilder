@@ -30,7 +30,7 @@ class PeriodicTask < Trigger
 
   def execute_at scheduled_time
     context = TireExecutionContext.new(application, NullPlaceholderSolver.new)
-    execute context
+    context.execute self
     schedule_job_for schedule.next_occurrence scheduled_time
     context
   end

@@ -45,6 +45,21 @@ describe "PeriodicTask" do
     context.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter at 1234"}])
   end
 
+  it "should create a delayed entity" do
+    new_periodic_task do
+      rule IceCube::Rule.weekly.day(:friday)
+      create_entity "users.phone = '1234'"
+    end
+
+    assert_equal 1, Delayed::Job.count
+    job = Delayed::Job.first
+    wake_up_event = YAML.load(job.handler)
+
+    wake_up_event.perform
+
+    assert_data "users", {'phone' => '1234'}
+  end
+
   it "should re-schedule a job when running a message" do
     add_data "users", [
       {"phone" => "1234", "name" => "Peter"}
