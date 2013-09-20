@@ -20,6 +20,7 @@ class ExecutionContext
     validation_trigger = application.validation_triggers.find_by_field_guid(ex.field_guid)
     if validation_trigger
       context = self.class.new(application, InvalidValuePlaceholderSolver.new(@placeholder_solver, ex.value))
+      context.logger = logger
       context.execute(validation_trigger)
     else
       self
@@ -72,5 +73,11 @@ class ExecutionContext
   def save
     @entities.values.each(&:save)
     @entities = {}
+  end
+
+  protected
+
+  def logger=(logger)
+    @logger = logger
   end
 end

@@ -42,7 +42,7 @@ class ExecutionLogger
         new_named_properties = map_properties(table, new_properties)
         "Update #{table.name} where #{old_named_properties} with #{new_named_properties}"
       when :invalid_value
-        kind, table_guidA, field_guid, value = action
+        kind, table_guid, field_guid, value = action
         table = find_table(table_guid)
         field = table.find_field(field_guid)
         "Tried to insert invalid value '#{value}' into #{table.name} #{field.name}"
