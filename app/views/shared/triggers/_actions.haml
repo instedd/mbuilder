@@ -1,0 +1,9 @@
+%div{'ng-controller' => 'ActionsController'}
+  %div{'ng-repeat' => 'action in actions'}
+    .action
+      %a.delete{href: 'javascript:', 'ng-click' => 'deleteAction($index)'} x
+      %div(ng-include src='actionTemplateFor(action.kind)')
+    %br
+  .new-action
+    %a{'ng-click' => 'addSendMessageAction()', href: 'javascript:'} [+] Add "Send message" step
+  %br

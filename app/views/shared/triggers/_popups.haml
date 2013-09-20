@@ -1,0 +1,13 @@
+%div#aggregate-functions.popup{'ng-controller' => 'AggregateFunctionsController'}
+  %div{'ng-repeat' => 'aggregate in aggregates'}
+    %a{'href' => 'javascript:', 'ng-hide' => 'aggregateFunctionPopup.pill.aggregate == aggregate.id', 'ng-click' => 'select(aggregate)'} {{aggregate.name}}
+    %strong{'ng-show' => 'aggregateFunctionPopup.pill.aggregate == aggregate.id'} {{aggregate.name}}
+
+%div#valid-values.popup{'ng-controller' => 'ValidValuesController'}
+  %label{for: 'valid-values'} Valid values for {{lookupFieldName(validValuesPopup.field.guid)}}:
+  %div
+    %input{name: 'valid-values', 'ng-model' => 'validValuesPopup.field.valid_values', 'ng-keydown' => 'keydown($event)'}
+  %div{style: 'margin-top: 8px'}
+    %a{'href' => 'javascript:', 'ng-click' => 'defineValidationTrigger()'} Trigger this when values are invalid
+  %div{style: 'margin-top: 8px'}
+    %button.btn{'ng-click' => 'hidePopups()'} Close

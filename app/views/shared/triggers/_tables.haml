@@ -1,0 +1,31 @@
+%div.span6{'ng-controller' => 'TablesController'}
+  %div
+    %strong Tables
+    %br
+    %a{'ng-click' => 'newTable()', href: 'javascript:'} (+) New table
+  %br
+
+  %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
+    %div.logic-table
+      %a.delete{href: 'javascript:', 'ng-click' => 'deleteTable($index)'} x
+      .logic-table-name{draggable: 'true', dragstart: 'tableDragStart(table.guid, $event)'}
+        %editable-input{'model' => 'table.name', 'editable' => 'table.editable', 'focus' => 'table.focus'}
+
+      %table.table.table-bordered.fields
+        %tr
+          %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)'}
+            %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
+            .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)'}
+              %editable-input{'model' => 'pill.name', 'editable' => 'pill.editable', 'focus' => 'pill.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
+          %td
+            %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
+        %tr{'ng-repeat' => 'row in selectedTableRows(table)'}
+          %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
+            {{ row[pill.guid] }}
+          %td
+
+        %tr
+          %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
+            %span(ng-include src='pillTemplateFor(pill)')
+          %td
+    %br

@@ -5,68 +5,27 @@
   - angular_templates "shared/pills"
   - angular_templates "shared/schedules"
 
-  %div{'ng-controller' => 'EditPeriodicTaskController', 'ng-init' => periodic_task_to_angular(application, periodic_task)}
-    %div.row-fluid
-      %div.span6
-        %div
-          %label{for: :name} Name
-          %input{'ng-model' => 'name', type: :text, name: :name, autofocus: true}
+  %div{'ng-controller' => 'PeriodicTaskController', 'ng-init' => periodic_task_to_angular(application, periodic_task)}
+    %div{'ng-controller' => 'TriggerController'}
+      %div.row-fluid
+        %div.span6
+          %div
+            %label{for: :name} Name
+            %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true}
 
-        %div{'ng-controller' => 'ScheduleController'}
-          = form_for [application, periodic_task] do |f|
-            %p This trigger will run:
-            = f.select_recurring :rule, [periodic_task.rule], {allow_blank: false}, {'id' => 'scheduleRule'}
-            at:
-            .control-group.input-append.bootstrap-timepicker
-              %input(type="text" ng-model="$parent.scheduleTime" bs-timepicker data-show-meridian="false" data-show-seconds="true" data-minute-step=1)
-              %button.btn{type:"button", 'data-toggle'=>"timepicker"}
-                %i.icon-time
+          %div
+            = form_for [application, periodic_task] do |f|
+              %p This trigger will run:
+              = f.select_recurring :rule, [periodic_task.rule], {allow_blank: false}, {'id' => 'scheduleRule'}
+              at:
+              .control-group.input-append.bootstrap-timepicker
+                %input(type="text" ng-model="$parent.scheduleTime" bs-timepicker data-show-meridian="false" data-show-seconds="true" data-minute-step=1)
+                %button.btn{type:"button", 'data-toggle'=>"timepicker"}
+                  %i.icon-time
 
-        %div{'ng-controller' => 'ActionsController'}
-          %div{'ng-repeat' => 'action in actions'}
-            .action
-              %a.delete{href: 'javascript:', 'ng-click' => 'deleteAction($index)'} x
-              %div(ng-include src='actionTemplateFor(action.kind)')
-            %br
-          .new-action
-            %a{'ng-click' => 'addSendMessageAction()', href: 'javascript:'} [+] Add "Send message" step
-          %br
+          = render 'shared/triggers/actions'
+        = render 'shared/triggers/tables'
 
-      %div.span6{'ng-controller' => 'TablesController'}
-        %div
-          %strong Tables
-          %br
-          %a{'ng-click' => 'newTable()', href: 'javascript:'} (+) New table
-        %br
+      %button.btn{'ng-click' => 'save()'} Save
 
-        %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
-          %div.logic-table
-            %a.delete{href: 'javascript:', 'ng-click' => 'deleteTable($index)'} x
-            .logic-table-name{draggable: 'true', dragstart: 'tableDragStart(table.guid, $event)'}
-              %editable-input{'model' => 'table.name', 'editable' => 'table.editable', 'focus' => 'table.focus'}
-
-            %table.table.table-bordered.fields
-              %tr
-                %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController'}
-                  %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
-                  .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)'}
-                    %editable-input{'model' => 'pill.name', 'editable' => 'pill.editable', 'focus' => 'pill.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
-                %td
-                  %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
-              %tr{'ng-repeat' => 'row in selectedTableRows(table)'}
-                %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
-                  {{ row[pill.guid] }}
-                %td
-
-              %tr
-                %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
-                  %span(ng-include src='pillTemplateFor(pill)')
-                %td
-          %br
-
-    %button.btn{'ng-click' => 'save()'} Save
-
-    %div#aggregate-functions.popup{'ng-controller' => 'AggregateFunctionsController'}
-      %div{'ng-repeat' => 'aggregate in aggregates'}
-        %a{'href' => 'javascript:', 'ng-hide' => 'aggregateFunctionPopup.pill.aggregate == aggregate.id', 'ng-click' => 'select(aggregate)'} {{aggregate.name}}
-        %strong{'ng-show' => 'aggregateFunctionPopup.pill.aggregate == aggregate.id'} {{aggregate.name}}
+      = render 'shared/triggers/popups'

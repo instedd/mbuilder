@@ -1,82 +1,184 @@
 angular.module('mbuilder').controller 'TriggerController', ['$scope', ($scope) ->
-  $scope.contenteditable = 'false'
+  $scope.tableAndFieldRebinds = []
 
-  $scope.phoneNumberDragStart = (event) ->
-    window.draggedPill = {kind: "placeholder", guid: "phone_number"}
-    event.dataTransfer.setData("Text", $scope.from)
+  $scope.aggregateFunctionPopup = { pill: null }
+  $scope.aggregates = [
+    {id: null, name: 'List of values', ''},
+    {id: 'count', name: 'Count of values', desc: 'count of'},
+    {id: 'sum', name: 'Sum of values', desc: 'sum of'},
+    {id: 'avg', name: 'Average of values', desc: 'average of'},
+    {id: 'max', name: 'Maximum of values', desc: 'maximum of'},
+    {id: 'min', name: 'Minimum of values', desc: 'minimum of'},
+  ]
 
-  addPiece = (pieces, kind, text, guid = window.guid()) ->
-    text = $.trim(text)
-    return if text.length == 0
+  $scope.validValuesPopup = { field: null }
 
-    pieces.push kind: kind, text: text, guid: guid
+  $scope.data = (node) ->
+    newData = {}
+    for key, value of node.data()
+      newData[key] = value unless key[0] == '$'
+    newData
 
-  addSelection = (pieces, text, range) ->
-    start = range.startOffset
-    end = range.endOffset
-    if start > end
-      tmp = start
-      start = end
-      end = tmp
-
-    while start > 0 && text[start] != ' '
-      start -= 1
-
-    while end < text.length && text[end] != ' '
-      end += 1
-
-    if start > 0
-      addPiece pieces, 'text', text.substring(0, start)
-
-    addPiece pieces, 'placeholder', text.substring(start, end)
-
-    if end < text.length
-      addPiece pieces, 'text', text.substring(end)
-
-  samePieces = (pieces1, pieces2) ->
-    return false if pieces1.length != pieces2.length
-
-    i = 0
-    while i < pieces1.length
-      piece1 = pieces1[i]
-      piece2 = pieces2[i]
-      return false if piece1.kind != piece2.kind || piece1.text != piece2.text
-      i += 1
+  $scope.tableExists = (tableGuid) ->
+    table = $scope.lookupTable(tableGuid)
+    return false unless table
 
     true
 
-  $scope.parseMessage = (event) ->
-    pieces = []
-
-    parser = new MessageParser(event.originalEvent.currentTarget)
-    parser.onText (text, hasSelection) ->
-      if hasSelection && parser.range.startContainer == parser.range.endContainer
-        addSelection pieces, text, parser.range
+  $scope.lookupPillName = (pill) ->
+    switch pill.kind
+      when 'field_value'
+        $scope.lookupJoinedFieldName(pill.guid)
       else
-        addPiece pieces, 'text', text
-    parser.onPill (node) ->
-      addPiece pieces, 'placeholder', node.text(), node.data('guid')
-    parser.lastPieceNeeded ->
-      pieces.length > 0 && pieces[pieces.length - 1].kind != 'text'
-    parser.parse()
+        pill = $scope.lookupPillByGuid(pill.guid)
+        pill?.text
 
-    # Replace $scope.pieces' contents only if it changed
-    unless samePieces($scope.pieces, pieces)
-      args = [0, $scope.pieces.length].concat(pieces)
-      Array.prototype.splice.apply($scope.pieces, args)
+  $scope.lookupJoinedFieldName = (fieldGuid) ->
+    "#{$scope.lookupTableByField(fieldGuid)?.name} #{$scope.lookupFieldName(fieldGuid)}"
 
-    if parser.selNode
-      $scope.contenteditable = 'false'
-    else
-      $scope.contenteditable = 'true'
+  $scope.lookupPillByGuid = (guid) ->
+    _.find $scope.allPills(), (pill) -> pill.guid == guid
 
+  $scope.lookupPill = (pill) ->
+    pill
+
+  # $scope.allPills = -> subclass responsibility
+  # $scope.implicitPills = -> subclass responsibility
+
+  $scope.lookupTable = (guid) ->
+    _.find $scope.tables, (table) -> table.guid == guid
+
+  $scope.lookupTableName = (guid) ->
+    $scope.lookupTable(guid)?.name
+
+  $scope.lookupTableByField = (fieldGuid) ->
+    _.find($scope.tables, (table) -> _.any(table.fields, (field) -> field.guid == fieldGuid))
+
+  $scope.lookupFieldName = (fieldGuid) ->
+    table = $scope.lookupTableByField(fieldGuid)
+    return "" unless table
+
+    field = _.find table.fields, (field) -> field.guid == fieldGuid
+    field?.name
+
+  $scope.lookupTableAction = (tableGuid) ->
+    for action in $scope.actions
+      if action.table == tableGuid
+        return action
+    null
+
+  $scope.lookupFieldAction = (fieldGuid) ->
+    for action in $scope.actions
+      if action.field == fieldGuid
+        return action
+    null
+
+  $scope.lookupPillStatus = (pill) ->
+    switch pill.kind
+      when 'literal'
+        return 'literal'
+      when 'field_value'
+        return 'field_value' if $scope.fieldExists(pill.guid)
+      else
+        return 'placeholder' if $scope.lookupPillByGuid(pill.guid)
+    'unbound'
+
+  $scope.pillTemplateFor = (field) ->
+    status = $scope.lookupPillStatus(field)
+    $scope.fieldNameFor(status)
+
+  $scope.pieceTemplateFor = (kind) ->
+    "#{kind}_piece"
+
+  $scope.fieldNameFor = (status) ->
+    "#{status}_pill"
+
+  $scope.fieldExists = (fieldGuid) ->
+    !!$scope.lookupTableByField(fieldGuid)
+
+  $scope.dragPill = (pill) ->
+    window.draggedPill = pill
+    event.dataTransfer.setData("Text", $scope.lookupPillName(pill))
+
+  $scope.fieldValueDragStart = (fieldGuid) ->
+    window.draggedPill = {kind: 'field_value', guid: fieldGuid}
+    event.dataTransfer.setData("Text", $scope.lookupFieldName(fieldGuid))
+
+  $scope.tableDragStart = (tableGuid, event) ->
+    window.draggedPill = {kind: 'table_ref', guid: tableGuid}
+    event.dataTransfer.setData("Text", $scope.lookupTableName(tableGuid))
+
+  $scope.fieldDragStart = (fieldGuid, event) ->
+    window.draggedPill = {kind: 'field_value', guid: fieldGuid}
+    event.dataTransfer.setData("Text", $scope.lookupFieldName(fieldGuid))
+
+  $scope.dragOverUnboundPill = (pill, event) ->
+    event.preventDefault()
     true
 
-  $scope.makeNotEditable = (event) ->
-    $scope.parseMessage(event)
-    $scope.contenteditable = 'false'
+  $scope.dropOverUnboundPill = (pill, event) ->
+    $scope.replacePills(pill.guid, window.draggedPill)
+    event.stopPropagation()
 
-  $scope.makeEditable = (event) ->
-    unless $(event.originalEvent.target).hasClass('pill')
-      $scope.contenteditable = 'true'
+  $scope.dragOverUnboundTable = (tableGuid, event) ->
+    return false if window.draggedPill.kind != 'table_ref'
+
+    event.preventDefault()
+    true
+
+  $scope.dropOverUnboundTable = (tableGuid, event) ->
+    $scope.tableAndFieldRebinds.push kind: 'table', from: tableGuid, to: window.draggedPill.guid
+
+    for action in $scope.actions
+      if action.table == tableGuid
+        action.table = window.draggedPill.guid
+
+    event.stopPropagation()
+
+  $scope.dragOverUnboundField = (fieldGuid, event) ->
+    return false if window.draggedPill.kind != 'field_ref'
+
+    event.preventDefault()
+    true
+
+  $scope.dropOverUnboundField = (destinationPillGuid, event) ->
+    draggedPillGuid = window.draggedPill.guid
+
+    draggedPillTableGuid = $scope.lookupTableByField(draggedPillGuid).guid
+
+    $scope.tableAndFieldRebinds.push kind: 'field', fromField: destinationPillGuid, toField: draggedPillGuid
+
+    for action in $scope.actions
+        if action.field == destinationPillGuid
+          action.field = draggedPillGuid
+          action.table = draggedPillTableGuid
+
+    event.stopPropagation()
+
+  $scope.hidePopups = ->
+    $('.popup').hide()
+
+  $(window.document).click (event) ->
+    unless $(event.target).closest($('.popup')).length > 0
+      $scope.hidePopups()
+
+  $(window.document).keydown (event) ->
+    if event.keyCode == 27 # Esc
+      $scope.hidePopups()
+
+  $scope.visitPills = (fun) ->
+    for action in $scope.actions
+      if action.pill
+        fun(action.pill)
+
+      if action.kind == 'send_message'
+        for binding in action.message
+          fun(binding)
+        fun(action.recipient)
+
+  $scope.replacePills = (guid, newPill) ->
+    $scope.visitPills (otherPill) ->
+      if otherPill.guid == guid
+        otherPill.kind = newPill.kind
+        otherPill.guid = newPill.guid
 ]
