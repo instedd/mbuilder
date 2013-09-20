@@ -6,8 +6,8 @@ module PeriodicTasksHelper
     str << "id=#{trigger.id.to_json};"
     str << "name=#{trigger.name.to_json};"
 
-    if trigger.logic
-      str << "actions=#{trigger.logic.actions.map(&:as_json).to_json};"
+    if trigger.actions
+      str << "actions=#{trigger.actions.map(&:as_json).to_json};"
     else
       str << "actions=[];"
     end

@@ -2,7 +2,7 @@ class MessagePlaceholderSolver < PlaceholderSolver
   def initialize(message, trigger, match)
     @message = message
     @match = match
-    @pieces = trigger.logic.message.pieces.select { |piece| piece.kind == 'placeholder' }
+    @pieces = trigger.message.pieces.select { |piece| piece.kind == 'placeholder' }
   end
 
   def piece_value(guid, trigger)

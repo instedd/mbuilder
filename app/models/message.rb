@@ -1,20 +1,26 @@
 class Message
-  attr_accessor :from
-  attr_accessor :pieces
+  attr_reader :from
+  attr_reader :pieces
+  attr_reader :pattern
 
   def initialize(from, pieces)
     @from = from
     @pieces = pieces
+    initialize_pattern
   end
 
-  def compile
-    pattern = "\\A\\s*"
+  def initialize_pattern
+    @pattern = "\\A\\s*"
     pieces.each_with_index do |piece, i|
-      pattern << "\\s+" if i > 0
-      piece.append_pattern(pattern, i, pieces.length)
+      @pattern << "\\s+" if i > 0
+      piece.append_pattern(@pattern, i, pieces.length)
     end
-    pattern << "\\s*\\Z"
-    pattern
+    @pattern << "\\s*\\Z"
+    @pattern = /#{@pattern}/
+  end
+
+  def match incoming_message
+    @pattern.match incoming_message
   end
 
   def self.from_hash(hash)

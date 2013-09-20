@@ -29,7 +29,7 @@ angular.module('mbuilder').controller 'ValidationTriggerController', ['$scope', 
 
     call = $http[method](url, JSON.stringify(data))
     call.success (data, status, headers, config) =>
-      window.location = "/applications/#{$scope.applicationId}/triggers"
+      window.location = "/applications/#{$scope.applicationId}/message_triggers"
     call.error (data, status, headers, config) =>
       alert "Error: #{data}"
 ]

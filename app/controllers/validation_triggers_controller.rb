@@ -10,27 +10,21 @@ class ValidationTriggersController < ApplicationController
 
   def update
     load_validation_trigger
-
     data = JSON.parse request.raw_post
-    from = data['from']
-    invalid_value = data['invalid_value']
-    actions = data['actions']
-    tables = data['tables']
-    table_and_field_rebinds = data['tableAndFieldRebinds']
 
-    actions = Action.from_list(actions)
+    @validation_trigger.from = data['from']
+    @validation_trigger.invalid_value = data['invalid_value']
+    @validation_trigger.actions = Action.from_list data['actions']
 
-    @validation_trigger.logic = ValidationLogic.new from, invalid_value, actions
-
-    application.tables = Table.from_list(tables)
+    application.tables = Table.from_list(data['tables'])
 
     begin
       ActiveRecord::Base.transaction do
         application.save!
         @validation_trigger.save!
 
-        if table_and_field_rebinds
-          application.rebind_tables_and_fields(table_and_field_rebinds)
+        if data['tableAndFieldRebinds']
+          application.rebind_tables_and_fields(data['tableAndFieldRebinds'])
         end
       end
       render json: @validation_trigger.id

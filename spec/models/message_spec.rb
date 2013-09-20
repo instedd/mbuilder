@@ -9,7 +9,7 @@ describe Message do
         {'kind' => 'text', 'text' => 'now'},
       ]
     })
-    msg.compile.should eq("\\A\\s*register\\s+(\\S+)\\s+now\\s*\\Z")
+    msg.pattern.source.should eq("\\A\\s*register\\s+(\\S+)\\s+now\\s*\\Z")
   end
 
   it "compiles message with single word at the end" do
@@ -19,7 +19,7 @@ describe Message do
         {'kind' => 'placeholder', 'text' => 'John'},
       ]
     })
-    msg.compile.should eq("\\A\\s*register\\s+(.+)\\s*\\Z")
+    msg.pattern.source.should eq("\\A\\s*register\\s+(.+)\\s*\\Z")
   end
 
   it "compiles message with multiple word" do
@@ -30,7 +30,7 @@ describe Message do
         {'kind' => 'text', 'text' => 'as user'},
       ]
     })
-    msg.compile.should eq("\\A\\s*register\\s+(.+)\\s+as\\ user\\s*\\Z")
+    msg.pattern.source.should eq("\\A\\s*register\\s+(.+)\\s+as\\ user\\s*\\Z")
   end
 
   it "compiles message with integer" do
@@ -40,7 +40,7 @@ describe Message do
         {'kind' => 'placeholder', 'text' => '1234'},
       ]
     })
-    msg.compile.should eq("\\A\\s*register\\s+(\\d+)\\s*\\Z")
+    msg.pattern.source.should eq("\\A\\s*register\\s+(\\d+)\\s*\\Z")
   end
 
   it "compiles message with float" do
@@ -50,7 +50,7 @@ describe Message do
         {'kind' => 'placeholder', 'text' => '1234.56'},
       ]
     })
-    msg.compile.should eq("\\A\\s*register\\s+(\\d+\\.\\d+)\\s*\\Z")
+    msg.pattern.source.should eq("\\A\\s*register\\s+(\\d+\\.\\d+)\\s*\\Z")
   end
 
   it "compiles message and escapes text" do
@@ -59,6 +59,6 @@ describe Message do
         {'kind' => 'text', 'text' => "."},
       ]
     })
-    msg.compile.should eq("\\A\\s*\\.\\s*\\Z")
+    msg.pattern.source.should eq("\\A\\s*\\.\\s*\\Z")
   end
 end

@@ -30,26 +30,20 @@ class MessageTriggersController < ApplicationController
 
   def set_message_trigger_data(trigger)
     data = JSON.parse request.raw_post
-    name = data['name']
-    message = data['message']
-    actions = data['actions']
-    tables = data['tables']
-    table_and_field_rebinds = data['tableAndFieldRebinds']
 
-    message = Message.from_hash(message)
-    actions = Action.from_list(actions)
-    trigger.name = name
-    trigger.logic = Logic.new message, actions
+    trigger.name = data['name']
+    trigger.message = Message.from_hash(data['message'])
+    trigger.actions = Action.from_list(data['actions'])
 
-    application.tables = Table.from_list(tables)
+    application.tables = Table.from_list data['tables']
 
     begin
       ActiveRecord::Base.transaction do
         application.save!
         trigger.save!
 
-        if table_and_field_rebinds
-          application.rebind_tables_and_fields(table_and_field_rebinds)
+        if data['tableAndFieldRebinds']
+          application.rebind_tables_and_fields(data['tableAndFieldRebinds'])
         end
       end
       render json: trigger.id

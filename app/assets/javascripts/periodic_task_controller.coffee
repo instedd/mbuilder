@@ -24,7 +24,7 @@ angular.module('mbuilder').controller 'PeriodicTaskController', ['$scope', '$htt
 
     call = $http[method](url, JSON.stringify(data))
     call.success (data, status, headers, config) =>
-      window.location = "/applications/#{$scope.applicationId}/periodic_tasks"
+      window.location = "/applications/#{$scope.applicationId}/message_triggers"
     call.error (data, status, headers, config) =>
       alert "Error: #{data}"
 ]

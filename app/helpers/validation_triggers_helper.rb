@@ -6,8 +6,8 @@ module ValidationTriggersHelper
     str << "from=#{trigger.generate_from_number.to_json};"
     str << "invalid_value=#{trigger.generate_invalid_value.to_json};"
 
-    if trigger.logic
-      str << "actions=#{trigger.logic.actions.map(&:as_json).to_json};"
+    if trigger.actions
+      str << "actions=#{trigger.actions.map(&:as_json).to_json};"
     else
       str << "actions=[];"
     end

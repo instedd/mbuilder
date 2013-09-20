@@ -19,7 +19,7 @@ describe "Tables and fields rebinding" do
     ])
 
     @trigger.reload
-    actions = @trigger.logic.actions
+    actions = @trigger.actions
     actions[0].table.should eq("friends")
     actions[1].table.should eq("friends")
     actions[2].table.should eq("friends")
@@ -33,7 +33,7 @@ describe "Tables and fields rebinding" do
     ])
 
     @trigger.reload
-    actions = @trigger.logic.actions
+    actions = @trigger.actions
     actions[0].table.should eq("friends")
     actions[1].field.should eq("display_name")
 

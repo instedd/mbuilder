@@ -13,8 +13,7 @@ class TriggerHelper
         pieces.push 'kind' => 'placeholder', 'text' => text, 'guid' => "placeholder_#{text.downcase}"
       end
     end
-    @message = Message.from_hash({'pieces' => pieces})
-    @message.from = options[:from]
+    @message = Message.from_hash({'pieces' => pieces, 'from' => options[:from]})
   end
 
   def rule rule, options={}
@@ -71,7 +70,8 @@ class TriggerHelper
 
   def trigger
     trigger = @application.message_triggers.make_unsaved
-    trigger.logic = Logic.new @message, @actions
+    trigger.message = @message
+    trigger.actions = @actions
     trigger.save!
 
     trigger
@@ -80,7 +80,7 @@ class TriggerHelper
   def periodic_task
     periodic_task = @application.periodic_tasks.make_unsaved
     periodic_task.schedule = @schedule
-    periodic_task.logic = ScheduleLogic.new @actions
+    periodic_task.actions = @actions
     periodic_task.save!
 
     periodic_task
@@ -88,7 +88,9 @@ class TriggerHelper
 
   def validation_trigger(field_guid)
     validation_trigger = @application.validation_triggers.make_unsaved field_guid: field_guid
-    validation_trigger.logic = ValidationLogic.new 'from', 'invalid_value', @actions
+    validation_trigger.from = 'from'
+    validation_trigger.invalid_value = 'invalid_value'
+    validation_trigger.actions = @actions
     validation_trigger.save!
 
     validation_trigger

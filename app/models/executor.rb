@@ -8,8 +8,7 @@ class Executor
     body = message['body']
 
     @triggers.each do |trigger|
-      pattern = /#{trigger.pattern}/
-      match = pattern.match(body)
+      match = trigger.match(body)
       if match
         return TireExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(message, trigger, match))
       end

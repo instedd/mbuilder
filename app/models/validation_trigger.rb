@@ -1,18 +1,11 @@
-class ValidationTrigger < ActiveRecord::Base
-  include Rebindable
-
-  attr_accessible :application_id, :field_guid, :logic
+class ValidationTrigger < Trigger
+  attr_accessible :application_id, :field_guid, :invalid_value, :from, :actions
 
   belongs_to :application
 
-  validates_presence_of :application
-  validates_presence_of :field_guid
+  validates_presence_of :application, :field_guid, :invalid_value, :from
 
-  serialize :logic
-
-  def execute(context)
-    logic.execute(context)
-  end
+  serialize :actions
 
   def table
     application.table_of field_guid
@@ -33,19 +26,11 @@ class ValidationTrigger < ActiveRecord::Base
     field ? field.name : "???"
   end
 
-  def generate_invalid_value
+  def generate_invalid_value # TODO default_invalid_value_label
     "invalid value"
   end
 
-  def generate_from_number
+  def generate_from_number # TODO default_from_number
     "+1-(234)-567-8912"
-  end
-
-  def rebind_table(from_table, to_table)
-    logic.rebind_table(from_table, to_table)
-  end
-
-  def rebind_field(from_field, to_table, to_field)
-    logic.rebind_field(from_field, to_table, to_field)
   end
 end

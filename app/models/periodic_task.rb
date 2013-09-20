@@ -1,18 +1,14 @@
-class PeriodicTask < ActiveRecord::Base
-  include Rebindable
-
-  attr_accessible :name
+class PeriodicTask < Trigger
+  attr_accessible :name, :actions, :schedule
 
   belongs_to :application
 
-  validates_presence_of :application
-  validates_presence_of :name
+  validates_presence_of :application, :name, :schedule
 
-  serialize :logic
+  serialize :actions
   serialize :schedule
 
-  after_save :schedule_job, if: :logic
-
+  after_save :schedule_job
   before_update :remove_existing_jobs
 
   after_initialize :set_default_schedule
@@ -32,12 +28,6 @@ class PeriodicTask < ActiveRecord::Base
       :run_at => run_at
   end
 
-  def execute(context)
-    logic.actions.each do |action|
-      action.execute(context)
-    end
-  end
-
   def execute_at scheduled_time
     context = TireExecutionContext.new(application, NullPlaceholderSolver.new)
     execute context
@@ -47,7 +37,7 @@ class PeriodicTask < ActiveRecord::Base
 
   def default_schedule
     s = IceCube::Schedule.new
-    s.add_recurrence_rule IceCube::Rule.weekly.day(:monday, :tuesday)
+    s.add_recurrence_rule IceCube::Rule.weekly.day(:monday, :wednesday, :friday)
     s
   end
 
@@ -55,18 +45,10 @@ class PeriodicTask < ActiveRecord::Base
     schedule.recurrence_rules.first
   end
 
-  def updateRule(rule, time)
+  def update_schedule_with(rule, time)
     s = IceCube::Schedule.new(time)
     s.add_recurrence_rule rule
     self.schedule = s
-  end
-
-  def rebind_table(from_table, to_table)
-    logic.rebind_table from_table, to_table
-  end
-
-  def rebind_field(from_field, to_table, to_field)
-    logic.rebind_field from_field, to_table, to_field
   end
 
   private
