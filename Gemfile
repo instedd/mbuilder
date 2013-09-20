@@ -21,6 +21,8 @@ gem 'recurring_select', git: "https://github.com/nekron/recurring_select"
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 
+gem 'foreman'
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
