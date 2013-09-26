@@ -22,6 +22,7 @@ gem 'delayed_job'
 gem 'delayed_job_active_record'
 
 gem 'foreman'
+gem 'ruby-openid'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

@@ -7,6 +7,13 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
+  def instedd
+    generic do |auth|
+      {email: auth.info['email']
+      }
+    end
+  end
+
   def generic
     auth = env['omniauth.auth']
 

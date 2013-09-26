@@ -1,6 +1,11 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require "openid"
+# require "openid/consumer/discovery"
+require 'openid/extensions/sreg'
+require 'openid/extensions/pape'
+require 'openid/store/filesystem'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -77,5 +82,7 @@ module Mbuilder
         require_dependency file
       end
     end
+
+    config.login_with_guisso = true
   end
 end

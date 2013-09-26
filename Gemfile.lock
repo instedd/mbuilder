@@ -257,6 +257,7 @@ DEPENDENCIES
   recurring_select!
   rspec
   rspec-rails
+  ruby-openid
   rvm-capistrano
   sass-rails (~> 3.2.3)
   timecop
