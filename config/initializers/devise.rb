@@ -232,5 +232,5 @@ Devise.setup do |config|
 
   require 'openid/store/filesystem'
   config.omniauth :open_id, store: OpenID::Store::Filesystem.new("#{Rails.root}/tmp"), name: 'google', identifier: 'https://www.google.com/accounts/o8/id', require: 'omniauth-openid'
-  config.omniauth :open_id, store: OpenID::Store::Filesystem.new("#{Rails.root}/tmp"), name: 'instedd', identifier: 'http://login.instedd.org:3001/openid', require: 'omniauth-openid'
+  config.omniauth :open_id, store: OpenID::Store::Filesystem.new("#{Rails.root}/tmp"), name: 'instedd', identifier: "#{Rails.configuration.guisso_url}/openid", require: 'omniauth-openid'
 end

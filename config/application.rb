@@ -84,5 +84,6 @@ module Mbuilder
     end
 
     config.login_with_guisso = true
+    config.guisso_url = 'http://login.instedd.org:3001'
   end
 end
