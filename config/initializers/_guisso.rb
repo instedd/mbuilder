@@ -5,7 +5,11 @@ class Guisso
     Config["enabled"]
   end
 
-  def self.url
-    Config["url"]
+  def self.openid_url
+    Config["openid_url"]
+  end
+
+  def self.sign_out_url
+    Config["sign_out_url"]
   end
 end

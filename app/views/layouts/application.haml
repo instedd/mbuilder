@@ -22,7 +22,7 @@
                   = current_user.email
                   %i.ic-cog
                 %ul.dropdown-menu
-                  %li= link_to "Sign out", "#{Rails.configuration.guisso_url}/users/sign_out", method: :delete
+                  %li= link_to "Sign out", Guisso.sign_out_url, method: :delete
 
   .container-fluid
     - if flash[:notice].present?

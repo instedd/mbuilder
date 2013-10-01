@@ -1,2 +1,3 @@
 enabled: true
-url: http://login-stg.instedd.org/openid
+openid_url: http://login.instedd.org:3001/openid
+sign_out_url: http://login.instedd.org:3001/users/sign_out
