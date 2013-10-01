@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  if Rails.configuration.login_with_guisso
+  if Guisso.enabled?
     def authenticate_user_with_guisso!
       if current_user
         guisso_email = cookies[:guisso]
