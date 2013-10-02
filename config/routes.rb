@@ -10,6 +10,10 @@ Mbuilder::Application.routes.draw do
     get :data
   end
 
+  authenticate :user do
+    mount Pigeon::Engine => '/pigeon'
+  end
+
   match '/nuntium/receive_at' => 'nuntium#receive_at'
 
   root :to => 'home#index'
