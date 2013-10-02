@@ -2,6 +2,13 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   if Guisso.enabled?
+    before_filter :sign_out_if_current_user_different_than_guisso
+    def sign_out_if_current_user_different_than_guisso
+      if current_user && current_user.email != cookies[:guisso]
+        sign_out current_user
+      end
+    end
+
     def authenticate_user_with_guisso!
       if current_user
         guisso_email = cookies[:guisso]
