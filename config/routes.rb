@@ -12,5 +12,5 @@ Mbuilder::Application.routes.draw do
 
   match '/nuntium/receive_at' => 'nuntium#receive_at'
 
-  root :to => 'applications#index'
+  root :to => 'home#index'
 end

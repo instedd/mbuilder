@@ -23,6 +23,10 @@
                   %i.ic-cog
                 %ul.dropdown-menu
                   %li= link_to "Sign out", Guisso.sign_out_url, method: :delete
+            - else
+              .btn-group.pull-right.user
+                %a.btn.btn-link{href: omniauth_authorize_path(:user, :instedd)}
+                  Sign in
 
   .container-fluid
     - if flash[:notice].present?
