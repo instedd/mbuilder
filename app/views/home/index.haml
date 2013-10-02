@@ -1,1 +1,7 @@
 This is MBuilder's home.
+
+%div
+  - if current_user
+    = link_to "Go to your applications", applications_path
+  - else
+    = link_to "Sign in", omniauth_authorize_path(:user, :instedd)
