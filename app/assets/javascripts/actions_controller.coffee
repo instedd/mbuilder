@@ -19,19 +19,25 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
         table: args.table.guid
         field: args.field.guid
 
-      # Put the action before the first "send message" action, if any
-      i = $scope.actions.length - 1
-      while i >= 0
-        action = $scope.actions[i]
-        if action.kind != 'send_message'
-          $scope.actions.splice(i + 1, 0, newAction)
-          return
-        i -= 1
+      addToActions(newAction)
 
-      $scope.actions.splice(0, 0, newAction)
+  addToActions = (newAction) ->
+    # Put the action before the first "send message" action, if any
+    i = $scope.actions.length - 1
+    while i >= 0
+      action = $scope.actions[i]
+      if action.kind != 'send_message'
+        $scope.actions.splice(i + 1, 0, newAction)
+        return
+      i -= 1
+
+    $scope.actions.splice(0, 0, newAction)
 
   $rootScope.$on 'pillOverFieldName', (event, args) ->
     createTableFieldAction 'select_entity', args
+
+  $rootScope.$on 'groupByField', (event, args) ->
+    addGroupByAction args
 
   $rootScope.$on 'pillOverFieldValue', (event, args) ->
     if tableIsUsedInAnAction(args.table.guid)
@@ -52,4 +58,10 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
   $scope.actionTemplateFor = (kind) ->
     "#{kind}_action"
+
+  addGroupByAction = (args) ->
+    addToActions
+      kind: 'group_by'
+      field: args.field.guid
+      table: args.table.guid
 ]

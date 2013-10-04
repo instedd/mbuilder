@@ -5,13 +5,14 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', ($scope) -
   $scope.aggregates = [
     {id: null, name: 'List of values', ''},
     {id: 'count', name: 'Count of values', desc: 'count of'},
-    {id: 'sum', name: 'Sum of values', desc: 'sum of'},
-    {id: 'avg', name: 'Average of values', desc: 'average of'},
+    {id: 'total', name: 'Sum of values', desc: 'sum of'},
+    {id: 'mean', name: 'Average of values', desc: 'average of'},
     {id: 'max', name: 'Maximum of values', desc: 'maximum of'},
     {id: 'min', name: 'Minimum of values', desc: 'minimum of'},
   ]
 
   $scope.validValuesPopup = { field: null }
+  $scope.tableColumnPopup = { field: null }
 
   $scope.data = (node) ->
     newData = {}

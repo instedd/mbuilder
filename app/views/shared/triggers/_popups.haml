@@ -11,3 +11,11 @@
     %a{'href' => 'javascript:', 'ng-click' => 'defineValidationTrigger()'} Trigger this when values are invalid
   %div{style: 'margin-top: 8px'}
     %button.btn{'ng-click' => 'hidePopups()'} Close
+
+%div#table-column.popup{'ng-controller' => 'TableColumnController'}
+  %div{style: 'margin-top: 8px'}
+    %a{'href' => 'javascript:', 'ng-click' => 'showValidValuesPopup(tableColumnPopup.field, $event)'} Set valid values
+  %div{style: 'margin-top: 8px'}
+    %a{'href' => 'javascript:', 'ng-click' => 'groupBy(tableColumnPopup.field)'} Group by this column
+  %div{style: 'margin-top: 8px'}
+    %button.btn{'ng-click' => 'hidePopups()'} Close

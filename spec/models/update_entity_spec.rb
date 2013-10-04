@@ -5,9 +5,9 @@ describe "Update entity" do
 
   it "updates entities with a literal value" do
     add_data "users", [
-      {"phone" => "1234", "name" => "John"},
-      {"phone" => "1234", "name" => "Peter"},
-      {"phone" => "5678", "name" => "Doe"},
+      {"phone" => 1234.0, "name" => "John"},
+      {"phone" => 1234.0, "name" => "Peter"},
+      {"phone" => 5678.0, "name" => "Doe"},
     ]
     new_trigger do
       message "rename {Phone}"
@@ -16,16 +16,16 @@ describe "Update entity" do
     end
     accept_message 'sms://1234', 'rename 1234'
     assert_data "users", [
-      {"phone" => "1234", "name" => "NewName"},
-      {"phone" => "1234", "name" => "NewName"},
-      {"phone" => "5678", "name" => "Doe"},
+      {"phone" => 1234.0, "name" => "NewName"},
+      {"phone" => 1234.0, "name" => "NewName"},
+      {"phone" => 5678.0, "name" => "Doe"},
     ]
   end
 
   it "updates one entity with a stored value" do
     add_data "users", [
-      {"phone" => "1234", "name" => "John"},
-      {"phone" => "5678", "name" => "Doe"},
+      {"phone" => 1234.0, "name" => "John"},
+      {"phone" => 5678.0, "name" => "Doe"},
     ]
     new_trigger do
       message "register {Name}"
@@ -34,16 +34,16 @@ describe "Update entity" do
     end
     accept_message "sms://1234", "register Peter"
     assert_data "users", [
-      {"phone" => "1234", "name" => "Peter"},
-      {"phone" => "5678", "name" => "Doe"},
+      {"phone" => 1234.0, "name" => "Peter"},
+      {"phone" => 5678.0, "name" => "Doe"},
     ]
   end
 
   it "updates many entities with a stored value" do
     add_data "users", [
-      {"phone" => "1234", "name" => "John"},
-      {"phone" => "1234", "name" => "Doe"},
-      {"phone" => "5678", "name" => "Foo"},
+      {"phone" => 1234.0, "name" => "John"},
+      {"phone" => 1234.0, "name" => "Doe"},
+      {"phone" => 5678.0, "name" => "Foo"},
     ]
     new_trigger do
       message "register {Name}"
@@ -52,16 +52,16 @@ describe "Update entity" do
     end
     accept_message "sms://1234", "register Peter"
     assert_data "users", [
-      {"phone" => "1234", "name" => "Peter"},
-      {"phone" => "1234", "name" => "Peter"},
-      {"phone" => "5678", "name" => "Foo"},
+      {"phone" => 1234.0, "name" => "Peter"},
+      {"phone" => 1234.0, "name" => "Peter"},
+      {"phone" => 5678.0, "name" => "Foo"},
     ]
   end
 
   it "updates all entities with a stored value" do
     add_data "users", [
-      {"phone" => "1234", "name" => "John"},
-      {"phone" => "5678", "name" => "Doe"},
+      {"phone" => 1234.0, "name" => "John"},
+      {"phone" => 5678.0, "name" => "Doe"},
     ]
     new_trigger do
       message "register {Name}"
@@ -69,8 +69,8 @@ describe "Update entity" do
     end
     accept_message "sms://1234", "register Peter"
     assert_data "users", [
-      {"phone" => "1234", "name" => "Peter"},
-      {"phone" => "5678", "name" => "Peter"},
+      {"phone" => 1234.0, "name" => "Peter"},
+      {"phone" => 5678.0, "name" => "Peter"},
     ]
   end
 end

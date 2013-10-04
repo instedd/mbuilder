@@ -11,13 +11,13 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
     $scope.table.fields.splice(index, 1)
 
   $scope.pillTemplateFor = (field) ->
-    # This is repeated here because of the "self problem". The controllers scope are built with composition, not inheritance
+    # This is repeated here because of the "self problem". The controller's scopes are composed, not inherited
     status = $scope.lookupPillStatus(field)
     $scope.fieldNameFor(status)
 
   $scope.lookupPillStatus = (field) ->
     action = $scope.lookupFieldAction(field.guid)
-    if action
+    if action && action.kind != 'group_by'
       return $scope.$parent.lookupPillStatus(action.pill)
 
     tableGuid = $scope.lookupTableByField(field.guid).guid

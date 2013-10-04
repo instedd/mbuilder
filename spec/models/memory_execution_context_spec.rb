@@ -15,7 +15,7 @@ describe MemoryExecutionContext do
     assert_data "users"
 
     data = context.data_for("users")
-    assert_sets_equal data, [{"phone" => "1234"}]
+    assert_sets_equal data, [{"phone" => 1234.0}]
   end
 
   it "creates entity and stores value" do
@@ -28,7 +28,7 @@ describe MemoryExecutionContext do
     context.execute(trigger)
 
     data = context.data_for("users")
-    assert_sets_equal data, [{"phone" => "1234", "name" => "John"}]
+    assert_sets_equal data, [{"phone" => 1234.0, "name" => "John"}]
   end
 
   it "creates entity with a literal value" do
@@ -64,8 +64,8 @@ describe MemoryExecutionContext do
 
     data = context.data_for("users")
     assert_sets_equal data, [
-      {"phone" => "1234", "name" => "Peter"},
-      {"phone" => "5678", "name" => "Doe"},
+      {"phone" => 1234.0, "name" => "Peter"},
+      {"phone" => 5678.0, "name" => "Doe"},
     ]
   end
 
@@ -101,8 +101,8 @@ describe MemoryExecutionContext do
     assert_data "users"
 
     assert_sets_equal db['users'], [
-      {"phone" => "1234"},
-      {"phone" => "2345"},
+      {"phone" => 1234.0},
+      {"phone" => 2345.0},
     ]
   end
 
@@ -127,7 +127,7 @@ describe MemoryExecutionContext do
     assert_data "users"
 
     assert_sets_equal db['users'], [
-      {"phone" => "1234"}
+      {"phone" => 1234.0}
     ]
   end
 
@@ -152,7 +152,7 @@ describe MemoryExecutionContext do
     assert_data "users"
 
     assert_sets_equal db['users'], [
-      {"phone" => "1234"},
+      {"phone" => 1234.0},
     ]
   end
 

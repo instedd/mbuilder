@@ -15,8 +15,8 @@ describe NuntiumController do
 
     @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("#{Nuntium::Config['incoming_username']}:#{Nuntium::Config['incoming_password']}")
 
-    get :receive_at, channel: 'pigeon_channel_name', from: 'sms://1234', body: 'register Peter'
+    get :receive_at, channel: 'pigeon_channel_name', from: 'sms://123-4', body: 'register Peter'
 
-    assert_data("users", {"phone" => "1234"})
+    assert_data("users", {"phone" => "123-4"})
   end
 end

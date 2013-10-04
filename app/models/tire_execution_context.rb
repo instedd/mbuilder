@@ -40,16 +40,45 @@ class TireExecutionContext < ExecutionContext
     @index.refresh
   end
 
-  def select_table_field(table, restrictions, field)
-    results = perform_search(table, restrictions)
-    results.map do |result|
-      result["_source"]["properties"][field]
+  def select_table_field(table, restrictions, field, group_by, aggregate)
+    if group_by.present?
+      results = perform_search(table, restrictions) do |search|
+        if group_by ==  field
+          search.facet ("#{group_by}_facet") do
+            terms group_by
+          end
+        else
+          search.facet ("#{group_by}_facet") do
+            terms_stats group_by, field
+          end
+        end
+      end
+      if aggregate.present?
+        results.facets["#{group_by}_facet"]['terms'].map { |result| result[aggregate].user_friendly }
+      else
+        results.facets["#{group_by}_facet"]['terms'].map { |result| result['term'].user_friendly }
+      end
+    else
+      results = perform_search(table, restrictions)
+
+      value = results.map do |result|
+        result["_source"]["properties"][field].user_friendly
+      end
+      apply_aggregation aggregate, value
     end
   end
 
   def perform_search(table, restrictions)
     search = application.tire_search(table)
 
+    apply_restrictions_to search, restrictions
+
+    yield search if block_given?
+
+    search.perform.results
+  end
+
+  def apply_restrictions_to(search, restrictions)
     restrictions.each do |restriction|
       search.query do
         case restriction[:op]
@@ -63,7 +92,5 @@ class TireExecutionContext < ExecutionContext
         end
       end
     end
-
-    search.perform.results
   end
 end

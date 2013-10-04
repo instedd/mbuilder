@@ -1,5 +1,4 @@
 require "spec_helper"
-
 describe "PeriodicTask" do
 
   before (:each) { Timecop.freeze(Time.utc(2013, 9, 17, 6, 0, 0)) }
@@ -8,7 +7,7 @@ describe "PeriodicTask" do
 
   it "should schedule a message for the next calendar occurrence" do
     add_data "users", [
-      {"phone" => "1234", "name" => "Peter"}
+      {"phone" => 1234.0, "name" => "Peter"}
     ]
 
     new_periodic_task do
@@ -28,7 +27,7 @@ describe "PeriodicTask" do
 
   it "should send a delayed message" do
     add_data "users", [
-      {"phone" => "1234", "name" => "Peter"}
+      {"phone" => 1234.0, "name" => "Peter"}
     ]
 
     new_periodic_task do
@@ -57,12 +56,12 @@ describe "PeriodicTask" do
 
     wake_up_event.perform
 
-    assert_data "users", {'phone' => '1234'}
+    assert_data "users", {'phone' => 1234.0}
   end
 
   it "should re-schedule a job when running a message" do
     add_data "users", [
-      {"phone" => "1234", "name" => "Peter"}
+      {"phone" => 1234.0, "name" => "Peter"}
     ]
 
     new_periodic_task do
@@ -98,7 +97,7 @@ describe "PeriodicTask" do
 
   it "should re-schedule a job when updating the trigger" do
     add_data "users", [
-      {"phone" => "1234", "name" => "Peter"}
+      {"phone" => 1234.0, "name" => "Peter"}
     ]
 
     task = new_periodic_task do

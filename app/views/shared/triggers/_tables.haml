@@ -13,7 +13,7 @@
 
       %table.table.table-bordered.fields
         %tr
-          %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)'}
+          %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showTableColumnPopup(pill, $event)'}
             %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
             .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)'}
               %editable-input{'model' => 'pill.name', 'editable' => 'pill.editable', 'focus' => 'pill.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}

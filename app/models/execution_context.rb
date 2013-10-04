@@ -32,20 +32,24 @@ class ExecutionContext
   end
 
   def select_entities(table, field, value)
-    @entities[table] = EntitySelection.new(self, table).eq(field, value)
+    (@entities[table] ||= EntitySelection.new(self, table)).eq(field, value)
   end
 
   def entity(table)
     @entities[table] ||= EntitySelection.new(self, table)
   end
 
+  def group_by(table, field)
+    (@entities[table] ||= EntitySelection.new(self, table)).group_by = field
+  end
+
   def piece_value(guid)
     subclass_responsibility
   end
 
-  def entity_field_values(field)
+  def entity_field_values(field, aggregate)
     entity = entity(application.table_of(field).guid)
-    entity.field_values(field)
+    entity.field_values(field, aggregate)
   end
 
   def insert(table, properties)
@@ -72,5 +76,28 @@ class ExecutionContext
   def save
     @entities.values.each(&:save)
     @entities = {}
+  end
+
+  def apply_aggregation aggregate, value
+    return value unless aggregate.present?
+
+    values = Array(value)
+
+    case aggregate
+    when 'count'
+      values.length
+    when 'total'
+      values.sum(&:to_f).user_friendly
+    when 'mean'
+      sum = values.sum(&:to_f)
+      len = values.length
+      (len == 0 ? 0 : sum / len).user_friendly
+    when 'max'
+      values.map(&:to_f).max.user_friendly
+    when 'min'
+      values.map(&:to_f).min.user_friendly
+    else
+      raise "Unknown aggregate function: #{aggregate}"
+    end
   end
 end

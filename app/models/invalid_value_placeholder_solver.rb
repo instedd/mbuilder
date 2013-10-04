@@ -1,4 +1,4 @@
-class InvalidValuePlaceholderSolver
+class InvalidValuePlaceholderSolver < PlaceholderSolver
   def initialize(solver, invalid_value)
     @solver = solver
     @invalid_value = invalid_value

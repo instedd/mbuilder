@@ -5,6 +5,6 @@ class TriggerPlaceholderSolver < PlaceholderSolver
       trigger.message.from
     else
       trigger.message.pieces.find { |piece| piece.guid == guid }.text
-    end
+    end.normalize_for_elasticsearch
   end
 end

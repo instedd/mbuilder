@@ -9,7 +9,7 @@ describe "Create entity" do
       create_entity "users.phone = {phone_number}"
     end
     accept_message 'sms://1234', 'register Peter'
-    assert_data "users", {"phone" => "1234"}
+    assert_data "users", {"phone" => 1234.0}
   end
 
   it "creates entity with a stored value" do
@@ -19,7 +19,7 @@ describe "Create entity" do
       store_entity_value "users.name = {name}"
     end
     accept_message 'sms://1234', 'register Peter'
-    assert_data "users", {"phone" => "1234", "name" => "Peter"}
+    assert_data "users", {"phone" => 1234.0, "name" => "Peter"}
   end
 
   it "creates entity with a literal value" do
@@ -38,6 +38,6 @@ describe "Create entity" do
       store_entity_value "users.name = {name}"
     end
     accept_message 'sms://1234', 'register 5678'
-    assert_data "users", {"phone" => "1234", "name" => "5678"}
+    assert_data "users", {"phone" => 1234.0, "name" => 5678.0}
   end
 end

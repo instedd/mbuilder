@@ -16,6 +16,16 @@ class TriggerHelper
     @message = Message.from_hash({'pieces' => pieces, 'from' => options[:from]})
   end
 
+  def group_by text
+    if text =~ /(\w+)\.(\w+)/
+      table = $1
+      field = $2
+      @actions << Action.from_hash({'kind' => 'group_by', 'table' => "#{table}", 'field' => "#{field}"})
+    else
+      raise "Wrong action text: #{text}"
+    end
+  end
+
   def rule rule, options={}
     @schedule = IceCube::Schedule.new(options[:at])
     @schedule.add_recurrence_rule rule

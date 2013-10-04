@@ -1,9 +1,12 @@
 class EntitySelection
+  attr_accessor :group_by
+
   def initialize(context, table)
     @context = context
     @table = table
     @restrictions = []
     @properties = {}
+    @group_by = []
   end
 
   def eq(field, value)
@@ -15,8 +18,8 @@ class EntitySelection
     @properties[field.to_s] = value
   end
 
-  def field_values(field)
-    @context.select_table_field(@table, @restrictions, field)
+  def field_values(field, aggregate)
+    @context.select_table_field(@table, @restrictions, field, group_by, aggregate)
   end
 
   def save

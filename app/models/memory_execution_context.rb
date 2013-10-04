@@ -41,13 +41,32 @@ class MemoryExecutionContext < ExecutionContext
     @next_id += 1
   end
 
-  def select_table_field(table, restrictions, field)
+  def select_table_field(table, restrictions, field, group_by, aggregate)
     rows = @db[table]
 
     result_rows = rows.select &(matcher_from restrictions)
 
-    result_rows.map do |result|
-      result[field]
+    if group_by.present?
+        grouped_rows = result_rows.group_by do |field|
+          field[group_by]
+        end
+        values = grouped_rows.map do |grouped_field, results_by_field|
+          results_by_field.map do|result|
+            result[field]
+          end
+        end
+      if group_by == field
+        values.map &:first
+      else
+        values.map do |value|
+          apply_aggregation aggregate, value
+        end
+      end
+    else
+      value = result_rows.map do |result|
+        result[field]
+      end
+      apply_aggregation aggregate, value
     end
   end
 

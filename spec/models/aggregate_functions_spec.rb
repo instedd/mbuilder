@@ -43,7 +43,7 @@ describe "Aggregate functions" do
   it "does sum of" do
     new_trigger do
       message "foo"
-      send_message "'1111'", "{*sum(age)}"
+      send_message "'1111'", "{*total(age)}"
     end
     ctx = accept_message 'sms://1234', 'foo'
     ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "150"}])
@@ -52,7 +52,7 @@ describe "Aggregate functions" do
   it "does avg of" do
     new_trigger do
       message "foo"
-      send_message "'1111'", "{*avg(age)}"
+      send_message "'1111'", "{*mean(age)}"
     end
     ctx = accept_message 'sms://1234', 'foo'
     ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "37.5"}])

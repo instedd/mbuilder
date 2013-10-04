@@ -8,7 +8,7 @@ class Pills::LiteralPill < Pill
   end
 
   def value_in(context)
-    text
+    text.normalize_for_elasticsearch
   end
 
   def self.from_hash(hash)

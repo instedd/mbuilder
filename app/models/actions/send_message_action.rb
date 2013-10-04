@@ -9,17 +9,18 @@ class Actions::SendMessageAction < Action
 
   def execute(context)
     message = @message.map do |binding|
-      values = Array(binding.value_in(context))
+      values = Array(binding.value_in(context).user_friendly)
       values.join ", "
     end.join(" ").strip
 
     # TODO: maybe this is wrong
     message.gsub!(" .", ".")
     message.gsub!(" ,", ",")
+    message.gsub!(" :", ":")
     message.gsub!(/"\s*(.+?)\s*"/, '"\1"')
     message.gsub!(/'\s*(.+?)\s*'/, '\'\1\'')
 
-    recipients = @recipient.value_in(context)
+    recipients = @recipient.value_in(context).user_friendly
     Array(recipients).each do |recipient|
       context.send_message(recipient, message)
     end
