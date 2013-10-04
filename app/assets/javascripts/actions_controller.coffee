@@ -1,7 +1,15 @@
 angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScope', ($scope, $rootScope) ->
-  tableIsUsedInAnAction = (tableGuid) ->
+  tableIsUsedInAnCreateOrSelectAction = (tableGuid) ->
     _.any $scope.actions, (action) ->
       (action.kind == 'select_entity' || action.kind == 'create_entity') && action.table == tableGuid
+
+  tableIsUsedInAGroupByAction = (tableGuid) ->
+    _.any $scope.actions, (action) ->
+      action.kind == 'group_by' && action.table == tableGuid
+
+  actionOfTable = (tableGuid) ->
+    _.find $scope.actions, (action) ->
+      action.kind == 'group_by' && action.table == tableGuid
 
   createTableFieldAction = (kind, args) ->
     action = $scope.lookupFieldAction(args.field.guid)
@@ -37,10 +45,14 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     createTableFieldAction 'select_entity', args
 
   $rootScope.$on 'groupByField', (event, args) ->
-    addGroupByAction args
+    if tableIsUsedInAGroupByAction(args.table.guid)
+      $scope.deleteAction $scope.actions.indexOf actionOfTable args.table.guid
+      addGroupByAction args
+    else
+      addGroupByAction args
 
   $rootScope.$on 'pillOverFieldValue', (event, args) ->
-    if tableIsUsedInAnAction(args.table.guid)
+    if tableIsUsedInAnCreateOrSelectAction(args.table.guid)
       createTableFieldAction 'store_entity_value', args
     else
       createTableFieldAction 'create_entity', args

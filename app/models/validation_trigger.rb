@@ -26,11 +26,11 @@ class ValidationTrigger < Trigger
     field ? field.name : "???"
   end
 
-  def generate_invalid_value # TODO default_invalid_value_label
+  def default_invalid_value_label
     "invalid value"
   end
 
-  def generate_from_number # TODO default_from_number
+  def default_from_number
     "+1-(234)-567-8912"
   end
 end

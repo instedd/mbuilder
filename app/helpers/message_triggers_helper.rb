@@ -7,7 +7,7 @@ module MessageTriggersHelper
 
     if trigger.message
       from = trigger.message.from
-      from = trigger.generate_from_number if from.blank?
+      from = trigger.default_from_number if from.blank?
 
       str << "from=#{from.to_json};"
       str << "pieces=#{trigger.message.pieces.map(&:as_json).to_json};"
@@ -15,7 +15,7 @@ module MessageTriggersHelper
     else
       str << "pieces=[];"
       str << "actions=[];"
-      str << "from=#{trigger.generate_from_number.to_json};"
+      str << "from=#{trigger.default_from_number.to_json};"
     end
 
     if application.tables

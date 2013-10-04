@@ -3,8 +3,8 @@ module ValidationTriggersHelper
     str = ""
     str << "applicationId=#{trigger.application_id.to_json};"
     str << "field_guid=#{trigger.field_guid.to_json};"
-    str << "from=#{trigger.generate_from_number.to_json};"
-    str << "invalid_value=#{trigger.generate_invalid_value.to_json};"
+    str << "from=#{trigger.default_from_number.to_json};"
+    str << "invalid_value=#{trigger.default_invalid_value_label.to_json};"
 
     if trigger.actions
       str << "actions=#{trigger.actions.map(&:as_json).to_json};"
