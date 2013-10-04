@@ -76,4 +76,9 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       kind: 'group_by'
       field: args.field.guid
       table: args.table.guid
+
+  $scope.isFirstFilter = (action) ->
+    (_.select $scope.actions, (a) ->
+      return a.kind == "select_entity"
+    )[0] == action
 ]

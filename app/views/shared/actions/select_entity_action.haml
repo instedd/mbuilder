@@ -1,4 +1,7 @@
-Filter
+%span{'ng-show' => "isFirstFilter(action)"}
+  Select
+%span{'ng-hide' => "isFirstFilter(action)"}
+  Filter
 = render 'shared/table'
 where
 = render 'shared/field'
