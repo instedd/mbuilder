@@ -1,6 +1,6 @@
 class NuntiumController < ApplicationController
   skip_filter :authenticate_user!
-  skip_filter :sign_out_if_current_user_different_than_guisso
+  skip_filter :check_guisso_cookie
 
   before_filter :authenticate
   def authenticate

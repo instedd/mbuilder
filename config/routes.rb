@@ -18,6 +18,7 @@ Mbuilder::Application.routes.draw do
   match '/nuntium/receive_at' => 'nuntium#receive_at'
 
   match '/resource_map/collections.json' => 'resource_map#collections'
+  match '/resource_map/collections/:id/fields.json' => 'resource_map#collection_fields'
 
   root :to => 'home#index'
 end

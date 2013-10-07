@@ -192,11 +192,4 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
 
     event.preventDefault()
     event.stopPropagation()
-
-  $scope.addResourceMapCollection = (event) ->
-    $scope.showPopup '#add-resource-map-collection', event
-
-    call = $http.get("/resource_map/collections.json")
-    call.success (data, status, headers, config) ->
-      console.log(data)
 ]

@@ -4,7 +4,14 @@
     %br
     %a{'ng-click' => 'newTable()', href: 'javascript:'} (+) New table
     %br
-    %a{'ng-click' => 'addResourceMapCollection($event)', href: 'javascript:'} (+) Add a Resource Map collection
+    %div{'ng-controller' => 'ResourceMapController'}
+      %a{'ng-click' => 'listCollections($event)', href: 'javascript:'} (+) Add a Resource Map collection
+      %div#add-resource-map-collection.popup
+        %div{'ng-show' => 'loading'}
+          Loading...
+        %div{'ng-hide' => 'loading'}
+          %div{'ng-repeat' => 'collection in collections'}
+            %a{'href' => 'javascript:', 'ng-click' => 'addCollection(collection)'} {{collection.name}}
   %br
 
   %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
