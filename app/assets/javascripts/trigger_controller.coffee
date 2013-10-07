@@ -1,4 +1,4 @@
-angular.module('mbuilder').controller 'TriggerController', ['$scope', ($scope) ->
+angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', ($scope, $http) ->
   $scope.tableAndFieldRebinds = []
 
   $scope.aggregateFunctionPopup = { pill: null }
@@ -182,4 +182,21 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', ($scope) -
       if otherPill.guid == guid
         otherPill.kind = newPill.kind
         otherPill.guid = newPill.guid
+
+  $scope.showPopup = (id, event) ->
+    $scope.hidePopups()
+
+    div = $(id)
+    div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
+    div.show()
+
+    event.preventDefault()
+    event.stopPropagation()
+
+  $scope.addResourceMapCollection = (event) ->
+    $scope.showPopup '#add-resource-map-collection', event
+
+    call = $http.get("/resource_map/collections.json")
+    call.success (data, status, headers, config) ->
+      console.log(data)
 ]

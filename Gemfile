@@ -23,6 +23,8 @@ gem 'delayed_job_active_record'
 
 gem 'foreman'
 gem 'ruby-openid'
+gem 'rack-oauth2', git: "https://github.com/manastech/rack-oauth2.git"
+gem 'alto_guisso', path: '../alto_guisso'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

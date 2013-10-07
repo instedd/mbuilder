@@ -1,4 +1,6 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  skip_before_filter :check_guisso_cookie
+
   def google
     generic do |auth|
       {email: auth.info['email']

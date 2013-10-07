@@ -1,3 +1,4 @@
 enabled: true
-openid_url: http://login.instedd.org:3001/openid
-sign_out_url: http://login.instedd.org:3001/users/sign_out
+url: http://login.instedd.org:3001
+client_id: OZDoHIY32Di7sY7ecrxaOg==
+client_secret: sQ1fDOS+lS9Sg2wPfuPBtdBAnHxtynMMJAF5Rd7zFXjotjPRqoFlcqqqhWL0Jw0Mrf3mVDp1jPY899/dfHqKgA==

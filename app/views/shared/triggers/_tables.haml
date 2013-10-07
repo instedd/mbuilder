@@ -3,6 +3,8 @@
     %strong Tables
     %br
     %a{'ng-click' => 'newTable()', href: 'javascript:'} (+) New table
+    %br
+    %a{'ng-click' => 'addResourceMapCollection($event)', href: 'javascript:'} (+) Add a Resource Map collection
   %br
 
   %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
