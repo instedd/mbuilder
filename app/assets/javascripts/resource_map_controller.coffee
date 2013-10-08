@@ -13,7 +13,12 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
 
     call = $http.get("/resource_map/collections/#{collection.id}/fields.json")
     call.success (data, status, headers, config) ->
-      fields = _.map data, (f) -> {guid: window.guid(), id: f.id, name: f.name}
+      fields = []
+      fields.push guid: window.guid(), id: "name", name: "Name"
+      fields.push guid: window.guid(), id: "lat", name: "Latitude"
+      fields.push guid: window.guid(), id: "lng", name: "Longitude"
+      for field in data
+        fields.push guid: window.guid(), id: field.id, name: field.name
 
       $scope.tables.push
         guid: window.guid()
