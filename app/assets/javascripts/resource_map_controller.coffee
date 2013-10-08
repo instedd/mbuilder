@@ -21,7 +21,7 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
         id: collection.id
         name: collection.name
         fields: fields
-        editable: false
-        focus: false
+        editmode: false
+        focusmode: false
 
 ]

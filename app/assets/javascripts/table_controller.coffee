@@ -4,8 +4,8 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
       guid: window.guid()
       name: "Field #{$scope.table.fields.length + 1}"
       valid_values: ""
-      editable: true
-      focus: true
+      editmode: true
+      focusmode: true
 
   $scope.deleteField = (index) ->
     $scope.table.fields.splice(index, 1)

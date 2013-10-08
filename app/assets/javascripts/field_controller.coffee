@@ -20,7 +20,7 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
     $scope.$emit 'pillOverFieldValue', pill: window.draggedPill, field: $scope.pill, table: $scope.table
 
   $scope.addNewValue = ->
-    $scope.$emit 'pillOverFieldValue', pill: {kind: 'literal', guid: window.guid(), text: '', editable: true}, field: $scope.pill, table: $scope.table
+    $scope.$emit 'pillOverFieldValue', pill: {kind: 'literal', guid: window.guid(), text: '', editmode: true}, field: $scope.pill, table: $scope.table
 
   $scope.showTableColumnPopup = (field, event) ->
     $scope.tableColumnPopup.field = field

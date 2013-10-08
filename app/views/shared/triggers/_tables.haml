@@ -18,14 +18,14 @@
     %div.logic-table
       %a.delete{href: 'javascript:', 'ng-click' => 'deleteTable($index)'} x
       .logic-table-name{draggable: 'true', dragstart: 'tableDragStart(table.guid, $event)'}
-        %editable-input{'model' => 'table.name', 'editable' => 'table.editable', 'focus' => 'table.focus'}
+        %editable-input{'model' => 'table.name', 'editmode' => 'table.editmode', 'focusmode' => 'table.focusmode'}
 
       %table.table.table-bordered.fields
         %tr
           %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showTableColumnPopup(pill, $event)'}
             %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
             .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)'}
-              %editable-input{'model' => 'pill.name', 'editable' => 'pill.editable', 'focus' => 'pill.focus', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
+              %editable-input{'model' => 'pill.name', 'editmode' => 'pill.editmode', 'focusmode' => 'pill.focusmode', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
           %td
             %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
         %tr{'ng-repeat' => 'row in selectedTableRows(table)'}
