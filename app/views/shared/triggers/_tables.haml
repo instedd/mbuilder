@@ -18,15 +18,21 @@
     %div.logic-table
       %a.delete{href: 'javascript:', 'ng-click' => 'deleteTable($index)'} x
       .logic-table-name{draggable: 'true', dragstart: 'tableDragStart(table.guid, $event)'}
-        %editable-input{'model' => 'table.name', 'editmode' => 'table.editmode', 'focusmode' => 'table.focusmode'}
+        %div{'ng-hide' => 'table.readonly'}
+          %editable-input{'model' => 'table.name', 'editmode' => 'table.editmode', 'focusmode' => 'table.focusmode'}
+        %span{'ng-show' => 'table.readonly'}
+          {{table.name}} (from {{table.kind}})
 
       %table.table.table-bordered.fields
         %tr
           %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showTableColumnPopup(pill, $event)'}
-            %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
+            %span{'ng-hide' => 'table.readonly'}
+              %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
             .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)'}
-              %editable-input{'model' => 'pill.name', 'editmode' => 'pill.editmode', 'focusmode' => 'pill.focusmode', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
-          %td
+              %div{'ng-hide' => 'table.readonly'}
+                %editable-input{'model' => 'pill.name', 'editmode' => 'pill.editmode', 'focusmode' => 'pill.focusmode', 'dragover' => 'dragOverName', 'drop' => 'dropOverName'}
+              %span{'ng-show' => 'table.readonly'} {{pill.name}}
+          %td{'ng-hide' => 'table.readonly'}
             %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
         %tr{'ng-repeat' => 'row in selectedTableRows(table)'}
           %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
@@ -36,5 +42,5 @@
         %tr
           %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
             %span(ng-include src='pillTemplateFor(pill)')
-          %td
+          %td{'ng-hide' => 'table.readonly'}
     %br
