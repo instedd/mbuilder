@@ -1,4 +1,16 @@
 GIT
+  remote: https://bitbucket.org/instedd/alto_guisso.git
+  revision: ff566691258b1bd045175cddcd7e37fe8dd87287
+  branch: master
+  specs:
+    alto_guisso (0.0.1)
+      omniauth
+      omniauth-openid
+      rack-oauth2
+      rails (>= 3.0)
+      ruby-openid
+
+GIT
   remote: https://github.com/manastech/rack-oauth2.git
   revision: 63f1b7394106ebb45dd5b7ccb88d3cfa82629d5a
   specs:
@@ -19,16 +31,6 @@ GIT
       jquery-rails (>= 3.0)
       rails (>= 3.2)
       sass-rails (>= 3.1)
-
-PATH
-  remote: ../alto_guisso
-  specs:
-    alto_guisso (0.0.1)
-      omniauth
-      omniauth-openid
-      rack-oauth2
-      rails (>= 3.0)
-      ruby-openid
 
 GEM
   remote: https://rubygems.org/
