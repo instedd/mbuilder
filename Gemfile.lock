@@ -11,8 +11,18 @@ GIT
       ruby-openid
 
 GIT
+  remote: https://bitbucket.org/instedd/resource_map_api_client.git
+  revision: f0b0cf930c5422c54134c8fa831853904ad66184
+  branch: master
+  specs:
+    resource_map_api_client (0.0.1)
+      alto_guisso
+      memoist
+
+GIT
   remote: https://github.com/manastech/rack-oauth2.git
   revision: 192e4d020a84432179297deb035f9716d4bf6622
+  branch: master
   specs:
     rack-oauth2 (1.0.5)
       activesupport (>= 2.3)
@@ -31,13 +41,6 @@ GIT
       jquery-rails (>= 3.0)
       rails (>= 3.2)
       sass-rails (>= 3.1)
-
-PATH
-  remote: ../resource_map_api_client
-  specs:
-    resource_map_api_client (0.0.1)
-      alto_guisso
-      memoist
 
 GEM
   remote: https://rubygems.org/

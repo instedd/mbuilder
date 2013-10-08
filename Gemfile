@@ -23,9 +23,9 @@ gem 'delayed_job_active_record'
 
 gem 'foreman'
 gem 'ruby-openid'
-gem 'rack-oauth2', git: "https://github.com/manastech/rack-oauth2.git"
+gem 'rack-oauth2', git: "https://github.com/manastech/rack-oauth2.git", branch: 'master'
 gem 'alto_guisso', git: "https://bitbucket.org/instedd/alto_guisso.git", branch: 'master'
-gem 'resource_map_api_client', path: '../resource_map_api_client'
+gem 'resource_map_api_client', git: "https://bitbucket.org/instedd/resource_map_api_client.git", branch: 'master'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
