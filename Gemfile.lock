@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: https://github.com/manastech/rack-oauth2.git
-  revision: 63f1b7394106ebb45dd5b7ccb88d3cfa82629d5a
+  revision: 192e4d020a84432179297deb035f9716d4bf6622
   specs:
     rack-oauth2 (1.0.5)
       activesupport (>= 2.3)
@@ -31,6 +31,13 @@ GIT
       jquery-rails (>= 3.0)
       rails (>= 3.2)
       sass-rails (>= 3.1)
+
+PATH
+  remote: ../resource_map_api_client
+  specs:
+    resource_map_api_client (0.0.1)
+      alto_guisso
+      memoist
 
 GEM
   remote: https://rubygems.org/
@@ -143,9 +150,10 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    memoist (0.9.1)
     method_source (0.8.1)
     mime-types (1.25)
-    multi_json (1.8.0)
+    multi_json (1.8.1)
     mysql2 (0.3.11)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
@@ -289,6 +297,7 @@ DEPENDENCIES
   rack-oauth2!
   rails (= 3.2.12)
   recurring_select!
+  resource_map_api_client!
   rspec
   rspec-rails
   ruby-openid

@@ -25,6 +25,7 @@ gem 'foreman'
 gem 'ruby-openid'
 gem 'rack-oauth2', git: "https://github.com/manastech/rack-oauth2.git"
 gem 'alto_guisso', git: "https://bitbucket.org/instedd/alto_guisso.git", branch: 'master'
+gem 'resource_map_api_client', path: '../resource_map_api_client'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

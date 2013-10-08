@@ -2,20 +2,20 @@ class ResourceMapController < ApplicationController
   before_filter :authenticate_user!
 
   def collections
-    response = resource_map.get "/api/collections.json"
-    render text: response.body
+    collections = resource_map.collections.all
+    collections_json = collections.map { |col| {id: col.id, name: col.name} }
+    render json: collections_json
   end
 
   def collection_fields
-    response = resource_map.get "/api/collections/#{params[:id]}/fields.json"
-    layers = JSON.parse response.body
-    fields = layers.map { |layer| layer['fields'] }.flatten
-    render json: fields
+    fields = resource_map.collections.find(params[:id]).fields
+    fields_json = fields.map { |field| {id: field.id, name: field.name} }
+    render json: fields_json
   end
 
   private
 
   def resource_map
-    Guisso.trusted_resource('http://resmap.instedd.org:3002', current_user.email)
+    ResourceMap::Api.trusted(current_user.email, "resmap.instedd.org:3002", false)
   end
 end
