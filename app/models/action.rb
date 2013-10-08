@@ -1,28 +1,4 @@
 class Action
   include Rebindable
-
-  def self.from_list(list)
-    list.map do |hash|
-      from_hash hash
-    end
-  end
-
-  def self.from_hash(hash)
-    kind = hash['kind']
-    SuitableClassFinder.find_leaf_subclass_of(self,
-      if_found: lambda{|action| action.from_hash hash},
-      if_none: proc{raise "Unknown action for '#{kind}' kind"}) do |subclass|
-        subclass.kind == kind
-      end
-  end
-
-  def self.kind
-    kind = name.split("::").last.underscore
-    kind = kind[0 .. -8] if kind.end_with?('_action')
-    kind
-  end
-
-  def kind
-    self.class.kind
-  end
+  include Hasheable
 end

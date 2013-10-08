@@ -1,6 +1,6 @@
 class Array
-  def normalize_for_elasticsearch
-    map &:normalize_for_elasticsearch
+  def to_f_if_looks_like_number
+    map &:to_f_if_looks_like_number
   end
 
   def user_friendly

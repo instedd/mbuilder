@@ -12,6 +12,6 @@ class MessagePlaceholderSolver < PlaceholderSolver
     else
       index = @pieces.index { |piece| piece.guid == guid }
       @match[index + 1]
-    end.normalize_for_elasticsearch
+    end.to_f_if_looks_like_number
   end
 end

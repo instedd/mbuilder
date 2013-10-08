@@ -7,7 +7,7 @@ class Numeric
     to_s
   end
 
-  def normalize_for_elasticsearch
+  def to_f_if_looks_like_number
     self
   end
 

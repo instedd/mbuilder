@@ -4,7 +4,7 @@ describe ValidationTrigger do
   let(:application) { new_application "Users: Phone, Name" }
 
   before(:each) do
-    application.tables.first.fields.first.valid_values = "1-5"
+    application.tables.first.fields.first.instance_eval { @valid_values = "1-5" }
     application.save!
   end
 

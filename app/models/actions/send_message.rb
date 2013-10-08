@@ -1,4 +1,4 @@
-class Actions::SendMessageAction < Action
+class Actions::SendMessage < Action
   attr_accessor :message
   attr_accessor :recipient
 

@@ -12,12 +12,16 @@ class String
     self =~ %r(^(.*?)://(.*?)$) ? $2 : self
   end
 
-  def normalize_for_elasticsearch
-    if self =~ /\A\d+(\.\d+)?\Z/
+  def to_f_if_looks_like_number
+    if is_number_like?
       to_f
     else
       self
     end
+  end
+
+  def is_number_like?
+    self =~ /\A\d+(\.\d+)?\Z/
   end
 
   def user_friendly

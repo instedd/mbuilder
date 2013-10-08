@@ -1,7 +1,5 @@
 class TableField
-  attr_accessor :name
-  attr_accessor :guid
-  attr_accessor :valid_values
+  subclass_responsibility :name, :guid, :valid_values, :'self.from_hash'
 
   def initialize(name, guid, valid_values)
     @name = name
@@ -11,12 +9,8 @@ class TableField
 
   def valid_value?(value)
     return true if @valid_values.blank?
-
-    cache_valid_values
-
-    value = value.to_f if is_number_like?(value)
-
-    @valid_values_array.any? { |range| range.include? value }
+    value = value.to_f_if_looks_like_number
+    valid_values_array.any? { |range| range.cover? value }
   end
 
   def as_json
@@ -28,14 +22,15 @@ class TableField
   end
 
   def self.from_list(list)
-    list.map { |hash| TableField.from_hash(hash) }
-  end
-
-  def self.from_hash(hash)
-    new hash['name'], hash['guid'], hash['valid_values']
+    list.map { |hash| from_hash(hash) }
   end
 
   private
+
+  def valid_values_array
+    cache_valid_values unless @valid_values_array
+    @valid_values_array
+  end
 
   def cache_valid_values
     @valid_values_array = []
@@ -48,19 +43,15 @@ class TableField
         left = left.strip
         right = right.strip
 
-        if is_number_like?(left) && is_number_like?(right)
+        if left.is_number_like? && right.is_number_like?
           left = left.to_f
           right = right.to_f
         end
         @valid_values_array.push(left .. right)
       else
-        piece = piece.to_f if is_number_like?(piece)
+        piece = piece.to_f if piece.is_number_like?
         @valid_values_array.push(piece .. piece)
       end
     end
-  end
-
-  def is_number_like?(string)
-    string =~ /\d+(\.\d+)?/
   end
 end

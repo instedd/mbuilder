@@ -1,12 +1,12 @@
-class Actions::TableFieldAction < Action
-  attr_accessor :pill
-  attr_accessor :table
-  attr_accessor :field
+class Actions::GroupBy < Action
 
-  def initialize(table, field, pill)
+  def initialize(table, field)
     @table = table
     @field = field
-    @pill = pill
+  end
+
+  def execute(context)
+    context.group_by(@table, @field)
   end
 
   def rebind_table(from_table, to_table)
@@ -23,13 +23,12 @@ class Actions::TableFieldAction < Action
   def as_json
     {
       kind: kind,
-      table: table,
-      field: field,
-      pill: pill.as_json,
+      table: @table,
+      field: @field
     }
   end
 
   def self.from_hash(hash)
-    new hash['table'], hash['field'], Pill.from_hash(hash['pill'])
+    new hash['table'], hash['field']
   end
 end

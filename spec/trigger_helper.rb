@@ -75,7 +75,7 @@ class TriggerHelper
       end
     end
 
-    @actions << Actions::SendMessageAction.from_hash('message' => bindings, 'recipient' => recipient)
+    @actions << Actions::SendMessage.from_hash('message' => bindings, 'recipient' => recipient)
   end
 
   def trigger
