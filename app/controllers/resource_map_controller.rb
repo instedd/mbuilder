@@ -7,8 +7,10 @@ class ResourceMapController < ApplicationController
   end
 
   def collection_fields
-    response = resource_map.get "/collections/#{params[:id]}/fields.json"
-    render text: response.body
+    response = resource_map.get "/api/collections/#{params[:id]}/fields.json"
+    layers = JSON.parse response.body
+    fields = layers.map { |layer| layer['fields'] }.flatten
+    render json: fields
   end
 
   private
