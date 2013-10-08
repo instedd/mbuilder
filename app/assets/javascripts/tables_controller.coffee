@@ -6,6 +6,7 @@ angular.module('mbuilder').controller 'TablesController', ['$scope', ($scope) ->
       fields: []
       editmode: true
       focusmode: true
+      kind: 'local'
 
   $scope.deleteTable = (index) ->
     $scope.tables.splice(index, 1)
