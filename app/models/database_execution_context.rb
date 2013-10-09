@@ -96,6 +96,6 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def resource_map_api
-    ResourceMap::Api.trusted(application.user.email, ResourceMap::Config.url, ResourceMap::Config.use_https)
+    @resource_map_api ||= ResourceMap::Api.trusted(application.user.email, ResourceMap::Config.url, ResourceMap::Config.use_https)
   end
 end
