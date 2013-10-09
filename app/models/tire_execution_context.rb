@@ -1,5 +1,4 @@
 class TireExecutionContext < ExecutionContext
-
   def initialize(application, placeholder_solver)
     super
     @index = application.tire_index
@@ -28,8 +27,7 @@ class TireExecutionContext < ExecutionContext
   end
 
   def insert_in_resource_map(table, properties)
-    api = ResourceMap::Api.trusted(application.user.email, "resmap.instedd.org:3002", false)
-    collection = api.collections.find(table)
+    collection = resource_map_api.collections.find(table)
 
     values = {"properties" => {}}
     properties.each do |field, value|
@@ -40,8 +38,7 @@ class TireExecutionContext < ExecutionContext
       end
     end
 
-    result = collection.sites.create values
-    result
+    collection.sites.create values
   end
 
   def update_many(table, restrictions, properties)
@@ -94,8 +91,7 @@ class TireExecutionContext < ExecutionContext
   end
 
   def select_resource_map_field(table, restrictions, field, group_by, aggregate)
-    api = ResourceMap::Api.trusted(application.user.email, "resmap.instedd.org:3002", false)
-    collection = api.collections.find(table)
+    collection = resource_map_api.collections.find(table)
     field_code = field_code_of field, collection
 
     query = restrictions.each_with_object({}) do |restriction, hash|
@@ -147,5 +143,9 @@ class TireExecutionContext < ExecutionContext
         end
       end
     end
+  end
+
+  def resource_map_api
+    ResourceMap::Api.trusted(application.user.email, ResourceMap::Config.url, ResourceMap::Config.use_https)
   end
 end
