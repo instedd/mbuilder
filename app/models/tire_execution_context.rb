@@ -41,6 +41,10 @@ class TireExecutionContext < ExecutionContext
   end
 
   def select_table_field(table, restrictions, field, group_by, aggregate)
+    application.find_table(table).select_field_in(self, restrictions, field, group_by, aggregate)
+  end
+
+  def select_local_field(table, restrictions, field, group_by, aggregate)
     if group_by.present?
       results = perform_search(table, restrictions) do |search|
         if group_by ==  field
@@ -65,6 +69,36 @@ class TireExecutionContext < ExecutionContext
         result["_source"]["properties"][field].user_friendly
       end
       apply_aggregation aggregate, value
+    end
+  end
+
+  def select_resource_map_field(table, restrictions, field, group_by, aggregate)
+    api = ResourceMap::Api.trusted(application.user.email, "resmap.instedd.org:3002", false)
+    collection = api.collections.find(table)
+    field_code = field_code_of field, collection
+
+    query = restrictions.each_with_object({}) do |restriction, hash|
+      hash[field_code_of restriction[:field], collection] = restriction[:value]
+    end
+    sites = collection.sites.where(query)
+    sites.map do |site|
+      if reserved? field
+        site.data[field_code]
+      else
+        site.data["properties"][field_code]
+      end
+    end
+  end
+
+  def reserved? field
+    ['name', 'lat', 'lng'].include? field
+  end
+
+  def field_code_of field, collection
+    if reserved? field
+      field
+    else
+      collection.field_by_id(field).code
     end
   end
 

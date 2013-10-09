@@ -10,4 +10,8 @@ class Tables::Local < Table
   def self.from_hash(hash)
     new hash['name'], hash['guid'], TableFields::Local.from_list(hash['fields'])
   end
+
+  def select_field_in(context, restrictions, field, group_by, aggregate)
+    context.select_local_field(guid, restrictions, field, group_by, aggregate)
+  end
 end

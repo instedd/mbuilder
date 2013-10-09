@@ -15,4 +15,11 @@ class Tables::ResourceMap < Table
   def self.from_hash(hash)
     new hash['name'], hash['guid'], TableFields::ResourceMap.from_list(hash['fields']), hash['id']
   end
+
+  def select_field_in(context, restrictions, field, group_by, aggregate)
+    mapped_restrictions = restrictions.clone.each do |restriction|
+      restriction[:field] = find_field(restriction[:field]).id
+    end
+    context.select_resource_map_field(id, mapped_restrictions, find_field(field).id, group_by, aggregate)
+  end
 end

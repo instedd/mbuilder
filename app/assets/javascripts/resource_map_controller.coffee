@@ -29,5 +29,4 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
         editmode: false
         focusmode: false
         readonly: true
-
 ]
