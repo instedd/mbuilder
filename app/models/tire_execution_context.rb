@@ -65,20 +65,38 @@ class TireExecutionContext < ExecutionContext
   def select_local_field(table, restrictions, field, group_by, aggregate)
     if group_by.present?
       results = perform_search(table, restrictions) do |search|
-        if group_by ==  field
-          search.facet ("#{group_by}_facet") do
-            terms group_by
-          end
-        else
+        if aggregate.present?
           search.facet ("#{group_by}_facet") do
             terms_stats group_by, field
           end
+        else
+          if group_by == field
+            search.facet ("#{group_by}_facet") do
+              terms group_by
+            end
+          end
         end
       end
+
       if aggregate.present?
-        results.facets["#{group_by}_facet"]['terms'].map { |result| result[aggregate].user_friendly }
+        results.facets["#{group_by}_facet"]['terms'].sort_by { |a| a['term'] }.map do |result|
+          result[aggregate].user_friendly
+        end
       else
-        results.facets["#{group_by}_facet"]['terms'].map { |result| result['term'].user_friendly }
+        if group_by == field
+          results.facets["#{group_by}_facet"]['terms'].sort_by { |a| a['term'] }.map do |result|
+            result['term'].user_friendly
+          end
+        else
+          results = results.map do |result|
+            result["_source"]["properties"]
+          end
+          results.group_by do |result|
+            result[group_by]
+          end.sort_by { |key, value| key }.map do |key, value|
+            ArrayWrapper.new(value.map { |a| a[field]})
+          end
+        end
       end
     else
       results = perform_search(table, restrictions)

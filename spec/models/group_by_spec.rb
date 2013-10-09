@@ -20,7 +20,7 @@ describe "Aggregate functions" do
         send_message "'1111'", "{*total(age)}"
       end
       context = accept_message 'sms://1234', 'foo'
-      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "30, 120"}])
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "120, 30"}])
     end
 
     it "groups by and shows the grouped field" do
@@ -30,7 +30,17 @@ describe "Aggregate functions" do
         send_message "'1111'", "{*name}: {*total(age)}"
       end
       context = accept_message 'sms://1234', 'foo'
-      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "foo, bar: 30, 120"}])
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: 120, 30"}])
+    end
+
+    it "shows a grouped field without aggregation" do
+      new_trigger do
+        message "foo"
+        group_by "users.name"
+        send_message "'1111'", "{*name}: {*age}"
+      end
+      context = accept_message 'sms://1234', 'foo'
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: [40, 80], [10, 20]"}])
     end
   end
 
@@ -56,7 +66,7 @@ describe "Aggregate functions" do
         send_message "'1111'", "{*total(age)}"
       end
       context.execute trigger
-      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "30, 120"}])
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "120, 30"}])
     end
 
     it "groups by and shows the grouped field" do
@@ -66,7 +76,17 @@ describe "Aggregate functions" do
         send_message "'1111'", "{*name}: {*total(age)}"
       end
       context.execute trigger
-      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "foo, bar: 30, 120"}])
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: 120, 30"}])
+    end
+
+    it "shows a grouped field without aggregation" do
+      trigger = new_trigger do
+        message "foo"
+        group_by "users.name"
+        send_message "'1111'", "{*name}: {*age}"
+      end
+      context.execute trigger
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: [40, 80], [10, 20]"}])
     end
   end
 end

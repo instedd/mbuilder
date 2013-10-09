@@ -47,19 +47,25 @@ class MemoryExecutionContext < ExecutionContext
     result_rows = rows.select &(matcher_from restrictions)
 
     if group_by.present?
-        grouped_rows = result_rows.group_by do |field|
-          field[group_by]
+      grouped_rows = result_rows.group_by do |field|
+        field[group_by]
+      end
+      values = grouped_rows.sort_by { |key, value| key }.map do |grouped_field, results_by_field|
+        results_by_field.map do|result|
+          result[field]
         end
-        values = grouped_rows.map do |grouped_field, results_by_field|
-          results_by_field.map do|result|
-            result[field]
-          end
-        end
+      end
       if group_by == field
         values.map &:first
       else
-        values.map do |value|
-          apply_aggregation aggregate, value
+        if aggregate
+          values.map do |value|
+            apply_aggregation aggregate, value
+          end
+        else
+          values.map do |group_of_fields|
+            ArrayWrapper.new(group_of_fields)
+          end
         end
       end
     else
