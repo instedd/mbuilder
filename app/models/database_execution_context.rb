@@ -1,4 +1,4 @@
-class TireExecutionContext < ExecutionContext
+class DatabaseExecutionContext < ExecutionContext
   def initialize(application, placeholder_solver)
     super
     @index = application.tire_index
@@ -42,7 +42,7 @@ class TireExecutionContext < ExecutionContext
   end
 
   def update_many(table, restrictions, properties)
-    results = perform_search(table, restrictions)
+    results = TireHelper.perform_search(application.tire_search(table), restrictions)
 
     now = Tire.format_date(Time.now)
 
@@ -63,49 +63,7 @@ class TireExecutionContext < ExecutionContext
   end
 
   def select_local_field(table, restrictions, field, group_by, aggregate)
-    if group_by.present?
-      results = perform_search(table, restrictions) do |search|
-        if aggregate.present?
-          search.facet ("#{group_by}_facet") do
-            terms_stats group_by, field
-          end
-        else
-          if group_by == field
-            search.facet ("#{group_by}_facet") do
-              terms group_by
-            end
-          end
-        end
-      end
-
-      if aggregate.present?
-        results.facets["#{group_by}_facet"]['terms'].sort_by { |a| a['term'] }.map do |result|
-          result[aggregate].user_friendly
-        end
-      else
-        if group_by == field
-          results.facets["#{group_by}_facet"]['terms'].sort_by { |a| a['term'] }.map do |result|
-            result['term'].user_friendly
-          end
-        else
-          results = results.map do |result|
-            result["_source"]["properties"]
-          end
-          results.group_by do |result|
-            result[group_by]
-          end.sort_by { |key, value| key }.map do |key, value|
-            ArrayWrapper.new(value.map { |a| a[field]})
-          end
-        end
-      end
-    else
-      results = perform_search(table, restrictions)
-
-      value = results.map do |result|
-        result["_source"]["properties"][field].user_friendly
-      end
-      apply_aggregation aggregate, value
-    end
+    ElasticSearchSelector.for(restrictions, field, group_by, aggregate).select(application.tire_search(table))
   end
 
   def select_resource_map_field(table, restrictions, field, group_by, aggregate)
@@ -134,32 +92,6 @@ class TireExecutionContext < ExecutionContext
       field
     else
       collection.field_by_id(field).code
-    end
-  end
-
-  def perform_search(table, restrictions)
-    search = application.tire_search(table)
-
-    apply_restrictions_to search, restrictions
-
-    yield search if block_given?
-
-    search.perform.results
-  end
-
-  def apply_restrictions_to(search, restrictions)
-    restrictions.each do |restriction|
-      search.query do
-        case restriction[:op]
-        when :eq
-          values = Array(restriction[:value])
-          boolean do
-            values.each do |value|
-              should { match restriction[:field], value }
-            end
-          end
-        end
-      end
     end
   end
 

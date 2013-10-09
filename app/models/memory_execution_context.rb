@@ -60,7 +60,7 @@ class MemoryExecutionContext < ExecutionContext
       else
         if aggregate
           values.map do |value|
-            apply_aggregation aggregate, value
+            Aggregator.new(aggregate).apply_to value
           end
         else
           values.map do |group_of_fields|
@@ -72,7 +72,7 @@ class MemoryExecutionContext < ExecutionContext
       value = result_rows.map do |result|
         result[field]
       end
-      apply_aggregation aggregate, value
+      Aggregator.new(aggregate).apply_to value
     end
   end
 

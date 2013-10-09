@@ -10,7 +10,7 @@ class Executor
     @triggers.each do |trigger|
       match = trigger.match(body)
       if match
-        return TireExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(message, trigger, match))
+        return DatabaseExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(message, trigger, match))
       end
     end
 

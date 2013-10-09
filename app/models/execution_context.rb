@@ -77,27 +77,4 @@ class ExecutionContext
     @entities.values.each(&:save)
     @entities = {}
   end
-
-  def apply_aggregation aggregate, value
-    return value unless aggregate.present?
-
-    values = Array(value)
-
-    case aggregate
-    when 'count'
-      values.length
-    when 'total'
-      values.sum(&:to_f).user_friendly
-    when 'mean'
-      sum = values.sum(&:to_f)
-      len = values.length
-      (len == 0 ? 0 : sum / len).user_friendly
-    when 'max'
-      values.map(&:to_f).max.user_friendly
-    when 'min'
-      values.map(&:to_f).min.user_friendly
-    else
-      raise "Unknown aggregate function: #{aggregate}"
-    end
-  end
 end
