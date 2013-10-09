@@ -14,4 +14,8 @@ class Tables::Local < Table
   def select_field_in(context, restrictions, field, group_by, aggregate)
     context.select_local_field(guid, restrictions, field, group_by, aggregate)
   end
+
+  def insert_in(context, properties)
+    context.insert_local(guid, properties)
+  end
 end

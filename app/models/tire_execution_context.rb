@@ -15,12 +15,33 @@ class TireExecutionContext < ExecutionContext
   end
 
   def insert(table, properties)
+    application.find_table(table).insert_in(self, properties)
+  end
+
+  def insert_local(table, properties)
     now = Tire.format_date(Time.now)
 
     @index.store type: table, properties: properties, created_at: now, updated_at: now
     @index.refresh
 
     @logger.insert(table, properties)
+  end
+
+  def insert_in_resource_map(table, properties)
+    api = ResourceMap::Api.trusted(application.user.email, "resmap.instedd.org:3002", false)
+    collection = api.collections.find(table)
+
+    values = {"properties" => {}}
+    properties.each do |field, value|
+      if reserved?(field)
+        values[field] = value.user_friendly
+      else
+        values["properties"][field] = value.user_friendly
+      end
+    end
+
+    result = collection.sites.create values
+    result
   end
 
   def update_many(table, restrictions, properties)
@@ -78,7 +99,7 @@ class TireExecutionContext < ExecutionContext
     field_code = field_code_of field, collection
 
     query = restrictions.each_with_object({}) do |restriction, hash|
-      hash[field_code_of restriction[:field], collection] = restriction[:value]
+      hash[field_code_of restriction[:field], collection] = restriction[:value].user_friendly
     end
     sites = collection.sites.where(query)
     sites.map do |site|

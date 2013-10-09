@@ -22,4 +22,11 @@ class Tables::ResourceMap < Table
     end
     context.select_resource_map_field(id, mapped_restrictions, find_field(field).id, group_by, aggregate)
   end
+
+  def insert_in(context, properties)
+    mapped_properties = Hash[properties.map do |field_guid, value|
+      [find_field(field_guid).id, value]
+    end]
+    context.insert_in_resource_map id, mapped_properties
+  end
 end

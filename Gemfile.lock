@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/resource_map_api_client.git
-  revision: f0b0cf930c5422c54134c8fa831853904ad66184
+  revision: d930d1cdf783f27d52052b9a1dc0c44f1e9c416e
   branch: master
   specs:
     resource_map_api_client (0.0.1)

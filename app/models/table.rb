@@ -1,6 +1,6 @@
 class Table
   include Hasheable
-  subclass_responsibility :fields, :name, :guid, :select_field_in
+  subclass_responsibility :fields, :name, :guid, :select_field_in, :insert_in
 
   def find_field(guid)
     fields.find { |field| field.guid == guid }
