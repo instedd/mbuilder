@@ -25,7 +25,7 @@
 
       %table.table.table-bordered.fields
         %tr
-          %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showTableColumnPopup(pill, $event)'}
+          %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)'}
             %span{'ng-hide' => 'table.readonly'}
               %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
             .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)', 'dragover' => 'dragOverName($event)', 'drop' => 'dropOverName($event)'}

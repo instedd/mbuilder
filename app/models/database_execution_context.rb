@@ -63,7 +63,7 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def select_local_field(table, restrictions, field, group_by, aggregate)
-    ElasticSearchSelector.for(restrictions, field, group_by, aggregate).select(application.tire_search(table))
+    ElasticSearchSelector.for(restrictions, field, group_by, aggregate).select(application.tire_search table)
   end
 
   def select_resource_map_field(table, restrictions, field, group_by, aggregate)

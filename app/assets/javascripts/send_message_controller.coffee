@@ -98,9 +98,14 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     true
 
   $scope.showAggregateFunctionsPopup = (pill, event) ->
+    $scope.hidePopups()
+    div = if $scope.lookupTableByField(pill.guid).readonly
+      $('#aggregate-functions-error')
+    else
+      $('#aggregate-functions')
+
     $scope.aggregateFunctionPopup.pill = pill
 
-    div = $('#aggregate-functions')
     div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
     div.show()
 
