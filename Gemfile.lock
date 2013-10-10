@@ -1,6 +1,6 @@
 GIT
   remote: https://bitbucket.org/instedd/alto_guisso.git
-  revision: 40518c9a63b6d258b1fab9ecbdc1bfa3e0b9816b
+  revision: f1f4edaefdff1a65a5b753d74e9e59fa26d07bd7
   branch: master
   specs:
     alto_guisso (0.0.1)
@@ -128,7 +128,7 @@ GEM
       activesupport (>= 3.1, < 4.1)
       haml (~> 3.1)
       railties (>= 3.1, < 4.1)
-    hashie (1.2.0)
+    hashie (2.0.5)
     hashr (0.0.22)
     highline (1.6.19)
     hike (1.2.3)
@@ -167,8 +167,8 @@ GEM
       net-ssh (>= 2.6.5)
     ng-rails-csrf (0.1.0)
     oauth (0.4.7)
-    omniauth (1.1.1)
-      hashie (~> 1.2)
+    omniauth (1.1.4)
+      hashie (>= 1.2, < 3)
       rack
     omniauth-openid (1.0.1)
       omniauth (~> 1.0)
@@ -227,7 +227,7 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
-    ruby-openid (2.2.3)
+    ruby-openid (2.3.0)
     rvm-capistrano (1.2.2)
       capistrano (>= 2.0.0)
     sass (3.2.10)
@@ -263,7 +263,7 @@ GEM
       json (>= 1.8.0)
       mime-types (>= 1.16)
       oauth (>= 0.4.7)
-    tzinfo (0.3.37)
+    tzinfo (0.3.38)
     uglifier (2.1.2)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
