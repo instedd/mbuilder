@@ -17,7 +17,7 @@ class Tables::ResourceMap < Table
   end
 
   def select_field_in(context, restrictions, field, group_by, aggregate)
-    mapped_restrictions = restrictions.clone.each do |restriction|
+    mapped_restrictions = restrictions.map(&:clone).each do |restriction|
       restriction[:field] = find_field(restriction[:field]).id
     end
     context.select_resource_map_field(id, mapped_restrictions, find_field(field).id, group_by, aggregate)
