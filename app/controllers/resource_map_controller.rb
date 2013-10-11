@@ -16,6 +16,6 @@ class ResourceMapController < ApplicationController
   private
 
   def resource_map
-    ResourceMap::Api.trusted(current_user.email, "resmap.instedd.org:3002", false)
+    ResourceMap::Api.trusted(current_user.email, ResourceMap::Config.url, ResourceMap::Config.use_https)
   end
 end
