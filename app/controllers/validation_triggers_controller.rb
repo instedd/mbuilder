@@ -6,6 +6,11 @@ class ValidationTriggersController < ApplicationController
 
   def show
     load_validation_trigger
+
+    if params[:valid_values]
+      field = application.table_of(params[:id]).find_field(params[:id])
+      field.valid_values = params[:valid_values]
+    end
   end
 
   def update

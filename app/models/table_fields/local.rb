@@ -1,5 +1,6 @@
 class TableFields::Local < TableField
-  attr_reader :name, :guid, :valid_values
+  attr_reader :name, :guid
+  attr_accessor :valid_values
 
   def initialize(name, guid, valid_values)
     @name = name

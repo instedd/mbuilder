@@ -1,5 +1,6 @@
 class TableFields::ResourceMap < TableField
-  attr_reader :name, :guid, :valid_values, :id
+  attr_reader :name, :guid, :id
+  attr_accessor :valid_values
 
   def initialize(name, guid, valid_values, id)
     @name = name

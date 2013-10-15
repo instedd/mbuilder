@@ -8,7 +8,8 @@ angular.module('mbuilder').controller 'ValidValuesController', ['$scope', ($scop
       $scope.hidePopups()
 
   $scope.defineValidationTrigger = ->
-    window.open "/applications/#{$scope.applicationId}/validation_triggers/#{$scope.validValuesPopup.field.guid}"
+    field = $scope.validValuesPopup.field
+    window.open "/applications/#{$scope.applicationId}/validation_triggers/#{field.guid}?valid_values=#{escape field.valid_values}"
     $scope.hidePopups()
 
   $scope.hideGroupByOption = () ->
