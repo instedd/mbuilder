@@ -92,6 +92,7 @@ a.delete {
   background: #ddd;
   margin-left: 4px;
   margin-right: 4px;
+  cursor: move;
 }
 
 .pill.new {
@@ -103,12 +104,14 @@ a.delete {
   border: 1px dashed #ddd;
   color: #999;
   background: #f3f3f3;
+  cursor: move;
 }
 
 .pill.unbound {
   border: 1px dashed red;
   color: #ff6666;
   background-color: #ffeeee;
+  cursor: move;
 }
 
 .pill.table-ref {
@@ -130,6 +133,7 @@ a.delete {
   background: #f1FFf1;
   margin-left: 4px;
   margin-right: 4px;
+  cursor: move;
 }
 
 .text {
