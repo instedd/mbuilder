@@ -29,4 +29,25 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
         editmode: false
         focusmode: false
         readonly: true
+
+  $scope.$on 'updateCollection', (event, table) ->
+    table = table
+    call = $http.get("/resource_map/collections/#{table.id}/fields.json")
+    call.success (data, status, headers, config) ->
+      fields = []
+
+      fields.push( _.detect table.fields, (field) -> field.id == "name")
+      fields.push( _.detect table.fields, (field) -> field.id == "lat")
+      fields.push( _.detect table.fields, (field) -> field.id == "lng")
+
+      for field in data
+        f = _.detect table.fields, (f) -> f.id == field.id
+        guid = if f
+          f.guid
+        else
+          window.guid()
+
+        fields.push guid: guid, id: field.id, name: field.name
+
+      table.fields = fields
 ]

@@ -51,6 +51,9 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     else
       addGroupByAction args
 
+  $rootScope.$on 'refreshCollection', (event, args) ->
+    $rootScope.$broadcast 'updateCollection', args
+
   $rootScope.$on 'pillOverFieldValue', (event, args) ->
     if tableIsUsedInAnCreateOrSelectAction(args.table.guid)
       createTableFieldAction 'store_entity_value', args

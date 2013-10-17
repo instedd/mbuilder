@@ -71,4 +71,7 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
         rows = _.select rows, (row) -> row[action.field] == text
 
     rows
+
+  $scope.updateCollection = (table) ->
+    $scope.$emit 'refreshCollection', table
 ]
