@@ -64,13 +64,13 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
 
   $scope.lookupTableAction = (tableGuid) ->
     for action in $scope.actions
-      if action.table == tableGuid
+      if action.table == tableGuid && action.kind != 'group_by'
         return action
     null
 
   $scope.lookupFieldAction = (fieldGuid) ->
     for action in $scope.actions
-      if action.field == fieldGuid
+      if action.field == fieldGuid && action.kind != 'group_by'
         return action
     null
 
