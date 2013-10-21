@@ -16,7 +16,7 @@ class Message
       piece.append_pattern(@pattern, i, pieces.length)
     end
     @pattern << "\\s*\\Z"
-    @pattern = /#{@pattern}/
+    @pattern = /#{@pattern}/i
   end
 
   def match incoming_message
