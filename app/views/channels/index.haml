@@ -4,12 +4,11 @@
   = form_tag(new_application_channel_path, method: :get) do
     Create new
     = select_tag :kind, pigeon_nuntium_channel_kinds_for_select
-    = submit_tag "Go"
+    = submit_tag "Go", :class => 'btn btn-primary'
 
 %ul
   - channels.each do |channel|
     %li
       #{channel.name}:
-      = link_to "edit", edit_application_channel_path(application, channel)
-      |
-      = link_to "delete", [application, channel], method: :delete, confirm: "Are you sure you want to delete the channel '#{channel.name}'"
+      = link_to "edit", edit_application_channel_path(application, channel), :class => 'btn'
+      = link_to "delete", [application, channel], method: :delete, confirm: "Are you sure you want to delete the channel '#{channel.name}'", :class => 'btn btn-danger'
