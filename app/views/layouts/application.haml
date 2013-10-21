@@ -29,7 +29,7 @@
                 %a.btn.btn-link{href: guisso_sign_in_path_for(:user)}
                   Sign in
 
-  .container-fluid
+  .container-fluid.body
     - if flash[:notice].present?
       .alert-container
         .alert.alert-success
@@ -42,3 +42,9 @@
           = flash[:alert]
 
     = yield
+
+  .footer-container
+    .footer
+      .footer-content
+        .right
+          Version: #{Mbuilder::Application.config.version_name}
