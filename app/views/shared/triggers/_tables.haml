@@ -22,7 +22,8 @@
           %editable-input{'model' => 'table.name', 'editmode' => 'table.editmode', 'focusmode' => 'table.focusmode'}
         %span{'ng-show' => 'table.readonly'}
           {{table.name}} (from {{table.kind}})
-          %a.refresh{href: 'javascript:', 'ng-click' => 'updateCollection(table)'} (Refresh)
+          %a.refresh{href: 'javascript:', 'ng-click' => 'updateCollection(table)'}
+            %i.icon-refresh
 
       .scroll
         %table.table.table-bordered.fields
