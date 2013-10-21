@@ -9,7 +9,7 @@ class ResourceMapController < ApplicationController
 
   def collection_fields
     fields = resource_map.collections.find(params[:id]).fields
-    fields_json = fields.map { |field| {id: field.id, name: field.name} }
+    fields_json = fields.map { |field| {id: field.id, name: field.name, kind: field.kind} }
     render json: fields_json
   end
 

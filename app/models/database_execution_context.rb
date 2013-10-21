@@ -68,23 +68,36 @@ class DatabaseExecutionContext < ExecutionContext
 
   def select_resource_map_field(table, restrictions, field, group_by, aggregate)
     collection = resource_map_api.collections.find(table)
-    field_code = field_code_of field, collection
+    field_code = field_code_of field.id, collection
 
     query = restrictions.each_with_object({}) do |restriction, hash|
       hash[field_code_of restriction[:field], collection] = restriction[:value].user_friendly
     end
     sites = collection.sites.where(query)
+
+    if multiple_options? field.kind
+      mapping = collection.field_by_id(field.id)
+    end
+
     sites.map do |site|
-      if reserved? field
+      if reserved? field.id
         site.data[field_code]
       else
-        site.data["properties"][field_code]
+        if mapping
+          mapping.options.find{ |o| o['code'] == site.data["properties"][field_code]}[field.value]
+        else
+          site.data["properties"][field_code]
+        end
       end
     end
   end
 
   def reserved? field
     ['name', 'lat', 'lng'].include? field
+  end
+
+  def multiple_options? field
+    ['hierarchy', 'select_one', 'select_many'].include? field
   end
 
   def field_code_of field, collection

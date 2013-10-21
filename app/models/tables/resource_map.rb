@@ -20,7 +20,7 @@ class Tables::ResourceMap < Table
     mapped_restrictions = restrictions.map(&:clone).each do |restriction|
       restriction[:field] = find_field(restriction[:field]).id
     end
-    context.select_resource_map_field(id, mapped_restrictions, find_field(field).id, group_by, aggregate)
+    context.select_resource_map_field(id, mapped_restrictions, find_field(field), group_by, aggregate)
   end
 
   def insert_in(context, properties)

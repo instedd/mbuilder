@@ -18,7 +18,11 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
       fields.push guid: window.guid(), id: "lat", name: "Latitude"
       fields.push guid: window.guid(), id: "lng", name: "Longitude"
       for field in data
-        fields.push guid: window.guid(), id: field.id, name: field.name
+        if $scope.isMultipleOptionsField field
+          fields.push guid: window.guid(), id: field.id, name: "#{field.name} (label)", kind: field.kind, value: "label"
+          fields.push guid: window.guid(), id: field.id, name: "#{field.name} (code)", kind: field.kind, value: "code"
+        else
+          fields.push guid: window.guid(), id: field.id, name: field.name, kind: field.kind
 
       $scope.tables.push
         guid: window.guid()
@@ -41,13 +45,20 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
       fields.push( _.detect table.fields, (field) -> field.id == "lng")
 
       for field in data
-        f = _.detect table.fields, (f) -> f.id == field.id
-        guid = if f
-          f.guid
-        else
-          window.guid()
+        existing_fields = _.select table.fields, (f) -> f.id == field.id
+        _.each existing_fields, (f) ->
+          guid = if f
+            f.guid
+          else
+            window.guid()
 
-        fields.push guid: guid, id: field.id, name: field.name
+          if $scope.isMultipleOptionsField field
+            fields.push guid: guid, id: field.id, name: "#{field.name} (#{f.value})", kind: field.kind, value: f.value
+          else
+            fields.push guid: guid, id: field.id, name: field.name, kind: field.kind
 
       table.fields = fields
+
+  $scope.isMultipleOptionsField = (field) ->
+    _.include ["select_one", "select_many", "hierarchy"], field.kind
 ]
