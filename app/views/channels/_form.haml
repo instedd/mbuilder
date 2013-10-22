@@ -14,12 +14,16 @@
 
   = hidden_field_tag :kind, params[:kind]
 
-  %div
-    = f.label :name
-    = f.text_field :name, autofocus: true
+  .row
+    .span5
+      = f.label :name
+      = f.text_field :name, autofocus: true
 
-  = pigeon_render_channel(@pigeon_channel, :channel_data).gsub("<br />", "").html_safe
+  .row
+    .span5
+      = pigeon_render_channel(@pigeon_channel, :channel_data).gsub("<br />", "").html_safe
 
   %br
-
-  = f.submit class: 'btn btn-primary'
+  .row
+    .span5
+      = f.submit class: 'btn btn-primary'

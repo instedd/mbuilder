@@ -11,6 +11,18 @@ GIT
       ruby-openid
 
 GIT
+  remote: https://bitbucket.org/instedd/pigeon.git
+  revision: 91510882e5213d07f3be4cf587c188c74ba9548d
+  branch: master
+  specs:
+    instedd-pigeon (0.3.1)
+      json
+      rails (~> 3.2)
+      rest-client
+      twilio-ruby
+      twitter_oauth
+
+GIT
   remote: https://bitbucket.org/instedd/resource_map_api_client.git
   revision: c7e1d6de3d1bc9b4bf73a31266f083c5a2422814
   branch: master
@@ -135,12 +147,6 @@ GEM
     httpclient (2.3.4.1)
     i18n (0.6.5)
     ice_cube (0.11.0)
-    instedd-pigeon (0.3.1)
-      json
-      rails (~> 3.2)
-      rest-client
-      twilio-ruby
-      twitter_oauth
     journey (1.0.4)
     jquery-rails (3.0.4)
       railties (>= 3.0, < 5.0)
@@ -288,7 +294,7 @@ DEPENDENCIES
   foreman
   haml-rails
   ice_cube
-  instedd-pigeon
+  instedd-pigeon!
   jquery-rails
   machinist
   mysql2

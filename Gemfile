@@ -11,7 +11,7 @@ gem 'haml-rails'
 gem 'angularjs-rails'
 gem 'underscore-rails'
 gem 'decent_exposure'
-gem 'instedd-pigeon', :require => 'pigeon'
+gem 'instedd-pigeon', git: "https://bitbucket.org/instedd/pigeon.git", branch: 'master', :require => 'pigeon'
 gem 'ng-rails-csrf'
 gem "tire"
 
