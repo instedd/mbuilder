@@ -10,5 +10,4 @@
     - rows.each do |properties|
       %tr
         - table.fields.each do |field|
-          %td= properties[field.guid].user_friendly
-
+          %td= properties[field.guid].try(:user_friendly)
