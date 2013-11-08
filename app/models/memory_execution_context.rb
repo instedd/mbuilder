@@ -7,7 +7,7 @@ class MemoryExecutionContext < ExecutionContext
   end
 
   def execute_many triggers
-    triggers.each { |trigger| execute trigger }
+    triggers.each { |trigger| execute trigger rescue nil }
     @db
   end
 
