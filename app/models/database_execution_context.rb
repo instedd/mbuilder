@@ -79,7 +79,7 @@ class DatabaseExecutionContext < ExecutionContext
       mapping = collection.field_by_id(field.id)
     end
 
-    sites.map do |site|
+    results = sites.map do |site|
       if reserved? field.id
         site.data[field_code]
       else
@@ -90,6 +90,8 @@ class DatabaseExecutionContext < ExecutionContext
         end
       end
     end
+    results = results.first if (results.is_an? Array) && results.one?
+    results.to_f_if_looks_like_number
   end
 
   def reserved? field

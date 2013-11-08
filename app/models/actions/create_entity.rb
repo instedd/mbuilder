@@ -3,6 +3,8 @@ class Actions::CreateEntity < Actions::TableField
     value = pill.value_in(context)
     value = value.first if (value.is_an? Array) && value.one?
 
+    value = value.to_f_if_looks_like_number
+
     context.check_valid_value!(table, field, value)
 
     entity = context.new_entity(table)
