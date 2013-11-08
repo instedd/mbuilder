@@ -82,6 +82,6 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
   $scope.isFirstFilter = (action) ->
     (_.select $scope.actions, (a) ->
-      return a.kind == "select_entity"
+      return a.kind == "select_entity" and a.table == action.table
     )[0] == action
 ]
