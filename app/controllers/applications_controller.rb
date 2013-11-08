@@ -37,7 +37,7 @@ class ApplicationsController < ApplicationController
     @application_tab = :data
     @data = if application.tire_index.exists?
       (application.tables || []).map do |table|
-        [table, application.tire_search(table.guid).perform.results.map { |result| result["_source"]["properties"] }]
+        [table, application.tire_search(table.guid).size(100).perform.results.map { |result| result["_source"]["properties"] }]
       end
     else
       []
