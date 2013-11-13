@@ -34,6 +34,10 @@ class PeriodicTask < Trigger
     context = DatabaseExecutionContext.new(application, NullPlaceholderSolver.new)
     context.execute self
     schedule_job_for schedule.next_occurrence scheduled_time
+    nuntium = Pigeon::Nuntium.from_config
+    context.messages.each do |message|
+      nuntium.send_ao message
+    end
     context
   end
 
