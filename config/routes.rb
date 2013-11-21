@@ -20,5 +20,7 @@ Mbuilder::Application.routes.draw do
   match '/resource_map/collections.json' => 'resource_map#collections'
   match '/resource_map/collections/:id/fields.json' => 'resource_map#collection_fields'
 
+  mount Listings::Engine => '/listings'
+
   root :to => 'home#index'
 end

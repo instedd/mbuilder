@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require recurring_select
 //= require underscore
+//= require listings
 //= require bootstrap
 //= require angular
 //= require_tree ./angular/

@@ -8,6 +8,9 @@
 
 - if message_triggers.present?
   %h4 Message Triggers
+
+  = render_listing :message_triggers
+
   %ul
     - message_triggers.each do |trigger|
       %li

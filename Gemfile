@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 gem 'mysql2'
 
 gem 'jquery-rails'
@@ -26,6 +26,8 @@ gem 'ruby-openid'
 gem 'rack-oauth2', git: "https://github.com/manastech/rack-oauth2.git", branch: 'master'
 gem 'alto_guisso', git: "https://bitbucket.org/instedd/alto_guisso.git", branch: 'master'
 gem 'resource_map_api_client', git: "https://bitbucket.org/instedd/resource_map_api_client.git", branch: 'master'
+
+gem 'listings', github: "manastech/listings", branch: 'master'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
