@@ -10,10 +10,10 @@ class ElasticRecord
   end
 
   def where(options)
-    ElasticQuery.where(self, options)
+    all.where!(options)
   end
 
   def all
-    ElasticQuery.all(self)
+    ElasticQuery.new(self)
   end
 end
