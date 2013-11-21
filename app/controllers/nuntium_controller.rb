@@ -11,9 +11,13 @@ class NuntiumController < ApplicationController
 
   def receive_at
     channel = Channel.find_by_pigeon_name params[:channel]
-    context = channel.application.accept_message params
-    if context && context.messages.any?
-      render json: context.messages.to_json
+    if channel
+      context = channel.application.accept_message params
+      if context && context.messages.any?
+        render json: context.messages.to_json
+      else
+        head :ok
+      end
     else
       head :ok
     end
