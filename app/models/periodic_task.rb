@@ -35,6 +35,7 @@ class PeriodicTask < Trigger
     context.execute self
     schedule_job_for schedule.next_occurrence scheduled_time
     nuntium = Pigeon::Nuntium.from_config
+    # TODO: refactor this to avoid multiple messaging. Nuntium can handle multiple recipients
     context.messages.each do |message|
       nuntium.send_ao message
     end

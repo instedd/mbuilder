@@ -16,6 +16,14 @@ class ExecutionLogger
     @actions << [:invalid_value, table_guid, field_guid, value]
   end
 
+  def error(description)
+    @actions << [:error, description]
+  end
+
+  def warning(description)
+    @actions << [:warning, description]
+  end
+
   def find_table(guid)
     @application.find_table(guid)
   end
@@ -46,6 +54,9 @@ class ExecutionLogger
         table = find_table(table_guid)
         field = table.find_field(field_guid)
         "Tried to insert invalid value '#{value}' into #{table.name} #{field.name}"
+      when :error, :warning
+        severity, description = action
+        "#{severity.titleize}: #{description}"
       end
     end
   end

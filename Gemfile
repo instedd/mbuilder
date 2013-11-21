@@ -14,10 +14,10 @@ gem 'decent_exposure'
 gem 'instedd-pigeon', git: "https://bitbucket.org/instedd/pigeon.git", branch: 'master', :require => 'pigeon'
 gem 'ng-rails-csrf'
 gem "tire"
+gem "elasticsearch"
 
 gem "ice_cube"
-gem 'recurring_select', git: "https://github.com/nekron/recurring_select"
-# gem 'recurring_select', path: "~/Projects/recurring_select"
+gem 'recurring_select', git: "https://github.com/nekron/recurring_select", branch: 'master'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 

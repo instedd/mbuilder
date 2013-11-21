@@ -10,15 +10,16 @@ class NuntiumController < ApplicationController
   end
 
   def receive_at
-    channel = Channel.find_by_pigeon_name params[:channel]
-    if channel
+    begin
+      channel = Channel.find_by_pigeon_name params[:channel]
       context = channel.application.accept_message params
-      if context && context.messages.any?
+      if context.messages.any?
         render json: context.messages.to_json
       else
         head :ok
       end
-    else
+    rescue Exception => e
+      ExecutionLogger.new.error(e.message) #TODO: make this a model and save it!
       head :ok
     end
   end
