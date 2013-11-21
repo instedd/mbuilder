@@ -46,6 +46,7 @@ GIT
 GIT
   remote: https://github.com/nekron/recurring_select
   revision: 9c3299232763f8725b2b2bbdefd02377ebf53b76
+  branch: master
   specs:
     recurring_select (1.2.1.rc1)
       coffee-rails (>= 3.1)
@@ -126,11 +127,21 @@ GEM
       warden (~> 1.2.1)
     diff-lcs (1.2.4)
     dotenv (0.9.0)
+    elasticsearch (0.4.1)
+      elasticsearch-api (= 0.4.1)
+      elasticsearch-transport (= 0.4.1)
+    elasticsearch-api (0.4.1)
+      multi_json
+    elasticsearch-transport (0.4.1)
+      faraday
+      multi_json
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
     faker (1.0.1)
       i18n (~> 0.4)
+    faraday (0.8.8)
+      multipart-post (~> 1.2.0)
     foreman (0.63.0)
       dotenv (>= 0.7)
       thor (>= 0.13.6)
@@ -163,6 +174,7 @@ GEM
     method_source (0.8.1)
     mime-types (1.25)
     multi_json (1.8.1)
+    multipart-post (1.2.0)
     mysql2 (0.3.11)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
@@ -290,6 +302,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   devise
+  elasticsearch
   faker
   foreman
   haml-rails
