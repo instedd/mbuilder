@@ -14,14 +14,18 @@ module Listings
 
         listing_class = Class.new(Listings::Base)
         listing_class.send(:define_method, :name, lambda { |*args| name })
-        listing_class.paginates_per 1
+
+        listing_class.send(:define_method, :has_active_model_source?, lambda { |*args| true })
+
+        listing_class.export :csv, :xls
+
         listing_class.model do
           elastic_record.all
         end
 
         table.fields.each do |app_field|
           listing_class.column app_field.name do |item|
-            item[app_field.guid]
+            item[app_field.guid].try(:user_friendly)
           end
         end
 

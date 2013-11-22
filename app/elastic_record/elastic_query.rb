@@ -2,7 +2,7 @@ class ElasticQuery
   DefaultPageSize = 10
 
   attr_reader :record
-  delegate :client, :index, :type, to: :record
+  delegate :client, :index, :type, :human_attribute_name, to: :record
   include Enumerable
 
   def initialize(record, where_options = {}, order = [], page = nil, page_size = DefaultPageSize)

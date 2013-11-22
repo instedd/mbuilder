@@ -22,4 +22,8 @@ class ElasticRecord
 
     result[type]['properties']['properties']['properties'].keys
   end
+
+  def human_attribute_name(name)
+    name
+  end
 end
