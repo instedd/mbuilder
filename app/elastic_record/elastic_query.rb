@@ -1,9 +1,11 @@
 class ElasticQuery
+  DefaultPageSize = 10
+
   attr_reader :record
   delegate :client, :index, :type, to: :record
   include Enumerable
 
-  def initialize(record, where_options = {}, order = [], page = nil, page_size = 10)
+  def initialize(record, where_options = {}, order = [], page = nil, page_size = DefaultPageSize)
     @record = record
     @where_options = where_options
     @order = order
@@ -73,7 +75,7 @@ class ElasticQuery
     results = client.search index: index, type: type, body: body
 
     total = results["hits"]["total"]
-    total_pages = total / @page_size
+    @total_pages = total / @page_size
 
     results["hits"]["hits"].each do |result|
       yield result["_source"]["properties"].with_indifferent_access
@@ -81,7 +83,7 @@ class ElasticQuery
 
     if @page.nil?
       current_page = self.next_page
-      while current_page.page <= total_pages
+      while current_page.page <= @total_pages
         current_page.each do |s|
           yield s
         end
@@ -90,6 +92,10 @@ class ElasticQuery
     end
 
     self
+  end
+
+  def empty?
+    count == 0
   end
 
   def clone
@@ -105,7 +111,7 @@ class ElasticQuery
   end
 
   def page!(page)
-    @page = page
+    @page = page.to_i
     self
   end
 
@@ -114,8 +120,20 @@ class ElasticQuery
   end
 
   def per!(page_size)
-    @page_size = page_size
+    @page_size = page_size || DefaultPageSize
     self
+  end
+
+  def current_page
+    @page
+  end
+
+  def total_pages
+    @total_pages
+  end
+
+  def limit_value
+    @page_size
   end
 
   def next_page

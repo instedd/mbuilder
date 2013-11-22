@@ -16,4 +16,10 @@ class ElasticRecord
   def all
     ElasticQuery.new(self)
   end
+
+  def columns
+    result = client.indices.get_mapping(index: index, type: type)
+
+    result[type]['properties']['properties']['properties'].keys
+  end
 end
