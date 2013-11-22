@@ -59,6 +59,11 @@ describe "ElasticQuery" do
     ])
   end
 
+  it "should inform the correct number of pages" do
+    results = users.all.per(3)
+    results.total_pages.should be(2)
+  end
+
   it "should iterate through all pages" do
     results = users.all.order(name: :asc, age: :asc).per(2)
     results.count.should be(4)
