@@ -48,7 +48,12 @@ class ElasticQuery
 
   def each
     results["hits"]["hits"].each do |result|
-      yield result["_source"]["properties"].with_indifferent_access
+      new_record = @record.new
+      new_record.id = result["_id"]
+      new_record.properties = result["_source"]["properties"].with_indifferent_access
+      # result["_source"]["properties"]["id"]= result["_id"]
+      # yield result["_source"]["properties"].with_indifferent_access
+      yield new_record
     end
 
     if @page.nil?
@@ -103,13 +108,7 @@ class ElasticQuery
   end
 
   def total_pages
-    @total_pages ||= calculate_total_pages
-  end
-
-  private
-
-  def calculate_total_pages
-    (results["hits"]["total"].fdiv @page_size).ceil
+    @total_pages ||= (results["hits"]["total"].fdiv @page_size).ceil
   end
 
   def results

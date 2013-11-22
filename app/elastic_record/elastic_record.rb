@@ -1,29 +1,34 @@
 class ElasticRecord
-  attr_reader :index, :type, :client
 
-  # (Elasticsearch::Client.new log: true).search index: index_name, type: table, body: yield
-
-  def initialize(index, type)
-    @index = index
-    @type = type
-    @client = Elasticsearch::Client.new log: false
+  class << self
+    attr_accessor :index, :type, :client
   end
 
-  def where(options)
+  attr_accessor :id, :properties
+
+  def self.for(index, type)
+    table = Class.new(self)
+    table.index = index
+    table.type = type
+    table.client = Elasticsearch::Client.new log: false
+    table
+  end
+
+  def self.where(options)
     all.where!(options)
   end
 
-  def all
+  def self.all
     ElasticQuery.new(self)
   end
 
-  def columns
+  def self.columns
     result = client.indices.get_mapping(index: index, type: type)
 
     result[type]['properties']['properties']['properties'].keys
   end
 
-  def human_attribute_name(name)
+  def self.human_attribute_name(name)
     name
   end
 end
