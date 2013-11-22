@@ -25,16 +25,16 @@ module Listings
 
         table.fields.each do |app_field|
           listing_class.column app_field.name do |item|
-            item[app_field.guid].try(:user_friendly)
+            item.properties[app_field.guid].try(:user_friendly)
           end
         end
 
-        # listing_class.column '', class: 'right' do |trigger|
-        #   [
-        #     link_to("edit", edit_application_message_trigger_path(@application, trigger)),
-        #     link_to("delete", [@application, trigger], method: :delete, confirm: "Are you sure you want to delete the trigger '#{trigger.name}'")
-        #   ].join(' ').html_safe
-        # end
+        listing_class.column '', class: 'right' do |record|
+          [
+            link_to("edit", edit_application_table_record_path(application_id, type, record.id)),
+            link_to("delete", application_table_record_path(application_id, type, record.id), method: :delete, confirm: "Are you sure you want to delete the record?")
+          ].join(' ').html_safe
+        end
 
         listing_class
       else

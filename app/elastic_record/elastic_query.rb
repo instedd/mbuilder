@@ -47,13 +47,8 @@ class ElasticQuery
   end
 
   def each
-    results["hits"]["hits"].each do |result|
-      new_record = @record.new
-      new_record.id = result["_id"]
-      new_record.properties = result["_source"]["properties"].with_indifferent_access
-      # result["_source"]["properties"]["id"]= result["_id"]
-      # yield result["_source"]["properties"].with_indifferent_access
-      yield new_record
+    results.each do |result|
+      yield result
     end
 
     if @page.nil?
@@ -108,37 +103,50 @@ class ElasticQuery
   end
 
   def total_pages
-    @total_pages ||= (results["hits"]["total"].fdiv @page_size).ceil
+    initialize_results unless @total_pages
+    @total_pages
   end
 
   def results
-    @results ||= begin
-      query = case @where_options.keys.size
-      when 0
-        { match_all: {} }
-      when 1
-        k, v = @where_options.first
-        { match: {k.to_s => {query: v}}}
-      else
-        { bool: {must: (@where_options.map { |k, v| {term: {k.to_s => v}} }) } }
-      end
+    initialize_results unless @results
+    @results
+  end
 
-      body = { query: query }
+  def initialize_results
+    query = case @where_options.keys.size
+    when 0
+      { match_all: {} }
+    when 1
+      k, v = @where_options.first
+      { match: {k.to_s => {query: v}}}
+    else
+      { bool: {must: (@where_options.map { |k, v| {term: {k.to_s => v}} }) } }
+    end
 
-      unless @page.nil?
-        body[:from] = (@page - 1) * @page_size
-      end
-      body[:size] = @page_size
+    body = { query: query }
 
-      unless @order.empty?
-        body[:sort] = @order.map do |sort|
-          sort.map do |field, direction|
-            {field.to_s => direction.to_s}
-          end
-        end.flatten
-      end
+    unless @page.nil?
+      body[:from] = (@page - 1) * @page_size
+    end
+    body[:size] = @page_size
 
-      client.search index: index, type: type, body: body
+    unless @order.empty?
+      body[:sort] = @order.map do |sort|
+        sort.map do |field, direction|
+          {field.to_s => direction.to_s}
+        end
+      end.flatten
+    end
+
+    response =  client.search index: index, type: type, body: body
+
+    @total_pages = (response["hits"]["total"].fdiv @page_size).ceil
+
+    @results = response["hits"]["hits"].map do |result|
+      new_record = @record.new
+      new_record.id = result["_id"]
+      new_record.properties = result["_source"]["properties"].with_indifferent_access
+      new_record
     end
   end
 end

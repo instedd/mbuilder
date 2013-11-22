@@ -8,33 +8,35 @@
 
 - if message_triggers.present?
   %h4 Message Triggers
-
   = render_listing :message_triggers
 
-  %ul
-    - message_triggers.each do |trigger|
-      %li
-        #{trigger.name}:
-        = link_to "edit", edit_application_message_trigger_path(application, trigger)
-        |
-        = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the trigger '#{trigger.name}'"
+  / %ul
+  /   - message_triggers.each do |trigger|
+  /     %li
+  /       #{trigger.name}:
+  /       = link_to "edit", edit_application_message_trigger_path(application, trigger)
+  /       |
+  /       = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the trigger '#{trigger.name}'"
 
 - if periodic_tasks.present?
   %h4 Periodic Tasks
-  %ul
-    - periodic_tasks.each do |periodic_task|
-      %li
-        #{periodic_task.name}:
-        = link_to "edit", edit_application_periodic_task_path(application, periodic_task)
-        |
-        = link_to "delete", [application, periodic_task], method: :delete, confirm: "Are you sure you want to delete the periodic_task '#{periodic_task.name}'"
+  = render_listing :periodic_tasks
+
+  / %ul
+  /   - periodic_tasks.each do |periodic_task|
+  /     %li
+  /       #{periodic_task.name}:
+  /       = link_to "edit", edit_application_periodic_task_path(application, periodic_task)
+  /       |
+  /       = link_to "delete", [application, periodic_task], method: :delete, confirm: "Are you sure you want to delete the periodic_task '#{periodic_task.name}'"
 
 - if validation_triggers.present?
   %h4 Validation triggers
-  %ul
-    - validation_triggers.each do |trigger|
-      %li
-        #{trigger.table_name} #{trigger.field_name}:
-        = link_to "edit", application_validation_trigger_path(application, trigger.field_guid)
-        |
-        = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the validation trigger for '#{trigger.table_name} #{trigger.field_name}'"
+  = render_listing :validation_triggers
+  / %ul
+  /   - validation_triggers.each do |trigger|
+  /     %li
+  /       #{trigger.table_name} #{trigger.field_name}:
+  /       = link_to "edit", application_validation_trigger_path(application, trigger.field_guid)
+  /       |
+  /       = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the validation trigger for '#{trigger.table_name} #{trigger.field_name}'"

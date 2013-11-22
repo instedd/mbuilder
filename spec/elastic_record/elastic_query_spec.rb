@@ -1,7 +1,8 @@
 require "spec_helper"
+
 describe "ElasticQuery" do
   let!(:application) { new_application "users: Age, Name" }
-  let(:users) { ElasticRecord.for application.tire_name, 'users' }
+  let(:users) { ElasticRecord.for application.tire_index.name, 'users' }
 
   before(:each) do
     add_data "users", [
@@ -67,5 +68,53 @@ describe "ElasticQuery" do
   it "should iterate through all pages" do
     results = users.all.order(name: :asc, age: :asc).per(2)
     results.count.should be(4)
+  end
+
+  it "should allow to update_attributes" do
+    result = users.where(age: 10).first
+    id = result.id
+    result.properties[:age] = 300
+    result.save!
+    result = users.where(age: 300).first
+    result.properties[:age].should be(300)
+    result.id.should eq(id)
+    result.properties[:age] = 200
+    result.save
+    result = users.where(age: 200).first
+    result.properties[:age].should be(200)
+    result.id.should eq(id)
+    users.all.count.should be(4)
+  end
+
+  it "should allow to create new records" do
+    new_user = users.new
+    new_user.properties[:age] = 1234
+    new_user.properties[:name] = "John Doe"
+    new_user.save
+    users.all.count.should be(5)
+    result = users.where(age: 1234).first
+    result.properties[:name].should eq("John Doe")
+    result.properties[:age].should eq(1234)
+  end
+
+  it "should expose an instance method for each column" do
+    user = users.where(age: 10).first
+    user.age.should eq(10)
+    user.name.should eq('foo')
+    user.age = 20
+    user.name = 'bar'
+    user.age.should eq(20)
+    user.name.should eq('bar')
+  end
+
+  it "should create a class with the type name in order to be used as an active record model" do
+    users
+    Users.all.count.should eq(4)
+  end
+
+  it "should allow to delete a record" do
+    user = users.where(age: 10).first
+    user.destroy
+    users.where(age: 10).count.should eq(0)
   end
 end
