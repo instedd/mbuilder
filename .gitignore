@@ -15,3 +15,5 @@
 /tmp
 
 db/cstore/*
+
+config/guisso.yml
