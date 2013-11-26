@@ -39,8 +39,7 @@ end
 group :development, :test do
   gem 'rspec'
   gem 'rspec-rails'
-  gem 'pry'
-  gem 'pry-debugger'
+  gem 'pry-byebug'
   gem 'faker'
   gem 'machinist'
   gem 'capistrano'

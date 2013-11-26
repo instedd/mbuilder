@@ -12,18 +12,22 @@ class ElasticRecord
 
   def self.for(index, type)
     class_name = type.camelize
-    if const_defined?(class_name) && !Rails.env.test?
+    begin
+      class_exists = const_defined?(class_name)
+    rescue NameError => e
+      invalid_class_name = true
+    end
+
+    if class_exists && !Rails.env.test?
       class_name.constantize
     else
       table = Class.new(self)
       table.index = index
       table.type = type
       table.client = Elasticsearch::Client.new log: false
-      begin
-        Object.instance_eval { remove_const(class_name) } if const_defined?(class_name)
+      unless invalid_class_name
+        Object.instance_eval { remove_const(class_name) } if class_exists
         Object.const_set(class_name, table)
-      rescue Exception => e
-        # The type name is an invalid constant name
       end
       table.columns.each do |column|
         begin
