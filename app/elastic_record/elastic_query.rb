@@ -112,12 +112,16 @@ class ElasticQuery
     @results
   end
 
+  def last
+    results.last
+  end
+
   def initialize_results
     if @where_options[:id].present?
       @results = []
 
       Array(@where_options[:id]).each do |id|
-        response = client.get index: index, type: type, id: @where_options[:id]
+        response = client.get index: index, type: type, id: id
 
         new_record = @record.new
         new_record.id = response["_id"]

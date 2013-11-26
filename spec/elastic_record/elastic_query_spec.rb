@@ -119,22 +119,46 @@ describe "ElasticQuery" do
   end
 
   it "should allow to find an element by id" do
-    user = users.where(age: 10).first
-    id = user.id
+    id = users.where(age: 10).first.id
+    id2 = User.where(age: 30).first.id
 
     result = User.find(id)
     result.id.should eq(id)
     result.age.should eq(10)
     result.name.should eq("foo")
 
+    results = User.find(id, id2)
+    results.first.id.should eq(id)
+    results.first.age.should eq(10)
+    results.first.name.should eq("foo")
+    results.last.id.should eq(id2)
+    results.last.age.should eq(30)
+    results.last.name.should eq("bar")
+
     result = User.find_by_id(id)
     result.id.should eq(id)
     result.age.should eq(10)
     result.name.should eq("foo")
 
+    results = User.find_by_id(id, id2)
+    results.first.id.should eq(id)
+    results.first.age.should eq(10)
+    results.first.name.should eq("foo")
+    results.last.id.should eq(id2)
+    results.last.age.should eq(30)
+    results.last.name.should eq("bar")
+
     result = User.where(id: id).first
     result.id.should eq(id)
     result.age.should eq(10)
     result.name.should eq("foo")
+
+    results = User.where(id: [id, id2])
+    results.first.id.should eq(id)
+    results.first.age.should eq(10)
+    results.first.name.should eq("foo")
+    results.last.id.should eq(id2)
+    results.last.age.should eq(30)
+    results.last.name.should eq("bar")
   end
 end

@@ -52,12 +52,14 @@ class ElasticRecord
     all.where!(options)
   end
 
-  def self.find(id)
-    where(id: id).first
+  def self.find(*ids)
+    results = where(id: ids.flatten)
+    results = results.first if results.count == 1
+    results
   end
 
-  def self.find_by_id(id)
-    find id
+  def self.find_by_id(*ids)
+    find ids
   end
 
   def self.all
