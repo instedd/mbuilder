@@ -113,40 +113,60 @@ class ElasticQuery
   end
 
   def initialize_results
-    query = case @where_options.keys.size
-    when 0
-      { match_all: {} }
-    when 1
-      k, v = @where_options.first
-      { match: {k.to_s => {query: v}}}
+    if @where_options[:id].present?
+      @results = []
+
+      Array(@where_options[:id]).each do |id|
+        response = client.get index: index, type: type, id: @where_options[:id]
+
+        new_record = @record.new
+        new_record.id = response["_id"]
+        new_record.properties = response["_source"]["properties"].with_indifferent_access
+        new_record
+
+        @results << new_record
+      end
+
+      @total_pages = (@results.count.fdiv @page_size).ceil
     else
-      { bool: {must: (@where_options.map { |k, v| {term: {k.to_s => v}} }) } }
-    end
+      # query = if @where_options[:id].present?
+      #   { ids: { values: Array(@where_options[:id]) } }
+      # else
+      query = case @where_options.keys.size
+      when 0
+        { match_all: {} }
+      when 1
+        k, v = @where_options.first
+        { match: {k.to_s => {query: v}}}
+      else
+        { bool: { must: (@where_options.map { |k, v| { term: {k.to_s => v} } }) } }
+      end
 
-    body = { query: query }
+      body = { query: query }
 
-    unless @page.nil?
-      body[:from] = (@page - 1) * @page_size
-    end
-    body[:size] = @page_size
+      unless @page.nil?
+        body[:from] = (@page - 1) * @page_size
+      end
+      body[:size] = @page_size
 
-    unless @order.empty?
-      body[:sort] = @order.map do |sort|
-        sort.map do |field, direction|
-          {field.to_s => direction.to_s}
-        end
-      end.flatten
-    end
+      unless @order.empty?
+        body[:sort] = @order.map do |sort|
+          sort.map do |field, direction|
+            {field.to_s => direction.to_s}
+          end
+        end.flatten
+      end
 
-    response =  client.search index: index, type: type, body: body
+      response = client.search index: index, type: type, body: body
 
-    @total_pages = (response["hits"]["total"].fdiv @page_size).ceil
+      @total_pages = (response["hits"]["total"].fdiv @page_size).ceil
 
-    @results = response["hits"]["hits"].map do |result|
-      new_record = @record.new
-      new_record.id = result["_id"]
-      new_record.properties = result["_source"]["properties"].with_indifferent_access
-      new_record
+      @results = response["hits"]["hits"].map do |result|
+        new_record = @record.new
+        new_record.id = result["_id"]
+        new_record.properties = result["_source"]["properties"].with_indifferent_access
+        new_record
+      end
     end
   end
 end

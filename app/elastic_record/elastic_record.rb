@@ -11,7 +11,7 @@ class ElasticRecord
   end
 
   def self.for(index, type)
-    class_name = type.camelize
+    class_name = type.camelize.singularize
     begin
       class_exists = const_defined?(class_name)
     rescue NameError => e
@@ -50,6 +50,14 @@ class ElasticRecord
 
   def self.where(options)
     all.where!(options)
+  end
+
+  def self.find(id)
+    where(id: id).first
+  end
+
+  def self.find_by_id(id)
+    find id
   end
 
   def self.all

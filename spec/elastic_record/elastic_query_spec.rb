@@ -19,7 +19,7 @@ describe "ElasticQuery" do
   end
 
   it "should search for multiple values" do
-    results = users.where(age: 20).where(name: 'foo')
+    results = users.where(age: 20, name: 'foo')
     results.count.should be(1)
     result = results.first.properties
     result[:age].should be(20)
@@ -109,12 +109,32 @@ describe "ElasticQuery" do
 
   it "should create a class with the type name in order to be used as an active record model" do
     users
-    Users.all.count.should eq(4)
+    User.all.count.should eq(4)
   end
 
   it "should allow to delete a record" do
     user = users.where(age: 10).first
     user.destroy
     users.where(age: 10).count.should eq(0)
+  end
+
+  it "should allow to find an element by id" do
+    user = users.where(age: 10).first
+    id = user.id
+
+    result = User.find(id)
+    result.id.should eq(id)
+    result.age.should eq(10)
+    result.name.should eq("foo")
+
+    result = User.find_by_id(id)
+    result.id.should eq(id)
+    result.age.should eq(10)
+    result.name.should eq("foo")
+
+    result = User.where(id: id).first
+    result.id.should eq(id)
+    result.age.should eq(10)
+    result.name.should eq("foo")
   end
 end
