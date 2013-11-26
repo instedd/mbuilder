@@ -11,32 +11,37 @@ class ElasticRecord
   end
 
   def self.for(index, type)
-    table = Class.new(self)
-    table.index = index
-    table.type = type
-    table.client = Elasticsearch::Client.new log: false
-    begin
-      Object.instance_eval { remove_const(type.camelize) } if const_defined?(type.camelize)
-      Object.const_set(type.camelize, table)
-    rescue Exception => e
-      # The type name is an invalid constant name
-    end
-    table.columns.each do |column|
+    class_name = type.camelize
+    if const_defined?(class_name) && !Rails.env.test?
+      class_name.constantize
+    else
+      table = Class.new(self)
+      table.index = index
+      table.type = type
+      table.client = Elasticsearch::Client.new log: false
       begin
-        table.class_eval <<-METHODS, __FILE__, __LINE__ + 1
-          def #{column.underscore}
-            properties["#{column}"]
-          end
-
-          def #{column.underscore}= new_value
-            properties["#{column}"] = new_value
-          end
-        METHODS
-      rescue SyntaxError => e
-        # The column name was probably a GUID and it doesn't make sense to generate a method
+        Object.instance_eval { remove_const(class_name) } if const_defined?(class_name)
+        Object.const_set(class_name, table)
+      rescue Exception => e
+        # The type name is an invalid constant name
       end
+      table.columns.each do |column|
+        begin
+          table.class_eval <<-METHODS, __FILE__, __LINE__ + 1
+            def #{column.underscore}
+              properties["#{column}"]
+            end
+
+            def #{column.underscore}= new_value
+              properties["#{column}"] = new_value
+            end
+          METHODS
+        rescue SyntaxError => e
+          # The column name was probably a GUID and it doesn't make sense to generate a method
+        end
+      end
+      table
     end
-    table
   end
 
   def self.where(options)
