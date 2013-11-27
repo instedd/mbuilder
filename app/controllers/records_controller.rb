@@ -4,7 +4,7 @@ class RecordsController < ApplicationController
   expose(:record_class) { ElasticRecord.for(application.tire_index.name, params[:table_id]) }
   expose(:record) do
     if params[:action] == "new" || params[:action] == "create"
-      record_class.new params[:record]
+      record_class.new params[:record].to_f_if_looks_like_number
     else
       record_class.find(params[:id])
     end
@@ -20,7 +20,7 @@ class RecordsController < ApplicationController
   end
 
   def update
-    if record.update_attributes params[:record]
+    if record.update_attributes params[:record].to_f_if_looks_like_number
       redirect_to controller: :applications, action: :data
     else
       flash.now[:error] = "Record can't be saved"
