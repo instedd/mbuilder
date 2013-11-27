@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/manastech/listings.git
-  revision: 186ddfb68ccb3ed9bdcd11a0c1d6b19fd5c7fd7c
+  revision: cf503839dc14d6a35a340318180c23d6294177a2
   branch: master
   specs:
     listings (0.0.2)
@@ -158,11 +158,12 @@ GEM
     foreman (0.63.0)
       dotenv (>= 0.7)
       thor (>= 0.13.6)
-    haml (3.1.8)
-    haml-rails (0.3.5)
+    haml (4.0.4)
+      tilt
+    haml-rails (0.4)
       actionpack (>= 3.1, < 4.1)
       activesupport (>= 3.1, < 4.1)
-      haml (~> 3.1)
+      haml (>= 3.1, < 4.1)
       railties (>= 3.1, < 4.1)
     hashie (2.0.5)
     hashr (0.0.22)
@@ -178,7 +179,7 @@ GEM
     json (1.8.1)
     jwt (0.1.8)
       multi_json (>= 1.5)
-    kaminari (0.14.1)
+    kaminari (0.15.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     machinist (1.0.6)
@@ -187,7 +188,7 @@ GEM
       treetop (~> 1.4.8)
     memoist (0.9.1)
     method_source (0.8.2)
-    mime-types (1.25)
+    mime-types (1.25.1)
     multi_json (1.8.2)
     multipart-post (1.2.0)
     mysql2 (0.3.11)
@@ -263,7 +264,7 @@ GEM
     ruby-openid (2.3.0)
     rvm-capistrano (1.2.2)
       capistrano (>= 2.0.0)
-    sass (3.2.10)
+    sass (3.2.12)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)

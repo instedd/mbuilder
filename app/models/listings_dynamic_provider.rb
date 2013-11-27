@@ -24,7 +24,7 @@ module Listings
         end
 
         table.fields.each do |app_field|
-          listing_class.column app_field.name do |item|
+          listing_class.column app_field.name, sortable: app_field.guid do |item|
             item.properties[app_field.guid].try(:user_friendly)
           end
         end
