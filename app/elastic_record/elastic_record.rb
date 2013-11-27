@@ -15,41 +15,26 @@ class ElasticRecord
   end
 
   def self.for(index, type)
-    class_name = type.camelize.singularize
-    begin
-      class_exists = const_defined?(class_name)
-    rescue NameError => e
-      invalid_class_name = true
-    end
+    table = Class.new(self)
+    table.index = index
+    table.type = type
+    table.client = Elasticsearch::Client.new log: false
+    table.columns.each do |column|
+      begin
+        table.class_eval <<-METHODS, __FILE__, __LINE__ + 1
+          def #{column.underscore}
+            properties["#{column}"]
+          end
 
-    if class_exists && !Rails.env.test?
-      class_name.constantize
-    else
-      table = Class.new(self)
-      table.index = index
-      table.type = type
-      table.client = Elasticsearch::Client.new log: false
-      unless invalid_class_name
-        Object.instance_eval { remove_const(class_name) } if class_exists
-        Object.const_set(class_name, table)
+          def #{column.underscore}= new_value
+            properties["#{column}"] = new_value
+          end
+        METHODS
+      rescue SyntaxError => e
+        # The column name was probably a GUID and it doesn't make sense to generate a method
       end
-      table.columns.each do |column|
-        begin
-          table.class_eval <<-METHODS, __FILE__, __LINE__ + 1
-            def #{column.underscore}
-              properties["#{column}"]
-            end
-
-            def #{column.underscore}= new_value
-              properties["#{column}"] = new_value
-            end
-          METHODS
-        rescue SyntaxError => e
-          # The column name was probably a GUID and it doesn't make sense to generate a method
-        end
-      end
-      table
     end
+    table
   end
 
   def self.where(options)

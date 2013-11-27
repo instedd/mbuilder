@@ -107,11 +107,6 @@ describe "ElasticQuery" do
     user.name.should eq('bar')
   end
 
-  it "should create a class with the type name in order to be used as an active record model" do
-    users
-    User.all.count.should eq(4)
-  end
-
   it "should allow to delete a record" do
     user = users.where(age: 10).first
     user.destroy
@@ -120,14 +115,14 @@ describe "ElasticQuery" do
 
   it "should allow to find an element by id" do
     id = users.where(age: 10).first.id
-    id2 = User.where(age: 30).first.id
+    id2 = users.where(age: 30).first.id
 
-    result = User.find(id)
+    result = users.find(id)
     result.id.should eq(id)
     result.age.should eq(10)
     result.name.should eq("foo")
 
-    results = User.find(id, id2)
+    results = users.find(id, id2)
     results.first.id.should eq(id)
     results.first.age.should eq(10)
     results.first.name.should eq("foo")
@@ -135,12 +130,12 @@ describe "ElasticQuery" do
     results.last.age.should eq(30)
     results.last.name.should eq("bar")
 
-    result = User.find_by_id(id)
+    result = users.find_by_id(id)
     result.id.should eq(id)
     result.age.should eq(10)
     result.name.should eq("foo")
 
-    results = User.find_by_id(id, id2)
+    results = users.find_by_id(id, id2)
     results.first.id.should eq(id)
     results.first.age.should eq(10)
     results.first.name.should eq("foo")
@@ -148,12 +143,12 @@ describe "ElasticQuery" do
     results.last.age.should eq(30)
     results.last.name.should eq("bar")
 
-    result = User.where(id: id).first
+    result = users.where(id: id).first
     result.id.should eq(id)
     result.age.should eq(10)
     result.name.should eq("foo")
 
-    results = User.where(id: [id, id2])
+    results = users.where(id: [id, id2])
     results.first.id.should eq(id)
     results.first.age.should eq(10)
     results.first.name.should eq("foo")
