@@ -38,7 +38,12 @@ class Object
     end
   end
 
+  # This is ugly but is until we store all the values for a given elasticsearch record
   def to_f_if_looks_like_number
+    self
+  end
+
+  def user_friendly
     self
   end
 end

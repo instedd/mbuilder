@@ -23,8 +23,4 @@ class String
   def is_number_like?
     self =~ /\A\d+(\.\d+)?\Z/
   end
-
-  def user_friendly
-    self
-  end
 end
