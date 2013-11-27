@@ -2,7 +2,7 @@
 
 %h4= application_table.name
 
-= form_for record, as: :record, url: application_table_record_path(application.id, application_table.guid, record.id) do |f|
+= form_for record, as: :record, url: (record.persisted? ? application_table_record_path(application.id, application_table.guid, record.id) : application_table_records_path(application.id, application_table.guid)) do |f|
 
   - application_table.fields.each do |field|
     .control-group

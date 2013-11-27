@@ -6,8 +6,12 @@ class ElasticRecord
 
   attr_accessor :id, :properties
 
-  def initialize
-    @properties = {}
+  def initialize(*attributes)
+    @properties = if attributes.first.is_a? Hash
+      attributes.first
+    else
+      {}
+    end
   end
 
   def self.for(index, type)
@@ -56,6 +60,8 @@ class ElasticRecord
     results = where(id: ids.flatten)
     results = results.first if results.count == 1
     results
+  rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+    raise ActiveRecord::RecordNotFound.new e.message
   end
 
   def self.find_by_id(*ids)
