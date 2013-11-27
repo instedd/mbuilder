@@ -37,4 +37,8 @@ class Object
       METHOD
     end
   end
+
+  def to_f_if_looks_like_number
+    self
+  end
 end

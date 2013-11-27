@@ -8,7 +8,7 @@ class Numeric
   end
 
   def to_f_if_looks_like_number
-    self
+    self.to_f
   end
 
   def user_friendly

@@ -8,6 +8,6 @@
     .control-group
       %label.control-label{for: field.guid}= field.name
       .controls
-        %input{type: 'text', name: "#{f.options[:as]}[#{field.guid}]", value: record.properties[field.guid]}
+        %input{type: 'text', name: "#{f.options[:as]}[#{field.guid}]", value: record.properties[field.guid].try(:user_friendly)}
 
   = f.submit class: 'btn btn-primary'
