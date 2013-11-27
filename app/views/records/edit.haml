@@ -1,1 +1,13 @@
 = render 'shared/application_tabs'
+
+%h4= application_table.name
+
+= form_for record, as: :record, url: application_table_record_path(application.id, application_table.guid, record.id) do |f|
+
+  - application_table.fields.each do |field|
+    .control-group
+      %label.control-label{for: field.guid}= field.name
+      .controls
+        %input{type: 'text', name: "#{f.options[:as]}[#{field.guid}]", value: record.properties[field.guid]}
+
+  = f.submit class: 'btn btn-primary'

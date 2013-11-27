@@ -9,8 +9,8 @@ Mbuilder::Application.routes.draw do
     resources :validation_triggers
     resources :messages
     get :data
-    resources :tables, except: [:index, :new, :create, :edit, :update, :destroy] do
-      resources :records, only: [:edit, :update, :destroy]
+    resources :tables, only: [] do
+      resources :records, except: [:index, :show]
     end
   end
 

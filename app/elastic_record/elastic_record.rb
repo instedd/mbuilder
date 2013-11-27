@@ -76,12 +76,26 @@ class ElasticRecord
     name
   end
 
+  def persisted?
+    !id.nil?
+  end
+
   def save!
     self.class.save! self
   end
 
   def save
     save! rescue false
+  end
+
+  def update_attributes!(attributes)
+    properties.merge! attributes
+    save!
+  end
+
+  def update_attributes(attributes)
+    properties.merge! attributes
+    save
   end
 
   def self.save! object
