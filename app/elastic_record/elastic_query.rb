@@ -121,7 +121,7 @@ class ElasticQuery
       @results = []
 
       Array(@where_options[:id]).each do |id|
-        response = client.get index: index, type: type, id: id
+        response = client.get index: index, type: type, id: id, refresh: true
 
         new_record = @record.new
         new_record.id = response["_id"]

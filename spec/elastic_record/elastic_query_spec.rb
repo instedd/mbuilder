@@ -11,6 +11,7 @@ describe "ElasticQuery" do
       {"age" => 20, "name" => "bar"},
       {"age" => 30, "name" => "bar"},
     ]
+    (Elasticsearch::Client.new log: false).indices.refresh index: application.tire_index.name
   end
 
   it "should search for a value" do

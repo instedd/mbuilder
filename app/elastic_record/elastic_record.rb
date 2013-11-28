@@ -58,6 +58,7 @@ class ElasticRecord
   end
 
   def self.columns
+    client.indices.refresh index: index
     result = client.indices.get_mapping(index: index, type: type)
 
     result[type]['properties']['properties']['properties'].keys
