@@ -58,12 +58,13 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
             window.guid()
 
           if $scope.isMultipleOptionsField field
-            fields.push guid: guid, id: field.id, name: "#{field.name} (#{f.value})", kind: field.kind, value: f.value
+            if $scope.isHierarchyOptionsField field
+              fields.push guid: guid, id: field.id, name: "#{field.name} (under id)", kind: field.kind, modifier: "under"
+            else
+              fields.push guid: guid, id: field.id, name: "#{field.name} (#{f.value})", kind: field.kind, value: f.value
           else
             fields.push guid: guid, id: field.id, name: field.name, kind: field.kind
 
-          if $scope.isHierarchyOptionsField field
-            fields.push guid: guid, id: field.id, name: "#{field.name} (under id)", kind: field.kind, modifier: "under"
 
       table.fields = fields
 
