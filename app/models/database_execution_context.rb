@@ -71,7 +71,7 @@ class DatabaseExecutionContext < ExecutionContext
     field_code = field_code_of field.id, collection
 
     query = restrictions.each_with_object({}) do |restriction, hash|
-      hash[field_code_of restriction[:field], collection] = restriction[:value].user_friendly
+      hash[field_restriction_to_api_query restriction, collection] = restriction[:value].user_friendly
     end
     sites = collection.sites.where(query)
 
@@ -100,6 +100,15 @@ class DatabaseExecutionContext < ExecutionContext
 
   def multiple_options? field
     ['hierarchy', 'select_one', 'select_many'].include? field
+  end
+
+  def field_restriction_to_api_query restriction, collection
+    code = field_code_of restriction[:field], collection
+    if restriction.has_key? :modifier
+      "#{code}[#{restriction[:modifier]}]"
+    else
+      code
+    end
   end
 
   def field_code_of field, collection

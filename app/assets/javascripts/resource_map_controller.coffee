@@ -24,6 +24,10 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
         else
           fields.push guid: window.guid(), id: field.id, name: field.name, kind: field.kind
 
+        if $scope.isHierarchyOptionsField field
+          fields.push guid: window.guid(), id: field.id, name: "#{field.name} (under id)", kind: field.kind, modifier: "under"
+
+
       $scope.tables.push
         guid: window.guid()
         kind: 'resource_map'
@@ -45,6 +49,7 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
       fields.push( _.detect table.fields, (field) -> field.id == "lng")
 
       for field in data
+        # TODO duplicate logic with addCollection
         existing_fields = _.select table.fields, (f) -> f.id == field.id
         _.each existing_fields, (f) ->
           guid = if f
@@ -57,8 +62,15 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
           else
             fields.push guid: guid, id: field.id, name: field.name, kind: field.kind
 
+          if $scope.isHierarchyOptionsField field
+            fields.push guid: guid, id: field.id, name: "#{field.name} (under id)", kind: field.kind, modifier: "under"
+
       table.fields = fields
 
   $scope.isMultipleOptionsField = (field) ->
     _.include ["select_one", "select_many", "hierarchy"], field.kind
+
+  $scope.isHierarchyOptionsField = (field) ->
+    _.include ["hierarchy"], field.kind
+
 ]
