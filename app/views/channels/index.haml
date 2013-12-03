@@ -1,7 +1,7 @@
 = render 'shared/application_tabs'
 
 %div
-  = form_tag(new_application_channel_path, method: :get) do
+  = form_tag(new_application_channel_path, method: :get, class: 'form-inline') do
     Create new
     = select_tag :kind, pigeon_nuntium_channel_kinds_for_select
     = submit_tag "Go", :class => 'btn btn-primary'
