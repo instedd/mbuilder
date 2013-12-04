@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/manastech/listings.git
-  revision: cf503839dc14d6a35a340318180c23d6294177a2
+  revision: bbde59b0d2128638f5b269912680b1d8149dc4f7
   branch: master
   specs:
     listings (0.0.2)
