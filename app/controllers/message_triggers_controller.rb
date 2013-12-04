@@ -46,9 +46,9 @@ class MessageTriggersController < ApplicationController
           application.rebind_tables_and_fields(data['tableAndFieldRebinds'])
         end
       end
-      render json: trigger.id
+      render_json trigger.id
     rescue ActiveRecord::RecordInvalid
-      render json: trigger.errors.full_messages.join("\n"), status: 402
+      render_json trigger.errors.full_messages.join("\n"), status: 402
     end
   end
 

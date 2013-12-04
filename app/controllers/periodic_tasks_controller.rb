@@ -39,9 +39,9 @@ class PeriodicTasksController < ApplicationController
           application.rebind_tables_and_fields(data['tableAndFieldRebinds'])
         end
       end
-      render json: periodic_task.id
+      render_json periodic_task.id
     rescue ActiveRecord::RecordInvalid
-      render json: periodic_task.errors.full_messages.join("\n"), status: 402
+      render_json periodic_task.errors.full_messages.join("\n"), status: 402
     end
   end
 

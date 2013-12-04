@@ -29,6 +29,8 @@ gem 'resource_map_api_client', git: "https://bitbucket.org/instedd/resource_map_
 
 gem 'listings', github: "manastech/listings", branch: 'master'
 
+gem 'oj'
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'

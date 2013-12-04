@@ -201,6 +201,7 @@ GEM
       net-ssh (>= 2.6.5)
     ng-rails-csrf (0.1.0)
     oauth (0.4.7)
+    oj (2.3.0)
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
       rack
@@ -329,6 +330,7 @@ DEPENDENCIES
   machinist
   mysql2
   ng-rails-csrf
+  oj
   omniauth
   omniauth-openid
   pry-byebug

@@ -32,9 +32,9 @@ class ValidationTriggersController < ApplicationController
           application.rebind_tables_and_fields(data['tableAndFieldRebinds'])
         end
       end
-      render json: @validation_trigger.id
+      render_json @validation_trigger.id
     rescue ActiveRecord::RecordInvalid
-      render json: @validation_trigger.errors.full_messages.join("\n"), status: 402
+      render_json @validation_trigger.errors.full_messages.join("\n"), status: 402
     end
   end
 

@@ -12,9 +12,9 @@ class MessagesController < ApplicationController
     message['from'] = message['from'].with_protocol 'sms'
     context = application.accept_message message
     if context
-      render json: {messages: context.messages, actions: context.logger.actions_as_strings}
+      render_json messages: context.messages, actions: context.logger.actions_as_strings
     else
-      render json: false
+      render_json false
     end
   end
 
