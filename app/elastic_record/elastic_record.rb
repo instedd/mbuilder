@@ -59,9 +59,12 @@ class ElasticRecord
 
   def self.columns
     client.indices.refresh index: index
-    result = client.indices.get_mapping(index: index, type: type)
-
-    result[type]['properties']['properties']['properties'].keys
+    begin
+      result = client.indices.get_mapping(index: index, type: type)
+      result[type]['properties']['properties']['properties'].keys
+    rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+      []
+    end
   end
 
   def self.human_attribute_name(name)
