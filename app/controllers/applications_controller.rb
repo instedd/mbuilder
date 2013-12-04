@@ -52,4 +52,11 @@ class ApplicationsController < ApplicationController
     end
     send_file file.path, filename: filename
   end
+
+  def import
+    file = params[:mba]
+    application.import file
+    flash.notice = 'Application imported'
+    redirect_to application
+  end
 end

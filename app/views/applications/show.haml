@@ -4,6 +4,19 @@
   %i.icon-download
   Export application
 
+= link_to '#import-form', class: 'btn', data: { toggle: 'collapse' } do
+  %i.icon-upload
+  Import application
+
+%br
+%br
+
+#import-form.collapse(style="width: 400px")
+  .well.well-small
+    = form_tag application_import_path(application), multipart: true, class: 'form-inline' do |f|
+      = file_field_tag 'mba'
+      = button_tag 'Upload', class: 'btn'
+
 %br
 
 = link_to "Delete this application", application, method: :delete, confirm: "Are you sure you want to delete the application '#{application.name}'"

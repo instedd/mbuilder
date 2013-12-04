@@ -14,6 +14,7 @@ Mbuilder::Application.routes.draw do
     end
 
     get :export
+    post :import
   end
 
   authenticate :user do

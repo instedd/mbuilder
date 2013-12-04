@@ -82,6 +82,10 @@ class Application < ActiveRecord::Base
     file.write data.to_yaml
   end
 
+  def import file
+
+  end
+
   if Rails.env.test?
     def tire_name
       "mbuilder_test_application_#{id}"
