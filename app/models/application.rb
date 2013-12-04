@@ -82,8 +82,15 @@ class Application < ActiveRecord::Base
     file.write data.to_yaml
   end
 
-  def import file
+  def import! file
+    data = YAML::load file
 
+    self.tables = data[:tables]
+    self.message_triggers = data[:message_triggers].map(&:dup)
+    self.periodic_tasks = data[:periodic_tasks].map(&:dup)
+    self.validation_triggers = data[:validation_triggers].map(&:dup)
+
+    save!
   end
 
   if Rails.env.test?

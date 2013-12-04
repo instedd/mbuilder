@@ -54,8 +54,7 @@ class ApplicationsController < ApplicationController
   end
 
   def import
-    file = params[:mba]
-    application.import file
+    application.import! File.read(params[:mba].tempfile.path)
     flash.notice = 'Application imported'
     redirect_to application
   end
