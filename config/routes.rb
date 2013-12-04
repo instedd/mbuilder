@@ -12,6 +12,8 @@ Mbuilder::Application.routes.draw do
     resources :tables, only: [] do
       resources :records, except: [:index, :show]
     end
+
+    get :export
   end
 
   authenticate :user do

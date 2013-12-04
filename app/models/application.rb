@@ -71,6 +71,17 @@ class Application < ActiveRecord::Base
     end
   end
 
+  def export file
+    data = {
+      tables: tables,
+      message_triggers: message_triggers,
+      periodic_tasks: periodic_tasks,
+      validation_triggers: validation_triggers
+    }
+
+    file.write data.to_yaml
+  end
+
   if Rails.env.test?
     def tire_name
       "mbuilder_test_application_#{id}"

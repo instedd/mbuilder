@@ -41,4 +41,15 @@ class ApplicationsController < ApplicationController
       []
     end
   end
+
+  def export
+    filename = "#{application.name}-#{application.id}-#{application.updated_at.strftime("%F")}.mba"
+    file = Tempfile.new filename
+    begin
+      application.export file
+    ensure
+      file.close
+    end
+    send_file file.path, filename: filename
+  end
 end
