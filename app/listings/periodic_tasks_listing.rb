@@ -9,6 +9,16 @@ class PeriodicTasksListing < Listings::Base
 
   column :name
 
+  # Next run at 12:34 (in 3 minutes), last run on Wed 13 12:23 (1 day ago)
+
+  column 'Rext run' do |trigger|
+    distance_of_time_in_words(Time.now, trigger.schedule.next_occurrence(Time.now).to_time, true)
+  end
+
+  column 'Last run' do |trigger|
+    distance_of_time_in_words(Time.now, trigger.schedule.previous_occurrence(Time.now).to_time, true) + ' ago'
+  end
+
   column '', class: 'right' do |trigger|
     [
       link_to("edit", edit_application_periodic_task_path(@application, trigger)),
