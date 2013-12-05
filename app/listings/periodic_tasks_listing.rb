@@ -11,7 +11,7 @@ class PeriodicTasksListing < Listings::Base
 
   # Next run at 12:34 (in 3 minutes), last run on Wed 13 12:23 (1 day ago)
 
-  column 'Rext run' do |trigger|
+  column 'Next run' do |trigger|
     distance_of_time_in_words(Time.now, trigger.schedule.next_occurrence(Time.now).to_time, true) if trigger.schedule.next_occurrence(Time.now)
   end
 
