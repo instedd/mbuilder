@@ -8,7 +8,7 @@ class MessageTrigger < Trigger
   serialize :message
   serialize :actions
 
-  def default_from_number # TODO default_from_number
+  def default_from_number
     "+1-(234)-567-8912"
   end
 
