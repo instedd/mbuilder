@@ -1,6 +1,6 @@
 class MemoryExecutionContext < ExecutionContext
 
-  def initialize(application, placeholder_solver)
+  def initialize(application, placeholder_solver, logger)
     super
     @db = Hash.new { |hash, table_name| hash[table_name] = [] }
     @next_id = 0

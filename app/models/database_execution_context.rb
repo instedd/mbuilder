@@ -1,12 +1,18 @@
 class DatabaseExecutionContext < ExecutionContext
-  def initialize(application, placeholder_solver)
+  def initialize(application, placeholder_solver, logger)
     super
     @index = application.tire_index
   end
 
-  def self.execute(application, trigger, placeholder_solver)
-    context = new application, placeholder_solver
+  def self.execute(application, trigger, placeholder_solver, logger)
+    context = new application, placeholder_solver, logger
     context.execute trigger
+  end
+
+  def execute(trigger)
+    result = super
+    logger.save!
+    result
   end
 
   def piece_value(guid)

@@ -19,7 +19,7 @@ class NuntiumController < ApplicationController
         head :ok
       end
     rescue Exception => e
-      ExecutionLogger.new.error(e.message) #TODO: make this a model and save it!
+      ExecutionLogger.new.error(e.message).save
       head :ok
     end
   end

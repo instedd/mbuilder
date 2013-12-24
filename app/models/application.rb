@@ -21,7 +21,7 @@ class Application < ActiveRecord::Base
   end
 
   def simulate_execution_of triggers
-    context = MemoryExecutionContext.new self, TriggerPlaceholderSolver.new
+    context = MemoryExecutionContext.new self, TriggerPlaceholderSolver.new, ExecutionLogger.new(application: self)
     context.execute_many triggers
   end
 

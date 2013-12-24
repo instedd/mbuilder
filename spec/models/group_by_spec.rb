@@ -46,7 +46,7 @@ describe "Aggregate functions" do
 
   context "Memory" do
     let(:application) { new_application "Users: Age, Name" }
-    let(:context) { MemoryExecutionContext.new(application, TriggerPlaceholderSolver.new) }
+    let(:context) { MemoryExecutionContext.new(application, TriggerPlaceholderSolver.new, ExecutionLogger.new(application: application)) }
 
     before(:each) do
       [["foo", "10"], ["foo", "20"], ["bar", "40"], ["bar", "80"]].each do |name, age|

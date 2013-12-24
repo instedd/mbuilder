@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130920191243) do
+ActiveRecord::Schema.define(:version => 20131224153038) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -45,6 +45,19 @@ ActiveRecord::Schema.define(:version => 20130920191243) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
+  create_table "execution_loggers", :force => true do |t|
+    t.integer  "application_id"
+    t.text     "actions"
+    t.string   "message"
+    t.string   "sender"
+    t.integer  "trigger_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "execution_loggers", ["application_id"], :name => "index_execution_loggers_on_application_id"
+  add_index "execution_loggers", ["trigger_id"], :name => "index_execution_loggers_on_trigger_id"
 
   create_table "identities", :force => true do |t|
     t.integer  "user_id"

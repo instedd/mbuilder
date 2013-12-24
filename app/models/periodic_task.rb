@@ -31,7 +31,7 @@ class PeriodicTask < Trigger
   end
 
   def execute_at scheduled_time
-    context = DatabaseExecutionContext.new(application, NullPlaceholderSolver.new)
+    context = DatabaseExecutionContext.new(application, NullPlaceholderSolver.new, ExecutionLogger.new(application: application, trigger: self))
     context.execute self
     schedule_job_for schedule.next_occurrence scheduled_time
     nuntium = Pigeon::Nuntium.from_config

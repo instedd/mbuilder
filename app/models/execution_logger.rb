@@ -1,31 +1,36 @@
-class ExecutionLogger
-  def initialize(application)
-    @application = application
-    @actions = []
-  end
+class ExecutionLogger < ActiveRecord::Base
+  belongs_to :application
+  belongs_to :trigger
+  attr_accessible :actions, :message, :sender, :application, :trigger
+
+  serialize :actions
 
   def insert(table_guid, properties)
-    @actions << [:insert, table_guid, properties]
+    actions << [:insert, table_guid, properties]
+  end
+
+  def actions
+    @actions ||= []
   end
 
   def update(table_guid, id, old_properties, new_properties)
-    @actions << [:update, table_guid, id, old_properties, new_properties]
+    actions << [:update, table_guid, id, old_properties, new_properties]
   end
 
   def invalid_value(table_guid, field_guid, value)
-    @actions << [:invalid_value, table_guid, field_guid, value]
+    actions << [:invalid_value, table_guid, field_guid, value]
   end
 
   def error(description)
-    @actions << [:error, description]
+    actions << [:error, description]
   end
 
   def warning(description)
-    @actions << [:warning, description]
+    actions << [:warning, description]
   end
 
   def find_table(guid)
-    @application.find_table(guid)
+    application.find_table(guid)
   end
 
   def map_properties(table, properties)
@@ -36,7 +41,7 @@ class ExecutionLogger
   end
 
   def actions_as_strings
-    @actions.map do |action|
+    actions.map do |action|
       case action[0]
       when :insert
         kind, table_guid, properties = action

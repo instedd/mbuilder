@@ -3,12 +3,12 @@ class ExecutionContext
   attr_reader :messages
   attr_reader :logger
 
-  def initialize(application, placeholder_solver)
+  def initialize(application, placeholder_solver, logger)
     @application = application
     @placeholder_solver = placeholder_solver
     @entities = {}
     @messages = []
-    @logger = ExecutionLogger.new(@application)
+    @logger = logger
   end
 
   def execute(trigger)
@@ -19,7 +19,7 @@ class ExecutionContext
   rescue InvalidValueException => ex
     validation_trigger = application.validation_triggers.find_by_field_guid(ex.field_guid)
     if validation_trigger
-      context = self.class.new(application, InvalidValuePlaceholderSolver.new(@placeholder_solver, ex.value))
+      context = self.class.new(application, InvalidValuePlaceholderSolver.new(@placeholder_solver, ex.value), ExecutionLogger.new(application: application, trigger: validation_trigger))
       context.logger.invalid_value(ex.table_guid, ex.field_guid, ex.value)
       context.execute(validation_trigger)
     else
