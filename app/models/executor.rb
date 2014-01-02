@@ -10,9 +10,15 @@ class Executor
     @triggers.each do |trigger|
       match = trigger.match(body)
       if match
-        logger = ExecutionLogger.new(application: @application)
-        # logger.trigger = trigger
-        return DatabaseExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(message, trigger, match, logger), logger)
+        logger = ExecutionLogger.new(application: @application, trigger: trigger)
+        logger.message = message
+        begin
+          return DatabaseExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(message, trigger, match), logger)
+        rescue Exception => e
+          logger.error(e.message)
+        ensure
+          logger.save!
+        end
       end
     end
 

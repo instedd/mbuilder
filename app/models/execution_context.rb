@@ -62,6 +62,7 @@ class ExecutionContext
 
   def send_message(to, body)
     @messages.push({from: "app://mbuilder", to: to.with_protocol("sms"), body: body})
+    logger.send_message(to, body)
   end
 
   def check_valid_value!(table_guid, field_guid, value)

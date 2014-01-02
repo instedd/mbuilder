@@ -10,9 +10,7 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def execute(trigger)
-    result = super
-    logger.save!
-    result
+    super
   end
 
   def piece_value(guid)

@@ -1,11 +1,8 @@
 class MessagePlaceholderSolver < PlaceholderSolver
-  def initialize(message, trigger, match, logger)
+  def initialize(message, trigger, match)
     @message = message
     @match = match
     @pieces = trigger.message.pieces.select { |piece| piece.kind == 'placeholder' }
-    @logger = logger
-    # @logger.message = message['body']
-    # @logger.sender = message['from']
   end
 
   def piece_value(guid, trigger)

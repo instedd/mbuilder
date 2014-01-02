@@ -1,32 +1,52 @@
 class ExecutionLogger < ActiveRecord::Base
   belongs_to :application
   belongs_to :trigger
-  attr_accessible :actions, :message, :sender, :application, :trigger
+  attr_accessible :actions, :message_to, :message_from, :message_body, :application, :trigger
 
   serialize :actions
 
-  def insert(table_guid, properties)
-    actions << [:insert, table_guid, properties]
+  def message=(message)
+    self.message_to = message['to']
+    self.message_from = message['from']
+    self.message_body = message['body']
   end
 
-  def actions
-    @actions ||= []
+  def message
+    if self.message_body
+      {'to' => message_to, 'from' => message_from, 'body' => message_body}
+    else
+      nil
+    end
+  end
+
+  def append_action(*entry)
+    self.actions ||= []
+    actions << entry
+    self
+  end
+
+  def insert(table_guid, properties)
+    append_action :insert, table_guid, properties
   end
 
   def update(table_guid, id, old_properties, new_properties)
-    actions << [:update, table_guid, id, old_properties, new_properties]
+    append_action :update, table_guid, id, old_properties, new_properties
   end
 
   def invalid_value(table_guid, field_guid, value)
-    actions << [:invalid_value, table_guid, field_guid, value]
+    append_action :invalid_value, table_guid, field_guid, value
   end
 
   def error(description)
-    actions << [:error, description]
+    append_action :error, description
   end
 
   def warning(description)
-    actions << [:warning, description]
+    append_action :warning, description
+  end
+
+  def send_message(to, body)
+    append_action :send_message, to, body
   end
 
   def find_table(guid)
@@ -62,6 +82,9 @@ class ExecutionLogger < ActiveRecord::Base
       when :error, :warning
         severity, description = action
         "#{severity.titleize}: #{description}"
+      when :send_message
+        kind, to, body = action
+        "Send message to #{to}: #{body}"
       end
     end
   end
