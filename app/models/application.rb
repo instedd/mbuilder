@@ -6,6 +6,7 @@ class Application < ActiveRecord::Base
   has_many :periodic_tasks, dependent: :destroy
   has_many :validation_triggers, dependent: :destroy
   has_many :channels, dependent: :destroy
+  has_many :logs, class_name: :ExecutionLogger, dependent: :destroy
 
   validates_presence_of :user
   validates_presence_of :name

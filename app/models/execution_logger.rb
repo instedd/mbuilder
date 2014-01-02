@@ -1,6 +1,6 @@
 class ExecutionLogger < ActiveRecord::Base
   belongs_to :application
-  belongs_to :trigger
+  belongs_to :trigger, polymorphic: true
   attr_accessible :actions, :message_to, :message_from, :message_body, :application, :trigger
 
   serialize :actions
@@ -61,7 +61,7 @@ class ExecutionLogger < ActiveRecord::Base
   end
 
   def actions_as_strings
-    actions.map do |action|
+    (actions || []).map do |action|
       case action[0]
       when :insert
         kind, table_guid, properties = action
@@ -81,7 +81,7 @@ class ExecutionLogger < ActiveRecord::Base
         "Tried to insert invalid value '#{value}' into #{table.name} #{field.name}"
       when :error, :warning
         severity, description = action
-        "#{severity.titleize}: #{description}"
+        "#{severity.to_s.titleize}: #{description}"
       when :send_message
         kind, to, body = action
         "Send message to #{to}: #{body}"

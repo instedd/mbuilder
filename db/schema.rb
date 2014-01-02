@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140102153026) do
+ActiveRecord::Schema.define(:version => 20140102172841) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20140102153026) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.string   "message_to"
+    t.string   "trigger_type"
   end
 
   add_index "execution_loggers", ["application_id"], :name => "index_execution_loggers_on_application_id"

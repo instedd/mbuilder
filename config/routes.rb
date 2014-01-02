@@ -1,4 +1,6 @@
 Mbuilder::Application.routes.draw do
+  get "logs/index"
+
   devise_for :users, controllers: {omniauth_callbacks: 'omniauth_callbacks'}
   guisso_for :user
 
@@ -8,6 +10,8 @@ Mbuilder::Application.routes.draw do
     resources :periodic_tasks
     resources :validation_triggers
     resources :messages
+    resources :logs, only: :index
+
     get :data
     resources :tables, only: [] do
       resources :records, except: [:index, :show]
