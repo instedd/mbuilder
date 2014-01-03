@@ -1,6 +1,4 @@
-mbuilder = angular.module('mbuilder-messages', ['ng-rails-csrf']);
-
-mbuilder.controller 'MessagesController', ['$scope', '$http', ($scope, $http) ->
+angular.module('mbuilder-messages').controller 'MessagesController', ['$scope', '$http', ($scope, $http) ->
   $scope.from = ''
   $scope.body = ''
   $scope.messages = []
@@ -16,9 +14,15 @@ mbuilder.controller 'MessagesController', ['$scope', '$http', ($scope, $http) ->
     call = $http.post "/applications/#{$scope.applicationId}/messages", JSON.stringify(data)
     call.success (data, status, headers, config) ->
       if data
+        $scope.$emit 'message-sent'
         $scope.actions = data.actions
         $scope.messages = data.messages
       else
         $scope.actions
         $scope.messages = []
+
+  $scope.$on 'load-message', (e, message) ->
+    $scope.from = message.from
+    $scope.body = message.body
+    $scope.actions = message.actions
 ]

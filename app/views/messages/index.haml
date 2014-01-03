@@ -22,10 +22,8 @@
             %li{'ng-repeat' => 'action in actions'}
               {{action}}
 
-
-        %div{'ng-show' => 'messages.length'}
-          %h5 Response messages
-
-          %ul
-            %li{'ng-repeat' => 'message in messages'}
-              <strong>{{message.to}}</strong>: {{message.body}}
+        / %div{'ng-show' => 'messages.length'}
+        /   %h5 Response messages
+        /   %ul
+        /     %li{'ng-repeat' => 'message in messages'}
+        /       <strong>{{message.to}}</strong>: {{message.body}}

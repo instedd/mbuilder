@@ -1,8 +1,6 @@
-mbuilder = angular.module('mbuilder', ['drag-and-drop', 'focus-and-blur', 'keys', 'right-click', 'ng-rails-csrf', 'preserve-ng-repeat', '$strap.directives']);
-
 window.draggedPill = null
 
-mbuilder.directive 'editableInput', ->
+angular.module('mbuilder').directive 'editableInput', ->
   restrict: 'E'
   scope: {
     model: '='

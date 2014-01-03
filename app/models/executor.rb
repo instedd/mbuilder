@@ -6,7 +6,6 @@ class Executor
 
   def execute(message)
     body = message['body']
-
     @triggers.each do |trigger|
       match = trigger.match(body)
       if match
@@ -21,7 +20,10 @@ class Executor
         end
       end
     end
-
+    logger = ExecutionLogger.new(application: @application)
+    logger.message = message
+    logger.error("No trigger found.")
+    logger.save!
     nil
   end
 end
