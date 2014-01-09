@@ -16,7 +16,7 @@ class NuntiumController < ApplicationController
       application = channel.application
       context = application.accept_message params
       if context.messages.any?
-        render_json context.messages
+        render json: context.messages.to_json
       else
         head :ok
       end
