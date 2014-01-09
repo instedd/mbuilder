@@ -8,25 +8,31 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
       $scope.loading = false
       $scope.collections = data
 
+  $scope._resmapTableFields = (data) ->
+    fields = []
+    fields.push id: "name", name: "Name"
+    fields.push id: "lat", name: "Latitude"
+    fields.push id: "lng", name: "Longitude"
+    for field in data
+      if $scope.isMultipleOptionsField field
+        fields.push id: field.id, name: "#{field.name} (label)", kind: field.kind, value: "label"
+        fields.push id: field.id, name: "#{field.name} (code)", kind: field.kind, value: "code"
+      else
+        fields.push id: field.id, name: field.name, kind: field.kind
+
+      if $scope.isHierarchyOptionsField field
+        fields.push id: field.id, name: "#{field.name} (under id)", kind: field.kind, modifier: "under"
+
+    return fields
+
   $scope.addCollection = (collection) ->
     $scope.hidePopups()
 
     call = $http.get("/resource_map/collections/#{collection.id}/fields.json")
     call.success (data, status, headers, config) ->
-      fields = []
-      fields.push guid: window.guid(), id: "name", name: "Name"
-      fields.push guid: window.guid(), id: "lat", name: "Latitude"
-      fields.push guid: window.guid(), id: "lng", name: "Longitude"
-      for field in data
-        if $scope.isMultipleOptionsField field
-          fields.push guid: window.guid(), id: field.id, name: "#{field.name} (label)", kind: field.kind, value: "label"
-          fields.push guid: window.guid(), id: field.id, name: "#{field.name} (code)", kind: field.kind, value: "code"
-        else
-          fields.push guid: window.guid(), id: field.id, name: field.name, kind: field.kind
-
-        if $scope.isHierarchyOptionsField field
-          fields.push guid: window.guid(), id: field.id, name: "#{field.name} (under id)", kind: field.kind, modifier: "under"
-
+      fields = $scope._resmapTableFields(data)
+      for f in fields
+        f.guid = window.guid()
 
       $scope.tables.push
         guid: window.guid()
@@ -42,31 +48,27 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
     table = table
     call = $http.get("/resource_map/collections/#{table.id}/fields.json")
     call.success (data, status, headers, config) ->
-      fields = []
-
-      fields.push( _.detect table.fields, (field) -> field.id == "name")
-      fields.push( _.detect table.fields, (field) -> field.id == "lat")
-      fields.push( _.detect table.fields, (field) -> field.id == "lng")
-
-      for field in data
-        # TODO duplicate logic with addCollection
-        existing_fields = _.select table.fields, (f) -> f.id == field.id
-        _.each existing_fields, (f) ->
-          guid = if f
-            f.guid
+      new_fields = $scope._resmapTableFields(data)
+      eqp = (a, b, p) ->
+        if a[p]?
+          if b[p]?
+            return a[p] == b[p]
+        else
+          if b[p]?
+            return false
           else
-            window.guid()
+            return true
+        return false
 
-          if $scope.isMultipleOptionsField field
-            if f.modifier == "under"
-              fields.push guid: guid, id: field.id, name: "#{field.name} (under id)", kind: field.kind, modifier: "under"
-            else
-              fields.push guid: guid, id: field.id, name: "#{field.name} (#{f.value})", kind: field.kind, value: f.value
-          else
-            fields.push guid: guid, id: field.id, name: field.name, kind: field.kind
+      for new_field in new_fields
+        existing_field = _.detect table.fields, (f) -> eqp(f, new_field, 'id') and eqp(f, new_field, 'value') and eqp(f, new_field, 'modifier')
+        console.log new_field, existing_field
+        if existing_field
+          new_field.guid = existing_field.guid
+        else
+          new_field.guid = window.guid()
 
-
-      table.fields = fields
+      table.fields = new_fields
 
   $scope.isMultipleOptionsField = (field) ->
     _.include ["select_one", "select_many", "hierarchy"], field.kind
