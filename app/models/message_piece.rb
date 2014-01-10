@@ -41,9 +41,9 @@ class MessagePiece
 
   def self.infer_pattern(text)
     case
-    when text =~ /\d+\.\d+/
+    when text =~ /^\d+\.\d+$/
       :float
-    when text =~ /\d+/
+    when text =~ /^\d+$/
       :integer
     when text.include?(' ')
       :multiple_word

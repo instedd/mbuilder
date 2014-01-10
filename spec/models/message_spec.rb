@@ -12,6 +12,17 @@ describe Message do
     msg.pattern.source.should eq("\\A\\s*register\\s+(\\S+)\\s+now\\s*\\Z")
   end
 
+  it "compiles message with single word disease code" do
+    msg = Message.from_hash({
+      'pieces' => [
+        {'kind' => 'text', 'text' => 'register'},
+        {'kind' => 'placeholder', 'text' => 'A90'},
+        {'kind' => 'text', 'text' => 'now'},
+      ]
+    })
+    msg.pattern.source.should eq("\\A\\s*register\\s+(\\S+)\\s+now\\s*\\Z")
+  end
+
   it "compiles message with single word at the end" do
     msg = Message.from_hash({
       'pieces' => [

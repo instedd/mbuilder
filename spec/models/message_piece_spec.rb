@@ -16,4 +16,12 @@ describe MessagePiece do
   it "infers patter to be float" do
     MessagePiece.infer_pattern("123.45").should eq(:float)
   end
+
+  it "infers patter to be single_word" do
+    MessagePiece.infer_pattern("A23").should eq(:single_word)
+  end
+
+  it "infers patter to be single_word" do
+    MessagePiece.infer_pattern("A2.3").should eq(:single_word)
+  end
 end
