@@ -98,6 +98,23 @@ class DatabaseExecutionContext < ExecutionContext
     results.to_f_if_looks_like_number
   end
 
+  def each_value(table, restrictions, &block)
+    application.find_table(table).each_value(self, restrictions, &block)
+  end
+
+  def each_local_value(table, restrictions, &block)
+    options = {}
+    restrictions.each_with_object({}) do |restriction|
+      case restriction[:op]
+      when :eq
+        options[restriction[:field]] = restriction[:value]
+      end
+    end
+    ElasticRecord.for(@index.name, table).where(options).each do |result|
+      block.call result.properties
+    end
+  end
+
   def reserved? field
     ['name', 'lat', 'lng'].include? field
   end

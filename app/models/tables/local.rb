@@ -18,4 +18,8 @@ class Tables::Local < Table
   def insert_in(context, properties)
     context.insert_local(guid, properties)
   end
+
+  def each_value(context, restrictions, &block)
+    context.each_local_value(guid, restrictions, &block)
+  end
 end

@@ -6,7 +6,7 @@ class ExecutionContext
   def initialize(application, placeholder_solver, logger)
     @application = application
     @placeholder_solver = placeholder_solver
-    @entities = {}
+    @entities_stack = [{}]
     @messages = []
     @logger = logger
   end
@@ -27,20 +27,31 @@ class ExecutionContext
     end
   end
 
+  def in_subcontext
+    @entities_stack.push({})
+    yield
+    save
+    @entities_stack.pop
+  end
+
   def new_entity(table)
-    @entities[table] = NewEntity.new(self, table)
+    entities[table] = NewEntity.new(self, table)
   end
 
   def select_entities(table, field, value)
-    (@entities[table] ||= EntitySelection.new(self, table)).eq(field, value)
+    find_or_create_entity(table) { EntitySelection.new(self, table) }.eq(field, value)
   end
 
   def entity(table)
-    @entities[table] ||= EntitySelection.new(self, table)
+    find_or_create_entity(table) { EntitySelection.new(self, table) }
+  end
+
+  def set_entity(table, entity)
+    entities[table] = entity
   end
 
   def group_by(table, field)
-    (@entities[table] ||= EntitySelection.new(self, table)).group_by = field
+    find_or_create_entity(table) { EntitySelection.new(self, table) }.group_by = field
   end
 
   def piece_value(guid)
@@ -75,7 +86,22 @@ class ExecutionContext
   end
 
   def save
-    @entities.values.each(&:save)
-    @entities = {}
+    entities.values.each(&:save)
+    entities.clear
+  end
+
+  private
+
+  def entities
+    @entities_stack.last
+  end
+
+  def find_or_create_entity(table)
+    @entities_stack.reverse_each do |entities|
+      entity = entities[table]
+      return entity if entity
+    end
+
+    entities[table] = yield
   end
 end

@@ -22,6 +22,10 @@ class EntitySelection
     @context.select_table_field(@table, @restrictions, field, group_by, aggregate)
   end
 
+  def each(&block)
+    @context.each_value(@table, @restrictions, &block)
+  end
+
   def save
     return if @properties.empty?
 

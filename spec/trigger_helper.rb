@@ -1,4 +1,6 @@
 class TriggerHelper
+  attr_reader :actions
+
   def initialize(application)
     @application = application
     @actions = []
@@ -76,6 +78,12 @@ class TriggerHelper
     end
 
     @actions << Actions::SendMessage.from_hash('message' => bindings, 'recipient' => recipient)
+  end
+
+  def foreach(table, &block)
+    helper = TriggerHelper.new(@application)
+    helper.instance_eval &block
+    @actions << Actions::Foreach.new(table, helper.actions)
   end
 
   def trigger
