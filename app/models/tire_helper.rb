@@ -10,14 +10,16 @@ module TireHelper
   end
 
   def apply_restrictions_to(search, restrictions)
-    restrictions.each do |restriction|
-      search.query do
-        case restriction[:op]
-        when :eq
-          values = Array(restriction[:value])
-          boolean do
+    search.query do |query|
+      query.boolean("minimum_should_match" => restrictions.size - 1 ) do |boolean|
+        restrictions.each do |restriction|
+          case restriction[:op]
+          when :eq
+            values = Array(restriction[:value])
             values.each do |value|
-              should { match restriction[:field], value }
+              boolean.should do |q|
+                q.match restriction[:field], value
+              end
             end
           end
         end
