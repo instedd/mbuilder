@@ -13,6 +13,11 @@ class MessagesController < ApplicationController
     message['timestamp'] = Time.now.utc.to_s
     context = application.accept_message message
     if context
+      nuntium = Pigeon::Nuntium.from_config
+      # TODO: refactor this to avoid multiple messaging. Nuntium can handle multiple recipients
+      context.messages.each do |message|
+        nuntium.send_ao message
+      end
       render_json messages: context.messages, actions: context.logger.actions_as_strings
     else
       render_json false
