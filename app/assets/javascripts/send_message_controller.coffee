@@ -42,6 +42,8 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
       $scope.action.messageEditable = 'true'
 
   $scope.dragOverMessage = (event) ->
+    return false unless window.draggedPill
+
     event.preventDefault()
     true
 
@@ -71,6 +73,8 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     $scope.action.recipientEditable = 'true'
 
   $scope.dragOverRecipient = (event) ->
+    return false unless window.draggedPill
+
     event.preventDefault()
     true
 

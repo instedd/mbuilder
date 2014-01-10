@@ -1,5 +1,7 @@
 angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
   $scope.dragOverName = (event) ->
+    return false unless window.draggedPill
+
     if window.draggedPill.kind == 'table_ref'
       false
     else
@@ -10,6 +12,8 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
     $scope.$emit 'pillOverFieldName', pill: window.draggedPill, field: $scope.pill, table: $scope.table
 
   $scope.dragOverValue = (event) ->
+    return false unless window.draggedPill
+
     if window.draggedPill.kind == 'table_ref'
       false
     else

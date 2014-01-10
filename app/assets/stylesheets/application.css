@@ -36,6 +36,7 @@
   padding: 10px;
   min-height: 30px;
   margin-bottom: 8px;
+  cursor: default;
 }
 
 .message-input {
@@ -45,6 +46,7 @@
   border: 1px solid gray;
   height: 24px;
   padding: 10px;
+  cursor: default;
 }
 
 .logic-table {
@@ -55,12 +57,27 @@
   padding: 10px;
 }
 
+.logic-table-name {
+  cursor: move;
+}
+
+.logic-field-name {
+  cursor: move;
+}
+
 .action {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   border: 1px solid gray;
   padding: 10px;
+  cursor: move;
+}
+
+.space-between-actions {
+  height: 20px;
+  width: 100%;
+  background-color: #fafafa;
 }
 
 .new-action {

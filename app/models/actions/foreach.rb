@@ -19,4 +19,16 @@ class Actions::Foreach < Action
     end
     context.set_entity(table, entity)
   end
+
+  def as_json
+    {
+      kind: kind,
+      table: @table,
+      actions: actions.as_json,
+    }
+  end
+
+  def self.from_hash(hash)
+    new hash['table'], Action.from_list(hash['actions'])
+  end
 end

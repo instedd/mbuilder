@@ -122,6 +122,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     event.stopPropagation()
 
   $scope.dragOverUnboundTable = (tableGuid, event) ->
+    return false unless window.draggedPill
     return false if window.draggedPill.kind != 'table_ref'
 
     event.preventDefault()
@@ -137,6 +138,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     event.stopPropagation()
 
   $scope.dragOverUnboundField = (fieldGuid, event) ->
+    return false unless window.draggedPill
     return false if window.draggedPill.kind != 'field_ref'
 
     event.preventDefault()

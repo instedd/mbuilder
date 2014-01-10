@@ -80,6 +80,56 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       field: args.field.guid
       table: args.table.guid
 
+  $scope.dragOverSpaceBetweenActions = (event) ->
+    if window.draggedAction
+
+      # We must prevent dropping an action inside itself
+      scope = window.draggedAction.scope
+      me = $scope
+      while me
+        if me == scope
+          return false
+        me = me.$parent
+
+      event.preventDefault()
+      true
+    else if window.draggedPill.kind == 'table_ref'
+      event.preventDefault()
+      true
+    else
+      false
+
+  $scope.dropOverSpaceBetweenActions = (index, event) ->
+    if window.draggedAction
+      window.draggedAction.scope.actions.splice window.draggedAction.index, 1
+      $scope.actions.splice index, 0, window.draggedAction.action
+
+      console.log $scope.actions
+
+      return false
+
+    action =
+      kind: 'foreach'
+      table: window.draggedPill.guid
+      actions: []
+
+    $scope.actions.splice index, 0, action
+
+    false
+
+  $scope.actionDragStart = (scope, action, index, event) ->
+    window.draggedAction = {scope: scope, action: action, index: index}
+    window.draggedPill = null
+
+    event.stopPropagation()
+
+    false
+
+  $scope.actionDragEnd = (event) ->
+    window.draggedAction = null
+
+    false
+
   $scope.isFirstFilter = (action) ->
     (_.select $scope.actions, (a) ->
       return a.kind == "select_entity" and a.table == action.table
