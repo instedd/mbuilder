@@ -15,8 +15,15 @@ class ChannelsController < ApplicationController
   end
 
   def create
-    @pigeon_channel = Pigeon::NuntiumChannel.new kind: params[:kind]
-    @pigeon_channel.name = "mbuilder_#{Time.now.strftime("%Y%m%d%H%M%S")}"
+    @pigeon_channel = Pigeon::NuntiumChannel.new kind: params[:kind],
+      at_rules: [{
+        'matchings' => [],
+        'actions' => [{ 'property' => 'mbuilder-application', 'value' => application.id }],
+        'stop' => false
+      }],
+      restrictions:
+        [{ 'name' => 'mbuilder-application', 'value' => application.id }],
+      name: "mbuilder_#{Time.now.strftime("%Y%m%d%H%M%S")}"
     channel.pigeon_name = @pigeon_channel.name
 
     if save_channels
