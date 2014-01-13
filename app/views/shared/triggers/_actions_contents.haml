@@ -1,0 +1,6 @@
+.space-between-actions{'dragover' => 'dragOverSpaceBetweenActions($event)', 'drop' => 'dropOverSpaceBetweenActions(0, $event)'}
+%div{'ng-repeat' => 'action in actions'}
+  .action{draggable: 'true', dragstart: 'actionDragStart(this, action, $index, $event)', dragend: 'actionDragEnd($event)'}
+    %a.delete{href: 'javascript:', 'ng-click' => 'deleteAction($index)'} x
+    %div(ng-include src='actionTemplateFor(action.kind)')
+  .space-between-actions{'dragover' => 'dragOverSpaceBetweenActions($event)', 'drop' => 'dropOverSpaceBetweenActions($index + 1, $event)'}
