@@ -16,14 +16,14 @@ describe "ElasticQuery" do
 
   it "should search for a value" do
     result = users.where(age: 10).first
-    result.properties[:age].should be(10)
+    result.properties[:age].should be(10.0)
   end
 
   it "should search for multiple values" do
     results = users.where(age: 20, name: 'foo')
     results.count.should be(1)
     result = results.first.properties
-    result[:age].should be(20)
+    result[:age].should be(20.0)
     result[:name].should eq('foo')
   end
 

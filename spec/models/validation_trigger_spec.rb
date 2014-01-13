@@ -23,7 +23,7 @@ describe ValidationTrigger do
 
     assert_data "users"
 
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "You sent the invalid value '6'"}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "You sent the invalid value '6'", :"mbuilder-application" => application.id}])
   end
 
   it "fires validation trigger on invalid value on store" do
@@ -42,6 +42,6 @@ describe ValidationTrigger do
 
     assert_data "users"
 
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "You sent the invalid value '7'"}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "You sent the invalid value '7'", :"mbuilder-application" => application.id}])
   end
 end

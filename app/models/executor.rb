@@ -14,6 +14,8 @@ class Executor
         begin
           return DatabaseExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(message, trigger, match), logger)
         rescue Exception => e
+          puts e.message
+          puts e.backtrace
           logger.error(e.message)
         ensure
           logger.save!
