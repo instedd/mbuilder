@@ -74,7 +74,8 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       if action.actions.length == 0
         $scope.deleteActionWithoutConfirmation(index)
       else
-        $scope.modalActionIndex = index
+        $rootScope.modalScope = $scope
+        $rootScope.modalActionIndex = index
         $('#actions-modal-delete').modal()
     else
       $scope.deleteActionWithoutConfirmation(index)
@@ -83,12 +84,13 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     $scope.actions.splice(index, 1)
 
   $scope.modalDeleteForeachAndActions = ->
-    $scope.deleteActionWithoutConfirmation($scope.modalActionIndex)
+    $rootScope.modalScope.deleteActionWithoutConfirmation($rootScope.modalActionIndex)
     $('#actions-modal-delete').modal('hide')
 
   $scope.modalDeleteForeachKeepActions = ->
-    action = $scope.actions[$scope.modalActionIndex]
-    $scope.actions.splice($scope.modalActionIndex, 1, action.actions...)
+    scope = $rootScope.modalScope
+    action = scope.actions[$rootScope.modalActionIndex]
+    scope.actions.splice($rootScope.modalActionIndex, 1, action.actions...)
     $('#actions-modal-delete').modal('hide')
 
   $scope.actionTemplateFor = (kind) ->
@@ -123,19 +125,42 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     if window.draggedAction
       window.draggedAction.scope.actions.splice window.draggedAction.index, 1
       $scope.actions.splice index, 0, window.draggedAction.action
-
-      console.log $scope.actions
-
       return false
+
+    table = $scope.lookupTable window.draggedPill.guid
+
+    # Automatically include following actions in the foreach
+    # if the mention some of the table's fields.
+    actions = []
+
+    i = index
+    while i < $scope.actions.length
+      next_action = $scope.actions[i]
+      if $scope.actionMentionsTable(next_action, table)
+        actions.push next_action
+        i += 1
+      else
+        break
 
     action =
       kind: 'foreach'
       table: window.draggedPill.guid
-      actions: []
+      actions: actions
 
-    $scope.actions.splice index, 0, action
+    $scope.actions.splice index, actions.length, action
 
     false
+
+  $scope.actionMentionsTable = (action, table) ->
+    switch action.kind
+      when 'create_entity', 'select_entity', 'store_entity_value'
+        _.any table.fields, (field) -> action.field == field.guid
+      when 'send_message'
+        _.any table.fields, (field) ->
+          (action.recipient.kind != 'text' && action.recipient.guid == field.guid) ||
+            _.any action.message, (msg) -> msg.guid == field.guid
+      else
+        false
 
   $scope.actionDragStart = (scope, action, index, event) ->
     window.draggedAction = {scope: scope, action: action, index: index}
