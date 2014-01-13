@@ -46,7 +46,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
   $rootScope.$on 'groupByField', (event, args) ->
     if tableIsUsedInAGroupByAction(args.table.guid)
-      $scope.deleteAction $scope.actions.indexOf actionOfTable args.table.guid
+      $scope.deleteActionWithoutConfirmation $scope.actions.indexOf actionOfTable args.table.guid
       addGroupByAction args
     else
       addGroupByAction args
@@ -69,7 +69,27 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       recipientEditable: 'false'
 
   $scope.deleteAction = (index) ->
+    action = $scope.actions[index]
+    if action.kind == 'foreach'
+      if action.actions.length == 0
+        $scope.deleteActionWithoutConfirmation(index)
+      else
+        $scope.modalActionIndex = index
+        $('#actions-modal-delete').modal()
+    else
+      $scope.deleteActionWithoutConfirmation(index)
+
+  $scope.deleteActionWithoutConfirmation = (index) ->
     $scope.actions.splice(index, 1)
+
+  $scope.modalDeleteForeachAndActions = ->
+    $scope.deleteActionWithoutConfirmation($scope.modalActionIndex)
+    $('#actions-modal-delete').modal('hide')
+
+  $scope.modalDeleteForeachKeepActions = ->
+    action = $scope.actions[$scope.modalActionIndex]
+    $scope.actions.splice($scope.modalActionIndex, 1, action.actions...)
+    $('#actions-modal-delete').modal('hide')
 
   $scope.actionTemplateFor = (kind) ->
     "#{kind}_action"
