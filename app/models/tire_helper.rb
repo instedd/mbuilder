@@ -18,10 +18,7 @@ module TireHelper
           values = Array(restriction[:value])
           boolean do
             must do |m|
-              # if values.size > 1
               m.terms restriction[:field], (values.map &:to_s)
-              # else
-              #   m.term restriction[:field], values[0]
             end
           end
         end
