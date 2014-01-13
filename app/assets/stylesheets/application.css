@@ -69,9 +69,13 @@
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  border: 1px solid gray;
+  border: 2px solid #bbbbbb;
   padding: 10px;
   cursor: move;
+}
+
+.action.selected {
+  border: 2px solid blue;
 }
 
 .space-between-actions {

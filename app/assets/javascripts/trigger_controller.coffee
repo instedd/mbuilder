@@ -14,6 +14,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
   $scope.validValuesPopup = { field: null }
   $scope.tableColumnPopup = { field: null }
 
+  $scope.selectedAction = null;
+
   $scope.data = (node) ->
     newData = {}
     for key, value of node.data()
@@ -194,4 +196,16 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
 
     event.preventDefault()
     event.stopPropagation()
+
+  $scope.selectAction = (scope, action, event) ->
+    $scope.selectedActionScope = scope
+    $scope.selectedAction = action
+    event.stopPropagation()
+
+  $scope.actionIsSelected = (action) ->
+    $scope.selectedAction == action
+
+  $scope.unselectAction = ->
+    $scope.selectedActionScope = null
+    $scope.selectedAction = null
 ]
