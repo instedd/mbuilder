@@ -11,6 +11,8 @@ class Application < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :name
 
+  before_destroy :delete_tire_index
+
   serialize :tables
 
   def accept_message(message)
@@ -35,9 +37,27 @@ class Application < ActiveRecord::Base
   end
 
   def tire_index(create_if_not_exists = true)
-    index = Tire::Index.new(tire_name)
-    index.create if create_if_not_exists && !index.exists?
+    index = Tire.index(tire_name)
+    if create_if_not_exists && !index.exists?
+      index.create(settings: {
+        index: {
+          analysis: {
+            analyzer: {
+              default: {
+                tokenizer: :keyword,
+                filter: [],
+                type: :custom,
+              }
+            }
+          }
+        }
+      })
+    end
     index
+  end
+
+  def delete_tire_index
+    tire_index.delete
   end
 
   def tire_search(table)

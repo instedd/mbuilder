@@ -13,6 +13,10 @@ class MessagesController < ApplicationController
     message['timestamp'] = Time.now.utc.to_s
     context = application.accept_message message
     if context
+      if context.messages.present?
+        nuntium = Pigeon::Nuntium.from_config
+        nuntium.send_ao context.messages
+      end
       render_json messages: context.messages, actions: context.logger.actions_as_strings
     else
       render_json false

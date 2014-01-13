@@ -27,7 +27,9 @@ class LogsListing < Listings::Base
     end
   end
 
-  column :created_at
+  column :created_at do |log|
+    time_ago_in_words(log.created_at) + " ago"
+  end
 
   column '', class: 'right' do |log|
     content_tag :button, 'class' => 'btn btn-lg', 'title' =>'Edit and re-send message', 'onclick' => "$('#logsController').scope().loadMessageInPopup(#{{from: log.message_from.without_protocol, body: log.message_body, actions: log.actions_as_strings}.to_json});$('#logsController').scope().$apply();" do

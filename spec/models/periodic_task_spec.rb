@@ -41,7 +41,7 @@ describe "PeriodicTask" do
 
     context = wake_up_event.perform
 
-    context.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter at 1234"}])
+    context.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter at 1234", :"mbuilder-application" => application.id}])
   end
 
   it "should create a delayed entity" do
@@ -80,7 +80,7 @@ describe "PeriodicTask" do
     job.run_at.should be_near_of(Time.now.utc)
 
     job.delete
-    wake_up_event.perform.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter at 1234"}])
+    wake_up_event.perform.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter at 1234", :"mbuilder-application" => application.id}])
 
     assert_equal 1, Delayed::Job.count
     job = Delayed::Job.first
@@ -92,7 +92,7 @@ describe "PeriodicTask" do
     wake_up_event.scheduled_time.should be_near_of(Time.now.utc)
     job.run_at.should be_near_of(Time.now.utc)
 
-    wake_up_event.perform.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter at 1234"}])
+    wake_up_event.perform.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter at 1234", :"mbuilder-application" => application.id}])
   end
 
   it "should re-schedule a job when updating the trigger" do

@@ -72,7 +72,7 @@ class ExecutionContext
   end
 
   def send_message(to, body)
-    @messages.push({from: "app://mbuilder", to: to.with_protocol("sms"), body: body})
+    @messages.push({from: "app://mbuilder", to: to.with_protocol("sms"), body: body, :'mbuilder-application' => application.id})
     logger.send_message(to, body)
   end
 

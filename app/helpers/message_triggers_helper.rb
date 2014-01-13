@@ -9,8 +9,11 @@ module MessageTriggersHelper
       from = trigger.message.from
       from = trigger.default_from_number if from.blank?
 
+      # We add an empty text pill at the end so the user can place the cursor there
+      pieces = (trigger.message.pieces + [Pills::TextPill.new("")]).map(&:as_json).to_json_oj
+
       str << "from=#{from.to_json_oj};"
-      str << "pieces=#{trigger.message.pieces.map(&:as_json).to_json_oj};"
+      str << "pieces=#{pieces};"
       str << "actions=#{trigger.actions.map(&:as_json).to_json_oj};"
     else
       str << "pieces=[];"

@@ -47,7 +47,8 @@ class Actions::SendMessage < Action
   def as_json
     {
       kind: kind,
-      message: message.as_json,
+      # We add an empty text pill at the end so the user can place the cursor there
+      message: (message + [Pills::TextPill.new("")]).as_json,
       recipient: recipient.as_json,
     }
   end

@@ -10,14 +10,15 @@ module TireHelper
   end
 
   def apply_restrictions_to(search, restrictions)
-    restrictions.each do |restriction|
-      search.query do
+    return unless restrictions.present?
+    search.query do
+      restrictions.each do |restriction|
         case restriction[:op]
         when :eq
           values = Array(restriction[:value])
           boolean do
-            values.each do |value|
-              should { match restriction[:field], value }
+            must do |m|
+              m.terms restriction[:field], (values.map &:to_s)
             end
           end
         end

@@ -77,7 +77,7 @@ describe MemoryExecutionContext do
 
     context.execute(trigger)
 
-    context.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Name from 1234"}])
+    context.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Name from 1234", :"mbuilder-application" => application.id}])
   end
 
   it "simulates all triggers execution" do
@@ -177,8 +177,8 @@ describe MemoryExecutionContext do
     context.execute_many application.message_triggers
 
     context.messages.should eq([
-      {from: "app://mbuilder", to: "sms://1234", body: "Hello John, Peter"},
-      {from: "app://mbuilder", to: "sms://2345", body: "Hello John, Peter"}
+      {from: "app://mbuilder", to: "sms://1234", body: "Hello John, Peter", :"mbuilder-application" => application.id},
+      {from: "app://mbuilder", to: "sms://2345", body: "Hello John, Peter", :"mbuilder-application" => application.id}
     ])
   end
 end

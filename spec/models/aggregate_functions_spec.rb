@@ -37,7 +37,7 @@ describe "Aggregate functions" do
       send_message "'1111'", "{*count(age)}"
     end
     ctx = accept_message 'sms://1234', 'foo'
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "4"}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "4", :"mbuilder-application" => application.id}])
   end
 
   it "does sum of" do
@@ -46,7 +46,7 @@ describe "Aggregate functions" do
       send_message "'1111'", "{*total(age)}"
     end
     ctx = accept_message 'sms://1234', 'foo'
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "150"}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "150", :"mbuilder-application" => application.id}])
   end
 
   it "does avg of" do
@@ -55,7 +55,7 @@ describe "Aggregate functions" do
       send_message "'1111'", "{*mean(age)}"
     end
     ctx = accept_message 'sms://1234', 'foo'
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "37.5"}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "37.5", :"mbuilder-application" => application.id}])
   end
 
   it "does max of" do
@@ -64,7 +64,7 @@ describe "Aggregate functions" do
       send_message "'1111'", "{*max(age)}"
     end
     ctx = accept_message 'sms://1234', 'foo'
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "80"}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "80", :"mbuilder-application" => application.id}])
   end
 
   it "does min of" do
@@ -73,6 +73,6 @@ describe "Aggregate functions" do
       send_message "'1111'", "{*min(age)}"
     end
     ctx = accept_message 'sms://1234', 'foo'
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "10"}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "10", :"mbuilder-application" => application.id}])
   end
 end

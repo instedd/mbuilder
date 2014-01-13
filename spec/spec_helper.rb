@@ -114,7 +114,7 @@ RSpec.configure do |config|
   def add_data(table, *data)
     data = data[0] if data.length == 1 && data[0].is_a?(Array)
 
-    data.each do |properties|
+    data.to_f_if_looks_like_number.each do |properties|
       application.tire_index.store type: table, properties: properties
     end
     application.tire_index.refresh

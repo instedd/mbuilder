@@ -9,7 +9,7 @@ describe "Send message" do
       send_message "'5678'", "Hello {{name}} from {{phone_number}}"
     end
     ctx = accept_message "sms://1234", "register Peter"
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter from 1234"}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter from 1234", :"mbuilder-application" => application.id}])
   end
 
   it "sends message with dot" do
@@ -18,7 +18,7 @@ describe "Send message" do
       send_message "'5678'", "Hello {{name}}. Your number is: {{phone_number}}"
     end
     ctx = accept_message "sms://1234", "register Peter"
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: 1234"}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: 1234", :"mbuilder-application" => application.id}])
   end
 
   it "sends message to phone number" do
@@ -27,7 +27,7 @@ describe "Send message" do
       send_message "{phone_number}", "Hello {{name}}. Your number is: {{phone_number}}"
     end
     ctx = accept_message "sms://1234", "register Peter"
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1234", body: "Hello Peter. Your number is: 1234"}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://1234", body: "Hello Peter. Your number is: 1234", :"mbuilder-application" => application.id}])
   end
 
   it "sends message with quotes" do
@@ -36,7 +36,7 @@ describe "Send message" do
       send_message "'5678'", "Hello {{name}}. Your number is: \"{{phone_number}}\""
     end
     ctx = accept_message "sms://1234", "register Peter"
-    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: \"1234\""}])
+    ctx.messages.should eq([{from: "app://mbuilder", to: "sms://5678", body: "Hello Peter. Your number is: \"1234\"", :"mbuilder-application" => application.id}])
   end
 
   it "sends message to many recipients" do
@@ -53,8 +53,8 @@ describe "Send message" do
     ctx = accept_message "sms://1234", "alert John with Hello"
 
     assert_sets_equal ctx.messages, [
-      {from: "app://mbuilder", to: "sms://1234", body: "The message: Hello"},
-      {from: "app://mbuilder", to: "sms://5678", body: "The message: Hello"},
+      {from: "app://mbuilder", to: "sms://1234", body: "The message: Hello", :"mbuilder-application" => application.id},
+      {from: "app://mbuilder", to: "sms://5678", body: "The message: Hello", :"mbuilder-application" => application.id},
     ]
   end
 
@@ -71,8 +71,8 @@ describe "Send message" do
     end
     ctx = accept_message "sms://1234", "alert John"
 
-    (ctx.messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 1234, 5678"}] ||
-     ctx.messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 5678, 1234"}]).should be_true
+    (ctx.messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 1234, 5678", :"mbuilder-application" => application.id}] ||
+     ctx.messages == [{from: "app://mbuilder", to: "sms://1111", body: "The message: 5678, 1234", :"mbuilder-application" => application.id}]).should be_true
   end
 
   it "send message filtered by many values" do
@@ -95,9 +95,27 @@ describe "Send message" do
     end
     ctx = accept_message "sms://9999", "alert John"
     assert_sets_equal ctx.messages, [
-      {from: "app://mbuilder", to: "sms://1111", body: "Watch out!"},
-      {from: "app://mbuilder", to: "sms://2222", body: "Watch out!"},
-      {from: "app://mbuilder", to: "sms://3333", body: "Watch out!"},
+      {from: "app://mbuilder", to: "sms://1111", body: "Watch out!", :"mbuilder-application" => application.id},
+      {from: "app://mbuilder", to: "sms://2222", body: "Watch out!", :"mbuilder-application" => application.id},
+      {from: "app://mbuilder", to: "sms://3333", body: "Watch out!", :"mbuilder-application" => application.id},
+    ]
+  end
+
+  it "send message filtered by many values on the same table" do
+    add_data "users", [
+      {"phone" => 1234, "name" => "John"},
+      {"phone" => 5678, "name" => "John"},
+      {"phone" => 1234, "name" => "Foo"},
+    ]
+    new_trigger do
+      message "alert {Name} {phone}"
+      select_entity "users.name = {name}"
+      select_entity "users.phone = {phone}"
+      send_message "*phone", "Watch out!"
+    end
+    ctx = accept_message "sms://9999", "alert John 1234"
+    assert_sets_equal ctx.messages, [
+      {from: "app://mbuilder", to: "sms://1234", body: "Watch out!", :"mbuilder-application" => application.id},
     ]
   end
 end

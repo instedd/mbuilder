@@ -20,7 +20,7 @@ describe "Aggregate functions" do
         send_message "'1111'", "{*total(age)}"
       end
       context = accept_message 'sms://1234', 'foo'
-      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "120, 30"}])
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "120, 30", :"mbuilder-application" => application.id}])
     end
 
     it "groups by and shows the grouped field" do
@@ -30,7 +30,7 @@ describe "Aggregate functions" do
         send_message "'1111'", "{*name}: {*total(age)}"
       end
       context = accept_message 'sms://1234', 'foo'
-      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: 120, 30"}])
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: 120, 30", :"mbuilder-application" => application.id}])
     end
 
     it "shows a grouped field without aggregation" do
@@ -40,7 +40,7 @@ describe "Aggregate functions" do
         send_message "'1111'", "{*name}: {*age}"
       end
       context = accept_message 'sms://1234', 'foo'
-      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: [40, 80], [10, 20]"}])
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: [40, 80], [10, 20]", :"mbuilder-application" => application.id}])
     end
   end
 
@@ -66,7 +66,7 @@ describe "Aggregate functions" do
         send_message "'1111'", "{*total(age)}"
       end
       context.execute trigger
-      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "120, 30"}])
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "120, 30", :"mbuilder-application" => application.id}])
     end
 
     it "groups by and shows the grouped field" do
@@ -76,7 +76,7 @@ describe "Aggregate functions" do
         send_message "'1111'", "{*name}: {*total(age)}"
       end
       context.execute trigger
-      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: 120, 30"}])
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: 120, 30", :"mbuilder-application" => application.id}])
     end
 
     it "shows a grouped field without aggregation" do
@@ -86,7 +86,7 @@ describe "Aggregate functions" do
         send_message "'1111'", "{*name}: {*age}"
       end
       context.execute trigger
-      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: [40, 80], [10, 20]"}])
+      context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: [40, 80], [10, 20]", :"mbuilder-application" => application.id}])
     end
   end
 end
