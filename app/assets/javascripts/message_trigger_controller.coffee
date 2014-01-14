@@ -3,7 +3,7 @@ angular.module('mbuilder').controller 'MessageTriggerController', ['$scope', '$h
     $scope.pieces.concat $scope.implicitPills()
 
   $scope.implicitPills = ->
-    [{text: $scope.from, guid:"phone_number"}, {text: 'dd-mm-yyyy', guid:"received_at"}]
+    [{text: $scope.from, guid:"phone_number"}, {text: 'yyyymmdd', guid:"received_at"}]
 
   $scope.contenteditable = 'false'
 
@@ -13,7 +13,7 @@ angular.module('mbuilder').controller 'MessageTriggerController', ['$scope', '$h
 
   $scope.receivedAtDragStart = (event) ->
     window.draggedPill = {kind: "placeholder", guid: "received_at"}
-    event.dataTransfer.setData("Text", 'dd-mm-yyyy')
+    event.dataTransfer.setData("Text", 'yyyymmdd')
 
   addPiece = (pieces, kind, text, guid = window.guid()) ->
     text = $.trim(text)
