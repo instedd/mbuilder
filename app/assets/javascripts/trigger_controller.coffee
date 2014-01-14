@@ -14,7 +14,16 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
   $scope.validValuesPopup = { field: null }
   $scope.tableColumnPopup = { field: null }
 
-  $scope.selectedAction = null;
+  $scope.selectedAction = null
+
+  for name in ['pillOverFieldName', 'pillOverFieldValue']
+    do(name) ->
+      $scope.$on name, (event, args) ->
+        unless event.targetScope == event.currentScope
+          $scope.$broadcast name, args
+
+  $scope.$on 'addSendMessageActionUp', (event, args) ->
+    $scope.$broadcast 'addSendMessageActionDown', args
 
   $scope.data = (node) ->
     newData = {}
@@ -197,8 +206,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     event.preventDefault()
     event.stopPropagation()
 
-  $scope.selectAction = (scope, action, event) ->
-    $scope.selectedActionScope = scope
+  $scope.selectAction = (action, event) ->
     $scope.selectedAction = action
     event.stopPropagation()
 
@@ -206,6 +214,5 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     $scope.selectedAction == action
 
   $scope.unselectAction = ->
-    $scope.selectedActionScope = null
     $scope.selectedAction = null
 ]

@@ -20,6 +20,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
         $scope.replacePills(actionGuid, args.pill)
       else
         action.pill = args.pill
+      null
     else
       newAction =
         kind: kind
@@ -27,46 +28,81 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
         table: args.table.guid
         field: args.field.guid
 
-      addToActions(newAction)
-
-  addToActions = (newAction) ->
+  addToActions = (actions, newAction, index = -1) ->
     # Put the action before the first "send message" action, if any
-    i = $scope.actions.length - 1
-    while i >= 0
-      action = $scope.actions[i]
-      if action.kind != 'send_message'
-        $scope.actions.splice(i + 1, 0, newAction)
-        return
-      i -= 1
+    i = index
+    i = actions.length - 1 if i == -1
 
-    $scope.actions.splice(0, 0, newAction)
+    if i == -1 || newAction.kind == 'send_message'
+      actions.push(newAction)
+    else
+      if newAction.kind != 'send_message'
+        while i >= 0
+          action = actions[i]
+          if action.kind != 'send_message'
+            actions.splice(i + 1, 0, newAction)
+            return
+          i -= 1
 
-  $rootScope.$on 'pillOverFieldName', (event, args) ->
-    createTableFieldAction 'select_entity', args
+      actions.splice(0, 0, newAction)
+
+  $scope.onActionTarget = (callback) ->
+    mustCreate = false
+    actions = $scope.actions
+    index = -1
+    if $scope.selectedAction
+      index = _.indexOf($scope.actions, $scope.selectedAction)
+      if index >= 0
+        if $scope.selectedAction.kind == 'foreach'
+          actions = $scope.selectedAction.actions
+          index = -1
+        mustCreate = true
+    else if !$scope.action
+      mustCreate = true
+
+    if mustCreate
+      callback(actions, index)
+
+  $scope.$on 'pillOverFieldName', (event, args) ->
+    $scope.onActionTarget (actions, index) ->
+      action = createTableFieldAction 'select_entity', args
+      if action
+        addToActions(actions, action, index)
+
+  $scope.$on 'pillOverFieldValue', (event, args) ->
+    $scope.onActionTarget (actions, index) ->
+      action = null
+      actionKind = if tableIsUsedInAnCreateOrSelectAction(args.table.guid) then 'store_entity_value' else 'create_entity'
+      action = createTableFieldAction actionKind, args
+      if action
+        addToActions(actions, action, index)
+
+  $scope.$on 'addSendMessageActionDown', (event) ->
+    $scope.onActionTarget (actions, index) ->
+      action =
+        kind: 'send_message'
+        message: []
+        recipient: {kind: 'text', guid: ''}
+        messageeditable: 'false'
+        recipienteditable: 'false'
+
+      addToActions actions, action, index
 
   $rootScope.$on 'groupByField', (event, args) ->
-    if tableIsUsedInAGroupByAction(args.table.guid)
-      $scope.deleteActionWithoutConfirmation $scope.actions.indexOf actionOfTable args.table.guid
-      addGroupByAction args
-    else
-      addGroupByAction args
+    unless $scope.action
+      if tableIsUsedInAGroupByAction(args.table.guid)
+        $scope.deleteActionWithoutConfirmation $scope.actions.indexOf actionOfTable args.table.guid
+        addGroupByAction args
+      else
+        addGroupByAction args
 
   $rootScope.$on 'refreshCollection', (event, args) ->
-    $rootScope.$broadcast 'updateCollection', args
-
-  $rootScope.$on 'pillOverFieldValue', (event, args) ->
-    if tableIsUsedInAnCreateOrSelectAction(args.table.guid)
-      createTableFieldAction 'store_entity_value', args
-    else
-      createTableFieldAction 'create_entity', args
+    unless $scope.action
+      $rootScope.$broadcast 'updateCollection', args
 
   $scope.addSendMessageAction = ->
-    $scope.actions.push
-      kind: 'send_message'
-      message: []
-      recipient: {kind: 'text', guid: ''}
-      messageEditable: 'false'
-      recipientEditable: 'false'
+    unless $scope.action
+      $scope.$emit 'addSendMessageActionUp'
 
   $scope.deleteAction = (index) ->
     action = $scope.actions[index]
@@ -81,6 +117,11 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       $scope.deleteActionWithoutConfirmation(index)
 
   $scope.deleteActionWithoutConfirmation = (index) ->
+    action = $scope.actions[index]
+
+    if action == $scope.selectedAction
+      $scope.selectedAction = null
+
     $scope.actions.splice(index, 1)
 
   $scope.modalDeleteForeachAndActions = ->
@@ -97,7 +138,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     "#{kind}_action"
 
   addGroupByAction = (args) ->
-    addToActions
+    addToActions $scope.actions,
       kind: 'group_by'
       field: args.field.guid
       table: args.table.guid
