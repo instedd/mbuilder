@@ -101,6 +101,17 @@ RSpec.configure do |config|
     end
   end
 
+  def parse_condition(text)
+    left, op, right = text.split(' ', 3)
+    if left && op && right
+      left = Pill.from_hash(pill(left))
+      right = Pill.from_hash(pill(right))
+      [left, op, [right]]
+    else
+      raise "Expected three pieces separated by spaces for condition: #{text}"
+    end
+  end
+
   def accept_message(from, body)
     application.accept_message('from' => from, 'body' => body)
   end

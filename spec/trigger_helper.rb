@@ -86,6 +86,13 @@ class TriggerHelper
     @actions << Actions::Foreach.new(table, helper.actions)
   end
 
+  def iff(condition, &block)
+    left, op, right = parse_condition(condition)
+    helper = TriggerHelper.new(@application)
+    helper.instance_eval &block
+    @actions << Actions::If.new(left, op, right, helper.actions)
+  end
+
   def trigger
     trigger = @application.message_triggers.make_unsaved
     trigger.message = @message
