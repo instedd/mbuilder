@@ -10,8 +10,8 @@ describe "Update entity" do
       {"phone" => 5678.0, "name" => "Doe"},
     ]
     new_trigger do
-      message "rename {Phone}"
-      select_entity "users.phone = {phone}"
+      message "rename {1111}"
+      select_entity "users.phone = {1111}"
       store_entity_value "users.name = 'NewName'"
     end
     accept_message 'sms://1234', 'rename 1234'

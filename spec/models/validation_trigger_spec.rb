@@ -10,8 +10,8 @@ describe ValidationTrigger do
 
   it "fires validation trigger on invalid value on create" do
     new_trigger do
-      message "register {Variable}"
-      create_entity "users.phone = {variable}"
+      message "register {1111}"
+      create_entity "users.phone = {1111}"
       send_message "'1234'", "Hello!"
     end
 
@@ -28,9 +28,9 @@ describe ValidationTrigger do
 
   it "fires validation trigger on invalid value on store" do
     new_trigger do
-      message "register {Variable}"
+      message "register {1111}"
       create_entity "users.name = 'Foo'"
-      store_entity_value "users.phone = {variable}"
+      store_entity_value "users.phone = {1111}"
       send_message "'1234'", "Hello!"
     end
 

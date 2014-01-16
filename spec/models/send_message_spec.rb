@@ -108,9 +108,9 @@ describe "Send message" do
       {"phone" => 1234, "name" => "Foo"},
     ]
     new_trigger do
-      message "alert {Name} {phone}"
+      message "alert {Name} {1111}"
       select_entity "users.name = {name}"
-      select_entity "users.phone = {phone}"
+      select_entity "users.phone = {1111}"
       send_message "*phone", "Watch out!"
     end
     ctx = accept_message "sms://9999", "alert John 1234"
