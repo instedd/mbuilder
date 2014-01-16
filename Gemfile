@@ -30,6 +30,7 @@ gem 'resource_map_api_client', git: "https://bitbucket.org/instedd/resource_map_
 gem 'listings', github: "manastech/listings", branch: 'master'
 
 gem 'oj'
+gem 'guid'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
