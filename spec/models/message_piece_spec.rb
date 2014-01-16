@@ -18,10 +18,10 @@ describe MessagePiece do
   end
 
   it "infers patter to be single_word" do
-    MessagePiece.infer_pattern("A23").should eq(:single_word)
+    MessagePiece.infer_pattern("A23").should eq(:single_word_alphanumeric)
   end
 
   it "infers patter to be single_word" do
-    MessagePiece.infer_pattern("A2.3").should eq(:single_word)
+    MessagePiece.infer_pattern("A2.3").should eq(:single_word_alphanumeric)
   end
 end
