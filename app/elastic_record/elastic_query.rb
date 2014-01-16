@@ -155,9 +155,8 @@ class ElasticQuery
 
       unless @order.empty?
         body[:sort] = @order.map do |sort|
-          sort.map do |field, direction|
-            {field.to_s => direction.to_s}
-          end
+          field, direction = sort.split(' ')
+          {field => direction}
         end.flatten
       end
 
