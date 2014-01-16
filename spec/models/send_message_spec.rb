@@ -118,4 +118,20 @@ describe "Send message" do
       {from: "app://mbuilder", to: "sms://1234", body: "Watch out!", :"mbuilder-application" => application.id},
     ]
   end
+
+  it "matches more than one trigger" do
+    new_trigger do
+      message "register {Name}"
+      send_message "'5678'", "Hello {{name}} from {{phone_number}}"
+    end
+    new_trigger do
+      message "register {Name}"
+      send_message "'1234'", "Hello {{name}} from {{phone_number}}"
+    end
+    ctx = accept_message "sms://1234", "register Peter"
+    ctx.messages.should eq([
+      {from: "app://mbuilder", to: "sms://5678", body: "Hello Peter from 1234", :"mbuilder-application" => application.id},
+      {from: "app://mbuilder", to: "sms://1234", body: "Hello Peter from 1234", :"mbuilder-application" => application.id},
+      ])
+  end
 end
