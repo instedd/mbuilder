@@ -34,7 +34,7 @@ describe "ElasticQuery" do
   end
 
   it "should retrieve the values sorted" do
-    results = users.all.order(age: :desc).order(name: :desc)
+    results = users.all.order("age desc").order("name desc")
     results.to_a.map(&:properties).should eq([
       {"age" => 30, "name" => "bar"},
       {"age" => 20, "name" => "foo"},
@@ -44,7 +44,7 @@ describe "ElasticQuery" do
   end
 
   it "should reorder" do
-    results = users.all.order(name: :asc).reorder(age: :desc).order(name: :desc)
+    results = users.all.order("name asc").reorder("age desc").order("name desc")
     results.to_a.map(&:properties).should eq([
       {"age" => 30, "name" => "bar"},
       {"age" => 20, "name" => "foo"},
@@ -54,7 +54,7 @@ describe "ElasticQuery" do
   end
 
   it "should paginate" do
-    results = users.all.order(name: :asc, age: :asc).page(2).per(3)
+    results = users.all.order("name asc", "age asc").page(2).per(3)
     results.count.should be(1)
     results.to_a.map(&:properties).should eq([
       {"age" => 20, "name" => "foo"}
@@ -67,7 +67,7 @@ describe "ElasticQuery" do
   end
 
   it "should iterate through all pages" do
-    results = users.all.order(name: :asc, age: :asc).per(2)
+    results = users.all.order("name asc", "age asc").per(2)
     results.count.should be(4)
   end
 
