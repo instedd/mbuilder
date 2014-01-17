@@ -16,7 +16,7 @@ class MemoryExecutionContext < ExecutionContext
 
   def insert(table, properties)
     @db[table] << properties.merge({ 'id' => next_id })
-    @logger.insert(table, properties)
+    @logger.insert_values(table, properties)
   end
 
   def update_many(table, restrictions, properties)
@@ -26,7 +26,7 @@ class MemoryExecutionContext < ExecutionContext
 
     result_rows.each do |row|
       row.merge!(properties)
-      @logger.update(table, properties['id'], row, properties)
+      @logger.update_values(table, properties['id'], row, properties)
     end
   end
 

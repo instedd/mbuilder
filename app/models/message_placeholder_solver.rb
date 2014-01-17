@@ -10,7 +10,7 @@ class MessagePlaceholderSolver < PlaceholderSolver
     when 'phone_number'
       @message['from'].without_protocol
     when 'received_at'
-      Time.parse(@message['timestamp']).strftime("%d-%m-%Y")
+      Time.parse(@message['timestamp']).strftime("%Y%m%d")
     else
       index = @pieces.index { |piece| piece.guid == guid }
       @match[index + 1]

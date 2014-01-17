@@ -33,9 +33,9 @@ describe "Create entity" do
 
   it "creates entity with a stored value when value is number" do
     new_trigger do
-      message "register {Name}"
+      message "register {1111}"
       create_entity "users.phone = {phone_number}"
-      store_entity_value "users.name = {name}"
+      store_entity_value "users.name = {1111}"
     end
     accept_message 'sms://1234', 'register 5678'
     assert_data "users", {"phone" => 1234.0, "name" => 5678.0}

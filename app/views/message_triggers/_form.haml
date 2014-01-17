@@ -24,7 +24,8 @@
               .received-at
                 %strong Received at:
                 .pill.bound{draggable: 'true', dragstart: 'receivedAtDragStart($event)'}
-                  dd-mm-yyyy
+                  yyyymmdd
+          %br
 
           = render 'shared/triggers/actions'
         = render 'shared/triggers/tables'

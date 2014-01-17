@@ -19,7 +19,7 @@ class ExecutionContext
   rescue InvalidValueException => ex
     validation_trigger = application.validation_triggers.find_by_field_guid(ex.field_guid)
     if validation_trigger
-      context = self.class.new(application, InvalidValuePlaceholderSolver.new(@placeholder_solver, ex.value), ExecutionLogger.new(application: application, trigger: validation_trigger))
+      context = self.class.new(application, InvalidValuePlaceholderSolver.new(@placeholder_solver, ex.value), logger)
       context.logger.invalid_value(ex.table_guid, ex.field_guid, ex.value)
       context.execute(validation_trigger)
     else

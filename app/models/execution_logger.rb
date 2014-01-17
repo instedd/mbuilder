@@ -25,16 +25,20 @@ class ExecutionLogger < ActiveRecord::Base
     self
   end
 
-  def insert(table_guid, properties)
+  def insert_values(table_guid, properties)
     append_action :insert, table_guid, properties
   end
 
-  def update(table_guid, id, old_properties, new_properties)
+  def update_values(table_guid, id, old_properties, new_properties)
     append_action :update, table_guid, id, old_properties, new_properties
   end
 
   def invalid_value(table_guid, field_guid, value)
     append_action :invalid_value, table_guid, field_guid, value
+  end
+
+  def info(description)
+    append_action :info, description
   end
 
   def error(description)
@@ -79,7 +83,7 @@ class ExecutionLogger < ActiveRecord::Base
         table = find_table(table_guid)
         field = table.find_field(field_guid)
         "Tried to insert invalid value '#{value}' into #{table.name} #{field.name}"
-      when :error, :warning
+      when :info, :error, :warning
         severity, description = action
         "#{severity.to_s.titleize}: #{description}"
       when :send_message

@@ -27,7 +27,7 @@ class DatabaseExecutionContext < ExecutionContext
     @index.store type: table, properties: properties, created_at: now, updated_at: now
     @index.refresh
 
-    @logger.insert(table, properties)
+    @logger.insert_values(table, properties)
   end
 
   def insert_in_resource_map(table, properties)
@@ -56,7 +56,7 @@ class DatabaseExecutionContext < ExecutionContext
 
       @index.store type: table, id: result["_id"], properties: new_properties, updated_at: now
 
-      @logger.update(table, result["_id"], old_properties, new_properties)
+      @logger.update_values(table, result["_id"], old_properties, new_properties)
     end
 
     @index.refresh

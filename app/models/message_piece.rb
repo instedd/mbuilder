@@ -17,17 +17,15 @@ class MessagePiece
       pattern << "("
       case infer_pattern
       when :float
-        pattern << "\\d+\\.\\d+"
+        pattern << "\\d+(?:\\.\\d+)?"
       when :integer
         pattern << "\\d+"
       when :multiple_word
-        pattern << ".+"
+        pattern << ".+?"
       when :single_word
-        if index == total - 1
-          pattern << ".+"
-        else
-          pattern << "\\S+"
-        end
+        pattern << "[^0-9\s]\\S*"
+      when :single_word_alphanumeric
+        pattern << "\\S+"
       end
       pattern << ")"
     else
@@ -47,6 +45,8 @@ class MessagePiece
       :integer
     when text.include?(' ')
       :multiple_word
+    when text =~ /\d/
+      :single_word_alphanumeric
     else
       :single_word
     end
