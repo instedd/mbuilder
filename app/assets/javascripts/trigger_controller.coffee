@@ -14,7 +14,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
   $scope.ifOperatorsPopup = { action: null }
   $scope.ifOperators = [
     {id: '==', desc: 'equals'},
-    {id: '!=', desc: 'not equals'},
+    {id: '!=', desc: 'does not equal'},
     {id: 'contains', desc: 'contains'},
     {id: '<', desc: 'is less than'},
     {id: '>', desc: 'is greater than'},
