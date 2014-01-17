@@ -11,7 +11,7 @@ class Message
 
   def initialize_pattern
     @pattern = "\\A\\s*"
-    pieces.each_with_index do |piece, i|
+    pieces.select(&:present?).each_with_index do |piece, i|
       @pattern << "\\s+" if i > 0
       piece.append_pattern(@pattern, i, pieces.length)
     end
