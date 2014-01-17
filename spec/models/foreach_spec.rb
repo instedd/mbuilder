@@ -11,8 +11,8 @@ describe "Foreach" do
     ]
 
     new_trigger do
-      message "copy {Phone}"
-      select_entity "users.phone = {phone}"
+      message "copy {1111}"
+      select_entity "users.phone = {1111}"
       foreach("users") do
         create_entity "copied.phone_copy = *phone"
         store_entity_value "copied.name_copy = *name"
@@ -39,8 +39,8 @@ describe "Foreach" do
     ]
 
     new_trigger do
-      message "filter {Phone}"
-      select_entity "users.phone = {phone}"
+      message "filter {1111}"
+      select_entity "users.phone = {1111}"
       foreach("users") do
         select_entity "copied.name_copy = *name"
         send_message "*phone_copy", "{*name_copy}"
