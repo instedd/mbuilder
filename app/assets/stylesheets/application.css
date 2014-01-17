@@ -151,7 +151,14 @@ a.delete {
   background: #f1FFf1;
   margin-left: 4px;
   margin-right: 4px;
+  height: 22px !important;
   cursor: move;
+}
+
+.pill.literal input {
+  margin: 0;
+  padding: 0;
+  height: 20px !important;
 }
 
 .text {
