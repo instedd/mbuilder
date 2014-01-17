@@ -24,25 +24,25 @@ class ElasticQuery
     self
   end
 
-  def order(options)
+  def order(*options)
     clone.tap do |query|
-      query.order! options
+      query.order! *options
     end
   end
 
-  def reorder(options)
+  def reorder(*options)
     clone.tap do |query|
-      query.reorder! options
+      query.reorder! *options
     end
   end
 
-  def reorder!(options)
+  def reorder!(*options)
     @order = []
-    order! options
+    order! *options
   end
 
-  def order!(options)
-    @order << options
+  def order!(*options)
+    @order.push(*options)
     self
   end
 
