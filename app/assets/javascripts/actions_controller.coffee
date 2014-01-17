@@ -197,7 +197,9 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       kind: 'if'
       left: window.draggedPill
       op: '=='
-      right: [{kind: 'literal', guid: window.guid(), text: ''}]
+      right: [
+        {kind: 'literal', guid: window.guid(), text: ''},
+      ]
       actions: []
 
     $scope.actions.splice index, 0, action
@@ -239,10 +241,22 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     false
 
-  $scope.opName = (op) ->
-    switch op
-      when "==" then "equals"
-      else "uknown op (bug)"
+  $scope.dragOverIfOperand = (event) ->
+    if window.draggedPill
+      event.preventDefault()
+      true
+    else
+      false
 
+  $scope.dropOverIfLeft = (event) ->
+    $scope.action.left = window.draggedPill
+
+  $scope.dropOverIfRight = (index, event) ->
+    $scope.action.right[index] = window.draggedPill
+
+  $scope.convertIfRightToLiteral = (index) ->
+    action = $scope.action.right[index]
+    if action.kind != 'literal'
+      $scope.action.right[index] = {kind: 'literal', guid: window.guid(), text: '', editmode: true, focusmode: true}
 
 ]

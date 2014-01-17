@@ -1,8 +1,12 @@
 .if{'ng-controller' => 'ActionsController', 'ng-init' => 'actions=action.actions;action=action'}
   If
   %span{'ng-repeat' => 'pill in [action.left]'}
-    %span(ng-include src='pillTemplateFor(pill)')
-  {{opName(action.op)}}
+    %span{dragover: 'dragOverIfOperand($event)', drop: 'dropOverIfLeft($event)'}
+      %span(ng-include src='pillTemplateFor(pill)')
+  %span{'ng-click' => 'showIfOperatorsPopup(action, $event)', 'ng-right-click' => 'showIfOperatorsPopup(action, $event)', 'style' => 'cursor:pointer'}
+    {{ifOperandDescription(action.op)}}
   %span{'ng-repeat' => 'pill in action.right'}
-    %span(ng-include src='pillTemplateFor(pill)')
+    %span{'ng-show' => '$index == 1'} and
+    %span{dragover: 'dragOverIfOperand($event)', drop: 'dropOverIfRight($index, $event)', 'ng-mouseup' => 'convertIfRightToLiteral($index)'}
+      %span(ng-include src='pillTemplateFor(pill)')
   = render 'shared/triggers/actions_contents'

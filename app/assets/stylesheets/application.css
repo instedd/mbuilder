@@ -151,14 +151,15 @@ a.delete {
   background: #f1FFf1;
   margin-left: 4px;
   margin-right: 4px;
-  height: 22px !important;
+  height: 20px !important;
   cursor: move;
 }
 
 .pill.literal input {
   margin: 0;
   padding: 0;
-  height: 20px !important;
+  margin-top: -2px;
+  height: 18px !important;
 }
 
 .text {
@@ -216,7 +217,7 @@ table.fields .input-small {
   box-shadow:         0px 10px 10px rgba(128, 128, 128, 0.5);
 }
 
-#aggregate-functions a {
+#aggregate-functions a, #if-operators a {
   color: black;
 }
 

@@ -11,6 +11,17 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     {id: 'min', name: 'Minimum of values', desc: 'minimum of'},
   ]
 
+  $scope.ifOperatorsPopup = { action: null }
+  $scope.ifOperators = [
+    {id: '==', desc: 'equals'},
+    {id: '!=', desc: 'not equals'},
+    {id: 'contains', desc: 'contains'},
+    {id: '<', desc: 'is less than'},
+    {id: '>', desc: 'is greater than'},
+    {id: 'between', desc: 'is between'},
+    {id: 'not between', desc: 'is not between'},
+  ]
+
   $scope.validValuesPopup = { field: null }
   $scope.tableColumnPopup = { field: null }
 
@@ -181,14 +192,25 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
       $scope.hidePopups()
 
   $scope.visitPills = (fun) ->
-    for action in $scope.actions
+    $scope.visitActions $scope.actions, fun
+
+  $scope.visitActions = (actions, fun) ->
+    for action in actions
       if action.pill
         fun(action.pill)
 
-      if action.kind == 'send_message'
-        for binding in action.message
-          fun(binding)
-        fun(action.recipient)
+      switch action.kind
+        when 'send_message'
+          for binding in action.message
+            fun(binding)
+          fun(action.recipient)
+        when 'foreach'
+          $scope.visitActions action.actions, fun
+        when 'if'
+          fun(action.left)
+          for right in action.right
+            fun(action.right)
+          $scope.visitActions action.actions, fun
 
   $scope.replacePills = (guid, newPill) ->
     $scope.visitPills (otherPill) ->
@@ -217,21 +239,22 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     $scope.selectedAction = null
 
   $scope.showAggregateFunctionsPopup = (pill, event) ->
-    $scope.hidePopups()
-    div = if $scope.lookupTableByField(pill.guid).readonly
-      $('#aggregate-functions-error')
-    else
-      $('#aggregate-functions')
-
     $scope.aggregateFunctionPopup.pill = pill
-
-    div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
-    div.show()
-
-    event.preventDefault()
-    event.stopPropagation()
+    id = if $scope.lookupTableByField(pill.guid).readonly
+           '#aggregate-functions-error'
+         else
+           '#aggregate-functions'
+    $scope.showPopup id, event
 
   $scope.aggregateLabel = (aggregate) ->
     aggregate = null unless aggregate
     _.find($scope.aggregates, (a) -> a.id == aggregate).desc
-  ]
+
+  $scope.showIfOperatorsPopup = (action, event) ->
+    $scope.ifOperatorsPopup.action = action
+    $scope.showPopup '#if-operators', event
+
+  $scope.ifOperandDescription = (op) ->
+    _.find($scope.ifOperators, (a) -> a.id == op).desc
+
+]
