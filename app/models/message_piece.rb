@@ -9,6 +9,10 @@ class MessagePiece
     @guid = guid
   end
 
+  def present?
+    text.present?
+  end
+
   def append_pattern(pattern, index, total)
     case kind
     when "text"

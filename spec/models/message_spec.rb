@@ -102,4 +102,18 @@ describe Message do
     ".".should match(msg.pattern)
     ",".should_not match(msg.pattern)
   end
+
+  it "compiles message with single word and empty text" do
+    msg = Message.from_hash({
+      'pieces' => [
+        {'kind' => 'text', 'text' => 'register'},
+        {'kind' => 'placeholder', 'text' => 'John'},
+        {'kind' => 'text', 'text' => ''},
+      ]
+    })
+    msg.pattern.source.should eq("\\A\\s*register\\s+([^0-9\s]\\S*)\\s*\\Z")
+
+    "register Foo".should match(msg.pattern)
+    "register Foo bar".should_not match(msg.pattern)
+  end
 end
