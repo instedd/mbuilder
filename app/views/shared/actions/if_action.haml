@@ -1,0 +1,8 @@
+.if{'ng-controller' => 'ActionsController', 'ng-init' => 'actions=action.actions;action=action'}
+  If
+  %span{'ng-repeat' => 'pill in [action.left]'}
+    %span(ng-include src='pillTemplateFor(pill)')
+  {{opName(action.op)}}
+  %span{'ng-repeat' => 'pill in action.right'}
+    %span(ng-include src='pillTemplateFor(pill)')
+  = render 'shared/triggers/actions_contents'

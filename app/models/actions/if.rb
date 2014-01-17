@@ -24,6 +24,7 @@ class Actions::If < Action
 
   def as_json
     {
+      kind: 'if',
       left: left.as_json,
       op: op,
       right: right.as_json,
@@ -32,7 +33,7 @@ class Actions::If < Action
   end
 
   def self.from_hash(hash)
-    new hash['left'], hash['op'], hash['right'], Action.from_list(hash['actions'])
+    new Pill.from_hash(hash['left']), hash['op'], Pill.from_list(hash['right']), Action.from_list(hash['actions'])
   end
 
   class Operator

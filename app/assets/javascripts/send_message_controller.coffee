@@ -101,23 +101,6 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
 
     true
 
-  $scope.showAggregateFunctionsPopup = (pill, event) ->
-    $scope.hidePopups()
-    div = if $scope.lookupTableByField(pill.guid).readonly
-      $('#aggregate-functions-error')
-    else
-      $('#aggregate-functions')
-
-    $scope.aggregateFunctionPopup.pill = pill
-
-    div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
-    div.show()
-
-    event.preventDefault()
-    event.stopPropagation()
-
-  $scope.aggregateLabel = (aggregate) ->
-    aggregate = null unless aggregate
-    _.find($scope.aggregates, (a) -> a.id == aggregate).desc
-
+  $scope.tryShowAggregateFunctionsPopup = (pill, event) ->
+    $scope.showAggregateFunctionsPopup pill, event
 ]

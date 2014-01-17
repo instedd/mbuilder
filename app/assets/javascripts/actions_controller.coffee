@@ -145,7 +145,6 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
   $scope.dragOverSpaceBetweenActions = (event) ->
     if window.draggedAction
-
       # We must prevent dropping an action inside itself
       scope = window.draggedAction.scope
       me = $scope
@@ -155,12 +154,13 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
         me = me.$parent
 
       event.preventDefault()
-      true
-    else if window.draggedPill.kind == 'table_ref'
+      return true
+
+    if window.draggedPill
       event.preventDefault()
-      true
-    else
-      false
+      return true
+
+    false
 
   $scope.dropOverSpaceBetweenActions = (index, event) ->
     if window.draggedAction
@@ -168,27 +168,39 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       $scope.actions.splice index, 0, window.draggedAction.action
       return false
 
-    table = $scope.lookupTable window.draggedPill.guid
+    if window.draggedPill.kind == 'table_ref'
+      table = $scope.lookupTable window.draggedPill.guid
 
-    # Automatically include following actions in the foreach
-    # if the mention some of the table's fields.
-    actions = []
+      # Automatically include following actions in the foreach
+      # if the mention some of the table's fields.
+      actions = []
 
-    i = index
-    while i < $scope.actions.length
-      next_action = $scope.actions[i]
-      if $scope.actionMentionsTable(next_action, table)
-        actions.push next_action
-        i += 1
-      else
-        break
+      i = index
+      while i < $scope.actions.length
+        next_action = $scope.actions[i]
+        if $scope.actionMentionsTable(next_action, table)
+          actions.push next_action
+          i += 1
+        else
+          break
+
+      action =
+        kind: 'foreach'
+        table: window.draggedPill.guid
+        actions: actions
+
+      $scope.actions.splice index, actions.length, action
+
+      return false
 
     action =
-      kind: 'foreach'
-      table: window.draggedPill.guid
-      actions: actions
+      kind: 'if'
+      left: window.draggedPill
+      op: '=='
+      right: [{kind: 'literal', guid: window.guid(), text: ''}]
+      actions: []
 
-    $scope.actions.splice index, actions.length, action
+    $scope.actions.splice index, 0, action
 
     false
 
@@ -220,4 +232,17 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     (_.select $scope.actions, (a) ->
       return a.kind == "select_entity" and a.table == action.table
     )[0] == action
+
+  $scope.tryShowAggregateFunctionsPopup = (pill, event) ->
+    if $scope.action?.kind == 'if'
+      return $scope.showAggregateFunctionsPopup pill, event
+
+    false
+
+  $scope.opName = (op) ->
+    switch op
+      when "==" then "equals"
+      else "uknown op (bug)"
+
+
 ]

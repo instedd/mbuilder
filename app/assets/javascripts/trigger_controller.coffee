@@ -215,4 +215,23 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
 
   $scope.unselectAction = ->
     $scope.selectedAction = null
-]
+
+  $scope.showAggregateFunctionsPopup = (pill, event) ->
+    $scope.hidePopups()
+    div = if $scope.lookupTableByField(pill.guid).readonly
+      $('#aggregate-functions-error')
+    else
+      $('#aggregate-functions')
+
+    $scope.aggregateFunctionPopup.pill = pill
+
+    div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
+    div.show()
+
+    event.preventDefault()
+    event.stopPropagation()
+
+  $scope.aggregateLabel = (aggregate) ->
+    aggregate = null unless aggregate
+    _.find($scope.aggregates, (a) -> a.id == aggregate).desc
+  ]
