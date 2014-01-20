@@ -195,6 +195,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     action =
       kind: 'if'
+      all: true,
       left: window.draggedPill
       op: '=='
       right: [

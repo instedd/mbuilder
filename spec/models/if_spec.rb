@@ -6,7 +6,7 @@ describe "If" do
   it "executes an action conditionally" do
     new_trigger do
       message "say {Text}"
-      iff("{text} == 'hello'") do
+      if_all("{text} == 'hello'") do
         send_message "'1234'", "Hi"
       end
     end
@@ -21,12 +21,92 @@ describe "If" do
   it "doesn't execute an action conditionally" do
     new_trigger do
       message "say {Text}"
-      iff("{text} == 'hello'") do
+      if_all("{text} == 'hello'") do
         send_message "'1234'", "Hi"
       end
     end
 
     ctx = accept_message 'sms://1234', 'say bye'
+
+    assert_sets_equal ctx.messages, []
+  end
+
+  it "executes if all when true" do
+    add_data "users", [
+      {"phone" => "1234", "name" => "Ban"},
+      {"phone" => "5678", "name" => "Can"},
+      {"phone" => "9012", "name" => "Dan"},
+    ]
+
+    new_trigger do
+      message "say {Text}"
+      if_all("*name contains 'a'") do
+        send_message "'1234'", "Hi"
+      end
+    end
+
+    ctx = accept_message 'sms://1234', 'say hello'
+
+    assert_sets_equal ctx.messages, [
+      {from: "app://mbuilder", to: "sms://1234", body: "Hi", :"mbuilder-application" => application.id},
+    ]
+  end
+
+  it "executes if all when false" do
+    add_data "users", [
+      {"phone" => "1234", "name" => "Ban"},
+      {"phone" => "5678", "name" => "Can"},
+      {"phone" => "9012", "name" => "Don"},
+    ]
+
+    new_trigger do
+      message "say {Text}"
+      if_all("*name contains 'a'") do
+        send_message "'1234'", "Hi"
+      end
+    end
+
+    ctx = accept_message 'sms://1234', 'say hello'
+
+    assert_sets_equal ctx.messages, []
+  end
+
+  it "executes if any when true" do
+    add_data "users", [
+      {"phone" => "1234", "name" => "Bon"},
+      {"phone" => "5678", "name" => "Can"},
+      {"phone" => "9012", "name" => "Don"},
+    ]
+
+    new_trigger do
+      message "say {Text}"
+      if_any("*name contains 'a'") do
+        send_message "'1234'", "Hi"
+      end
+    end
+
+    ctx = accept_message 'sms://1234', 'say hello'
+
+    assert_sets_equal ctx.messages, [
+      {from: "app://mbuilder", to: "sms://1234", body: "Hi", :"mbuilder-application" => application.id},
+    ]
+  end
+
+  it "executes if any when false" do
+    add_data "users", [
+      {"phone" => "1234", "name" => "Bon"},
+      {"phone" => "5678", "name" => "Con"},
+      {"phone" => "9012", "name" => "Don"},
+    ]
+
+    new_trigger do
+      message "say {Text}"
+      if_all("*name contains 'a'") do
+        send_message "'1234'", "Hi"
+      end
+    end
+
+    ctx = accept_message 'sms://1234', 'say hello'
 
     assert_sets_equal ctx.messages, []
   end

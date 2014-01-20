@@ -1,10 +1,12 @@
 class Actions::If < Action
+  attr_accessor :all
   attr_accessor :left
   attr_accessor :op
   attr_accessor :right
   attr_accessor :actions
 
-  def initialize(left, op, right, actions)
+  def initialize(all, left, op, right, actions)
+    @all = all
     @left = left
     @op = op
     @right = right
@@ -15,7 +17,7 @@ class Actions::If < Action
     left_value = left.value_in(context)
     right_values = right.map { |r| r.value_in(context) }
 
-    if Operator.execute(left_value, op, right_values)
+    if Operator.execute(left_value, op, right_values, all)
       actions.each do |action|
         action.execute(context)
       end
@@ -25,6 +27,7 @@ class Actions::If < Action
   def as_json
     {
       kind: 'if',
+      all: all,
       left: left.as_json,
       op: op,
       right: right.as_json,
@@ -33,11 +36,20 @@ class Actions::If < Action
   end
 
   def self.from_hash(hash)
-    new Pill.from_hash(hash['left']), hash['op'], Pill.from_list(hash['right']), Action.from_list(hash['actions'])
+    new hash['all'], Pill.from_hash(hash['left']), hash['op'], Pill.from_list(hash['right']), Action.from_list(hash['actions'])
   end
 
   class Operator
-    def self.execute(left, op, right)
+    def self.execute(left, op, right, all = true)
+      lefts = Array(left)
+      if all
+        lefts.all? { |left| execute_single(left, op, right) }
+      else
+        lefts.any? { |left| execute_single(left, op, right) }
+      end
+    end
+
+    def self.execute_single(left, op, right)
       case op
       when "=="
         to_num(left) == to_num(right.first)

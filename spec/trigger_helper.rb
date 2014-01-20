@@ -86,11 +86,19 @@ class TriggerHelper
     @actions << Actions::Foreach.new(table, helper.actions)
   end
 
-  def iff(condition, &block)
+  def if_any(condition, &block)
+    iff(false, condition, &block)
+  end
+
+  def if_all(condition, &block)
+    iff(true, condition, &block)
+  end
+
+  def iff(all, condition, &block)
     left, op, right = parse_condition(condition)
     helper = TriggerHelper.new(@application)
     helper.instance_eval &block
-    @actions << Actions::If.new(left, op, right, helper.actions)
+    @actions << Actions::If.new(all, left, op, right, helper.actions)
   end
 
   def trigger
