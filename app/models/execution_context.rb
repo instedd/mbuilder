@@ -39,7 +39,17 @@ class ExecutionContext
   end
 
   def select_entities(table, field, value)
-    find_or_create_entity(table) { EntitySelection.new(self, table) }.eq(field, value)
+    entity = entities[table]
+    unless entity
+      entity = find_entity(table)
+      if entity
+        entity = entities[table] = entity.clone
+      else
+        entity = entities[table] = EntitySelection.new(self, table)
+      end
+    end
+    entity.eq(field, value)
+    entity
   end
 
   def entity(table)
@@ -97,11 +107,19 @@ class ExecutionContext
   end
 
   def find_or_create_entity(table)
+    entity = find_entity(table)
+    if entity
+      entity
+    else
+      entities[table] = yield
+    end
+  end
+
+  def find_entity(table)
     @entities_stack.reverse_each do |entities|
       entity = entities[table]
       return entity if entity
     end
-
-    entities[table] = yield
+    nil
   end
 end

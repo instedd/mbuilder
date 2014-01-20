@@ -1,7 +1,7 @@
 class EntitySelection
   attr_accessor :group_by
 
-  def initialize(context, table)
+  def initialize(context, table, restrictions = [], properties = {}, group_by = [])
     @context = context
     @table = table
     @restrictions = []
@@ -30,6 +30,10 @@ class EntitySelection
     return if @properties.empty?
 
     @context.update_many(@table, @restrictions, @properties)
+  end
+
+  def clone
+    EntitySelection.new(@context, @table, @restrictions.clone, @properties.clone, @group_by.clone)
   end
 
   def to_s
