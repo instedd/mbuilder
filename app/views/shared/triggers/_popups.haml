@@ -21,3 +21,8 @@
   %div{'ng-repeat' => 'operator in ifOperators'}
     %a{'href' => 'javascript:', 'ng-hide' => 'ifOperatorsPopup.action.op == operator.id', 'ng-click' => 'select(operator)'} {{operator.desc}}
     %strong{'ng-show' => 'ifOperatorsPopup.action.op == operator.id'} {{operator.desc}}
+
+%div#if-aggregates.popup{'ng-controller' => 'IfAggregatesController'}
+  %div{'ng-repeat' => 'operator in ifAggregates'}
+    %a{'href' => 'javascript:', 'ng-hide' => 'ifAggregatesPopup.action.all == operator.id', 'ng-click' => 'select(operator)'} {{operator.desc}}
+    %strong{'ng-show' => 'ifAggregatesPopup.action.all == operator.id'} {{operator.desc}}

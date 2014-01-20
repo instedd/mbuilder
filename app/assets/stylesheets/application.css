@@ -225,6 +225,11 @@ table.fields .input-small {
   font-style: italic;
 }
 
+.combo {
+  border-bottom: 1px dashed #999;
+  cursor:pointer;
+}
+
 input.small {
   width: 40px;
 }

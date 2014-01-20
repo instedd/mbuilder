@@ -22,6 +22,12 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     {id: 'not between', desc: 'is not between'},
   ]
 
+  $scope.ifAggregatesPopup = { action : null }
+  $scope.ifAggregates = [
+    {id: true, desc: 'all of'},
+    {id: false, desc: 'any of'},
+  ]
+
   $scope.validValuesPopup = { field: null }
   $scope.tableColumnPopup = { field: null }
 
@@ -254,7 +260,14 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     $scope.ifOperatorsPopup.action = action
     $scope.showPopup '#if-operators', event
 
-  $scope.ifOperandDescription = (op) ->
+  $scope.ifOperatorDescription = (op) ->
     _.find($scope.ifOperators, (a) -> a.id == op).desc
 
+  $scope.showIfAggregatesPopup = (action, event) ->
+    $scope.ifAggregatesPopup.action = action
+    $scope.showPopup '#if-aggregates', event
+
+  $scope.ifAggregateDescription = (aggregate) ->
+    aggregate = !!aggregate
+    _.find($scope.ifAggregates, (a) -> a.id == aggregate).desc
 ]

@@ -134,6 +134,10 @@ describe "If" do
       op.execute("foo bar", "contains", ["oo baz"]).should be_false
     end
 
+    it "executes contains gives true (because it's case insensitive)" do
+      op.execute("foo bar", "contains", ["OO BA"]).should be_true
+    end
+
     it "executes greater than gives true" do
       op.execute(20, ">", [10]).should be_true
     end

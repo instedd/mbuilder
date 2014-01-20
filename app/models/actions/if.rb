@@ -56,7 +56,7 @@ class Actions::If < Action
       when "!="
         to_num(left) != to_num(right.first)
       when "contains"
-        left.include? right.first
+        left.downcase.include? right.first.downcase
       when ">"
         left.to_f > right.first.to_f
       when "<"

@@ -215,8 +215,17 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
         _.any table.fields, (field) ->
           (action.recipient.kind != 'text' && action.recipient.guid == field.guid) ||
             _.any action.message, (msg) -> msg.guid == field.guid
+      when 'if'
+        $scope.pillMentionsTable(action.left, table) || _.any(action.right, (a) -> $scope.pillMentionsTable(a, table))
       else
         false
+
+  $scope.pillMentionsTable = (pill, table) ->
+    if pill.kind == 'field_ref' || pill.kind == 'field_value'
+      targetTable = $scope.lookupTableByField(pill.guid)
+      return targetTable?.guid == table.guid
+    else
+      false
 
   $scope.actionDragStart = (scope, action, index, event) ->
     window.draggedAction = {scope: scope, action: action, index: index}
@@ -259,5 +268,26 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     action = $scope.action.right[index]
     if action.kind != 'literal'
       $scope.action.right[index] = {kind: 'literal', guid: window.guid(), text: '', editmode: true, focusmode: true}
+
+  $scope.mustShowIfAggregate = (action) ->
+    switch action.left.kind
+      when 'placeholder'
+        false
+      when 'field_ref', 'field_value'
+        table = $scope.lookupTableByField(action.left.guid)
+        if table && $scope.tableIsUsedAsForeach(table.guid)
+          false
+        else
+          true
+      else
+        true
+
+  $scope.tableIsUsedAsForeach = (table_guid) ->
+    scope = $scope.$parent
+    while scope
+      if scope.action?.kind == 'foreach' && scope.action.table == table_guid
+        return true
+      scope = scope.$parent
+    false
 
 ]
