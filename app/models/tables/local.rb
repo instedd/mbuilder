@@ -19,7 +19,7 @@ class Tables::Local < Table
     context.insert_local(guid, properties)
   end
 
-  def each_value(context, restrictions, &block)
-    context.each_local_value(guid, restrictions, &block)
+  def each_value(context, restrictions, group_by, &block)
+    context.each_local_value(guid, restrictions, group_by, &block)
   end
 end

@@ -11,7 +11,7 @@ class Actions::Foreach < Action
     entity = context.entity(table)
     entity.each do |row|
       context.in_subcontext do
-        context.set_entity(table, IterationEntity.new(row))
+        context.set_entity(table, IterationEntity.new(context, entity, row))
         actions.each do |action|
           action.execute(context)
         end

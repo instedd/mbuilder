@@ -1,12 +1,12 @@
 class EntitySelection
   attr_accessor :group_by
 
-  def initialize(context, table, restrictions = [], properties = {}, group_by = [])
+  def initialize(context, table, restrictions = [], properties = {}, group_by = nil)
     @context = context
     @table = table
-    @restrictions = []
-    @properties = {}
-    @group_by = []
+    @restrictions = restrictions
+    @properties = properties
+    @group_by = group_by
   end
 
   def eq(field, value)
@@ -23,7 +23,7 @@ class EntitySelection
   end
 
   def each(&block)
-    @context.each_value(@table, @restrictions, &block)
+    @context.each_value(@table, @restrictions, @group_by, &block)
   end
 
   def save
@@ -33,7 +33,7 @@ class EntitySelection
   end
 
   def clone
-    EntitySelection.new(@context, @table, @restrictions.clone, @properties.clone, @group_by.clone)
+    EntitySelection.new(@context, @table, @restrictions.clone, @properties.clone, @group_by.try(&:clone))
   end
 
   def to_s

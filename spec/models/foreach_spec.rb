@@ -84,4 +84,27 @@ describe "Foreach" do
       {from: "app://mbuilder", to: "sms://1234", body: "Bar", :"mbuilder-application" => application.id},
     ]
   end
+
+  it "loops with group by" do
+    add_data "users", [
+      {"phone" => 1234.0, "name" => 1.0},
+      {"phone" => 1234.0, "name" => 2.0},
+      {"phone" => 5678.0, "name" => 10.0},
+    ]
+
+    new_trigger do
+      message "iterate"
+      group_by "users.phone"
+      foreach("users") do
+        send_message "*phone", "{*phone} {*total(name)}"
+      end
+    end
+
+    ctx = accept_message 'sms://1234', 'iterate'
+
+    assert_sets_equal ctx.messages, [
+      {from: "app://mbuilder", to: "sms://1234", body: "1234 3", :"mbuilder-application" => application.id},
+      {from: "app://mbuilder", to: "sms://5678", body: "5678 10", :"mbuilder-application" => application.id},
+    ]
+  end
 end
