@@ -213,9 +213,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
         when 'foreach'
           $scope.visitActions action.actions, fun
         when 'if'
-          fun(action.left)
           for right in action.right
-            fun(action.right)
+            fun(right)
           $scope.visitActions action.actions, fun
 
   $scope.replacePills = (guid, newPill) ->
