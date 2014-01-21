@@ -7,6 +7,8 @@ class Tables::Local < Table
     @fields = fields
   end
 
+  generate_equals :name, :guid, :fields
+
   def self.from_hash(hash)
     new hash['name'], hash['guid'], TableFields::Local.from_list(hash['fields'])
   end

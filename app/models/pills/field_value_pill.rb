@@ -7,6 +7,8 @@ class Pills::FieldValuePill < Pill
     @aggregate = aggregate
   end
 
+  generate_equals :guid, :aggregate
+
   def value_in(context)
     context.entity_field_values(guid, aggregate)
   end

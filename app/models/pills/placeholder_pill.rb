@@ -5,6 +5,8 @@ class Pills::PlaceholderPill < Pill
     @guid = guid
   end
 
+  generate_equals :guid
+
   def value_in(context)
     context.piece_value(guid)
   end

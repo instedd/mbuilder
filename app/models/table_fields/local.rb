@@ -8,6 +8,8 @@ class TableFields::Local < TableField
     @valid_values = valid_values
   end
 
+  generate_equals :name, :guid, :valid_values
+
   def self.from_hash(hash)
     new hash['name'], hash['guid'], hash['valid_values']
   end

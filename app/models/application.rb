@@ -97,19 +97,19 @@ class Application < ActiveRecord::Base
       tables: tables,
       message_triggers: message_triggers,
       periodic_tasks: periodic_tasks,
-      validation_triggers: validation_triggers
+      validation_triggers: validation_triggers,
     }
 
-    file.write data.to_yaml
+    file.write data.to_json_oj
   end
 
   def import! file
-    data = YAML::load file
+    data = JSON.load file
 
-    self.tables = data[:tables]
-    self.message_triggers = data[:message_triggers].map(&:dup)
-    self.periodic_tasks = data[:periodic_tasks].map(&:dup)
-    self.validation_triggers = data[:validation_triggers].map(&:dup)
+    self.tables = Table.from_list(data["tables"])
+    self.message_triggers = MessageTrigger.from_list(data["message_triggers"])
+    self.periodic_tasks = PeriodicTask.from_list(data["periodic_tasks"])
+    self.validation_triggers = ValidationTrigger.from_list(data["validation_triggers"])
 
     save!
   end

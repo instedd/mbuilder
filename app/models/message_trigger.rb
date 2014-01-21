@@ -8,6 +8,21 @@ class MessageTrigger < Trigger
   serialize :message
   serialize :actions
 
+  generate_equals :name, :message, :actions
+
+  def self.from_hash(hash)
+    new name: hash["name"], message: Message.from_hash(hash["message"]), actions: Action.from_list(hash["actions"])
+  end
+
+  def as_json
+    {
+      name: name,
+      message: message,
+      kind: kind,
+      actions: actions.map(&:as_json)
+    }
+  end
+
   def default_from_number
     "+1-(234)-567-8912"
   end

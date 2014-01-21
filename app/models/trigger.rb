@@ -1,5 +1,6 @@
 class Trigger < ActiveRecord::Base
   include Rebindable
+  include Hasheable
 
   self.abstract_class = true
 

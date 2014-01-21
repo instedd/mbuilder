@@ -9,6 +9,8 @@ class MessagePiece
     @guid = guid
   end
 
+  generate_equals :kind, :text, :guid
+
   def present?
     text.present?
   end

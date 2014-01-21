@@ -7,6 +7,8 @@ class Actions::SendMessage < Action
     @recipient = recipient
   end
 
+  generate_equals :message, :recipient
+
   def execute(context)
     message = @message.map do |binding|
       values = Array(binding.value_in(context).user_friendly)

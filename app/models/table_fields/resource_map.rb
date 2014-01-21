@@ -12,6 +12,8 @@ class TableFields::ResourceMap < TableField
     @modifier = modifier
   end
 
+  generate_equals :name, :guid, :id, :value, :kind, :modifier, :valid_values
+
   def as_json
     super.merge(id: id, kind: kind, value: value, modifier: modifier)
   end
