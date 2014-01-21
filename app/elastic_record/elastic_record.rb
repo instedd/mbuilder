@@ -4,7 +4,7 @@ class ElasticRecord
     attr_accessor :index, :type, :client
   end
 
-  attr_accessor :id, :properties
+  attr_accessor :id, :properties, :created_at, :updated_at
 
   def initialize(*attributes)
     @properties = if attributes.first.is_a? Hash
@@ -103,5 +103,9 @@ class ElasticRecord
 
   def self.destroy object
     client.delete index: index, type: type, id: object.id, refresh: true
+  end
+
+  def as_json
+    properties.merge id: id, created_at: created_at, updated_at: updated_at
   end
 end

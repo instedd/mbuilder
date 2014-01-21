@@ -121,14 +121,7 @@ class ElasticQuery
       @results = []
 
       Array(@where_options[:id]).each do |id|
-        response = client.get index: index, type: type, id: id, refresh: true
-
-        new_record = @record.new
-        new_record.id = response["_id"]
-        new_record.properties = response["_source"]["properties"].with_indifferent_access
-        new_record
-
-        @results << new_record
+        @results << new_record(client.get index: index, type: type, id: id, refresh: true)
       end
 
       @total_pages = (@results.count.fdiv @page_size).ceil
@@ -165,11 +158,17 @@ class ElasticQuery
       @total_pages = (response["hits"]["total"].fdiv @page_size).ceil
 
       @results = response["hits"]["hits"].map do |result|
-        new_record = @record.new
-        new_record.id = result["_id"]
-        new_record.properties = result["_source"]["properties"].with_indifferent_access
-        new_record
+        new_record result
       end
     end
+  end
+
+  def new_record response
+    new_record = @record.new
+    new_record.id = response["_id"]
+    new_record.properties = response["_source"]["properties"].with_indifferent_access
+    new_record.created_at = DateTime.parse(response['_source']["created_at"])
+    new_record.updated_at = DateTime.parse(response['_source']["updated_at"])
+    new_record
   end
 end
