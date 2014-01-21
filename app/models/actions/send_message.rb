@@ -41,14 +41,15 @@ class Actions::SendMessage < Action
   end
 
   def self.from_hash(hash)
-    new(Pill.from_list(hash['message']), Pill.from_hash(hash['recipient']))
+    message_pills = Pill.from_list(hash['message']).select { |p| !p.empty? }
+    new(message_pills, Pill.from_hash(hash['recipient']))
   end
 
   def as_json
     {
       kind: kind,
       # We add an empty text pill at the end so the user can place the cursor there
-      message: (message + [Pills::TextPill.new("")]).as_json,
+      message: message.as_json,
       recipient: recipient.as_json,
     }
   end
