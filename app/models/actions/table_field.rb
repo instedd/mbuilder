@@ -3,6 +3,8 @@ class Actions::TableField < Action
   attr_accessor :table
   attr_accessor :field
 
+  generate_equals :pill, :table, :field
+
   def initialize(table, field, pill)
     @table = table
     @field = field

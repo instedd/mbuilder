@@ -5,8 +5,14 @@ class Pills::TextPill < Pill
     @guid = guid
   end
 
+  generate_equals :guid
+
   def value_in(context)
     guid
+  end
+
+  def empty?
+    @guid.empty?
   end
 
   def self.from_hash(hash)

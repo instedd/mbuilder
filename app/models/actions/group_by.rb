@@ -5,6 +5,8 @@ class Actions::GroupBy < Action
     @field = field
   end
 
+  generate_equals :table, :field
+
   def execute(context)
     context.group_by(@table, @field)
   end

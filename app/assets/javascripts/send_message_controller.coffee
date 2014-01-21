@@ -1,4 +1,8 @@
 angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scope) ->
+  # Fix: add text piece at the end so the user can place the cursor there
+  if $scope.action.message.length > 0 && $scope.action.message[$scope.action.message.length - 1].kind != 'text'
+    $scope.action.message.push({kind: 'text', guid: ''})
+
   addBinding = (bindings, properties) ->
     guid = $.trim(properties.guid)
     return if guid.length == 0

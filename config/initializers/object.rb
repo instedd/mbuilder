@@ -46,4 +46,14 @@ class Object
   def user_friendly
     self
   end
+
+  def self.generate_equals(*names)
+    define_method("==") do |other|
+      return false unless self.class == other.class
+
+      names.all? do |name|
+        send(name) == other.send(name)
+      end
+    end
+  end
 end

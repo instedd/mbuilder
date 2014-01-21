@@ -7,6 +7,8 @@ class TableField
     @valid_values = valid_values
   end
 
+  generate_equals :name, :guid, :valid_values
+
   def valid_value?(value)
     return true if @valid_values.blank?
     value = value.to_f_if_looks_like_number

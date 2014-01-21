@@ -7,6 +7,8 @@ class Pills::LiteralPill < Pill
     @text = text
   end
 
+  generate_equals :guid, :text
+
   def value_in(context)
     text.to_f_if_looks_like_number
   end

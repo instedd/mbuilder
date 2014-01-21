@@ -9,6 +9,8 @@ class MessagePiece
     @guid = guid
   end
 
+  generate_equals :kind, :text, :guid
+
   def present?
     text.present?
   end
@@ -62,6 +64,14 @@ class MessagePiece
       text: text,
       guid: guid,
     }
+  end
+
+  def self.from_list(list)
+    list.each_with_object([]) do |piece, pieces|
+      unless piece['text'].blank?
+        pieces << from_hash(piece)
+      end
+    end
   end
 
   def self.from_hash(hash)

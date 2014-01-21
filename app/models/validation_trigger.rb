@@ -7,6 +7,22 @@ class ValidationTrigger < Trigger
 
   serialize :actions
 
+  generate_equals :field_guid, :invalid_value, :from, :actions
+
+  def self.from_hash(hash)
+    new field_guid: hash["field_guid"], invalid_value: hash["invalid_value"], actions: Action.from_list(hash["actions"]), from: hash["from"]
+  end
+
+  def as_json
+    {
+      field_guid: field_guid,
+      invalid_value: invalid_value,
+      kind: kind,
+      actions: actions.map(&:as_json),
+      from: from
+    }
+  end
+
   def table
     application.table_of field_guid
   end

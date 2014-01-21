@@ -23,10 +23,10 @@ class Message
     @pattern.match incoming_message
   end
 
+  generate_equals :from, :pieces, :pattern
+
   def self.from_hash(hash)
-    pieces = hash['pieces'].map do |piece|
-      MessagePiece.from_hash(piece)
-    end
+    pieces = MessagePiece.from_list(hash['pieces'])
     new hash['from'], pieces
   end
 end
