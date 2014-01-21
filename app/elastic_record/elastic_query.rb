@@ -167,8 +167,8 @@ class ElasticQuery
     new_record = @record.new
     new_record.id = response["_id"]
     new_record.properties = response["_source"]["properties"].with_indifferent_access
-    new_record.created_at = DateTime.parse(response['_source']["created_at"])
-    new_record.updated_at = DateTime.parse(response['_source']["updated_at"])
+    new_record.created_at = DateTime.parse(response['_source']["created_at"]) rescue nil
+    new_record.updated_at = DateTime.parse(response['_source']["updated_at"]) rescue nil
     new_record
   end
 end
