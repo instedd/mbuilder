@@ -61,7 +61,7 @@ class ElasticRecord
     client.indices.refresh index: index
     begin
       result = client.indices.get_mapping(index: index, type: type)
-      result[type]['properties']['properties']['properties'].keys
+      result[type]['properties']['properties']['properties'].keys rescue []
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
       []
     end
@@ -106,6 +106,6 @@ class ElasticRecord
   end
 
   def as_json
-    properties.merge id: id, created_at: created_at, updated_at: updated_at
+    { id: id, created_at: created_at, updated_at: updated_at }.merge properties
   end
 end

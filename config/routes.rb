@@ -21,8 +21,8 @@ Mbuilder::Application.routes.draw do
     post :import
   end
 
-  get '/api/applications/:id/tables' => 'api#index',as: :tables
-  get '/api/applications/:id/tables/:table_id' => 'api#show', as: :table
+  get '/api/applications/:id/tables' => 'api#index',as: :api_index
+  get '/api/applications/:id/tables/:table_id' => 'api#show', as: :api_show
 
   authenticate :user do
     mount Pigeon::Engine => '/pigeon'

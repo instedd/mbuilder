@@ -33,7 +33,13 @@ class Application < ActiveRecord::Base
   end
 
   def find_table(guid)
-    tables.find { |table| table.guid == guid }
+    table = tables.find { |table| table.guid == guid }
+    raise ActiveRecord::RecordNotFound.new("There is no table with id \"#{guid}\"") unless table
+    table
+  end
+
+  def find_table_by_name(name)
+    tables.find { |table| table.name == name }
   end
 
   def tire_index(create_if_not_exists = true)
