@@ -7,7 +7,7 @@
 
     = render_listing :logs
 
-    .modal.fade#messagesModal{ 'tabindex' => "-1", 'role' => "dialog", 'ng-controller' => 'MessagesController', 'ng-init' => "applicationId=#{application.id}"}
+    .modal.fade.hide#messagesModal{ 'tabindex' => "-1", 'role' => "dialog", 'ng-controller' => 'MessagesController', 'ng-init' => "applicationId=#{application.id}"}
       .modal-dialog
         .modal-content
           .modal-header
