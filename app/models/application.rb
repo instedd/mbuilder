@@ -120,7 +120,7 @@ class Application < ActiveRecord::Base
     save!
   end
 
-  def api_tables
+  def local_tables
     (self.tables || []).select {|table| table.is_a? Tables::Local }
   end
 

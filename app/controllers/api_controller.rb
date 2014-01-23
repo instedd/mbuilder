@@ -6,7 +6,7 @@ class ApiController < ApplicationController
   expose(:record_class) { ElasticRecord.for(application.tire_index.name, application_table.try(:guid)) }
 
   def index
-    tables = application.api_tables
+    tables = application.local_tables
 
     # keep access token if used to access api
     url_params = {}

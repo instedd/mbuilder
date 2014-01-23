@@ -12,7 +12,7 @@ Access Token
   %dd
     = link api_index_url(application.id, @url_params)
 
-  - application.api_tables.each do |table|
+  - application.local_tables.each do |table|
     %dt
       = table.name
     %dd
