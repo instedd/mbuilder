@@ -1,0 +1,23 @@
+
+Access Token
+%pre= @token
+
+.warning
+  Save this token. You con revoke them at
+  = link_to Guisso.url, Guisso.url
+
+%dl
+  %dt
+    Tables index
+  %dd
+    = link api_index_url(application.id, @url_params)
+
+  - application.api_tables.each do |table|
+    %dt
+      = table.name
+    %dd
+      json:
+      = link api_show_url(application.id, table.guid, @url_params.merge(format: :json))
+    %dd
+      csv:
+      = link api_show_url(application.id, table.guid, @url_params.merge(format: :csv))

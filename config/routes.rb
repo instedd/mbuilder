@@ -19,6 +19,8 @@ Mbuilder::Application.routes.draw do
 
     get :export
     post :import
+
+    get :request_api_token
   end
 
   get '/api/applications/:id/tables' => 'api#index',as: :api_index

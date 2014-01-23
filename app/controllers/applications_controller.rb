@@ -58,4 +58,10 @@ class ApplicationsController < ApplicationController
     flash.notice = 'Application imported'
     redirect_to application
   end
+
+  def request_api_token
+    @token = Guisso.generate_bearer_token current_user.email
+    @url_params = { access_token: @token }
+    render layout: false
+  end
 end

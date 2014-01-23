@@ -1,5 +1,19 @@
 = render 'shared/application_tabs'
 
+%p
+  Get access through API.
+  = link_to 'Request API token', application_request_api_token_path(application),
+    data: { toggle: 'modal', target: '#api-modal' }
+
+#api-modal.modal.hide.fade(tabindex="-1" role="dialog")
+  .modal-header
+    %button.close(type="button" class="close" data-dismiss="modal") ×
+    %h3 API access
+  .modal-body
+    Loading ...
+  .modal-footer
+    %button.btn(data-dismiss="modal") Close
+
 - @data.each do |table|
   %h4{style: 'display: inline-block'}=table.name
   = link_to "Add new record", new_application_table_record_path(application.id, table.guid), class: 'btn btn-default', style: 'margin-left: 20px'

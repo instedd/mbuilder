@@ -120,6 +120,10 @@ class Application < ActiveRecord::Base
     save!
   end
 
+  def api_tables
+    (self.tables || []).select {|table| table.is_a? Tables::Local }
+  end
+
   if Rails.env.test?
     def tire_name
       "mbuilder_test_application_#{id}"
