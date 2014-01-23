@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/alto_guisso.git
-  revision: 6a1a111359979ad1c84aec3fcf306491c6cc2487
+  revision: 290198b2f58f6ef24f81b3fece9fcf34d7b4402d
   branch: master
   specs:
     alto_guisso (0.0.1)
@@ -203,9 +203,9 @@ GEM
     ng-rails-csrf (0.1.0)
     oauth (0.4.7)
     oj (2.3.0)
-    omniauth (1.1.4)
+    omniauth (1.2.1)
       hashie (>= 1.2, < 3)
-      rack
+      rack (~> 1.0)
     omniauth-openid (1.0.1)
       omniauth (~> 1.0)
       rack-openid (~> 1.3.1)
