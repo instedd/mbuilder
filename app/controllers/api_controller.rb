@@ -27,18 +27,25 @@ class ApiController < ApplicationController
   end
 
   def show
+    records = if params[:since]
+      record_class.where("updated_at >= ?", Time.parse(params[:since]))
+    else
+      record_class.all
+    end
+
     if params[:guid]
       respond_to do |format|
-        format.csv { send_data to_csv(record_class.all.map(&:as_json), ['id'].concat(application_table.fields.map &:guid).concat(['created_at', 'updated_at'])), filename: "#{record_class.name}.csv" }
-        format.json { render_json record_class.all }
+        format.csv { send_data to_csv(records.map(&:as_json), ['id'].concat(application_table.fields.map &:guid).concat(['created_at', 'updated_at'])), filename: "#{record_class.name}.csv" }
+        format.json { render_json records }
       end
     else
-      records = record_class.all.map do |record|
+      records = records.map do |record|
         hash = {
           'id'         => record.id,
           'created_at' => record.created_at,
           'updated_at' => record.updated_at
         }
+
         application_table.fields.each do |field|
           hash[field.name] = record.properties[field.guid]
         end

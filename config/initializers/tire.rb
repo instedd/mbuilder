@@ -1,13 +1,11 @@
 Tire::Configuration.wrapper Hash
 
 module Tire
-  DateFormat = "%Y%m%dT%H%M%S.%L%z"
-
   def self.parse_date(date)
-    Time.zone.parse(date)
+    Time.parse(date)
   end
 
   def self.format_date(date)
-    date.strftime DateFormat
+    date.utc.iso8601
   end
 end

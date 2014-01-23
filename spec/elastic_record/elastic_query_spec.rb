@@ -5,6 +5,7 @@ describe "ElasticQuery" do
   let(:users) { ElasticRecord.for application.tire_index.name, 'users' }
 
   before(:each) do
+    Timecop.freeze(Time.utc(2013, 9, 17, 6, 0, 0))
     add_data "users", [
       {"age" => 10, "name" => "foo"},
       {"age" => 20, "name" => "foo"},
@@ -13,6 +14,8 @@ describe "ElasticQuery" do
     ]
     (Elasticsearch::Client.new log: false).indices.refresh index: application.tire_index.name
   end
+
+  after(:each) { Timecop.return }
 
   it "should search for a value" do
     result = users.where(age: 10).first
@@ -87,6 +90,29 @@ describe "ElasticQuery" do
     users.all.count.should be(4)
   end
 
+  it "should set and update created_at and updated_at when saving" do
+    result = users.new
+    result.properties[:age] = 234
+    result.properties[:name] = 'baz'
+    result.save!
+    result.created_at.should eq(Time.now)
+    result.updated_at.should eq(Time.now)
+
+    result = users.where(age: 234).first
+    result.created_at.should eq(Time.now)
+    result.updated_at.should eq(Time.now)
+    Timecop.return
+    Timecop.freeze(Time.utc(2013, 9, 17, 7, 0, 0))
+    result.properties[:name] = 'zoo'
+    result.save!
+    result.created_at.should eq(Time.utc(2013, 9, 17, 6, 0, 0))
+    result.updated_at.should eq(Time.now)
+
+    result = users.where(age: 234).first
+    result.created_at.should eq(Time.utc(2013, 9, 17, 6, 0, 0))
+    result.updated_at.should eq(Time.now)
+  end
+
   it "should allow to create new records" do
     new_user = users.new
     new_user.properties[:age] = 1234
@@ -156,5 +182,82 @@ describe "ElasticQuery" do
     results.last.id.should eq(id2)
     results.last.age.should eq(30)
     results.last.name.should eq("bar")
+  end
+
+  it "should filter by >= with a query parameter" do
+    add_data "users", [
+      {"age" => 10, "name" => "foo2"},
+      {"age" => 20, "name" => "foo3"},
+      {"age" => 20, "name" => "bar2"},
+      {"age" => 30, "name" => "bar3"},
+    ]
+
+    results = users.where('age >= ?', 20).order("age desc").order("name desc")
+    results.to_a.map(&:properties).should eq([
+      {"age" => 30, "name" => "bar3"},
+      {"age" => 30, "name" => "bar"},
+      {"age" => 20, "name" => "foo3"},
+      {"age" => 20, "name" => "foo"},
+      {"age" => 20, "name" => "bar2"},
+      {"age" => 20, "name" => "bar"}
+    ])
+  end
+
+  it "should filter by >= with a fixed query string" do
+    add_data "users", [
+      {"age" => 10, "name" => "foo2"},
+      {"age" => 20, "name" => "foo3"},
+      {"age" => 20, "name" => "bar2"},
+      {"age" => 30, "name" => "bar3"},
+    ]
+    (Elasticsearch::Client.new log: false).indices.refresh index: application.tire_index.name
+
+    results = users.where('age >= 20').order("age desc").order("name desc")
+    results.to_a.map(&:properties).should eq([
+      {"age" => 30, "name" => "bar3"},
+      {"age" => 30, "name" => "bar"},
+      {"age" => 20, "name" => "foo3"},
+      {"age" => 20, "name" => "foo"},
+      {"age" => 20, "name" => "bar2"},
+      {"age" => 20, "name" => "bar"}
+    ])
+  end
+
+    it "should filter a string property by >=" do
+    add_data "users", [
+      {"age" => 10, "name" => "foo2"},
+      {"age" => 20, "name" => "foo3"},
+      {"age" => 20, "name" => "bar2"},
+      {"age" => 30, "name" => "bar3"},
+    ]
+    (Elasticsearch::Client.new log: false).indices.refresh index: application.tire_index.name
+
+    results = users.where('name >= foo').order("age desc").order("name desc")
+    results.to_a.map(&:properties).should eq([
+      {"age"=>20.0, "name"=>"foo3"},
+      {"age"=>20.0, "name"=>"foo"},
+      {"age"=>10.0, "name"=>"foo2"},
+      {"age"=>10.0, "name"=>"foo"}
+    ])
+  end
+
+  it "should filter created_at by >=" do
+    Timecop.return
+    Timecop.freeze(Time.utc(2013, 9, 18, 7, 0, 0))
+    add_data "users", [
+      {"age" => 10, "name" => "foo2"},
+      {"age" => 20, "name" => "foo3"},
+      {"age" => 20, "name" => "bar2"},
+      {"age" => 30, "name" => "bar3"},
+    ]
+    (Elasticsearch::Client.new log: false).indices.refresh index: application.tire_index.name
+
+    results = users.where('created_at >= ?', Time.utc(2013, 9, 17, 6, 30, 0)).order("age desc").order("name desc")
+    results.to_a.map(&:properties).should eq([
+      {"age" => 30, "name" => "bar3"},
+      {"age" => 20, "name" => "foo3"},
+      {"age" => 20, "name" => "bar2"},
+      {"age" => 10, "name" => "foo2"}
+    ])
   end
 end
