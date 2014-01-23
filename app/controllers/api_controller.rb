@@ -28,7 +28,10 @@ class ApiController < ApplicationController
 
   def show
     if params[:guid]
-      render_json record_class.all
+      respond_to do |format|
+        format.csv { send_data to_csv(record_class.all.map(&:as_json), ['id'].concat(application_table.fields.map &:guid).concat(['created_at', 'updated_at'])), filename: "#{record_class.name}.csv" }
+        format.json { render_json record_class.all }
+      end
     else
       records = record_class.all.map do |record|
         hash = {
@@ -41,7 +44,22 @@ class ApiController < ApplicationController
         end
         hash
       end
-      render_json records
+
+      respond_to do |format|
+        format.csv { send_data to_csv(records, ['id'].concat(application_table.fields.map &:name).concat(['created_at', 'updated_at'])), filename: "#{record_class.name}.csv" }
+        format.json { render_json records }
+      end
+    end
+  end
+
+  private
+
+  def to_csv(records, columns)
+    CSV.generate do |csv|
+      csv << columns
+      records.map(&:with_indifferent_access).each do |record|
+        csv << columns.map { |c| record[c] }
+      end
     end
   end
 end

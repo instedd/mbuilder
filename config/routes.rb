@@ -24,7 +24,7 @@ Mbuilder::Application.routes.draw do
   end
 
   get '/api/applications/:id/tables' => 'api#index',as: :api_index
-  get '/api/applications/:id/tables/:table_id' => 'api#show', as: :api_show
+  get '/api/applications/:id/tables/:table_id(.:format)' => 'api#show', as: :api_show, defaults: { format: 'json' }
 
   authenticate :user do
     mount Pigeon::Engine => '/pigeon'
