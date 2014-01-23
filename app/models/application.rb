@@ -11,6 +11,7 @@ class Application < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :name
 
+  after_save :create_index
   before_destroy :delete_tire_index
 
   serialize :tables
@@ -64,6 +65,10 @@ class Application < ActiveRecord::Base
 
   def delete_tire_index
     tire_index.delete
+  end
+
+  def create_index
+    tire_index(true)
   end
 
   def tire_search(table)

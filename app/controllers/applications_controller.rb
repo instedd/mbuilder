@@ -35,11 +35,7 @@ class ApplicationsController < ApplicationController
 
   def data
     @application_tab = :data
-    @data = if application.tire_index.exists?
-      (application.tables || []).select {|table| table.is_a? Tables::Local }
-    else
-      []
-    end
+    @data = application.local_tables
   end
 
   def export
