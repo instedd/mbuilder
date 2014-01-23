@@ -1,7 +1,7 @@
 class ApiController < ApplicationController
   before_filter :authenticate_api_user!
 
-  expose(:application)
+  expose(:application) { current_user.applications.find(params[:id]) }
   expose(:application_table) { application.find_table_by_name(params[:table_id]) || application.find_table(params[:table_id]) }
   expose(:record_class) { ElasticRecord.for(application.tire_index.name, application_table.try(:guid)) }
 
