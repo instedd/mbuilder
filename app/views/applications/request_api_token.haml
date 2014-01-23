@@ -17,7 +17,7 @@ Access Token
       = table.name
     %dd
       json:
-      = link api_show_url(application.id, table.guid, @url_params.merge(format: :json))
+      = link api_show_url(application.id, table.name, @url_params.merge(format: :json))
     %dd
       csv:
-      = link api_show_url(application.id, table.guid, @url_params.merge(format: :csv))
+      = link api_show_url(application.id, table.name, @url_params.merge(format: :csv))
