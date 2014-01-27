@@ -19,16 +19,19 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
 
   $scope.parseMessage = (event) ->
     bindings = []
+    pills = _.select $scope.action.message, (m) -> m.kind != 'text'
+    pillIndex = 0
+
     parser = new MessageParser(event.originalEvent.currentTarget)
     parser.onText (text) ->
       addBinding bindings, kind: 'text', guid: text
     parser.onPill (node) ->
-      guid = node.data('guid')
-      pill = _.find $scope.action.message, (p) -> p.guid == guid
+      pill = pills[pillIndex]
       if pill
         bindings.push pill
       else
         addBinding bindings, $scope.data(node)
+      pillIndex += 1
     parser.lastPieceNeeded ->
       bindings.length > 0 && bindings[bindings.length - 1].kind != 'text'
     parser.parse()
