@@ -14,7 +14,9 @@ class NuntiumController < ApplicationController
     begin
       channel = Channel.find_by_pigeon_name params[:channel]
       application = channel.application
-      context = application.accept_message params
+      message = params.clone
+      message['timestamp'] = Time.now.utc.to_s
+      context = application.accept_message message
       if context && context.messages.any?
         render json: context.messages.to_json
       else
