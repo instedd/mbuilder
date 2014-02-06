@@ -53,7 +53,7 @@ class ApiController < ApplicationController
       end
 
       respond_to do |format|
-        format.csv { send_data to_csv(records, ['id'].concat(application_table.fields.map &:name).concat(['created_at', 'updated_at'])), filename: "#{record_class.name}.csv" }
+        format.csv { send_data to_csv(records, ['id'].concat(application_table.fields.map &:name).concat(['created_at', 'updated_at'])), filename: "#{application_table.name}.csv" }
         format.json { render_json records }
       end
     end
@@ -62,7 +62,7 @@ class ApiController < ApplicationController
   private
 
   def to_csv(records, columns)
-    CSV.generate do |csv|
+    CSV.generate row_sep: "\r\n" do |csv|
       csv << columns
       records.map(&:with_indifferent_access).each do |record|
         csv << columns.map { |c| record[c] }
