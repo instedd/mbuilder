@@ -129,6 +129,26 @@ class Application < ActiveRecord::Base
     (self.tables || []).select {|table| table.is_a? Tables::Local }
   end
 
+  def elastic_record_for(table)
+    ElasticRecord.for(self.tire_index.name, table.guid)
+  end
+
+  def rebuild_local_tables
+    data = {}
+    local_tables.each do |table|
+      record_class = elastic_record_for(table)
+      data[table.guid] = record_class.all.map(&:as_json)
+    end
+
+    self.delete_tire_index
+
+    local_tables.each do |table|
+      # ElasticRecord clases are not catched since index is recreated
+      record_class = elastic_record_for(table)
+      record_class.create data[table.guid]
+    end
+  end
+
   if Rails.env.test?
     def tire_name
       "mbuilder_test_application_#{id}"

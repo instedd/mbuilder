@@ -56,6 +56,10 @@ class ElasticRecord
     ElasticQuery.new(self)
   end
 
+  def self.count
+    self.all.count
+  end
+
   def self.columns
     client.indices.refresh index: index
     begin
@@ -102,6 +106,11 @@ class ElasticRecord
       object.id = response["_id"]
     end
     object
+  end
+
+  def self.create(objects)
+    objects = [objects] unless objects.kind_of?(Array)
+    objects.map { |o| self.new(o) }.each &:save!
   end
 
   def destroy
