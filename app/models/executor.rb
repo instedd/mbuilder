@@ -37,7 +37,7 @@ class Executor
 
     case @matching_triggers.length
     when 0
-      @logger.error "No trigger matched the message."
+      @logger.error_no_trigger
     when 1
       @logger.trigger = @matching_triggers.first
     end
