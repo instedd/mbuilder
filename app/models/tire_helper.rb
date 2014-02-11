@@ -3,7 +3,7 @@ module TireHelper
 
   def perform_search(search, restrictions)
     apply_restrictions_to search, restrictions
-
+    # puts search.to_curl
     yield search if block_given?
 
     search.perform.results
@@ -11,18 +11,30 @@ module TireHelper
 
   def apply_restrictions_to(search, restrictions)
     return unless restrictions.present?
-    search.query do
-      restrictions.each do |restriction|
-        case restriction[:op]
-        when :eq
-          values = Array(restriction[:value])
-          boolean do
-            must do |m|
-              m.terms restriction[:field], (values.map &:to_s)
-            end
+
+    musts = []
+    query = { bool: { must: musts } }
+
+    restrictions.each do |restriction|
+      case restriction[:op]
+      when :eq
+        values = Array(restriction[:value]).map &:to_s
+
+        if values.count == 1
+          musts << { match: { restriction[:field] => values.first } }
+        else
+          shoulds = []
+          match_any_value = { bool: { should: shoulds, minimum_should_match: 1 } }
+          musts << match_any_value
+          values.each do |v|
+            shoulds << { match: { restriction[:field] => v } }
           end
         end
       end
+    end
+
+    search.query do |q|
+      q.value = query
     end
   end
 end

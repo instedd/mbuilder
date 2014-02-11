@@ -52,7 +52,7 @@ class Application < ActiveRecord::Base
             analyzer: {
               default: {
                 tokenizer: :keyword,
-                filter: [],
+                filter: [:lowercase],
                 type: :custom,
               }
             }
