@@ -66,7 +66,7 @@ class Actions::If < Action
       when "not between"
         !between(left, right)
       else
-        raise "Uknown op: #{op}"
+        raise "Unknown op: #{op}"
       end
     end
 

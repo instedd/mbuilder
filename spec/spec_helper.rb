@@ -97,7 +97,7 @@ RSpec.configure do |config|
     when /\{(.+)\}/
       {'kind' => 'placeholder', 'guid' => "placeholder_#{$1}"}
     else
-      raise "Uknown pill helper: #{text}"
+      raise "Unknown pill helper: #{text}"
     end
   end
 
