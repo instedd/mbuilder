@@ -1,7 +1,6 @@
 %div#aggregate-functions.popup{'ng-controller' => 'AggregateFunctionsController'}
   %div{'ng-repeat' => 'aggregate in aggregates'}
-    %a{'href' => 'javascript:', 'ng-hide' => 'aggregateFunctionPopup.pill.aggregate == aggregate.id', 'ng-click' => 'select(aggregate)'} {{aggregate.name}}
-    %strong{'ng-show' => 'aggregateFunctionPopup.pill.aggregate == aggregate.id'} {{aggregate.name}}
+    %a{'href' => 'javascript:', 'ng-class' => '{ selected : aggregateFunctionPopup.pill.aggregate == aggregate.id }', 'ng-click' => 'select(aggregate)'} {{aggregate.name}}
 
 %div#aggregate-functions-error.popup{'ng-controller' => 'AggregateFunctionsController'}
   Aggregate is not supported for Resource Map columns
@@ -19,10 +18,8 @@
 
 %div#if-operators.popup{'ng-controller' => 'IfOperatorsController'}
   %div{'ng-repeat' => 'operator in ifOperators'}
-    %a{'href' => 'javascript:', 'ng-hide' => 'ifOperatorsPopup.action.op == operator.id', 'ng-click' => 'select(operator)'} {{operator.desc}}
-    %strong{'ng-show' => 'ifOperatorsPopup.action.op == operator.id'} {{operator.desc}}
+    %a{'href' => 'javascript:', 'ng-class' => '{ selected: ifOperatorsPopup.action.op == operator.id }', 'ng-click' => 'select(operator)'} {{operator.desc}}
 
 %div#if-aggregates.popup{'ng-controller' => 'IfAggregatesController'}
   %div{'ng-repeat' => 'operator in ifAggregates'}
-    %a{'href' => 'javascript:', 'ng-hide' => 'ifAggregatesPopup.action.all == operator.id', 'ng-click' => 'select(operator)'} {{operator.desc}}
-    %strong{'ng-show' => 'ifAggregatesPopup.action.all == operator.id'} {{operator.desc}}
+    %a{'href' => 'javascript:', 'ng-class' => '{ selected: ifAggregatesPopup.action.all == operator.id }', 'ng-click' => 'select(operator)'} {{operator.desc}}

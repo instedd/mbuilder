@@ -234,6 +234,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     event.stopPropagation()
 
   $scope.selectAction = (action, event) ->
+    $scope.hidePopups()
     $scope.selectedAction = action
     event.stopPropagation()
 
