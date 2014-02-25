@@ -15,6 +15,7 @@ gem 'instedd-pigeon', git: "https://bitbucket.org/instedd/pigeon.git", branch: '
 gem 'ng-rails-csrf'
 gem "tire"
 gem "elasticsearch"
+gem 'rack-cors', :require => 'rack/cors'
 
 gem "ice_cube"
 gem 'recurring_select', git: "https://github.com/nekron/recurring_select", branch: 'master'
