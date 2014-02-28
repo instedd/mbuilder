@@ -31,6 +31,14 @@ describe "ElasticRecord" do
     end
   end
 
+  describe "validations" do
+    it "should validate numers" do
+      users.create age: 10.0, name: 'foo'
+      other = users.new age: 'abc', name: 'foo'
+      other.should be_invalid
+    end
+  end
+
   it "records should be able to be copied" do
     users.create [{ age: 10, name: 'foo' }, { age: 20, name: 'bar' }]
     json = users.all.map(&:as_json)
