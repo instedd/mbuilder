@@ -3,6 +3,10 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     _.any $scope.actions, (action) ->
       (action.kind == 'select_entity' || action.kind == 'create_entity') && action.table == tableGuid
 
+  tableIsUsedInASelectAction = (tableGuid) ->
+    _.any $scope.actions, (action) ->
+      (action.kind == 'select_entity') && action.table == tableGuid
+
   tableIsUsedInAGroupByAction = (tableGuid) ->
     _.any $scope.actions, (action) ->
       action.kind == 'group_by' && action.table == tableGuid
@@ -243,6 +247,11 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
   $scope.isFirstFilter = (action) ->
     (_.select $scope.actions, (a) ->
       return a.kind == "select_entity" and a.table == action.table
+    )[0] == action
+
+  $scope.isFirstStoreAfterSelect = (action) ->
+    tableIsUsedInASelectAction(action.table) and (_.select $scope.actions, (a) ->
+      return a.kind == "store_entity_value" and a.table == action.table
     )[0] == action
 
   $scope.tryShowAggregateFunctionsPopup = (pill, event) ->
