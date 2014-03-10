@@ -3,6 +3,7 @@ class Application < ActiveRecord::Base
 
   belongs_to :user
   has_many :message_triggers, dependent: :destroy
+  has_many :external_triggers, dependent: :destroy
   has_many :periodic_tasks, dependent: :destroy
   has_many :validation_triggers, dependent: :destroy
   has_many :channels, dependent: :destroy

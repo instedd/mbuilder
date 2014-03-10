@@ -4,6 +4,8 @@
   = link_to "Create Message Trigger", new_application_message_trigger_path(application)
 %div
   = link_to "Create Periodic Task", new_application_periodic_task_path(application)
+%div
+  = link_to "Create External Trigger", new_application_external_trigger_path(application)
 %br/
 
 - if message_triggers.present?
@@ -33,6 +35,17 @@
 - if validation_triggers.present?
   %h4 Validation triggers
   = render_listing :validation_triggers
+  / %ul
+  /   - validation_triggers.each do |trigger|
+  /     %li
+  /       #{trigger.table_name} #{trigger.field_name}:
+  /       = link_to "edit", application_validation_trigger_path(application, trigger.field_guid)
+  /       |
+  /       = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the validation trigger for '#{trigger.table_name} #{trigger.field_name}'"
+
+- if external_triggers.present?
+  %h4 External triggers
+  = render_listing :external_triggers
   / %ul
   /   - validation_triggers.each do |trigger|
   /     %li

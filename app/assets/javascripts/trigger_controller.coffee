@@ -58,6 +58,9 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     switch pill.kind
       when 'field_value'
         $scope.lookupJoinedFieldName(pill.guid)
+      when 'parameter'
+        pill = $scope.lookupPillByGuid(pill.guid)
+        pill?.name
       else
         pill = $scope.lookupPillByGuid(pill.guid)
         pill?.text
@@ -108,6 +111,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
         return 'literal'
       when 'field_value'
         return 'field_value' if $scope.fieldExists(pill.guid)
+      when 'parameter'
+        return 'parameter' if $scope.lookupPillByGuid(pill.guid)
       else
         return 'placeholder' if $scope.lookupPillByGuid(pill.guid)
     'unbound'
