@@ -9,6 +9,10 @@ class NewEntity
     @properties[field.to_s] = value
   end
 
+  def empty?
+    false
+  end
+
   def save
     @context.insert @table, @properties
   end

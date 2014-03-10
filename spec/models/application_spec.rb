@@ -34,4 +34,14 @@ describe Application do
     app2.periodic_tasks.all.should eq(application.periodic_tasks.all)
     app2.validation_triggers.all.should eq(application.validation_triggers.all)
   end
+
+  it "rebuilds local tables data" do
+    users = application.elastic_record_for application.find_table_by_name('Users')
+    users.create [{phone: 234567, name: 'john'},{phone: 234567, name: 'mary'}]
+
+    application.rebuild_local_tables
+
+    users = application.elastic_record_for application.find_table_by_name('Users')
+    users.count.should eq(2)
+  end
 end

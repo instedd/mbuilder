@@ -5,9 +5,12 @@
 = form_for record, as: :record, url: (record.persisted? ? application_table_record_path(application.id, application_table.guid, record.id) : application_table_records_path(application.id, application_table.guid)) do |f|
 
   - application_table.fields.each do |field|
-    .control-group
+    .control-group{class: "#{'error' if record.errors.has_key?(field.guid.to_sym)}"}
       %label.control-label{for: field.guid}= field.name
       .controls
-        %input{type: 'text', name: "#{f.options[:as]}[#{field.guid}]", value: record.properties[field.guid].try(:user_friendly)}
+        %input.error{type: 'text', name: "#{f.options[:as]}[#{field.guid}]", value: record.properties[field.guid].try(:user_friendly)}
+        - if record.errors.has_key?(field.guid.to_sym)
+          %span.help-inline
+            = record.errors.get(field.guid.to_sym).join(', ')
 
-  = f.submit class: 'btn btn-primary'
+  = f.submit 'Create Record', class: 'btn btn-primary'

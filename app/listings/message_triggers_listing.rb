@@ -2,7 +2,7 @@ class MessageTriggersListing < Listings::Base
 
   model do
     @application = Application.find(params[:application_id])
-    @application.message_triggers
+    @application.message_triggers.order('name')
   end
 
   sortable false

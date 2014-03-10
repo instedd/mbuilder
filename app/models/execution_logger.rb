@@ -1,9 +1,12 @@
 class ExecutionLogger < ActiveRecord::Base
   belongs_to :application
   belongs_to :trigger, polymorphic: true
-  attr_accessible :actions, :message_to, :message_from, :message_body, :application, :trigger
+  attr_accessible :actions, :message_to, :message_from, :message_body, :application, :trigger, :no_trigger, :with_errors
 
   serialize :actions
+
+  scope :no_triggers, -> { where(no_trigger: true) }
+  scope :with_errors, -> { where(with_errors: true) }
 
   def message=(message)
     self.message_to = message['to']
@@ -43,6 +46,12 @@ class ExecutionLogger < ActiveRecord::Base
 
   def error(description)
     append_action :error, description
+    self.with_errors = true
+  end
+
+  def error_no_trigger
+    self.error "No trigger matched the message."
+    self.no_trigger = true
   end
 
   def warning(description)

@@ -5,6 +5,10 @@ class LogsListing < Listings::Base
     @application.logs.order 'created_at DESC'
   end
 
+  scope 'All', :all, default: true
+  scope 'No trigger matched', :no_triggers
+  scope 'With Errors', :with_errors
+
   sortable true
 
   column :trigger do |log|

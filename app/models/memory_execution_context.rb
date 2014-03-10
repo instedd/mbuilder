@@ -40,6 +40,14 @@ class MemoryExecutionContext < ExecutionContext
     @next_id += 1
   end
 
+  def each_value(table, restrictions, group_by, &block)
+    rows = @db[table]
+
+    result_rows = rows.select &(matcher_from restrictions)
+
+    result_rows.each &block
+  end
+
   def select_table_field(table, restrictions, field, group_by, aggregate)
     rows = @db[table]
 

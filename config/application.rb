@@ -81,5 +81,12 @@ module Mbuilder
         require_dependency file
       end
     end
+
+    config.middleware.use Rack::Cors do
+      allow do
+        origins '*'
+        resource '/api/*', :headers => :any, :methods => :get
+      end
+    end
   end
 end

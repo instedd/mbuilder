@@ -33,7 +33,7 @@ module Listings
           [
             link_to("edit", edit_application_table_record_path(application_id, type, record.id)),
             link_to("delete", application_table_record_path(application_id, type, record.id), method: :delete, confirm: "Are you sure you want to delete the record?")
-          ].join(' ').html_safe
+          ].join(' ').html_safe if format == :html
         end
 
         listing_class

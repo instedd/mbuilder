@@ -217,7 +217,13 @@ table.fields .input-small {
   box-shadow:         0px 10px 10px rgba(128, 128, 128, 0.5);
 }
 
-#aggregate-functions a, #if-operators a {
+.popup .selected {
+  text-decoration: none;
+  font-weight: bold;
+  color: black;
+}
+
+#aggregate-functions a, #if-operators a, #if-aggregates a {
   color: black;
 }
 

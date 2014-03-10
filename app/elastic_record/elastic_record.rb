@@ -3,7 +3,10 @@ class ElasticRecord
     attr_accessor :index, :type, :client
   end
 
+  include ActiveModel::Validations
+
   attr_accessor :id, :properties, :created_at, :updated_at, :_source
+
 
   def initialize(*attributes)
     @properties = if attributes.first.is_a? Hash
@@ -18,6 +21,7 @@ class ElasticRecord
     table.index = index
     table.type = type
     table.client = Elasticsearch::Client.new log: false
+
     table.columns.each do |column|
       begin
         table.class_eval <<-METHODS, __FILE__, __LINE__ + 1
@@ -56,14 +60,25 @@ class ElasticRecord
     ElasticQuery.new(self)
   end
 
-  def self.columns
+  def self.count
+    self.all.count
+  end
+
+  # {"31f8f311-137a-4ba4-b696-853a96e279a2"=>{"type"=>"double"},
+  #  "54e9ba76-7003-4654-9bc9-c3e176a23b57"=>{"type"=>"string"}
+  # }
+  def self.properties_mapping
     client.indices.refresh index: index
     begin
       result = client.indices.get_mapping(index: index, type: type)
-      result[type]['properties']['properties']['properties'].keys rescue []
+      result[type]['properties']['properties']['properties'] || {} rescue {}
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
-      []
+      {}
     end
+  end
+
+  def self.columns
+    self.properties_mapping.keys
   end
 
   def self.human_attribute_name(name)
@@ -93,6 +108,10 @@ class ElasticRecord
   end
 
   def self.save! object
+    if object.invalid?
+      throw ActiveRecord::RecordInvalid.new(object)
+    end
+
     updated_at = Time.now
     created_at = object.created_at || updated_at
     response = client.index index: index, type: type, id: object.id, body: {properties: object.properties, created_at: created_at.utc.iso8601, updated_at: updated_at.utc.iso8601}, refresh: true
@@ -102,6 +121,11 @@ class ElasticRecord
       object.id = response["_id"]
     end
     object
+  end
+
+  def self.create(objects)
+    objects = [objects] unless objects.kind_of?(Array)
+    objects.map { |o| self.new(o) }.each &:save!
   end
 
   def destroy
@@ -114,5 +138,25 @@ class ElasticRecord
 
   def as_json
     { id: id, created_at: created_at, updated_at: updated_at }.merge properties
+  end
+
+  validate do
+    values = self.properties.with_indifferent_access
+    self.class.properties_mapping.each do |column, mapping|
+      value = values[column]
+      if mapping["type"] == "double" && !(value.is_a?(Float) || value.is_a?(Fixnum))
+        # nil numbers are empty strings
+        unless value.is_a?(String) && value.blank?
+          errors.add(column, "must be a number")
+        end
+      end
+
+      if mapping["type"] == "long" && !value.is_a?(Fixnum)
+        # nil numbers are empty strings
+        unless value.is_a?(String) && value.blank?
+          errors.add(column, "must be a number")
+        end
+      end
+    end
   end
 end

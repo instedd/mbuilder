@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(:version => 20140307165308) do
     t.datetime "updated_at",     :null => false
     t.string   "message_to"
     t.string   "trigger_type"
+    t.boolean  "no_trigger"
+    t.boolean  "with_errors"
   end
 
   add_index "execution_loggers", ["application_id"], :name => "index_execution_loggers_on_application_id"

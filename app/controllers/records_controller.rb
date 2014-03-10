@@ -23,7 +23,7 @@ class RecordsController < ApplicationController
     if record.update_attributes params[:record].to_f_if_looks_like_number
       redirect_to controller: :applications, action: :data
     else
-      flash.now[:error] = "Record can't be saved"
+      flash.now[:alert] = "Record can't be saved"
       render 'form'
     end
   end
@@ -32,7 +32,7 @@ class RecordsController < ApplicationController
     if record.save
       redirect_to controller: :applications, action: :data
     else
-      flash.now[:error] = "Record can't be saved"
+      flash.now[:alert] = "Record can't be saved"
       render 'form'
     end
   end

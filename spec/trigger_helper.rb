@@ -45,12 +45,20 @@ class TriggerHelper
     new_entity_action 'store_entity_value', text
   end
 
+  def store_or_create_entity_value(text)
+    store_entity_value(text).tap do |action|
+      action.create_or_update = true
+    end
+  end
+
   def new_entity_action(kind, text)
     if text =~ /(\w+)\.(\w+) = (.+)/
       table = $1
       field = $2
       pill = pill($3)
-      @actions << Action.from_hash({'kind' => kind, 'table' => "#{table}", 'field' => "#{field}", 'pill' => pill})
+      Action.from_hash({'kind' => kind, 'table' => "#{table}", 'field' => "#{field}", 'pill' => pill}).tap do |action|
+        @actions << action
+      end
     else
       raise "Wrong action text: #{text}"
     end

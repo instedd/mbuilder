@@ -26,10 +26,19 @@ class EntitySelection
     @context.each_value(@table, @restrictions, @group_by, &block)
   end
 
+  def empty?
+    self.each { return false }
+    true
+  end
+
   def save
     return if @properties.empty?
 
     @context.update_many(@table, @restrictions, @properties)
+  end
+
+  def create_entity_matching_restrictions
+    @context.insert(@table, Hash[@restrictions.select { |r| r[:op] == :eq }.map {|r| [r[:field], r[:value]]}])
   end
 
   def clone

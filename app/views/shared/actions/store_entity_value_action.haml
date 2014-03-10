@@ -4,3 +4,8 @@ as
 = render 'shared/field'
 of
 = render 'shared/table'
+%br
+%div{'ng-show'=>'isFirstStoreAfterSelect(action)'}
+  %label.checkbox
+    %input(type='checkbox' ng-model='action.create_or_update')
+    Create record if no matching exists
