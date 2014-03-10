@@ -161,6 +161,17 @@ RSpec.configure do |config|
 
   def parse_message(text)
     case text
+    when /(.*?)\{(.+)\}(.*?)\{(.+)\}(.*?)\{(.+)\}(.*?)\{(.+)\}(.*)/
+      v1, v2, v3, v4, v5, v6, v7, v8, v9= $1, $2, $3, $4, $5, $6, $7, $8, $9
+      yield 'text', v1.strip
+      yield 'pill', v2
+      yield 'text', v3.strip if v3.present?
+      yield 'pill', v4
+      yield 'text', v5.strip if v5.present?
+      yield 'pill', v6
+      yield 'text', v7.strip if v7.present?
+      yield 'pill', v8
+      yield 'text', v9.strip if v9.present?
     when /(.*?)\{(.+)\}(.*?)\{(.+)\}(.*)/
       v1, v2, v3, v4, v5= $1, $2, $3, $4, $5
       yield 'text', v1.strip

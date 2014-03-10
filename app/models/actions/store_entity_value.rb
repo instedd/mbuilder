@@ -17,6 +17,9 @@ class Actions::StoreEntityValue < Actions::TableField
     context.check_valid_value!(table, field, value)
 
     entity = context.entity(table)
+    if entity.empty? && create_or_update
+      entity.create_entity_matching_restrictions
+    end
     entity[field] = value
   end
 
