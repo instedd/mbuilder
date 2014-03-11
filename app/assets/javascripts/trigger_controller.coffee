@@ -249,6 +249,11 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
       return action.kind == "select_entity" and action.table == tableGuid
     ) != null
 
+  $scope.isFirstFilter = (action) ->
+    ($scope.firstActionThat (a) ->
+      return a.kind == "select_entity" and a.table == action.table
+    ) == action
+
   $scope.isFirstStoreAfterSelect = (action) ->
     $scope.tableIsUsedInASelectAction(action.table) and ($scope.firstActionThat (a) ->
       return a.kind == "store_entity_value" and a.table == action.table

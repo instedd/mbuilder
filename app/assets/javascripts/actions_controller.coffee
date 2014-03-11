@@ -245,11 +245,6 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     false
 
-  $scope.isFirstFilter = (action) ->
-    (_.select $scope.actions, (a) ->
-      return a.kind == "select_entity" and a.table == action.table
-    )[0] == action
-
   $scope.tryShowAggregateFunctionsPopup = (pill, event) ->
     if $scope.action?.kind == 'if'
       return $scope.showAggregateFunctionsPopup pill, event
