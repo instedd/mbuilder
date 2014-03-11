@@ -7,6 +7,7 @@ class ExecutionContext
     @application = application
     @placeholder_solver = placeholder_solver
     @entities_stack = [{}]
+    @store_entity_value_visited = [{}]
     @messages = []
     @logger = logger
   end
@@ -29,9 +30,11 @@ class ExecutionContext
 
   def in_subcontext
     @entities_stack.push({})
+    @store_entity_value_visited.push({})
     yield
     save
     @entities_stack.pop
+    @store_entity_value_visited.pop
   end
 
   def new_entity(table)
@@ -98,6 +101,17 @@ class ExecutionContext
   def save
     entities.values.each(&:save)
     entities.clear
+  end
+
+  def store_entity_value_visited?(table)
+    @store_entity_value_visited.reverse_each do |marks|
+      return true if marks[table]
+    end
+    false
+  end
+
+  def mark_store_entity_value_visited(table)
+    @store_entity_value_visited.last[table] = true
   end
 
   private

@@ -165,5 +165,20 @@ describe "Update entity" do
       end
     end
 
+    describe "treat store_or_create_entity_value as store_entity_value if its not the first one" do
+      it "should ignore the creation flag" do
+        new_trigger do
+          message "name {Name}"
+          select_entity "users.phone = {phone_number}"
+          store_entity_value "users.name = {name}"
+          store_or_create_entity_value "users.name = {name}"
+        end
+
+        accept_message "sms://1234", "name John"
+
+        assert_data "users", []
+      end
+    end
+
   end
 end
