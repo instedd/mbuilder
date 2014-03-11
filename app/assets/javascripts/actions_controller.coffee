@@ -1,11 +1,8 @@
 angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScope', ($scope, $rootScope) ->
+
   tableIsUsedInAnCreateOrSelectAction = (tableGuid) ->
     _.any $scope.actions, (action) ->
       (action.kind == 'select_entity' || action.kind == 'create_entity') && action.table == tableGuid
-
-  tableIsUsedInASelectAction = (tableGuid) ->
-    _.any $scope.actions, (action) ->
-      (action.kind == 'select_entity') && action.table == tableGuid
 
   tableIsUsedInAGroupByAction = (tableGuid) ->
     _.any $scope.actions, (action) ->
@@ -31,6 +28,10 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
         pill: args.pill
         table: args.table.guid
         field: args.field.guid
+
+      newAction.create_or_update = false if kind == 'store_entity_value'
+
+      newAction
 
   addToActions = (actions, newAction, index = -1) ->
     # Put the action before the first "send message" action, if any
@@ -247,11 +248,6 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
   $scope.isFirstFilter = (action) ->
     (_.select $scope.actions, (a) ->
       return a.kind == "select_entity" and a.table == action.table
-    )[0] == action
-
-  $scope.isFirstStoreAfterSelect = (action) ->
-    tableIsUsedInASelectAction(action.table) and (_.select $scope.actions, (a) ->
-      return a.kind == "store_entity_value" and a.table == action.table
     )[0] == action
 
   $scope.tryShowAggregateFunctionsPopup = (pill, event) ->

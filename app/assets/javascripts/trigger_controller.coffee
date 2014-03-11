@@ -42,6 +42,20 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
   $scope.$on 'addSendMessageActionUp', (event, args) ->
     $scope.$broadcast 'addSendMessageActionDown', args
 
+  $scope.$watch 'actions', ->
+    # deep watch on actions
+    $scope._checkActionState()
+  , true
+
+  $scope._checkActionState = ->
+    $scope.visitActions $scope.actions, (pill) ->
+      null
+    , (action) ->
+      # ensure all non first store_entity_value had create_or_update flag in false
+      # not required by backend, but cleaner
+      if action.kind == 'store_entity_value' && !$scope.isFirstStoreAfterSelect(action)
+        action.create_or_update = false
+
   $scope.data = (node) ->
     newData = {}
     for key, value of node.data()
@@ -200,8 +214,10 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
   $scope.visitPills = (fun) ->
     $scope.visitActions $scope.actions, fun
 
-  $scope.visitActions = (actions, fun) ->
+  $scope.visitActions = (actions, fun, actionsFun) ->
     for action in actions
+      actionsFun(action) if actionsFun?
+
       if action.pill
         fun(action.pill)
 
@@ -211,11 +227,32 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
             fun(binding)
           fun(action.recipient)
         when 'foreach'
-          $scope.visitActions action.actions, fun
+          $scope.visitActions action.actions, fun, actionsFun
         when 'if'
           for right in action.right
             fun(right)
-          $scope.visitActions action.actions, fun
+          $scope.visitActions action.actions, fun, actionsFun
+
+  $scope.firstActionThat = (filter) ->
+    first_action = null
+
+    $scope.visitActions $scope.actions, (pill) ->
+      null
+    , (action) ->
+      if filter(action) && first_action == null
+        first_action = action
+
+    first_action
+
+  $scope.tableIsUsedInASelectAction = (tableGuid) ->
+    ($scope.firstActionThat (action) ->
+      return action.kind == "select_entity" and action.table == tableGuid
+    ) != null
+
+  $scope.isFirstStoreAfterSelect = (action) ->
+    $scope.tableIsUsedInASelectAction(action.table) and ($scope.firstActionThat (a) ->
+      return a.kind == "store_entity_value" and a.table == action.table
+    ) == action
 
   $scope.replacePills = (guid, newPill) ->
     $scope.visitPills (otherPill) ->
