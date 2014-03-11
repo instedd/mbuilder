@@ -10,8 +10,6 @@ require 'rspec/autorun'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
-ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
-
 RSpec.configure do |config|
   # ## Mock Framework
   #
@@ -41,6 +39,8 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.after(:all) { Tire.index('*test*').delete }
+
+  config.include Devise::TestHelpers, :type => :controller
 
   def new_application(tables)
     tables = tables.split(";").map(&:strip)
@@ -78,6 +78,10 @@ RSpec.configure do |config|
 
   def new_validation_trigger(field_guid, &block)
     instance_eval_trigger_helper(&block).validation_trigger(field_guid)
+  end
+
+  def new_external_trigger(&block)
+    instance_eval_trigger_helper(&block).external_trigger
   end
 
   def instance_eval_trigger_helper(&block)

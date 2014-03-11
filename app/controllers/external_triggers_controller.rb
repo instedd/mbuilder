@@ -29,6 +29,35 @@ class ExternalTriggersController < ApplicationController
     redirect_to application_message_triggers_path(application)
   end
 
+  def run
+    trigger = application.external_triggers.find_by_name(params['trigger_name'])
+
+    logger = ExecutionLogger.new(application: @application)
+
+    logger.info "Executing trigger '#{trigger.name}'"
+    logger.trigger = trigger
+    begin
+      @context = DatabaseExecutionContext.execute(application, trigger, ParameterPlaceholderSolver.new(params), logger)
+      if @context.messages.present?
+        nuntium = Pigeon::Nuntium.from_config
+        nuntium.send_ao @context.messages
+      end
+    rescue Exception => e
+      puts e.message
+      puts e.backtrace
+      logger.error(e.message)
+    ensure
+      logger.save!
+    end
+
+    render_json @context.try(:messages), status: 200
+
+  rescue ActiveRecord::RecordNotFound => e
+    logger.error_no_trigger
+    logger.save!
+    render_json trigger.errors.full_messages.join("\n"), status: 404
+  end
+
   private
 
   def set_external_trigger_data(trigger)

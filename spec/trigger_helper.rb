@@ -18,6 +18,11 @@ class TriggerHelper
     @message = Message.from_hash({'pieces' => pieces, 'from' => options[:from]})
   end
 
+  def params(param_list = [])
+    param_list = Array.wrap(param_list)
+    @parameters = Pill.from_list(param_list.map { |param_name| {'kind' => 'parameter', 'name' => param_name, 'guid' => "placeholder_#{param_name.downcase}"}})
+  end
+
   def group_by text
     if text =~ /(\w+)\.(\w+)/
       table = $1
@@ -135,5 +140,14 @@ class TriggerHelper
     validation_trigger.save!
 
     validation_trigger
+  end
+
+  def external_trigger
+    external_trigger = @application.external_triggers.make_unsaved
+    external_trigger.parameters = @parameters
+    external_trigger.actions = @actions
+    external_trigger.save!
+
+    external_trigger
   end
 end
