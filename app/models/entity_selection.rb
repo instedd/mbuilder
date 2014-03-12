@@ -38,7 +38,7 @@ class EntitySelection
   end
 
   def create_entity_matching_restrictions
-    @context.insert(@table, Hash[@restrictions.select { |r| r[:op] == :eq }.map {|r| [r[:field], r[:value]]}])
+    @context.insert(@table, Hash[@restrictions.select { |r| r[:op] == :eq }.map {|r| [r[:field], r[:value].to_single]}])
   end
 
   def clone

@@ -135,12 +135,12 @@ describe "Update entity" do
     describe "with multiple criterias" do
       before(:each) do
         add_data "reports", [
-          {"key1" => 10, "key2" => 20, "value" => "a", "other" => "b"}
+          {"key1" => "Acme", "key2" => 20, "value" => "a", "other" => "b"}
         ]
 
         new_trigger do
-          message "store {1111} at {2222} with {abc} and {def}"
-          select_entity "reports.key1 = {1111}"
+          message "on {acme} and {2222} save {abc} with {def}"
+          select_entity "reports.key1 = {acme}"
           select_entity "reports.key2 = {2222}"
           store_or_create_entity_value "reports.value = {abc}"
           store_entity_value "reports.other = {def}"
@@ -148,19 +148,19 @@ describe "Update entity" do
       end
 
       it "create if no entity exists" do
-        accept_message "sms://1234", "store 20 at 30 with foo and bar"
+        accept_message "sms://1234", "on Contoso and 30 save foo with bar"
 
         assert_data "reports", [
-          {"key1" => 10, "key2" => 20, "value" => "a", "other" => "b"},
-          {"key1" => 20, "key2" => 30, "value" => "foo", "other" => "bar"}
+          {"key1" => "Acme", "key2" => 20, "value" => "a", "other" => "b"},
+          {"key1" => "Contoso", "key2" => 30, "value" => "foo", "other" => "bar"}
         ]
       end
 
       it "update if entity exists" do
-        accept_message "sms://1234", "store 10 at 20 with foo and bar"
+        accept_message "sms://1234", "on Acme and 20 save foo with bar"
 
         assert_data "reports", [
-          {"key1" => 10, "key2" => 20, "value" => "foo", "other" => "bar"}
+          {"key1" => "Acme", "key2" => 20, "value" => "foo", "other" => "bar"}
         ]
       end
     end

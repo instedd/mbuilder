@@ -43,6 +43,10 @@ class Object
     self
   end
 
+  def to_single
+    self
+  end
+
   def user_friendly
     self
   end

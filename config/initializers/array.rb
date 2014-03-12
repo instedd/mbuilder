@@ -6,4 +6,12 @@ class Array
   def user_friendly
     map &:user_friendly
   end
+
+  def to_single
+    if self.one?
+      self.first
+    else
+      self
+    end
+  end
 end
