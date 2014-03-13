@@ -9,6 +9,16 @@ class MessageTriggersListing < Listings::Base
 
   column :name
 
+  column 'Sample message' do |trigger|
+    (trigger.message.pieces.map {|p|
+      if p.kind == "placeholder"
+        content_tag :span, p.text, class: 'pill sample'
+      else
+        h p.text
+      end
+    }).join(' ').html_safe
+  end
+
   column '', class: 'right' do |trigger|
     [
       link_to("edit", edit_application_message_trigger_path(@application, trigger)),
