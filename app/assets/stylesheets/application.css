@@ -9,11 +9,11 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require bootstrap
+ *= require instedd-bootstrap
  *= require listings
  *= require recurring_select
  *= require pigeon
- *= require_tree .
+ *= require bootstrap-timepicker
  */
 
 .message-container {
@@ -249,29 +249,3 @@ body {
   height: 100%;
 }
 
-/* Wrapper for page content to push down footer */
-#wrap {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by it's height */
-  margin: 0 auto -80px;
-}
-
-#wrap > .container-fluid {
-  padding-top: 60px;
-}
-.container-fluid .credit {
-  margin: 20px 0;
-}
-
-/* Set the fixed height of the footer here */
-#push,
-#footer {
-  height: 60px;
-  margin-top: 20px;
-}
-
-#footer {
-  background-color: #f5f5f5;
-}

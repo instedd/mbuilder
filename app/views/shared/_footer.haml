@@ -1,0 +1,26 @@
+.footer
+  .container-fluid
+    .row-fluid.top
+      .span5
+        %img{:src => "/assets/instedd-bootstrap/footer/InSTEDDPlatform.png", :vspace => "7", :title => "InSTEDD Platform"}
+        %br
+        InSTEDD has created an evolving platform of free and open source technologies to support humanitarian causes. These tools can be used individually or as building blocks for larger solutions.
+        %a{:href => "http://instedd.org/technologies/"} Click here
+        to learn more
+      .span7
+        %a.more.pull-right{:href => "http://instedd.org/technologies/"} Learn more
+        %br
+        #instedd-footer.pull-right{"data-app-name" => "nuntium"}
+    .row-fluid
+      .span4
+        %a{:href => "http://instedd.org"} © 2011 InSTEDD
+        %a{:href => "#TODO"} Terms and conditions
+        %a{:href => "#TODO"} Contact us
+      .span6.offset2.aright
+        %a{:href => "#"} Events
+        %a{:href => "#"} Volunteers
+        %a{:href => "#"} Members
+        %a#invite_bubble_trigger{:href => "#"} Invite new users
+        #invite_bubble_content
+        %span#version
+          Version: xxx

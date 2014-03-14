@@ -1,0 +1,106 @@
+//
+// State Display
+// --------------------------------------------------
+.StateDisplay {
+  @extend .well;
+  font-size: 100%;
+  padding: 4px; 
+  color: #555555; 
+
+  .values { 
+    font-size:75%; 
+    letter-spacing:-0.02em; 
+    line-height:95%; 
+    width:50%; 
+    padding: 2px 0; 
+    white-space:nowrap;
+    float: left;
+
+    & > div > span {
+      display: block;
+    }
+
+    .L { 
+      color:#777777; 
+      text-align:left; 
+      padding-bottom:3px; 
+      margin-left:2px; 
+      float:left; 
+    }
+
+    .R { 
+      color:#f86808; 
+      text-align:right; 
+      padding-bottom:3px; 
+      float:right;
+    }
+
+    .M { 
+      background: #f86808; 
+      margin-left:2px;
+      float: none;
+
+      span { 
+        background:#777777; 
+        height:4px;
+      } 
+    }
+
+    &.empty {
+      div {
+
+        & > span { color:#f86808 }
+
+        &.R span {
+          background:url(image-path("instedd-bootstrap/icons/18/orange/alert.png")) no-repeat center 3px;
+          width: 18px;
+          height: 18px;
+        }
+
+        &.M span {
+          background: #f86808;
+        }
+      } 
+    }
+
+    &.done {
+      div.M {
+        background:#777777;
+      }
+    }
+  }
+
+  .action { 
+    width:45%; 
+    white-space:nowrap;
+    float: right;
+
+    button, a {
+      @extend .btn;
+      @extend .btn-large;
+      @extend .btn-block;
+      font-size: 100%;
+
+      &.orange {
+        @extend .btn-warning;
+      }
+    } 
+  }
+  @extend .clearfix;
+}
+
+
+
+.values div.U { text-align:left }
+.values div.U span.big { font-size:22px; line-height:18px  }
+
+
+
+.values span.tilde { background:url(image-path("instedd-bootstrap/icons/misc/grey/tilde.png")) no-repeat center 9px; width:11px; height:18px }
+
+.smvalues { background:#d0d0d0; font-size:11px; letter-spacing:-0.02em; line-height:9px; padding:3px; text-align:center; vertical-align:baseline; white-space:nowrap; width:50px; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px; border:1px solid #DDDDDD }
+.smvalues div.L { color:#777777; text-align:left; padding-bottom:3px; float:left }
+.smvalues div.R { color:#f86808; text-align:right; padding-bottom:3px; float:right }
+.smvalues div.L span, .values div.R span { display:block }
+.smvalues div.M { background:#f86808; display:block !important}
+.smvalues div.M span { background: #777777; height:4px; display:block; width:40% }

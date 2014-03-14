@@ -1,0 +1,18 @@
+.navbar {
+  margin-bottom: 0;
+
+  .brand {
+    padding: 7px 20px;
+    text-shadow:none;
+  }
+}
+.navbar-inner {
+  background: none;
+  border:none;
+  @include border-radius(0);
+  @include box-shadow(none);
+}
+
+.btn-link {
+  text-decoration: none !important;
+}
