@@ -162,7 +162,7 @@ class ElasticQuery
         k, v = query_options.first
         { match: {k.to_s => {query: v}}}
       else
-        { bool: { must: (query_options.map { |k, v| { term: {k.to_s => v} } }) } }
+        { bool: { must: (query_options.map { |k, v| { match: { k.to_s => v.to_single } } }) } }
       end
 
       body = { query: query }
@@ -205,4 +205,5 @@ class ElasticQuery
     new_record.id = response["_id"]
     new_record
   end
+
 end
