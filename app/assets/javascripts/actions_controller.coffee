@@ -129,6 +129,16 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     $scope.actions.splice(index, 1)
 
+    # change the first store_entity_value in the table to a create_entity
+    if action.kind == 'create_entity'
+      new_create_entity = ($scope.firstActionThat (a) ->
+        return a.kind == 'store_entity_value' and a.table == action.table
+      )
+      if new_create_entity != null
+        delete new_create_entity.create_or_update
+        new_create_entity.kind = 'create_entity'
+
+
   $scope.modalDeleteForeachAndActions = ->
     $rootScope.modalScope.deleteActionWithoutConfirmation($rootScope.modalActionIndex)
     $('#actions-modal-delete').modal('hide')
