@@ -1,11 +1,36 @@
-%h3 Applications
+.row-fluid
+  .span12
+    .title Applications
 
-%div
-  = link_to "Create Application", new_application_path
+/ %div
+/   = link_to "Create Application", new_application_path
 
-%br/
-
-%ul
-  - applications.each do |application|
-    %li
-      = link_to application.name, application
+.row-fluid
+  .span6
+    %table.table.items
+      %thead
+        %tr
+          %th
+            My Applications
+      %tbody
+        - if applications.count > 0
+          - applications.each do |application|
+            %tr
+              %td
+                = link_to application.name, application
+                = link_to application, :class => "btn-icon pull-right" do
+                  %i.icf-arrow
+          %tr
+            %td
+              = link_to "Create Application", new_application_path
+              %a.pull-right{:href => new_application_path}
+                .btn-icon.blue
+                  %i.icc-add
+        - else
+          %tr
+            %td.emptydata
+              = link_to "You don't have an application yet", new_application_path
+              %a{:href => new_application_path}
+                .btn-icon.blue
+                  %i.icc-add
+                Create application

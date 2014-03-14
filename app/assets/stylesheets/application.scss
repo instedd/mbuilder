@@ -249,3 +249,48 @@ body {
   height: 100%;
 }
 
+//-------------------- Classes -----------------------
+//----------------------------------------------------
+
+.title {
+  font-size: 20px;
+}
+
+td.emptydata {
+  text-align: center !important;
+  background: url(/assets/instedd-bootstrap/icons/72/grey/folder.png) no-repeat center 40px !important;
+  line-height: 22px !important;
+  font-style: italic;
+  color: #999999;
+  height: 200px !important;
+  padding-top: 65px !important;
+
+  a {
+    display: block;
+  }
+}
+
+table.items {
+  tr {
+
+    td {
+      border-top: 1px solid #eeeeee;
+      a {
+        color: black;
+      }
+    }
+    &:first-child {
+      td {
+        padding-top: 8px;
+        border-top: none;
+      }
+    }
+    &:last-child td {
+      background: none !important;
+      padding-top: 15px;
+      a {
+        color: #1f86c8;
+      }
+    }
+  }
+}
