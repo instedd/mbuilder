@@ -19,6 +19,10 @@ class LogsListing < Listings::Base
     log.message_from.without_protocol
   end
 
+  column :message_to do |log|
+    log.message_to.try :without_protocol
+  end
+
   column :message_body
 
   column 'Actions' do |log|
