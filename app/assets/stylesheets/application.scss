@@ -254,6 +254,7 @@ body {
 
 .title {
   font-size: 20px;
+  padding: 8px 0 14px;
 }
 
 td.emptydata {
@@ -270,27 +271,4 @@ td.emptydata {
   }
 }
 
-table.items {
-  tr {
 
-    td {
-      border-top: 1px solid #eeeeee;
-      a {
-        color: black;
-      }
-    }
-    &:first-child {
-      td {
-        padding-top: 8px;
-        border-top: none;
-      }
-    }
-    &:last-child td {
-      background: none !important;
-      padding-top: 15px;
-      a {
-        color: #1f86c8;
-      }
-    }
-  }
-}
