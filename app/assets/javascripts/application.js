@@ -16,6 +16,7 @@
 //= require underscore
 //= require listings
 //= require bootstrap
+//= require instedd-bootstrap
 //= require angular
 //= require_tree ./angular/
 //= require ng-rails-csrf

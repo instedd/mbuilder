@@ -33,6 +33,8 @@ gem 'listings', github: "manastech/listings", branch: 'master'
 gem 'oj'
 gem 'guid'
 
+gem 'instedd-bootstrap', git: "https://bitbucket.org/instedd/instedd-bootstrap.git", branch: 'master'
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
