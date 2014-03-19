@@ -1,29 +1,28 @@
-= render 'shared/application_tabs'
+- full_row do
+  %h4 Send message
 
-%h4 Send message
+  %div{'ng-app' => 'mbuilder-messages'}
+    %div{'ng-controller' => 'MessagesController', 'ng-init' => "applicationId=#{application.id}"}
+      %div.row-fluid
+        %div.span6
+          %form
+            %div
+              %label{for: :from} From
+              %input{'ng-model' => 'from', type: :text, name: :from, autofocus: true}
+            %div
+              %label{for: :body} Message
+              %textarea{'ng-model' => 'body'}
+            %button.btn{'ng-click' => 'send()'} Send
+        %div.span6
+          %div{'ng-show' => 'actions.length'}
+            %h5 Actions
 
-%div{'ng-app' => 'mbuilder-messages'}
-  %div{'ng-controller' => 'MessagesController', 'ng-init' => "applicationId=#{application.id}"}
-    %div.row-fluid
-      %div.span6
-        %form
-          %div
-            %label{for: :from} From
-            %input{'ng-model' => 'from', type: :text, name: :from, autofocus: true}
-          %div
-            %label{for: :body} Message
-            %textarea{'ng-model' => 'body'}
-          %button.btn{'ng-click' => 'send()'} Send
-      %div.span6
-        %div{'ng-show' => 'actions.length'}
-          %h5 Actions
+            %ul
+              %li{'ng-repeat' => 'action in actions'}
+                {{action}}
 
-          %ul
-            %li{'ng-repeat' => 'action in actions'}
-              {{action}}
-
-        / %div{'ng-show' => 'messages.length'}
-        /   %h5 Response messages
-        /   %ul
-        /     %li{'ng-repeat' => 'message in messages'}
-        /       <strong>{{message.to}}</strong>: {{message.body}}
+          / %div{'ng-show' => 'messages.length'}
+          /   %h5 Response messages
+          /   %ul
+          /     %li{'ng-repeat' => 'message in messages'}
+          /       <strong>{{message.to}}</strong>: {{message.body}}

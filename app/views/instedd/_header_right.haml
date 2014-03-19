@@ -1,4 +1,9 @@
-.btn-group.pull-right.user
+.pull-right
+  %a.btn-icon{:href => "#"}
+    %i.icf-settings
+  %a.btn-icon{:href => "#"}
+    %i.icf-configuration.btn-group.pull-right.user
+.btn-group.pull-right
   - if current_user
     - dropdown current_user.email do
       - dropdown_item 'Settings', guisso_settings_path, target: '_blank'

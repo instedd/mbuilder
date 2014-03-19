@@ -1,4 +1,6 @@
 class LogsController < ApplicationController
+  layout "applications"
+
   before_filter :authenticate_user!
   before_filter :set_tab
 

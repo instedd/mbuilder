@@ -9,12 +9,13 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require instedd-bootstrap
  *= require listings
  *= require recurring_select
  *= require pigeon
  *= require bootstrap-timepicker
  */
+
+@import "instedd-bootstrap";
 
 .message-container {
   -webkit-border-radius: 4px;
@@ -276,12 +277,9 @@ td.emptydata {
 //----------------------------------------------
 
 .testing-sandbox {
-  /*@include border-radius(5px);*/
-  /*@include box-shadow(0 2px 0 0 rgba(0,0,0,0.5));*/
-  /*@include box-sizing(border-box);*/
-  border-radius:5px;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.5);
-  box-sizing: border-box;
+  @include border-radius(5px);
+  @include box-shadow(0 2px 0 0 rgba(0,0,0,0.5));
+  @include box-sizing(border-box);
   background: #d0d0d0;
   padding: 10px;
 }

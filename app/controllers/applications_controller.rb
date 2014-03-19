@@ -1,4 +1,7 @@
 class ApplicationsController < ApplicationController
+  layout "applications", except: :index
+  layout "application", only: :index
+
   before_filter :authenticate_user!
 
   expose(:applications) { current_user.applications }
