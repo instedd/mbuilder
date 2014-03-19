@@ -272,3 +272,23 @@ td.emptydata {
 }
 
 
+//-------------- Testing Sandbox ---------------
+//----------------------------------------------
+
+.testing-sandbox {
+  /*@include border-radius(5px);*/
+  /*@include box-shadow(0 2px 0 0 rgba(0,0,0,0.5));*/
+  /*@include box-sizing(border-box);*/
+  border-radius:5px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.5);
+  box-sizing: border-box;
+  background: #d0d0d0;
+  padding: 10px;
+}
+
+hr.shadow {
+  border: none;
+  height: 12px;
+  background-image: linear-gradient(to bottom, #bbbbbb, #cecece);
+  margin: 8px -10px;
+}

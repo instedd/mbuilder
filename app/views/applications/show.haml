@@ -1,5 +1,17 @@
-= render 'shared/application_tabs'
+.row-fluid
+  .span12
+    = render 'shared/application_tabs'
 
+.row-fluid
+  .span9
+    .row-fluid
+      .span9
+        %h4 Messages
+        %p.small Total number of messages sent and received
+        = image_tag "img-placeholder1.png"
+      .span3
+  .span3
+    = render 'shared/testing_sandbox'
 = link_to application_export_path(application), class: 'btn' do
   %i.icon-download
   Export application

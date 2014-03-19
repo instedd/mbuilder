@@ -7,40 +7,7 @@
     = csrf_meta_tags
 %body
   .wrapper
-    .navbar.top
-      .navbar-inner
-        .container-fluid
-          .row-fluid
-            .span3
-              %a{:href => root_url}
-                = image_tag "/assets/instedd-bootstrap/header/InSTEDDPlatform.png", :class => "brand"
-            .span6.acenter
-              %ul.NavMenu
-                %li
-                  %a{"data-toggle" => "tab", :href => "#"} Home
-                %li
-                  %a{"data-toggle" => "tab", :href => "#"} Applications
-                %li
-                  %a{"data-toggle" => "tab", :href => "#"} Tour
-                %li
-                  %a{"data-toggle" => "tab", :href => "#"} Community
-                %li
-                  %a{"data-toggle" => "tab", :href => "#"} Help
-            .span3
-              - unless @hide_navbar
-                .nav-collapse.collapse
-                  - if current_user
-                    .btn-group.pull-right.user
-                      %a.btn.btn-link{"data-toggle" => "dropdown", href: "#"}
-                        = current_user.email
-                        %i.ic-cog
-                      %ul.dropdown-menu
-                        %li= link_to "Settings", guisso_settings_path, "target" => "_blank"
-                        %li= link_to "Sign out", guisso_sign_out_path_for(:user, after_sign_out_url: root_url), method: :delete
-                  - else
-                    .btn-group.pull-right.user
-                      %a.btn.btn-link{href: guisso_sign_in_path_for(:user)}
-                        Sign in
+    = render "shared/header"
     = render "shared/appheader"
 
     .content
