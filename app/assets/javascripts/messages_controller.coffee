@@ -3,6 +3,7 @@ angular.module('mbuilder-messages').controller 'MessagesController', ['$scope', 
   $scope.body = ''
   $scope.messages = []
   $scope.actions = []
+  $scope.loading = false
 
   $scope.send = ->
     return if $.trim($scope.from).length == 0 || $.trim($scope.body).length == 0
@@ -11,6 +12,9 @@ angular.module('mbuilder-messages').controller 'MessagesController', ['$scope', 
       from: $scope.from
       body: $scope.body
 
+    $scope.loading = true
+    $scope.actions = []
+
     call = $http.post "/applications/#{$scope.applicationId}/messages", JSON.stringify(data)
     call.success (data, status, headers, config) ->
       if data
@@ -18,11 +22,13 @@ angular.module('mbuilder-messages').controller 'MessagesController', ['$scope', 
         $scope.actions = data.actions
         $scope.messages = data.messages
       else
-        $scope.actions
+        $scope.actions = []
         $scope.messages = []
+      $scope.loading = false
 
   $scope.$on 'load-message', (e, message) ->
     $scope.from = message.from
     $scope.body = message.body
     $scope.actions = message.actions
+    $scope.loading = false
 ]
