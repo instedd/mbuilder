@@ -1,5 +1,5 @@
 class MessageTriggersController < ApplicationController
-  layout "applications"
+  layout "trigger_edit"
 
   before_filter :authenticate_user!
   before_filter :set_tab
@@ -13,6 +13,10 @@ class MessageTriggersController < ApplicationController
     validation_triggers = application.validation_triggers.all
     validation_triggers.each { |t| t.application = application }
     validation_triggers
+  end
+
+  def index
+    self.class.layout "applications"
   end
 
   def create

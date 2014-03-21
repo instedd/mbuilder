@@ -1,5 +1,3 @@
-= render 'shared/application_tabs'
-
 - @data.each do |table|
   %h4{style: 'display: inline-block'}=table.name
   = link_to "Add new record", new_application_table_record_path(application.id, table.guid), class: 'btn btn-default', style: 'margin-left: 20px'

@@ -1,21 +1,16 @@
 .row-fluid
   .span12
-    = link_to "Create Message Trigger", new_application_message_trigger_path(application)
-%div
-  = link_to "Create Periodic Task", new_application_periodic_task_path(application)
-%br/
-
+    %h4 Triggers
 - if message_triggers.present?
-  %h4 Message Triggers
-  = render_listing :message_triggers
+  / = render_listing :message_triggers
 
-  / %ul
-  /   - message_triggers.each do |trigger|
-  /     %li
-  /       #{trigger.name}:
-  /       = link_to "edit", edit_application_message_trigger_path(application, trigger)
-  /       |
-  /       = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the trigger '#{trigger.name}'"
+  - message_triggers.each do |trigger|
+    .row-fluid
+      .span12.well
+        #{trigger.name}:
+        = link_to "edit", edit_application_message_trigger_path(application, trigger)
+        |
+        = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the trigger '#{trigger.name}'"
 
 - if periodic_tasks.present?
   %h4 Periodic Tasks
@@ -39,3 +34,7 @@
   /       = link_to "edit", application_validation_trigger_path(application, trigger.field_guid)
   /       |
   /       = link_to "delete", [application, trigger], method: :delete, confirm: "Are you sure you want to delete the validation trigger for '#{trigger.table_name} #{trigger.field_name}'"
+.row-fluid
+  .span12
+    = link_to "Create Message Trigger", new_application_message_trigger_path(application)
+    = link_to "Create Periodic Task", new_application_periodic_task_path(application)

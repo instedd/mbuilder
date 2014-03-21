@@ -2,10 +2,6 @@
   - full_row do
     = render 'shared/application_tabs'
 
-  .row-fluid
-    .span9
-      = yield
-    .span3
-      = render 'shared/testing_sandbox'
+  = yield
 
 = render template: 'layouts/application'
