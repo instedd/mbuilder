@@ -4,6 +4,12 @@
     = select_tag :kind, pigeon_nuntium_channel_kinds_for_select
     = submit_tag "Go", :class => 'btn btn-primary'
 
+.row-fluid
+  .span6
+    - simple_list :channel, icon: :folder, create_path: '#' do
+      - channels.each do |channel|
+        - simple_list_item channel.name, edit_application_channel_path(application, channel)
+
 %ul
   - channels.each do |channel|
     %li
