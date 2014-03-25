@@ -1,6 +1,7 @@
 class ApplicationsController < ApplicationController
   layout "applications", except: :index
   layout "application", only: :index
+  add_breadcrumb 'Applications', :applications_path
 
   before_filter :authenticate_user!
 
@@ -8,7 +9,9 @@ class ApplicationsController < ApplicationController
   expose(:application)
 
   def show
-    @application_tab = :overview
+    add_breadcrumb application.name, application
+    add_breadcrumb 'Overview'
+    set_application_tab :overview
   end
 
   def create
@@ -20,7 +23,9 @@ class ApplicationsController < ApplicationController
   end
 
   def edit
-    @application_tab = :settings
+    add_breadcrumb application.name, application
+    add_breadcrumb 'Settings'
+    set_application_tab :settings
   end
 
   def update
@@ -37,7 +42,10 @@ class ApplicationsController < ApplicationController
   end
 
   def data
-    @application_tab = :data
+    add_breadcrumb application.name, application
+    add_breadcrumb 'Data'
+    set_application_tab :data
+
     @data = application.local_tables
   end
 

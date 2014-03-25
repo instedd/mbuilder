@@ -1,8 +1,9 @@
-class ValidationTriggersController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :set_tab
-
-  expose(:application) { current_user.applications.find params[:application_id] }
+class ValidationTriggersController < MbuilderApplicationController
+  before_filter do
+    add_breadcrumb 'Triggers', application_message_triggers_path(application)
+  end
+  layout "trigger_edit"
+  set_application_tab :triggers
 
   def show
     load_validation_trigger
@@ -11,6 +12,8 @@ class ValidationTriggersController < ApplicationController
       field = application.table_of(params[:id]).find_field(params[:id])
       field.valid_values = params[:valid_values]
     end
+
+    add_breadcrumb @validation_trigger.field_name
   end
 
   def update
@@ -53,9 +56,5 @@ class ValidationTriggersController < ApplicationController
       @validation_trigger = application.validation_triggers.new field_guid: @field_guid
     end
     @validation_trigger.application = application
-  end
-
-  def set_tab
-    @application_tab = :triggers
   end
 end

@@ -1,18 +1,19 @@
-class ChannelsController < ApplicationController
-  layout "applications"
-
-  before_filter :authenticate_user!
-  before_filter :set_tab
-
+class ChannelsController < MbuilderApplicationController
   expose(:application) { current_user.applications.find params[:application_id] }
   expose(:channels) { application.channels }
   expose(:channel)
+  before_filter do
+    add_breadcrumb 'Channels', application_channels_path(application)
+  end
+  set_application_tab :channels
 
   def new
+    add_breadcrumb 'New channel'
     @pigeon_channel = Pigeon::NuntiumChannel.new kind: params[:kind]
   end
 
   def edit
+    add_breadcrumb channel.name
     @pigeon_channel = Pigeon::NuntiumChannel.find(channel.pigeon_name)
   end
 
@@ -72,9 +73,5 @@ class ChannelsController < ApplicationController
     rescue ActiveRecord::RecordInvalid, Pigeon::ChannelInvalid
       false
     end
-  end
-
-  def set_tab
-    @application_tab = :channels
   end
 end

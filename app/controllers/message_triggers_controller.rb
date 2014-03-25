@@ -1,10 +1,10 @@
-class MessageTriggersController < ApplicationController
+class MessageTriggersController < MbuilderApplicationController
+  before_filter do
+    add_breadcrumb 'Triggers', application_message_triggers_path(application)
+  end
   layout "trigger_edit"
+  set_application_tab :triggers
 
-  before_filter :authenticate_user!
-  before_filter :set_tab
-
-  expose(:application) { current_user.applications.find params[:application_id] }
   expose(:message_triggers) { application.message_triggers }
   expose(:message_trigger)
   expose(:periodic_tasks) { application.periodic_tasks }
@@ -21,6 +21,10 @@ class MessageTriggersController < ApplicationController
 
   def create
     set_message_trigger_data(message_trigger)
+  end
+
+  def edit
+    add_breadcrumb message_trigger.name, application_message_trigger_path(application, message_trigger)
   end
 
   def update
@@ -56,9 +60,5 @@ class MessageTriggersController < ApplicationController
     rescue ActiveRecord::RecordInvalid
       render_json trigger.errors.full_messages.join("\n"), status: 402
     end
-  end
-
-  def set_tab
-    @application_tab = :triggers
   end
 end

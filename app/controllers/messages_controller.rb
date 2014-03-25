@@ -1,10 +1,6 @@
-class MessagesController < ApplicationController
-  layout "applications"
-
-  before_filter :authenticate_user!
-  before_filter :set_tab
-
-  expose(:application) { current_user.applications.find params[:application_id] }
+class MessagesController < MbuilderApplicationController
+  add_breadcrumb 'Messages'
+  set_application_tab :messages
 
   def index
   end
@@ -23,11 +19,5 @@ class MessagesController < ApplicationController
     else
       render_json false
     end
-  end
-
-  private
-
-  def set_tab
-    @application_tab = :messages
   end
 end

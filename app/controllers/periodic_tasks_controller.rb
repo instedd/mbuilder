@@ -1,15 +1,19 @@
-class PeriodicTasksController < ApplicationController
-  layout "applications"
+class PeriodicTasksController < MbuilderApplicationController
+  before_filter do
+    add_breadcrumb 'Triggers', application_message_triggers_path(application)
+  end
+  layout "trigger_edit"
+  set_application_tab :triggers
 
-  before_filter :authenticate_user!
-  before_filter :set_tab
-
-  expose(:application) { current_user.applications.find params[:application_id] }
   expose(:periodic_tasks) { application.periodic_tasks }
   expose(:periodic_task)
 
   def create
     set_periodic_task_data(periodic_task)
+  end
+
+  def edit
+    add_breadcrumb periodic_task.name, application_periodic_task_path(application, periodic_task)
   end
 
   def update
@@ -45,9 +49,5 @@ class PeriodicTasksController < ApplicationController
     rescue ActiveRecord::RecordInvalid
       render_json periodic_task.errors.full_messages.join("\n"), status: 402
     end
-  end
-
-  def set_tab
-    @application_tab = :triggers
   end
 end
