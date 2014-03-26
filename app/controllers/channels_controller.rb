@@ -9,7 +9,11 @@ class ChannelsController < MbuilderApplicationController
 
   def new
     add_breadcrumb 'New channel'
-    @pigeon_channel = Pigeon::NuntiumChannel.new kind: params[:kind]
+    if params[:kind].blank?
+      render 'new_kind_choose'
+    else
+      @pigeon_channel = Pigeon::NuntiumChannel.new kind: params[:kind]
+    end
   end
 
   def edit

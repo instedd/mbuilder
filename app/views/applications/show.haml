@@ -4,16 +4,13 @@
     %p.small Total number of messages sent and received
     = image_tag "img-placeholder1.png"
   .span3
-= link_to application_export_path(application), class: 'btn' do
-  %i.icon-download
-  Export application
 
-= link_to '#import-form', class: 'btn', data: { toggle: 'collapse' } do
-  %i.icon-upload
-  Import application
+.row-fluid
+  .span2
+    = icon_link_to :'icf-export', 'Export application', application_export_path(application)
 
-%br
-%br
+  .span2
+    = icon_link_to :'icf-import', 'Import application', '#import-form', data: { toggle: 'collapse' }
 
 #import-form.collapse(style="width: 400px")
   .well.well-small
@@ -21,7 +18,7 @@
       = file_field_tag 'mba'
       = button_tag 'Upload', class: 'btn'
 
-%br
+%hr
 
-= link_to "Delete this application", application, method: :delete, confirm: "Are you sure you want to delete the application '#{application.name}'"
+= icon_link_to :'icf-delete', "Delete this application", application, method: :delete, confirm: "Are you sure you want to delete the application '#{application.name}'"
 
