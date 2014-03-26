@@ -25,7 +25,6 @@ function Clipboard(input) {
 
 	function keyDownHandler(e) {
 		var selection = (window.getSelection? window.getSelection().toString() : (document.selection? document.selection.createRange().text : "")).length > 0;
-			console.log("down", window.getSelection())
 		if(!selection && (e.ctrlKey || e.metaKey)) {
 			document.body.appendChild(_clipboardContainer);
 			_clipboardContainer.style.display = "block";
@@ -77,4 +76,4 @@ function Clipboard(input) {
 
 	init(input);
 }
-		
+

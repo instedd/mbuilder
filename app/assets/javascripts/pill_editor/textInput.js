@@ -1,4 +1,4 @@
-function TextInput(containerId) {
+function TextInput(container) {
 
 	EventDispatcher.call(this);
 	InvalidateElement.call(this);
@@ -22,13 +22,13 @@ function TextInput(containerId) {
 	var _displayHiddenCharacters;
 	var _debug;
 
-	function init(containerId) {
+	function init(container) {
 		_selection = new Selection();
 		_selection.addEventListener(Event.SELECT, selectHandler);
 		_keyTracker = new KeyTracker(self, _selection);
 		_clipboard = new Clipboard(self, _selection);
 		_display = new TextDisplay();
-		_container = document.getElementById(containerId);
+		_container = container;
 		_container.addEventListener("mousedown", mouseHandler);
 		_container.addEventListener("dblclick", doubleClickHandler);
 		_container.addEventListener("contextmenu", contextMenuHandler);
@@ -246,12 +246,17 @@ function TextInput(containerId) {
 		self.append(_elements.indexOf(pill), 1, replaceText);
 	}
 
+  self.selectionText = function(start, end) {
+    var text = "";
+    for (var index = start; index < end; index++) {
+      var element = _elements[index];
+      text += element.text();
+    }
+    return text;
+  }
+
 	self.createPill = function() {
-		var text = "";
-		for (var index = _selection.start(); index < _selection.end(); index++) {
-			var element = _elements[index];
-			text += element.text();
-		}
+		var text = self.selectionText(_selection.start(), _selection.end());
 		if(self.GUIDgenerator != undefined) {
 			var id = self.GUIDgenerator();
 		}
@@ -508,5 +513,5 @@ function TextInput(containerId) {
 		self.dispatchEvent(e);
 	}
 
-	init(containerId);
+	init(container);
 }

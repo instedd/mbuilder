@@ -137,6 +137,7 @@ function Pill(id, text, operator) {
 				_textHolder.appendChild(parse(node.firstChild));
 			}
 			var arrow = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+      arrow.setAttribute("class", "arrow")
 			arrow.textContent = TextDisplay.ARROW_DOWN;
 			_textHolder.appendChild(arrow);
 			var tempBoundingBox = _textHolder.getBBox();
