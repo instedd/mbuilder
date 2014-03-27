@@ -21,6 +21,7 @@ angular.module('mbuilder').directive 'pilltextarea', ->
       # because the Event.SELECT uses $apply
       window.setTimeout ->
         input.createPill()
+        ensureSpacesAroundPills()
         updateScopeFromInputData()
       , 0
 
@@ -37,6 +38,33 @@ angular.module('mbuilder').directive 'pilltextarea', ->
       input.data(inputData)
       # input.data(["Hola mundo", {id:"116afaa1-89a5-c86c-e03d-83dd5fab97be", text:"this is a pill far too wide", operator:undefined},"! new line"]);
 
+    ensureSpacesAroundPills = ->
+      data = []
+      originalData = input.data()
+      moveCarretToEnd = true
+      for item, i in originalData
+        if typeof(item) == 'string'
+          # space before a pill
+          if !/\s/.test(_.last(item)) && i < originalData.length - 1
+            item = item + ' '
+          # space after a pill
+          if !/\s/.test(_.first(item)) && i > 0
+            item = ' ' + item
+            if i == originalData.length - 1
+              moveCarretToEnd = true
+        else
+          # two pills together
+          if data.length > 0 && typeof(_.last(data)) != 'string'
+            data.push ' '
+        data.push item
+
+      input.data(data)
+      input.render()
+      if moveCarretToEnd
+        window.setTimeout ->
+          input.caret(Number.MAX_VALUE, false)
+        , 0
+
     updateScopeFromInputData = ->
       scope.$apply ->
         scope.model.splice(0, scope.model.length)
@@ -47,6 +75,7 @@ angular.module('mbuilder').directive 'pilltextarea', ->
             scope.model.push { kind: 'placeholder', text: item.text, guid: item.id }
 
     updateInputDataFromScope()
+    ensureSpacesAroundPills()
     input.render();
 
     _contextMenu = null
@@ -97,8 +126,14 @@ angular.module('mbuilder').directive 'pilltextarea', ->
         menu.parentNode.removeChild(menu)
         input.render()
 
+    skipInputChange = false
     input.addEventListener Event.CHANGE, (e) ->
+      return if skipInputChange
+      skipInputChange = true
+      ensureSpacesAroundPills()
       updateScopeFromInputData()
+      skipInputChange = false
+
     input.addEventListener Event.CONTEXT_MENU, contextMenuHandler
 
     phantom = null
