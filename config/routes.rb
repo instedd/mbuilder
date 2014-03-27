@@ -9,7 +9,7 @@ Mbuilder::Application.routes.draw do
     resources :message_triggers
     resources :periodic_tasks
     resources :validation_triggers
-    resources :messages
+    resources :messages, only: :create
     resources :logs, only: :index
 
     get :data
