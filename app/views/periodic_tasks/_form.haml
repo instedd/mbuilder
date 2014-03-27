@@ -1,31 +1,24 @@
-%div{'ng-app' => 'mbuilder'}
-  - angular_templates "shared/angular"
-  - angular_templates "shared/actions"
-  - angular_templates "shared/pieces"
-  - angular_templates "shared/pills"
-  - angular_templates "shared/schedules"
+%div{'ng-controller' => 'PeriodicTaskController', 'ng-init' => periodic_task_to_angular(application, periodic_task)}
+  %div{'ng-controller' => 'TriggerController'}
+    %div.row-fluid
+      %div.span6
+        %div
+          %label{for: :name} Name
+          %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true}
 
-  %div{'ng-controller' => 'PeriodicTaskController', 'ng-init' => periodic_task_to_angular(application, periodic_task)}
-    %div{'ng-controller' => 'TriggerController'}
-      %div.row-fluid
-        %div.span6
-          %div
-            %label{for: :name} Name
-            %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true}
+        %div
+          = form_for [application, periodic_task] do |f|
+            %p This trigger will run:
+            = f.select_recurring :rule, [periodic_task.rule], {allow_blank: false}, {'id' => 'scheduleRule'}
+            at:
+            .control-group.input-append.bootstrap-timepicker
+              %input(type="text" ng-model="$parent.scheduleTime" bs-timepicker data-show-meridian="false" data-show-seconds="true" data-minute-step=1)
+              %button.btn{type:"button", 'data-toggle'=>"timepicker"}
+                %i.icon-time
 
-          %div
-            = form_for [application, periodic_task] do |f|
-              %p This trigger will run:
-              = f.select_recurring :rule, [periodic_task.rule], {allow_blank: false}, {'id' => 'scheduleRule'}
-              at:
-              .control-group.input-append.bootstrap-timepicker
-                %input(type="text" ng-model="$parent.scheduleTime" bs-timepicker data-show-meridian="false" data-show-seconds="true" data-minute-step=1)
-                %button.btn{type:"button", 'data-toggle'=>"timepicker"}
-                  %i.icon-time
+        = render 'shared/triggers/actions'
+      = render 'shared/triggers/tables'
 
-          = render 'shared/triggers/actions'
-        = render 'shared/triggers/tables'
+    %button.btn{'ng-click' => 'save()'} Save
 
-      %button.btn{'ng-click' => 'save()'} Save
-
-      = render 'shared/triggers/popups'
+    = render 'shared/triggers/popups'

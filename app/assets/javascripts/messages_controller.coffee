@@ -1,4 +1,4 @@
-angular.module('mbuilder-messages').controller 'MessagesController', ['$scope', '$http', ($scope, $http) ->
+angular.module('testing-sandbox', []).controller 'MessagesController', ['$scope', '$http', ($scope, $http) ->
   $scope.from = ''
   $scope.body = ''
   $scope.messages = []

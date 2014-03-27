@@ -27,7 +27,7 @@
     - validation_triggers.each do |trigger|
       .row-fluid
         .span12.box-list
-          = icon_link_to :'icf-arrow', trigger.field_name, application_validation_trigger_path(application, trigger)
+          = icon_link_to :'icf-arrow', trigger.field_name, application_validation_trigger_path(application, trigger.field_guid)
 
   / = render_listing :validation_triggers
 

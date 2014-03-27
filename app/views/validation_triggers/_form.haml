@@ -1,24 +1,18 @@
-%div{'ng-app' => 'mbuilder'}
-  - angular_templates "shared/angular"
-  - angular_templates "shared/actions"
-  - angular_templates "shared/pieces"
-  - angular_templates "shared/pills"
+%div{'ng-controller' => 'ValidationTriggerController', 'ng-init' => validation_trigger_to_angular(application, @validation_trigger)}
+  %div{'ng-controller' => 'TriggerController'}
+    %div.row-fluid
+      %div.span6
+        %div
+          When
+          .pill.bound{draggable: 'true', dragstart: 'phoneNumberDragStart($event)'} {{from}}
+          tries to insert an
+          .pill.bound{draggable: 'true', dragstart: 'invalidValueDragStart($event)'} {{invalid_value}}
+          into #{@validation_trigger.table_name} #{@validation_trigger.field_name}
+        %br
 
-  %div{'ng-controller' => 'ValidationTriggerController', 'ng-init' => validation_trigger_to_angular(application, @validation_trigger)}
-    %div{'ng-controller' => 'TriggerController'}
-      %div.row-fluid
-        %div.span6
-          %div
-            When
-            .pill.bound{draggable: 'true', dragstart: 'phoneNumberDragStart($event)'} {{from}}
-            tries to insert an
-            .pill.bound{draggable: 'true', dragstart: 'invalidValueDragStart($event)'} {{invalid_value}}
-            into #{@validation_trigger.table_name} #{@validation_trigger.field_name}
-          %br
+        = render 'shared/triggers/actions'
+      = render 'shared/triggers/tables'
 
-          = render 'shared/triggers/actions'
-        = render 'shared/triggers/tables'
+    %button.btn{'ng-click' => 'save()'} Save
 
-      %button.btn{'ng-click' => 'save()'} Save
-
-      = render 'shared/triggers/popups'
+    = render 'shared/triggers/popups'

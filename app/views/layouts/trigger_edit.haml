@@ -2,8 +2,16 @@
   - full_row do
     = render 'shared/application_tabs'
 
-  .sandbox-container
-    = render 'shared/testing_sandbox'
-  = yield
+  %div{'ng-app' => 'mbuilder'}
+    - angular_templates "shared/angular"
+    - angular_templates "shared/actions"
+    - angular_templates "shared/pieces"
+    - angular_templates "shared/pills"
+    - angular_templates "shared/schedules"
+
+    = yield
+
+    .sandbox-container
+      = render 'shared/testing_sandbox'
 
 = render template: 'layouts/application'

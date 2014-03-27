@@ -1,36 +1,15 @@
-%h4 Recent Activity
+- content_for :instedd_content do
+  - full_row do
+    = render 'shared/application_tabs'
 
-%div{'ng-app' => 'mbuilder-messages'}
-  #logsController{'ng-controller' => 'LogsController'}
+  .row-fluid{'ng-app' => 'mbuilder-messages'}
+    .span12
+      .row-fluid{'ng-controller' => 'LogsController'}
+        .span9
+          %h4 Recent Activity
 
-    = render_listing :logs
+          #logsController
+            = render_listing :logs
 
-    .modal.fade.hide#messagesModal{ 'tabindex' => "-1", 'role' => "dialog", 'ng-controller' => 'MessagesController', 'ng-init' => "applicationId=#{application.id}"}
-      .modal-dialog
-        .modal-content
-          .modal-header
-            %button.close{ 'type' => 'button', 'data-dismiss' => 'modal', 'aria-hidden' => 'true' }
-              &times;
-            %h4.modal-title#myModalLabel Modal title
-          .modal-body
-            %div.row-fluid
-              %div.span6
-                %form
-                  %div
-                    %label{for: :from} From
-                    %input{'ng-model' => 'from', type: :text, name: :from, autofocus: true}
-                  %div
-                    %label{for: :body} Message
-                    %textarea{'ng-model' => 'body'}
-              %div.span6
-                %div{'ng-show' => 'actions.length'}
-                  %h5 Actions
-
-                  %ul
-                    %li{'ng-repeat' => 'action in actions'}
-                      {{action}}
-                %div{'ng-show' => '!actions.length'}
-                  %h5 No Actions performed
-          .modal-footer
-            %button.btn.btn-default{'data-dismiss' => 'modal'} Close
-            %button.btn.btn-primary{'ng-click' => 'send()'} Resend message
+        .span3
+          = render 'shared/testing_sandbox'
