@@ -12,7 +12,7 @@
       %label{for: :body} Message
       .controls
         %textarea.span12{'ng-model' => 'body', :rows => 5}
-    %button.btn.btn-small.btn-warning{'ng-click' => 'send()'} Send
+    %button.btn.btn-small.btn-warning.w-hide{'ng-click' => 'send()'} Send
 
     %div{'ng-show' => 'loading'}
       %hr

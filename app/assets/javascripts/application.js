@@ -24,3 +24,24 @@
 //= require pigeon
 //= require message_parser
 //= require_tree .
+
+$(function(){
+
+  $(".sandbox-container").click(function(){
+    $(this).addClass("show");
+    return false;
+  });
+
+  $(".w-hide").click(function(){
+    $(".sandbox-container").removeClass("show");
+    return false;
+  });
+
+  $(".add-trigger").click(function(){
+    $(this).addClass("hide");
+    $(".triggers-menu").addClass("show");
+    return false;
+  });
+
+});
+

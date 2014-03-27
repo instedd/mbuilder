@@ -250,6 +250,22 @@ body {
   height: 100%;
 }
 
+.triggers-menu {
+  display: none;
+
+  a {
+    color: #555655;
+    text-align: center;
+    display: inline-block;
+    width: 60px;
+    margin-right: 8px;
+  }
+
+  &.show {
+    display: block;
+  }
+}
+
 //-------------------- Classes -----------------------
 //----------------------------------------------------
 
@@ -274,4 +290,34 @@ hr.shadow {
   height: 12px;
   background-image: linear-gradient(to bottom, #bbbbbb, #cecece);
   margin: 8px -10px;
+}
+
+.sandbox-container {
+  position: absolute;
+  bottom: 149px;
+  right: 20px;
+  z-index: 1000;
+
+  >div {
+    @include transition(all ease 0.3s);
+    width: 348px;
+    height: 80px;
+    overflow: hidden;
+  }
+  .testing-sandbox {
+    @include border-radius(5px 5px 0 0);
+    @include box-shadow(none);
+
+    input.span12,
+    textarea.span12 {
+      width: 315px !important;
+    }
+  }
+
+  &.show {
+    >div {
+      height: auto;
+    }
+  }
+
 }
