@@ -101,3 +101,25 @@ angular.module('mbuilder').directive 'pilltextarea', ->
       updateScopeFromInputData()
     input.addEventListener Event.CONTEXT_MENU, contextMenuHandler
 
+    phantom = null
+
+    mouseHandler = (e) ->
+      mouse = mousePosition(e)
+      phantom.style.left = mouse.x + "px"
+      phantom.style.top = mouse.y + "px"
+
+    input.addEventListener Event.DRAG, (e) ->
+      phantom = document.body.appendChild(e.info.pill)
+      phantom.style.mouseEvents = "none"
+      phantom.style.position = "absolute"
+      phantom.style.opacity = 0.5
+      phantom.style.left = e.info.mouseX + "px"
+      phantom.style.top = e.info.mouseY + "px"
+      window.addEventListener("mousemove", mouseHandler)
+
+    input.addEventListener Event.DROP, (e) ->
+      if phantom.parentNode
+        phantom.parentNode.removeChild(phantom)
+      window.removeEventListener("mousemove", mouseHandler)
+
+
