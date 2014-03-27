@@ -29,6 +29,7 @@ $(function(){
 
   $(".sandbox-container").click(function(){
     $(this).addClass("show");
+    $('input:first', this).focus();
     return false;
   });
 
