@@ -1,7 +1,7 @@
 %div{'ng-controller' => 'MessageTriggerController', 'ng-init' => message_trigger_to_angular(application, message_trigger)}
   %div{'ng-controller' => 'TriggerController'}
-    %div.row-fluid
-      %div.span6
+    .row-fluid
+      .span6
         %div
           %label{for: :name} Name
           %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true}
@@ -24,6 +24,10 @@
         = render 'shared/triggers/actions'
       = render 'shared/triggers/tables'
 
-    %button.btn{'ng-click' => 'save()'} Save
+    .row-fluid
+      .span6
+        %button.btn{'ng-click' => 'save()'} Save
+        %button.btn.btn-link Cancel
+        = icon_link_to :'icf-delete', 'Delete this trigger', '#', class: "pull-right"
 
     = render 'shared/triggers/popups'
