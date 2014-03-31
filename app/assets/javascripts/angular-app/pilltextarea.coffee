@@ -69,7 +69,7 @@ angular.module('mbuilder').directive 'pilltextarea', ->
       scope.$apply ->
         scope.model.splice(0, scope.model.length)
         for item in input.data()
-          scope.mode.push(inputDataToMbuilderPill(item))
+          scope.model.push(inputDataToMbuilderPill(item))
 
     inputDataToMbuilderPill = (item) ->
       if typeof(item) == 'string'
