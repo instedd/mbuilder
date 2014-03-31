@@ -280,11 +280,17 @@ body {
 .testing-sandbox {
   @include border-radius(5px);
   @include box-shadow(0 2px 0 0 rgba(0,0,0,0.5));
-  @include box-sizing(border-box);
   background: #d0d0d0;
-  padding: 10px;
 }
-
+.sandbox-header {
+  @include box-sizing(border-box);
+  padding: 10px 10px 0;
+  cursor: pointer;
+}
+.sandbox-content {
+  @include box-sizing(border-box);
+  padding: 2px 10px 10px;
+}
 hr.shadow {
   border: none;
   height: 12px;

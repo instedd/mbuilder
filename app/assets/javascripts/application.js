@@ -27,14 +27,9 @@
 
 $(function(){
 
-  $(".sandbox-container").click(function(){
-    $(this).addClass("show");
+  $(".sandbox-header").click(function(){
+    $(".sandbox-container").toggleClass("show");
     $('input:first', this).focus();
-    return false;
-  });
-
-  $(".w-hide").click(function(){
-    $(".sandbox-container").removeClass("show");
     return false;
   });
 
