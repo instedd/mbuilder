@@ -389,6 +389,7 @@ function TextInput(container) {
 					var clone = svg.appendChild(_dragTarget.cloneNode(true));
 					phantom.style.width = bounds.width + "px";
           phantom.style.height = bounds.height + "px";
+          phantom.style.pointerEvents = "none"
 					for (var index = clone.childElementCount - 1; index >= 0; index--) {
 						var child = clone.childNodes[index];
 						child.setAttribute("x", 0);
@@ -453,7 +454,7 @@ function TextInput(container) {
 					_dragTarget = undefined;
 					self.caret(index + 1, insertBefore);
 					document.body.style.cursor = "auto";
-					self.dispatchEvent(new Event(Event.DROP));
+					self.dispatchEvent(new Event(Event.DROP, {dropZone:e.target}));
 				}
 				break;
 		}

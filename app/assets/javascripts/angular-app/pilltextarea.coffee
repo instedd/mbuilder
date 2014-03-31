@@ -149,7 +149,6 @@ angular.module('mbuilder').directive 'pilltextarea', ->
     input.addEventListener Event.DRAG, (e) ->
       window.draggedPill = inputDataToMbuilderPill(e.info.pill)
       phantom = document.body.appendChild(e.info.phantom)
-      phantom.style.pointerEvents = "none"
       phantom.style.position = "absolute"
       phantom.style.opacity = 0.5
       phantom.style.left = e.info.mouseX + "px"
