@@ -1,6 +1,6 @@
-pilltextarea
 .svgInput
-%br
-%p(ng-hide='textselection == ""' )
+.svgInputHelp(ng-hide='textselection == ""' )
   %a(href='javascript:' ng-click='createPill()') Make pill for {{textselection}}
-%p(ng-show='textselection == ""') Select text to create pills
+.svgInputHelp(ng-show='textselection == ""')
+  %span Select text to create pills
+.clearfix
