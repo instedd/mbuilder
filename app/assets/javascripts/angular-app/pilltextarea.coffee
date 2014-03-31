@@ -56,7 +56,8 @@ angular.module('mbuilder').directive 'pilltextarea', ->
           # two pills together
           if data.length > 0 && typeof(_.last(data)) != 'string'
             data.push ' '
-        data.push item
+        unless i == originalData.length - 1 && i == ' '
+          data.push item
 
       input.data(data)
       input.render()
@@ -159,5 +160,5 @@ angular.module('mbuilder').directive 'pilltextarea', ->
       if phantom.parentNode
         phantom.parentNode.removeChild(phantom)
       window.removeEventListener("mousemove", mouseHandler)
-
+      ensureSpacesAroundPills()
 
