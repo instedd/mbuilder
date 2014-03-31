@@ -10,6 +10,7 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
 
   $scope.dropOverName = (event) ->
     $scope.$emit 'pillOverFieldName', pill: window.draggedPill, field: $scope.pill, table: $scope.table
+    window.draggedPill = null
 
   $scope.dragOverValue = (event) ->
     return false unless window.draggedPill
@@ -20,10 +21,11 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
       event.preventDefault()
       true
 
-  $scope.mouseDragOverValue = (event) ->
-    console.log 'mouseDragOverValue'
+  $scope.mouseEnterOverValue = (event) ->
+    $(event.target).closest('td').toggleClass('dropzone', window.draggedPill != null)
 
   $scope.mouseDropOverValue = (event) ->
+    $(event.target).closest('td').removeClass('dropzone')
     $scope.dropOverName(event)
 
   $scope.dropOverValue = (event) ->
