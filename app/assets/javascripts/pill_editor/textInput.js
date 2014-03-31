@@ -365,6 +365,7 @@ function TextInput(container) {
 		mouse.y -= _container.offsetTop - _container.scrollTop + _margin;
 		switch(e.type) {
 			case "mousedown":
+        $(document.activeElement).blur();
 				if(e.target.textContent == TextDisplay.ARROW_DOWN) {
 					e.stopImmediatePropagation();
 					var info = {};
