@@ -396,11 +396,12 @@ function TextInput(container) {
 						child.setAttribute("x", 0);
 						child.setAttribute("y", _display.fontSize());
 					}
-					document.body.style.cursor = "move";
+					_wrapper.style.cursor = "move";
 					self.dispatchEvent(new Event(Event.DRAG, {pill:pill.toJson(), phantom:phantom, mouseX:mouse.x + _container.offsetLeft - _container.scrollLeft, mouseY:mouse.y + _container.offsetTop - _container.scrollTop}));
 				}
 				break;
 			case "mouseup":
+        _wrapper.style.cursor = "text";
 				window.removeEventListener("mousemove", mouseHandler);
 				window.removeEventListener("mouseup", mouseHandler);
 				break;
