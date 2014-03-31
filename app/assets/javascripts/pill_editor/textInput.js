@@ -355,6 +355,7 @@ function TextInput(container) {
 	}
 
 	function mouseHandler(e) {
+    e.preventDefault(); // avoid selection to start
 		if(_container.contains(e.target)) {
 			self.focus(true);
 		}

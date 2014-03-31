@@ -24,7 +24,7 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
     console.log 'mouseDragOverValue'
 
   $scope.mouseDropOverValue = (event) ->
-    console.log 'mouseDropOverValue'
+    $scope.dropOverName(event)
 
   $scope.dropOverValue = (event) ->
     $scope.$emit 'pillOverFieldValue', pill: window.draggedPill, field: $scope.pill, table: $scope.table
