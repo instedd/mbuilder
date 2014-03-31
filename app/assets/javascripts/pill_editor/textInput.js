@@ -111,7 +111,7 @@ function TextInput(container) {
 						data[data.lastIndex()] = data.lastElement() + element.text();
 						break;
 					case "pill":
-						data.push({id:element.id(), label:element.label(), text:element.text(), operator:element.operator()});
+						data.push(element.toJson());
 						break;
 				}
 			});
@@ -379,22 +379,23 @@ function TextInput(container) {
 				window.addEventListener("mouseup", mouseHandler);
 				if(e.target.parentNode.getAttribute("type") == "pill") {
 					_dragTarget = e.target.parentNode;
+          var pill = self.getPillById(_dragTarget.getAttribute("data-id"));
 					var bounds = _dragTarget.getBBox();
-					var pill = document.createElement("div");
-					var svg = pill.appendChild(document.createElementNS("http://www.w3.org/2000/svg","svg"));
+					var phantom = document.createElement("div");
+					var svg = phantom.appendChild(document.createElementNS("http://www.w3.org/2000/svg","svg"));
 					svg.style.position = "absolute";
 					svg.style.left = (bounds.x - mouse.x + _margin) + "px";
 					svg.style.top = (bounds.y - mouse.y + _margin) + "px";
 					var clone = svg.appendChild(_dragTarget.cloneNode(true));
-					pill.style.width = bounds.width + "px";
-		            pill.style.height = bounds.height + "px";
+					phantom.style.width = bounds.width + "px";
+          phantom.style.height = bounds.height + "px";
 					for (var index = clone.childElementCount - 1; index >= 0; index--) {
 						var child = clone.childNodes[index];
 						child.setAttribute("x", 0);
 						child.setAttribute("y", _display.fontSize());
 					}
 					document.body.style.cursor = "move";
-					self.dispatchEvent(new Event(Event.DRAG, {pill:pill, mouseX:mouse.x + _container.offsetLeft - _container.scrollLeft, mouseY:mouse.y + _container.offsetTop - _container.scrollTop}));
+					self.dispatchEvent(new Event(Event.DRAG, {pill:pill.toJson(), phantom:phantom, mouseX:mouse.x + _container.offsetLeft - _container.scrollLeft, mouseY:mouse.y + _container.offsetTop - _container.scrollTop}));
 				}
 				break;
 			case "mouseup":

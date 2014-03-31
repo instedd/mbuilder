@@ -41,7 +41,7 @@ angular.module('mbuilder').directive 'pilltextarea', ->
     ensureSpacesAroundPills = ->
       data = []
       originalData = input.data()
-      moveCarretToEnd = true
+      moveCarretToEnd = false
       for item, i in originalData
         if typeof(item) == 'string'
           # space before a pill
@@ -69,10 +69,13 @@ angular.module('mbuilder').directive 'pilltextarea', ->
       scope.$apply ->
         scope.model.splice(0, scope.model.length)
         for item in input.data()
-          if typeof(item) == 'string'
-            scope.model.push { kind: 'text', text: item, guid: window.guid() }
-          else
-            scope.model.push { kind: 'placeholder', text: item.text, guid: item.id }
+          scope.mode.push(inputDataToMbuilderPill(item))
+
+    inputDataToMbuilderPill = (item) ->
+      if typeof(item) == 'string'
+        { kind: 'text', text: item, guid: window.guid() }
+      else
+        { kind: 'placeholder', text: item.text, guid: item.id }
 
     updateInputDataFromScope()
     ensureSpacesAroundPills()
@@ -144,7 +147,8 @@ angular.module('mbuilder').directive 'pilltextarea', ->
       phantom.style.top = mouse.y + "px"
 
     input.addEventListener Event.DRAG, (e) ->
-      phantom = document.body.appendChild(e.info.pill)
+      window.draggedPill = inputDataToMbuilderPill(e.info.pill)
+      phantom = document.body.appendChild(e.info.phantom)
       phantom.style.mouseEvents = "none"
       phantom.style.position = "absolute"
       phantom.style.opacity = 0.5

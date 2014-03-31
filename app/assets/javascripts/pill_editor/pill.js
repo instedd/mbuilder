@@ -36,6 +36,10 @@ function Pill(id, text, operator) {
 		self.index(0);
 	}
 
+  self.toJson = function() {
+    return {id:self.id(), label:self.label(), text:self.text(), operator:self.operator()};
+  }
+
 	self.displayHiddenCharacters = function(value) {
 		if(!arguments.length) {
 			return _displayHiddenCharacters;
