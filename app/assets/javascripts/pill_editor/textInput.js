@@ -29,9 +29,16 @@ function TextInput(container) {
 		_clipboard = new Clipboard(self, _selection);
 		_display = new TextDisplay();
 		_container = container;
-		_container.addEventListener("mousedown", mouseHandler);
+    _container.addEventListener("mousedown", mouseHandler);
+    _container.addEventListener("dragover", mouseHandler);
+    _container.addEventListener("drop", mouseHandler);
 		_container.addEventListener("dblclick", doubleClickHandler);
 		_container.addEventListener("contextmenu", contextMenuHandler);
+    _container.addEventListener("mousemove", function(){
+      if (self.isForeignObjectDragged()) {
+        trackMousePositionForDrop();
+      }
+    });
 		_wrapper = _container.appendChild(document.createElement("div"));
 		_wrapper.style.cursor = "text";
 		_wrapper.id = "wrapper";
@@ -40,6 +47,10 @@ function TextInput(container) {
 		self.margin(5);
 		self.displayHiddenCharacters(false);
 	}
+
+  self.isForeignObjectDragged = function() {
+    return false;
+  }
 
 	self.focus = function(value) {
 		if(!arguments.length) {
@@ -265,6 +276,13 @@ function TextInput(container) {
 		self.invalidate();
 	}
 
+  self.insertPillAtCaret = function(id, label, text, data) {
+    _elements.splice(_caret, 0, new Pill(id, sanitize(label), sanitize(text), data));
+    self.invalidate();
+    //BUG: caret is not leaft on drop position
+    self.dispatchEvent(new Event(Event.CHANGE));
+  }
+
 	self.render = function(start) {
 		var innerWidth = self.width() - _margin * 2;
 		var innerHeight = self.height() - _margin * 2;
@@ -354,11 +372,19 @@ function TextInput(container) {
 		return text;
 	}
 
+  function trackMousePositionForDrop() {
+    window.addEventListener("mousemove", mouseHandler);
+    window.addEventListener("mouseup", mouseHandler);
+    _selection.clear();
+  }
+
 	function mouseHandler(e) {
     e.preventDefault(); // avoid selection to start
 		if(_container.contains(e.target)) {
 			self.focus(true);
-		}
+		} else {
+      self.focus(false);
+    }
 		if(e.target == _container || e.button) return;
 		var mouse = mousePosition(e);
 		mouse.x -= _container.offsetLeft - _container.scrollLeft + _margin;
@@ -377,9 +403,9 @@ function TextInput(container) {
 					self.dispatchEvent(new Event(Event.CONTEXT_MENU, info));
 					return;
 				}
-				window.addEventListener("mousemove", mouseHandler);
-				window.addEventListener("mouseup", mouseHandler);
-				if(e.target.parentNode.getAttribute("type") == "pill") {
+        trackMousePositionForDrop();
+        _dragTarget = null;
+				if(_container.contains(e.target) && e.target.parentNode.getAttribute("type") == "pill") {
 					_dragTarget = e.target.parentNode;
           var pill = self.getPillById(_dragTarget.getAttribute("data-id"));
 					var bounds = _dragTarget.getBBox();
@@ -402,6 +428,7 @@ function TextInput(container) {
 				}
 				break;
 			case "mouseup":
+      case "drop":
         _wrapper.style.cursor = "text";
 				window.removeEventListener("mousemove", mouseHandler);
 				window.removeEventListener("mouseup", mouseHandler);
@@ -415,7 +442,7 @@ function TextInput(container) {
 			caret = Number(index) + (mouse.x > (element.x() + element.source().getBBox().width / 2)? 1 : 0);
 			insertBefore = element.source().parentNode.nextSibling == undefined;
 		} else {
-			var contour = _dragTarget == undefined;
+			var contour = _dragTarget != null;
 			var nearestPosition = _display.nearestPosition(mouse, contour);
 			caret = nearestPosition.index;
 			insertBefore = nearestPosition.insertBefore;
@@ -433,16 +460,20 @@ function TextInput(container) {
 				}
 				self.caret(caret, insertBefore);
 				break;
-			case "mousemove":
-				if(_dragTarget == undefined) {
+      case "dragover":
+        self.caret(caret, insertBefore);
+        break;
+      case "mousemove":
+				if(_dragTarget == null && !self.isForeignObjectDragged()) {
 					_selection.set(_caret, caret);
 				} else {
 					self.caret(caret, insertBefore);
 				}
 				break;
-			case "mouseup":
+      case "mouseup":
+			case "drop":
 				self.caret(caret, insertBefore);
-				if(_dragTarget != undefined) {
+				if(_dragTarget != null) {
 					var index = Number(_dragTarget.getAttribute("data-index"));
 					if(0 <= mouse.x && mouse.x <= self.width() && 0 <= mouse.y && mouse.y <= self.height()) {
 						var element = _elements[index];
@@ -454,11 +485,14 @@ function TextInput(container) {
 						self.render();
 						index = _caret;
 					}
-					_dragTarget = undefined;
+					_dragTarget = null;
 					self.caret(index + 1, insertBefore);
 					document.body.style.cursor = "auto";
-					self.dispatchEvent(new Event(Event.DROP, {dropZone:e.target}));
-				}
+					self.dispatchEvent(new Event(Event.DROP, {pill:element, dropZone:e.target}));
+				} else {
+          // outside drop. without a _dragTarget
+          self.dispatchEvent(new Event(Event.DROP, {pill:null}));
+        }
 				break;
 		}
 	}

@@ -11,26 +11,14 @@ angular.module('mbuilder').directive 'textpad', ->
 
     input = new TextInput(svgInput[0]);
     input.autoExpand(true);
+    input.isForeignObjectDragged = ->
+      return window.draggedPill != null
 
     updateInputDataFromScope = ->
       inputData = []
-      guidsByScopePillIndex = {}
       scopeModelCopy = scope.model.slice(0)
-      for pill, i in scopeModelCopy
-        if pill.kind == 'text'
-          inputData.push pill.guid # pills here seems to store the text in the guid property. this is why pilltextarea != textpad
-        else if pill.kind == 'placeholder' || pill.kind == 'field_value'
-          guidsByScopePillIndex[i] = window.guid()
-          inputData.push {
-            id: guidsByScopePillIndex[i] # pill guid refers to field id. no identity :-(
-            text: pill.guid
-            label: scope.$parent.lookupPillName(pill)
-            data: {
-              mbuilder_kind: pill.kind
-              mbuilder_guid: pill.guid
-            }
-          }
-
+      for pill in scopeModelCopy
+        inputData.push(mbuilderToInputDataPill(pill))
       input.data(inputData)
       input.render()
 
@@ -84,6 +72,20 @@ angular.module('mbuilder').directive 'textpad', ->
           { kind: 'placeholder', guid: item.data.mbuilder_guid }
         else if item.data.mbuilder_kind == 'field_value'
           { kind: 'field_value', guid: item.data.mbuilder_guid }
+
+    mbuilderToInputDataPill = (pill) ->
+      if pill.kind == 'text'
+        pill.guid # pills here seems to store the text in the guid property. this is why pilltextarea != textpad
+      else if pill.kind == 'placeholder' || pill.kind == 'field_value'
+        {
+          id: window.guid() # pill guid refers to field id. no identity :-(
+          text: pill.guid
+          label: scope.$parent.lookupPillName(pill)
+          data: {
+            mbuilder_kind: pill.kind
+            mbuilder_guid: pill.guid
+          }
+        }
 
     # updateInputDataFromScope()
     scope.$watch 'model', ->
@@ -167,8 +169,15 @@ angular.module('mbuilder').directive 'textpad', ->
       window.addEventListener("mousemove", mouseHandler)
 
     input.addEventListener Event.DROP, (e) ->
-      if phantom.parentNode
-        phantom.parentNode.removeChild(phantom)
-      window.removeEventListener("mousemove", mouseHandler)
-      ensureSpacesAroundPills()
+      if e.info.pill != null
+        # drag&drop inside pill
+        if phantom.parentNode
+          phantom.parentNode.removeChild(phantom)
+        window.removeEventListener("mousemove", mouseHandler)
+        ensureSpacesAroundPills()
+      else
+        if window.draggedPill
+          pill = mbuilderToInputDataPill(window.draggedPill)
+          input.insertPillAtCaret(pill.id, pill.label, pill.text, pill.data)
+      window.draggedPill = null
 
