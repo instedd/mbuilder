@@ -1,4 +1,4 @@
-function Pill(id, text, operator) {
+function Pill(id, label, text, data) {
 
 	var self = this;
 	var _type;
@@ -10,14 +10,14 @@ function Pill(id, text, operator) {
 	var _textHolder;
 	var _source;
 	var _displayText;
-	var _operator;
+	var _data;
 	var _background;
 	var _index;
 	var _focus;
 	var _boundingBox;
 	var _displayHiddenCharacters;
 
-	function init(id, label, text, operator) {
+	function init(id, label, text, data) {
 		_type = "pill";
 		_source = document.createElementNS("http://www.w3.org/2000/svg", "g");
 		_source.setAttribute("type", _type);
@@ -31,13 +31,13 @@ function Pill(id, text, operator) {
 		self.id(id);
 		self.label(label);
 		self.text(text);
-		self.operator(operator);
+		self.data(data);
 		self.move(0, 0);
 		self.index(0);
 	}
 
   self.toJson = function() {
-    return {id:self.id(), label:self.label(), text:self.text(), operator:self.operator()};
+    return {id:self.id(), label:self.label(), text:self.text(), data:self.data()};
   }
 
 	self.displayHiddenCharacters = function(value) {
@@ -94,11 +94,11 @@ function Pill(id, text, operator) {
 		}
 	}
 
-	self.operator = function(value) {
+	self.data = function(value) {
 		if(!arguments.length) {
-			return _operator;
+			return _data;
 		} else {
-			_operator = value;
+			_data = value;
 		}
 	}
 
@@ -210,5 +210,5 @@ function Pill(id, text, operator) {
 		return text;
 	}
 
-	init(id, text, operator);
+	init(id, label, text, data);
 }

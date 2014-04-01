@@ -129,7 +129,7 @@ function TextInput(container) {
 						info += block;
 						break;
 					case "object":
-						_elements.push(new Pill(block.id, sanitize(block.label), sanitize(block.text), block.opperator));
+						_elements.push(new Pill(block.id, sanitize(block.label), sanitize(block.text), block.data));
 						info += "(" + (block.text || block.label) + ")";
 						break;
 				}

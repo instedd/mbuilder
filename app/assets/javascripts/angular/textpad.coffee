@@ -19,28 +19,28 @@ angular.module('mbuilder').directive 'textpad', ->
       for pill, i in scopeModelCopy
         if pill.kind == 'text'
           inputData.push pill.guid # pills here seems to store the text in the guid property. this is why pilltextarea != textpad
-        else if pill.kind == 'placeholder'
+        else if pill.kind == 'placeholder' || pill.kind == 'field_value'
           guidsByScopePillIndex[i] = window.guid()
           inputData.push {
             id: guidsByScopePillIndex[i] # pill guid refers to field id. no identity :-(
             text: pill.guid
+            label: scope.$parent.lookupPillName(pill)
+            data: {
+              mbuilder_kind: pill.kind
+              mbuilder_guid: pill.guid
+            }
           }
-        else
-          console.error('Unsupported pill kind: ' + pill.kind)
 
       input.data(inputData)
       input.render()
 
       # update labels of pills
-      for pill, i in scopeModelCopy
-        if pill.kind == 'placeholder'
-          textInputPill = input.getPillById(guidsByScopePillIndex[i])
-          if not textInputPill?
-            input.getPillById(guidsByScopePillIndex[i])
-          textInputPill.label(scope.$parent.lookupPillName(pill))
-
-      console.log(scope.model)
-
+      # for pill, i in scopeModelCopy
+      #   if pill.kind == 'placeholder'
+      #     textInputPill = input.getPillById(guidsByScopePillIndex[i])
+      #     if not textInputPill?
+      #       input.getPillById(guidsByScopePillIndex[i])
+      #     textInputPill.label(scope.$parent.lookupPillName(pill))
 
     ensureSpacesAroundPills = ->
       data = []
@@ -80,7 +80,10 @@ angular.module('mbuilder').directive 'textpad', ->
       if typeof(item) == 'string'
         { kind: 'text', guid: item }
       else
-        { kind: 'placeholder', guid: item.text }
+        if item.data.mbuilder_kind == 'placeholder'
+          { kind: 'placeholder', guid: item.data.mbuilder_guid }
+        else if item.data.mbuilder_kind == 'field_value'
+          { kind: 'field_value', guid: item.data.mbuilder_guid }
 
     # updateInputDataFromScope()
     scope.$watch 'model', ->
