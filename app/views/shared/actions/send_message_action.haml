@@ -1,6 +1,7 @@
 %div{'ng-controller' => 'SendMessageController'}
   Send this message
   %br
+  %textpad(model='action.message')
   .message-area{contenteditable: '{{action.messageEditable}}', 'ng-blur' => 'makeMessageNotEditable($event)', 'ng-mousedown' => 'makeMessageEditable($event)', dragover: 'dragOverMessage($event)', drop: 'dropOverMessage($event)', 'preserve-ng-repeat' => true}
     %span.piece-container{'ng-repeat' => 'pill in action.message', 'ng-include' => true, 'src' => 'pillTemplateFor(pill)'}<>
   to
