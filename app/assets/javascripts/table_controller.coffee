@@ -22,8 +22,8 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
 
     tableGuid = $scope.lookupTableByField(field.guid).guid
 
-    tableAction = _.find $scope.actions, (action) -> action.table == tableGuid
-    if tableAction?.kind == 'select_entity'
+    tableAction = $scope.firstActionThat (action) -> action.table == tableGuid
+    if tableAction?.kind in ['select_entity', 'foreach']
       return 'field_value'
 
     'new'
