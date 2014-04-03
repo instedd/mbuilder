@@ -18,22 +18,23 @@
 @import "instedd-bootstrap";
 
 .message-container {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  border: 1px solid gray;
-  padding: 10px;
-}
+  @include border-radius(3px);
+  @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
 
-.message-container .from {
-  margin-bottom: 10px;
+  >div {
+    padding: 10px;
+  }
+}
+input.n {
+  border: none;
+
+  &:focus {
+    @include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.3) inset);
+  }
 }
 
 .message-area {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  border: 1px solid gray;
+  border-top: 1px solid #e7e7e7;
   padding: 10px;
   min-height: 30px;
   margin-bottom: 8px;
@@ -51,15 +52,25 @@
 }
 
 .logic-table {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  border: 1px solid gray;
-  padding: 10px;
+
+  .table {
+    border-top: 3px solid #555555;
+  }
+
 }
 
 .logic-table-name {
+  @include border-radius(3px 3px 0 0);
+  background: #555555;
+  color: $white;
+  padding: 5px 8px;
+  display: inline-block;
+  margin: 0 0 -1px 3px;
   cursor: move;
+  input[type="text"] {
+    background: #2e74e8;
+    color: $white;
+  }
 }
 
 .logic-field-name {
@@ -67,16 +78,18 @@
 }
 
 .action {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  border: 2px solid #bbbbbb;
+  @include border-radius(3px);
+  @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
   padding: 10px;
   cursor: move;
-}
 
-.action.selected {
-  border: 2px solid blue;
+  &:active {
+    background: #e8e7e7 !important;
+  }
+
+  &.selected {
+    background: #cae3f1;
+  }
 }
 
 .space-between-actions {
@@ -168,8 +181,15 @@ a.delete {
 }
 
 table.fields {
-  min-width: 300px;
-  width: auto;
+  /*min-width: 300px;*/
+  width: 100%;
+
+  th {
+    input[type="text"] {
+      background: #2e74e8;
+      color: $white;
+    }
+  }
 }
 
 table.fields td {
@@ -187,13 +207,10 @@ table.fields td div {
   margin: 0px !important;
 }
 
-.logic-table-name {
-  margin-bottom: 8px;
-}
 
-table.fields th, table.fields td {
+/*table.fields th, table.fields td {
   padding: 4px;
-}
+}*/
 
 table.fields input {
   margin: 0px;

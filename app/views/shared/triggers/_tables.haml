@@ -1,22 +1,11 @@
 %div.span6{'ng-controller' => 'TablesController'}
-  %div
-    %strong Tables
-    %br
-    %a{'ng-click' => 'newTable()', href: 'javascript:'} (+) New table
-    %br
-    %div{'ng-controller' => 'ResourceMapController'}
-      %a{'ng-click' => 'listCollections($event)', href: 'javascript:'} (+) Add a Resource Map collection
-      %div#add-resource-map-collection.popup
-        %div{'ng-show' => 'loading'}
-          Loading...
-        %div{'ng-hide' => 'loading'}
-          %div{'ng-repeat' => 'collection in collections'}
-            %a{'href' => 'javascript:', 'ng-click' => 'addCollection(collection)'} {{collection.name}}
-  %br
+  %p Use tables to store o retrieve data
 
   %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
-    %div.logic-table
-      %a.delete{href: 'javascript:', 'ng-click' => 'deleteTable($index)'} x
+    .logic-table
+      / = icon_link_to :'icf-delete', '', '{href: 'javascript:', 'ng-click' => 'deleteTable($index)'}'
+      %a.delete{href: 'javascript:', 'ng-click' => 'deleteTable($index)', title: 'Delete table'}
+        %i.icf-delete
       .logic-table-name{draggable: 'true', dragstart: 'tableDragStart(table.guid, $event)'}
         %div{'ng-hide' => 'table.readonly'}
           %editable-input{'model' => 'table.name', 'editmode' => 'table.editmode', 'focusmode' => 'table.focusmode'}
@@ -26,17 +15,18 @@
             %i.icon-refresh
 
       .scroll
-        %table.table.table-bordered.fields
+        %table.table.table-bordered.fields.graygrad
           %tr
-            %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)'}
+            %th{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)'}
               %span{'ng-hide' => 'table.readonly'}
                 %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
               .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)', 'dragover' => 'dragOverName($event)', 'drop' => 'dropOverName($event)'}
                 %div{'ng-hide' => 'table.readonly'}
                   %editable-input{'model' => 'pill.name', 'editmode' => 'pill.editmode', 'focusmode' => 'pill.focusmode'}
                 %span{'ng-show' => 'table.readonly'} {{pill.name}}
-            %td{'ng-hide' => 'table.readonly'}
-              %a{'ng-click' => 'newField()', href: 'javascript:'} (+) New column
+            %th{'ng-hide' => 'table.readonly'}
+              %a{'ng-click' => 'newField()', href: 'javascript:', title: 'Add column'}
+                %i.icp-add
           %tr{'ng-repeat' => 'row in selectedTableRows(table)'}
             %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
               {{ row[pill.guid] }}
@@ -47,3 +37,14 @@
               %span(ng-include src='pillTemplateFor(pill)')
             %td{'ng-hide' => 'table.readonly'}
     %br
+  %div
+    %a{'ng-click' => 'newTable()', href: 'javascript:'} (+) New table
+    %br
+    %div{'ng-controller' => 'ResourceMapController'}
+      %a{'ng-click' => 'listCollections($event)', href: 'javascript:'} (+) Add a Resource Map collection
+      %div#add-resource-map-collection.popup
+        %div{'ng-show' => 'loading'}
+          Loading...
+        %div{'ng-hide' => 'loading'}
+          %div{'ng-repeat' => 'collection in collections'}
+            %a{'href' => 'javascript:', 'ng-click' => 'addCollection(collection)'} {{collection.name}}
