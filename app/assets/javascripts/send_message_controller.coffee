@@ -108,6 +108,6 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
 
     true
 
-  $scope.tryShowAggregateFunctionsPopup = (pill, event) ->
-    $scope.showAggregateFunctionsPopup pill, event
+  $scope.tryShowAggregateFunctionsPopup = (pill, actionScope, event) ->
+    $scope.showAggregateFunctionsPopup pill, actionScope, event
 ]

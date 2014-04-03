@@ -400,7 +400,7 @@ function TextInput(container) {
 					info.mouseX =  _container.offsetLeft + boundingBox.x + boundingBox.width + self.margin();
 					info.mouseY =  _container.offsetTop + boundingBox.y + boundingBox.height + self.margin();
 					info.eventAt = "arrow";
-					self.dispatchEvent(new Event(Event.CONTEXT_MENU, info));
+          self.dispatchEvent(new Event(Event.CONTEXT_MENU, info));
 					return;
 				}
         trackMousePositionForDrop();

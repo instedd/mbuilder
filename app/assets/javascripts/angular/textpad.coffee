@@ -68,10 +68,7 @@ angular.module('mbuilder').directive 'textpad', ->
       if typeof(item) == 'string'
         { kind: 'text', guid: item }
       else
-        if item.data.mbuilder_kind == 'placeholder'
-          { kind: 'placeholder', guid: item.data.mbuilder_guid }
-        else if item.data.mbuilder_kind == 'field_value'
-          { kind: 'field_value', guid: item.data.mbuilder_guid }
+        item.data.mbuilder_pill
 
     mbuilderToInputDataPill = (pill) ->
       if pill.kind == 'text'
@@ -80,67 +77,71 @@ angular.module('mbuilder').directive 'textpad', ->
         {
           id: window.guid() # pill guid refers to field id. no identity :-(
           text: pill.guid
-          label: scope.$parent.lookupPillName(pill)
+          label: labelForMbuilderPill(pill)
           data: {
-            mbuilder_kind: pill.kind
-            mbuilder_guid: pill.guid
+            mbuilder_pill: pill
           }
         }
+
+    labelForMbuilderPill = (pill) ->
+      aggDesc = scope.$parent.aggregateLabel(pill.aggregate)
+      pillDesc = scope.$parent.lookupPillName(pill)
+
+      label = document.createElementNS("http://www.w3.org/2000/svg", "text")
+      if aggDesc
+        aggregate = document.createElementNS("http://www.w3.org/2000/svg", "tspan")
+        aggregate.setAttribute("class", "aggregate")
+        aggregate.textContent = aggDesc + ' '
+        label.appendChild(aggregate)
+      label.appendChild(document.createTextNode(pillDesc))
+
+      label
 
     # updateInputDataFromScope()
     scope.$watch 'model', ->
       window.setTimeout updateInputDataFromScope, 0
 
+    scope.$on 'AggregateFuncionSelected', (e) ->
+      window.setTimeout updateInputDataFromScope, 0
+      e.stopPropagation()
+
     ensureSpacesAroundPills()
     input.render();
 
-    _contextMenu = null
+    # begin context menu
+    pillContextMenu = false
+
+    svgInput.click (e) ->
+      if pillContextMenu
+        e.stopPropagation()
+        e.preventDefault()
+      else
+        scope.$parent.hidePopups()
+      pillContextMenu = false
+
     contextMenuHandler = (e) ->
-      console.log "CONTEXT_MENU"
-      if(_contextMenu != null && _contextMenu.parentNode)
-        _contextMenu.parentNode.removeChild(_contextMenu)
+      pill = e.info.pill.data().mbuilder_pill
+      if pill.kind == 'field_value'
 
-      _contextMenu = document.body.appendChild(document.createElement("div"))
-      _contextMenu.style.position = "absolute"
-      _contextMenu.style.backgroundColor = "#cccccc"
-      _contextMenu.style.border = "1px solid #999999"
-      addOption "Break", null, _contextMenu, e.info, ->
-        input.breakPill(e.info.pill)
-        _contextMenu.parentNode.removeChild(_contextMenu)
-        _contextMenu = null
-        input.render()
+        popup_width = $(if scope.$parent.lookupTableByField(pill.guid).readonly
+           '#aggregate-functions-error'
+         else
+           '#aggregate-functions').outerWidth()
 
-      x = e.info.mouseX || e.info.pill.x();
-      y = e.info.mouseY || e.info.pill.y();
-      if(e.info.eventAt == "arrow")
-        x -= _contextMenu.getBoundingClientRect().width;
-        y += 5;
-
-      _contextMenu.style.left = x + "px";
-      _contextMenu.style.top = y + "px";
-      document.addEventListener "mousedown", (e) ->
-        if(!_contextMenu.contains(e.target) && _contextMenu.parentNode)
-          _contextMenu.parentNode.removeChild(_contextMenu)
-
-    addOption = (label, option, menu, info, customHandler) ->
-      button = menu.appendChild(document.createElement("button"))
-      button.innerHTML = label
-      button.style.display = "block"
-      button.style.width = "100%"
-      button.onclick = customHandler || (e) ->
-        info.pill.operator(option);
-
-        label = document.createElementNS("http://www.w3.org/2000/svg", "text")
-        if option != null
-          operator = document.createElementNS("http://www.w3.org/2000/svg", "tspan")
-          operator.setAttribute("class", "operator")
-          operator.textContent = option + " of "
-          label.appendChild(operator);
-
-        label.appendChild(document.createTextNode(info.pill.text()))
-        info.pill.label(label)
-        menu.parentNode.removeChild(menu)
-        input.render()
+        scope.$parent.tryShowAggregateFunctionsPopup pill, scope, {
+          originalEvent : {
+            pageX : e.info.mouseX - popup_width + 1,
+            pageY : e.info.mouseY + 2
+          }
+          preventDefault : ->
+            pillContextMenu = true
+            return
+          stopPropagation : ->
+            pillContextMenu = true
+            return
+        }
+      else
+        console.log 'no popup to show for ', e
 
     skipInputChange = false
     input.addEventListener Event.CHANGE, (e) ->

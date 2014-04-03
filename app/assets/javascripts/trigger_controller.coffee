@@ -291,8 +291,9 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
   $scope.unselectAction = ->
     $scope.selectedAction = null
 
-  $scope.showAggregateFunctionsPopup = (pill, event) ->
+  $scope.showAggregateFunctionsPopup = (pill, actionScope, event) ->
     $scope.aggregateFunctionPopup.pill = pill
+    $scope.aggregateFunctionPopup.actionScope = actionScope
     id = if $scope.lookupTableByField(pill.guid).readonly
            '#aggregate-functions-error'
          else
