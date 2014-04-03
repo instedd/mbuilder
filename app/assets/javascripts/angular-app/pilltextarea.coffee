@@ -1,8 +1,5 @@
 angular.module('mbuilder').directive 'pilltextarea', ->
   restrict: 'E'
-  scope: {
-    model: '='
-  }
   templateUrl: 'pilltextarea'
   link: (scope, elem, attrs) ->
     svgInput = $('.svgInput', elem)
@@ -27,7 +24,7 @@ angular.module('mbuilder').directive 'pilltextarea', ->
 
     updateInputDataFromScope = ->
       inputData = []
-      for pill in scope.model
+      for pill in scope.pieces
         if pill.kind == 'text'
           inputData.push pill.text
         else if pill.kind == 'placeholder'
@@ -36,7 +33,6 @@ angular.module('mbuilder').directive 'pilltextarea', ->
             text: pill.text
           }
       input.data(inputData)
-      # input.data(["Hola mundo", {id:"116afaa1-89a5-c86c-e03d-83dd5fab97be", text:"this is a pill far too wide", operator:undefined},"! new line"]);
 
     ensureSpacesAroundPills = ->
       data = []
@@ -68,9 +64,13 @@ angular.module('mbuilder').directive 'pilltextarea', ->
 
     updateScopeFromInputData = ->
       scope.$apply ->
-        scope.model.splice(0, scope.model.length)
+        newPieces = []
         for item in input.data()
-          scope.model.push(inputDataToMbuilderPill(item))
+          newPieces.push(inputDataToMbuilderPill(item))
+
+        args = [0, scope.pieces.length].concat(newPieces)
+        Array.prototype.splice.apply(scope.pieces, args)
+      scope.$emit 'onPatternpadPicesChanged'
 
     inputDataToMbuilderPill = (item) ->
       if typeof(item) == 'string'

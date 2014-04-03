@@ -86,6 +86,7 @@ angular.module('mbuilder').directive 'textpad', ->
     labelForMbuilderPill = (pill) ->
       aggDesc = scope.$parent.aggregateLabel(pill.aggregate)
       pillDesc = scope.$parent.lookupPillName(pill)
+      pillDesc = "???" unless pillDesc
 
       label = document.createElementNS("http://www.w3.org/2000/svg", "text")
       if aggDesc
@@ -99,6 +100,9 @@ angular.module('mbuilder').directive 'textpad', ->
 
     # updateInputDataFromScope()
     scope.$watch 'model', ->
+      window.setTimeout updateInputDataFromScope, 0
+
+    scope.$on 'onAllPillsChanged', ->
       window.setTimeout updateInputDataFromScope, 0
 
     scope.$on 'AggregateFuncionSelected', (e) ->
