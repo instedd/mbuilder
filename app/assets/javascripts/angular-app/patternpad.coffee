@@ -1,6 +1,6 @@
-angular.module('mbuilder').directive 'pilltextarea', ->
+angular.module('mbuilder').directive 'patternpad', ->
   restrict: 'E'
-  templateUrl: 'pilltextarea'
+  templateUrl: 'patternpad'
   link: (scope, elem, attrs) ->
     svgInput = $('.svgInput', elem)
 
@@ -161,4 +161,3 @@ angular.module('mbuilder').directive 'pilltextarea', ->
         phantom.parentNode.removeChild(phantom)
       window.removeEventListener("mousemove", mouseHandler)
       ensureSpacesAroundPills()
-

@@ -72,7 +72,7 @@ angular.module('mbuilder').directive 'textpad', ->
 
     mbuilderToInputDataPill = (pill) ->
       if pill.kind == 'text'
-        pill.guid # pills here seems to store the text in the guid property. this is why pilltextarea != textpad
+        pill.guid # pills here seems to store the text in the guid property. this is why patternpad != textpad
       else if pill.kind == 'placeholder' || pill.kind == 'field_value'
         {
           id: window.guid() # pill guid refers to field id. no identity :-(
