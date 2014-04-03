@@ -58,13 +58,13 @@ function TextInput(container) {
 		} else {
 			_focus = value;
 			if(_focus) {
-				document.addEventListener("click", clickOutsideHandler);
+				document.addEventListener("mousedown", clickOutsideHandler);
 				_container.className = "svgInput svgInput-focus";
 				_display.focus(true);
 				_keyTracker.activate();
 				_clipboard.activate();
 			} else {
-				document.removeEventListener("click", clickOutsideHandler);
+				document.removeEventListener("mousedown", clickOutsideHandler);
 				_container.className = "svgInput";
 				_display.focus(false);
 				_keyTracker.deactivate();
@@ -140,7 +140,7 @@ function TextInput(container) {
 						info += block;
 						break;
 					case "object":
-						_elements.push(new Pill(block.id, sanitize(block.label), sanitize(block.text), block.data));
+						_elements.push(new Pill(block.id, sanitize(block.label), sanitize(block.text), block.hasMenu, block.data));
 						info += "(" + (block.text || block.label) + ")";
 						break;
 				}
@@ -276,8 +276,8 @@ function TextInput(container) {
 		self.invalidate();
 	}
 
-  self.insertPillAtCaret = function(id, label, text, data) {
-    _elements.splice(_caret, 0, new Pill(id, sanitize(label), sanitize(text), data));
+  self.insertPillAtCaret = function(id, label, text, hasMenu, data) {
+    _elements.splice(_caret, 0, new Pill(id, sanitize(label), sanitize(text), hasMenu, data));
     self.invalidate();
     //BUG: caret is not leaft on drop position
     self.dispatchEvent(new Event(Event.CHANGE));
@@ -437,7 +437,7 @@ function TextInput(container) {
 		var caret;
 		var insertBefore = false;
 		var index = e.target.getAttribute("data-index");
-		if(index) {
+		if(_container.contains(e.target) && index) {
 			var element = _elements[index];
 			caret = Number(index) + (mouse.x > (element.x() + element.source().getBBox().width / 2)? 1 : 0);
 			insertBefore = element.source().parentNode.nextSibling == undefined;

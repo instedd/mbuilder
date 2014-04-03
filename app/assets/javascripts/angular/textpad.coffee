@@ -78,6 +78,7 @@ angular.module('mbuilder').directive 'textpad', ->
           id: window.guid() # pill guid refers to field id. no identity :-(
           text: pill.guid
           label: labelForMbuilderPill(pill)
+          hasMenu: pill.kind == 'field_value'
           data: {
             mbuilder_pill: pill
           }
@@ -176,13 +177,13 @@ angular.module('mbuilder').directive 'textpad', ->
     input.addEventListener Event.DROP, (e) ->
       if e.info.pill != null
         # drag&drop inside pill
-        if phantom.parentNode
+        if phantom != null && phantom.parentNode
           phantom.parentNode.removeChild(phantom)
         window.removeEventListener("mousemove", mouseHandler)
         ensureSpacesAroundPills()
       else
         if window.draggedPill
           pill = mbuilderToInputDataPill(window.draggedPill)
-          input.insertPillAtCaret(pill.id, pill.label, pill.text, pill.data)
+          input.insertPillAtCaret(pill.id, pill.label, pill.text, pill.hasMenu, pill.data)
       window.draggedPill = null
 

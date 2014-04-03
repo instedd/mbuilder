@@ -31,6 +31,7 @@ angular.module('mbuilder').directive 'patternpad', ->
           inputData.push {
             id: pill.guid
             text: pill.text
+            hasMenu : false
           }
       input.data(inputData)
 
@@ -82,54 +83,6 @@ angular.module('mbuilder').directive 'patternpad', ->
     ensureSpacesAroundPills()
     input.render();
 
-    _contextMenu = null
-    contextMenuHandler = (e) ->
-      console.log "CONTEXT_MENU"
-      if(_contextMenu != null && _contextMenu.parentNode)
-        _contextMenu.parentNode.removeChild(_contextMenu)
-
-      _contextMenu = document.body.appendChild(document.createElement("div"))
-      _contextMenu.style.position = "absolute"
-      _contextMenu.style.backgroundColor = "#cccccc"
-      _contextMenu.style.border = "1px solid #999999"
-      addOption "Break", null, _contextMenu, e.info, ->
-        input.breakPill(e.info.pill)
-        _contextMenu.parentNode.removeChild(_contextMenu)
-        _contextMenu = null
-        input.render()
-
-      x = e.info.mouseX || e.info.pill.x();
-      y = e.info.mouseY || e.info.pill.y();
-      if(e.info.eventAt == "arrow")
-        x -= _contextMenu.getBoundingClientRect().width;
-        y += 5;
-
-      _contextMenu.style.left = x + "px";
-      _contextMenu.style.top = y + "px";
-      document.addEventListener "mousedown", (e) ->
-        if(!_contextMenu.contains(e.target) && _contextMenu.parentNode)
-          _contextMenu.parentNode.removeChild(_contextMenu)
-
-    addOption = (label, option, menu, info, customHandler) ->
-      button = menu.appendChild(document.createElement("button"))
-      button.innerHTML = label
-      button.style.display = "block"
-      button.style.width = "100%"
-      button.onclick = customHandler || (e) ->
-        info.pill.operator(option);
-
-        label = document.createElementNS("http://www.w3.org/2000/svg", "text")
-        if option != null
-          operator = document.createElementNS("http://www.w3.org/2000/svg", "tspan")
-          operator.setAttribute("class", "operator")
-          operator.textContent = option + " of "
-          label.appendChild(operator);
-
-        label.appendChild(document.createTextNode(info.pill.text()))
-        info.pill.label(label)
-        menu.parentNode.removeChild(menu)
-        input.render()
-
     skipInputChange = false
     input.addEventListener Event.CHANGE, (e) ->
       return if skipInputChange
@@ -137,8 +90,6 @@ angular.module('mbuilder').directive 'patternpad', ->
       ensureSpacesAroundPills()
       updateScopeFromInputData()
       skipInputChange = false
-
-    input.addEventListener Event.CONTEXT_MENU, contextMenuHandler
 
     phantom = null
 
@@ -157,7 +108,10 @@ angular.module('mbuilder').directive 'patternpad', ->
       window.addEventListener("mousemove", mouseHandler)
 
     input.addEventListener Event.DROP, (e) ->
-      if phantom.parentNode
+      if phantom != null && phantom.parentNode
         phantom.parentNode.removeChild(phantom)
       window.removeEventListener("mousemove", mouseHandler)
       ensureSpacesAroundPills()
+
+    # svgInput.mouseup ->
+    #   window.draggedPill = null

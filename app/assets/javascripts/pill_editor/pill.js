@@ -1,4 +1,4 @@
-function Pill(id, label, text, data) {
+function Pill(id, label, text, hasMenu, data) {
 
 	var self = this;
 	var _type;
@@ -16,8 +16,9 @@ function Pill(id, label, text, data) {
 	var _focus;
 	var _boundingBox;
 	var _displayHiddenCharacters;
+  var _hasMenu;
 
-	function init(id, label, text, data) {
+	function init(id, label, text, hasMenu, data) {
 		_type = "pill";
 		_source = document.createElementNS("http://www.w3.org/2000/svg", "g");
 		_source.setAttribute("type", _type);
@@ -34,10 +35,11 @@ function Pill(id, label, text, data) {
 		self.data(data);
 		self.move(0, 0);
 		self.index(0);
+    self.hasMenu(hasMenu);
 	}
 
   self.toJson = function() {
-    return {id:self.id(), label:self.label(), text:self.text(), data:self.data()};
+    return {id:self.id(), label:self.label(), text:self.text(), hasMenu:self.hasMenu(), data:self.data()};
   }
 
 	self.displayHiddenCharacters = function(value) {
@@ -66,6 +68,14 @@ function Pill(id, label, text, data) {
 			_source.setAttribute("data-index", _index);
 		}
 	}
+
+  self.hasMenu = function(value) {
+    if (!arguments.length) {
+      return _hasMenu;
+    } else {
+      _hasMenu = value;
+    }
+  }
 
 	self.id = function(value) {
 		if(!arguments.length) {
@@ -140,10 +150,12 @@ function Pill(id, label, text, data) {
 			while (node.firstChild) {
 				_textHolder.appendChild(parse(node.firstChild));
 			}
-			var arrow = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-      arrow.setAttribute("class", "arrow")
-			arrow.textContent = TextDisplay.ARROW_DOWN;
-			_textHolder.appendChild(arrow);
+      if (_hasMenu) {
+  			var arrow = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        arrow.setAttribute("class", "arrow");
+  			arrow.textContent = TextDisplay.ARROW_DOWN;
+  			_textHolder.appendChild(arrow);
+      }
 			var tempBoundingBox = _textHolder.getBBox();
 			_boundingBox = {};
 			for (var prop in tempBoundingBox) _boundingBox[prop] = tempBoundingBox[prop];
@@ -210,5 +222,5 @@ function Pill(id, label, text, data) {
 		return text;
 	}
 
-	init(id, label, text, data);
+	init(id, label, text, hasMenu, data);
 }
