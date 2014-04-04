@@ -113,6 +113,4 @@ angular.module('mbuilder').directive 'patternpad', ->
         phantom.parentNode.removeChild(phantom)
       window.removeEventListener("mousemove", mouseHandler)
       ensureSpacesAroundPills()
-
-    # svgInput.mouseup ->
-    #   window.draggedPill = null
+      window.draggedPill = null
