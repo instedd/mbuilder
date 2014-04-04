@@ -51,12 +51,13 @@ angular.module('mbuilder').directive 'textpad', ->
         unless i == originalData.length - 1 && i == ' '
           data.push item
 
-      input.data(data)
-      input.render()
-      if moveCarretToEnd
-        window.setTimeout ->
-          input.caret(Number.MAX_VALUE, false)
-        , 0
+      if !_.isEqual(input.data(), data)
+        input.data(data)
+        input.render()
+        if moveCarretToEnd
+          window.setTimeout ->
+            input.caret(Number.MAX_VALUE, false)
+          , 0
 
     updateScopeFromInputData = ->
       scope.$apply ->
