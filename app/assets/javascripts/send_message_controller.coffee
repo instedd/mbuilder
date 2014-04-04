@@ -86,9 +86,17 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     true
 
   $scope.dropOverRecipient = (event) ->
+    return if window.draggedPill == null
     $scope.action.recipient = window.draggedPill
     MessageParser.appendLastPieceTo(event.target)
     true
+
+  $scope.mouseEnterOverValue = (event) ->
+    $(event.target).closest('.message-input').toggleClass('dropzone', window.draggedPill != null)
+
+  $scope.mouseDropOverValue = (event) ->
+    $(event.target).closest('.message-input').removeClass('dropzone')
+    $scope.dropOverRecipient(event)
 
   $scope.handleRecipientKey = (event) ->
     hasPill = $scope.action.recipient.kind != 'text'
