@@ -13,6 +13,8 @@ module Listings
         elastic_record = ElasticRecord.for(index, type)
 
         listing_class = Class.new(Listings::Base)
+        listing_class.css_class 'graygrad'
+
         listing_class.send(:define_method, :name, lambda { |*args| name })
 
         listing_class.send(:define_method, :has_active_model_source?, lambda { |*args| true })

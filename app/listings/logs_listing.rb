@@ -1,4 +1,5 @@
 class LogsListing < Listings::Base
+  css_class 'graygrad'
 
   model do
     @application = Application.find(params[:application_id])

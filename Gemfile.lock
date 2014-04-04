@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/manastech/listings.git
-  revision: 184d6abbc60c803b192b64b1d1f76de50a98e134
+  revision: a79a1c32f091787bc8ae6935444115272d52c69e
   branch: master
   specs:
     listings (0.0.2)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/instedd-bootstrap.git
-  revision: 8dc446519544ac33a425dec1ad3c8bacde72a941
+  revision: 542ed9b618ea3b468d4b7c90d121087173294a23
   branch: master
   specs:
     instedd-bootstrap (0.0.1)
