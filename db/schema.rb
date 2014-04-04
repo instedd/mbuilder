@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140211203710) do
+ActiveRecord::Schema.define(:version => 20140307165308) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -62,6 +62,17 @@ ActiveRecord::Schema.define(:version => 20140211203710) do
 
   add_index "execution_loggers", ["application_id"], :name => "index_execution_loggers_on_application_id"
   add_index "execution_loggers", ["trigger_id"], :name => "index_execution_loggers_on_trigger_id"
+
+  create_table "external_triggers", :force => true do |t|
+    t.integer  "application_id"
+    t.string   "name"
+    t.text     "actions"
+    t.text     "parameters"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "external_triggers", ["application_id"], :name => "index_external_triggers_on_application_id"
 
   create_table "identities", :force => true do |t|
     t.integer  "user_id"

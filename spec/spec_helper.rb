@@ -40,6 +40,8 @@ RSpec.configure do |config|
 
   config.after(:all) { Tire.index('*test*').delete }
 
+  config.include Devise::TestHelpers, :type => :controller
+
   def new_application(tables)
     tables = tables.split(";").map(&:strip)
     tables = tables.map do |table|
@@ -76,6 +78,10 @@ RSpec.configure do |config|
 
   def new_validation_trigger(field_guid, &block)
     instance_eval_trigger_helper(&block).validation_trigger(field_guid)
+  end
+
+  def new_external_trigger(&block)
+    instance_eval_trigger_helper(&block).external_trigger
   end
 
   def instance_eval_trigger_helper(&block)

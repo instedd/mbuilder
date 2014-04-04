@@ -119,6 +119,13 @@ a.delete {
   display: inline-block;
 }
 
+.pill.sample {
+  border: 1px solid #ddd;
+  background: #ddd;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
 .pill.bound {
   border: 1px solid #ddd;
   background: #ddd;

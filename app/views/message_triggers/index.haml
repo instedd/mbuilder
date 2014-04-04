@@ -31,6 +31,18 @@
 
   / = render_listing :validation_triggers
 
+- if external_triggers.present?
+  .row-fluid
+    .span12
+      %h4 External Triggers
+
+    - external_triggers.each do |trigger|
+      .row-fluid
+        .span12.box-list
+          = icon_link_to :'icf-arrow', trigger.name, edit_application_external_trigger_path(application, trigger)
+
+  / = render_listing :external_triggers
+
 .row-fluid
   .span12
     / = icon_link_to :'icc-add', 'Add Trigger', '#', class: "add-trigger"
@@ -49,4 +61,6 @@
       / %a{:href => "#"}
       /   = image_tag "trigger-validation.png"
       /   Validation trigger
-
+      = link_to new_application_external_trigger_path(application) do
+        = image_tag "trigger-message.png"
+        External Trigger

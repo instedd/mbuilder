@@ -26,6 +26,11 @@ MessageTrigger.blueprint do
   name
 end
 
+ExternalTrigger.blueprint do
+  application
+  name
+end
+
 PeriodicTask.blueprint do
   application
   name

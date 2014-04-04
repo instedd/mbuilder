@@ -1,0 +1,43 @@
+%div{'ng-app' => 'mbuilder'}
+  - angular_templates "shared/angular"
+  - angular_templates "shared/actions"
+  - angular_templates "shared/pieces"
+  - angular_templates "shared/pills"
+
+  %div{'ng-controller' => 'ExternalTriggerController', 'ng-init' => external_trigger_to_angular(application, external_trigger)}
+    %div{'ng-controller' => 'TriggerController'}
+      %div.row-fluid
+        %div.span6
+          %div
+            %label{for: :name} Name
+            %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true}
+
+          %div
+            %label{for: :message} When a post to this url is received:
+            .message-container
+              .from
+                %strong
+                  = "#{root_url}external/application/#{application.id}/trigger/{{$parent.name}}?"
+                  %span{'ng-repeat' => 'pill in parameters'}
+                    {{pill.name}}=
+                    %span(ng-include src='pillTemplateFor(pill)')
+                    &
+              %span{'ng-repeat' => 'pill in parameters'}
+                .message-container
+                  %input{:'ng-model'=>"pill.name", :type=>"text"}
+                  \=
+                  %span(ng-include src='pillTemplateFor(pill)')
+                  %a.delete{href: 'javascript:', 'ng-click' => 'deleteParameter($index)'} x
+                .space-between-actions
+              %a{'ng-click' => 'addParameter()', href: 'javascript:'} [+] Add additional parameter
+              .received-at
+                %strong Received at:
+                .pill.bound{draggable: 'true', dragstart: 'receivedAtDragStart($event)'}
+                  yyyymmdd
+
+          = render 'shared/triggers/actions'
+        = render 'shared/triggers/tables'
+
+      %button.btn{'ng-click' => 'save()'} Save
+
+      = render 'shared/triggers/popups'

@@ -8,6 +8,7 @@ class MessageTriggersController < MbuilderApplicationController
   expose(:message_triggers) { application.message_triggers }
   expose(:message_trigger)
   expose(:periodic_tasks) { application.periodic_tasks }
+  expose(:external_triggers) { application.external_triggers }
 
   expose(:validation_triggers) do
     validation_triggers = application.validation_triggers.all

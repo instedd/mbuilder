@@ -9,6 +9,7 @@ Mbuilder::Application.routes.draw do
     resources :message_triggers
     resources :periodic_tasks
     resources :validation_triggers
+    resources :external_triggers
     resources :messages, only: :create
     resources :logs, only: :index
 
@@ -25,6 +26,8 @@ Mbuilder::Application.routes.draw do
 
   get '/api/applications/:id/tables' => 'api#index',as: :api_index
   get '/api/applications/:id/tables/:table_id(.:format)' => 'api#show', as: :api_show, defaults: { format: 'json' }
+
+  post '/external/application/:application_id/trigger/:trigger_name(.:format)' => 'external_triggers#run', as: :run_external_trigger, defaults: { format: 'json' }
 
   authenticate :user do
     mount Pigeon::Engine => '/pigeon'

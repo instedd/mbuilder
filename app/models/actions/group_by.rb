@@ -1,4 +1,5 @@
 class Actions::GroupBy < Action
+  attr_accessor :table, :field
 
   def initialize(table, field)
     @table = table
