@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.17'
 gem 'mysql2'
 
+gem 'newrelic_rpm'
+
 gem 'jquery-rails'
 gem 'devise'
 gem 'omniauth'
