@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/instedd-bootstrap.git
-  revision: 8acd08efe7922a5bf886cd7214e9663c38724c01
+  revision: 4ab7bdb72e99bae24825d08e3f177a776068a734
   branch: master
   specs:
     instedd-bootstrap (0.0.1)
@@ -121,7 +121,7 @@ GEM
     byebug (2.3.1)
       columnize (~> 0.3.6)
       debugger-linecache (~> 1.2.0)
-    capistrano (2.15.5)
+    capistrano (2.14.2)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
@@ -178,7 +178,7 @@ GEM
       railties (>= 3.1, < 4.1)
     hashie (2.0.5)
     hashr (0.0.22)
-    highline (1.6.19)
+    highline (1.6.21)
     hike (1.2.3)
     httpclient (2.3.4.1)
     i18n (0.6.9)
@@ -203,11 +203,11 @@ GEM
     multi_json (1.9.2)
     multipart-post (1.2.0)
     mysql2 (0.3.11)
-    net-scp (1.1.2)
+    net-scp (1.2.0)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
       net-ssh (>= 2.6.5)
-    net-ssh (2.6.8)
+    net-ssh (2.8.0)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
     newrelic_rpm (3.7.3.204)
@@ -326,7 +326,7 @@ DEPENDENCIES
   alto_guisso!
   angularjs-rails
   bootstrap-sass (~> 2.3.2.1)
-  capistrano
+  capistrano (= 2.14.2)
   coffee-rails (~> 3.2.1)
   decent_exposure
   delayed_job

@@ -50,7 +50,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'faker'
   gem 'machinist'
-  gem 'capistrano'
+  gem 'capistrano', '2.14.2'
   gem 'rvm-capistrano'
   gem 'timecop'
 end
