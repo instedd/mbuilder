@@ -1,6 +1,6 @@
 class ApplicationsController < ApplicationController
-  layout "applications", except: :index
-  layout "application", only: :index
+  layout "applications", except: [:index, :new]
+  layout "application", only: [:index, :new]
   add_breadcrumb 'Applications', :applications_path
 
   before_filter :authenticate_user!
