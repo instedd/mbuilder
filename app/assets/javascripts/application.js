@@ -18,12 +18,12 @@
 //= require bootstrap
 //= require instedd-bootstrap
 //= require angular
-//= require_tree ./angular/
+//= require_directory ./angular/
 //= require ng-rails-csrf
 //= require guid
 //= require pigeon
 //= require message_parser
-//= require_tree .
+//= require_directory .
 
 $(function(){
 
