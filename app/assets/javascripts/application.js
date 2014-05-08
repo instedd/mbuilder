@@ -18,7 +18,7 @@
 //= require bootstrap
 //= require instedd-bootstrap
 //= require angular
-//= require_directory ./angular/
+//= require_directory ./angular-app/
 //= require ng-rails-csrf
 //= require guid
 //= require pigeon
