@@ -10,7 +10,7 @@ class Pills::ParameterPill < Pill
   generate_equals :guid, :name
 
   def value_in(context)
-    context.params[name]
+    context.piece_value(guid)
   end
 
   def self.from_hash(hash)

@@ -51,17 +51,16 @@ ActiveRecord::Schema.define(:version => 20140307165308) do
     t.text     "actions"
     t.string   "message_body"
     t.string   "message_from"
-    t.integer  "trigger_id"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.string   "message_to"
+    t.integer  "trigger_id"
     t.string   "trigger_type"
     t.boolean  "no_trigger"
     t.boolean  "with_errors"
   end
 
   add_index "execution_loggers", ["application_id"], :name => "index_execution_loggers_on_application_id"
-  add_index "execution_loggers", ["trigger_id"], :name => "index_execution_loggers_on_trigger_id"
 
   create_table "external_triggers", :force => true do |t|
     t.integer  "application_id"
