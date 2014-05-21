@@ -6,7 +6,7 @@
 .btn-group.pull-right
   - if current_user
     - dropdown current_user.email do
-      - dropdown_item 'Settings', guisso_settings_path, target: '_blank'
+      - dropdown_item 'Settings', guisso_settings_path(:user), target: '_blank'
       - dropdown_divider
       - dropdown_item 'Sign out', guisso_sign_out_path_for(:user, after_sign_out_url: root_url), method: :delete
   - else
