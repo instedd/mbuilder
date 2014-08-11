@@ -36,7 +36,7 @@ class ExternalTriggersController < MbuilderApplicationController
   def run
     trigger = application.external_triggers.find_by_name(params['trigger_name'])
 
-    logger = ExecutionLogger.new(application: @application)
+    logger = ExecutionLogger.new(application: application)
 
     logger.info "Executing trigger '#{trigger.name}'"
     logger.trigger = trigger
