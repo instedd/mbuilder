@@ -17,7 +17,7 @@ class LogsListing < Listings::Base
   end
 
   column :message_from do |log|
-    log.message_from.without_protocol
+    log.message_from.try :without_protocol
   end
 
   column :message_to do |log|
@@ -41,7 +41,7 @@ class LogsListing < Listings::Base
   end
 
   column '', class: 'right' do |log|
-    content_tag :button, 'class' => 'btn btn-lg', 'title' =>'Edit and re-send message', 'onclick' => "$('#logsController').scope().loadMessageInPopup(#{{from: log.message_from.without_protocol, body: log.message_body, actions: log.actions_as_strings}.to_json});$('#logsController').scope().$apply();" do
+    content_tag :button, 'class' => 'btn btn-lg', 'title' =>'Edit and re-send message', 'onclick' => "$('#logsController').scope().loadMessageInPopup(#{{from: log.message_from.try(:without_protocol), body: log.message_body, actions: log.actions_as_strings}.to_json});$('#logsController').scope().$apply();" do
       content_tag :i, '', 'class' => 'icon-pencil'
     end
   end
