@@ -17,7 +17,7 @@ class MessageTriggersController < MbuilderApplicationController
   end
 
   def index
-    self.class.layout "applications"
+    render layout: "applications"
   end
 
   def create
