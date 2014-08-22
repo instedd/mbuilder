@@ -9,8 +9,8 @@
       %div.row-fluid
         %div.span6
           %div
-            %label{for: :name} Name
-            %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true}
+            %label{for: :name} Trigger name
+            %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name"}
 
           %div
             %label{for: :message} When a post to this url is received:
