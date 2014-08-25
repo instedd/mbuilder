@@ -17,6 +17,37 @@
 
 @import "instedd-bootstrap";
 
+//-------------------- Fonts -----------------------
+//--------------------------------------------------
+@font-face {
+    font-family: 'TheSansPlain';
+    src: font-url('thesansp-webfont.eot');
+    src: font-url('thesansp-webfont.eot?#iefix') format('embedded-opentype'),
+         font-url('thesansp-webfont.woff') format('woff'),
+         font-url('thesansp-webfont.ttf') format('truetype'),
+         font-url('thesansp-webfont.svg#clarendon_btbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'TheSansBlack';
+    src: font-url('thesanbp-webfont.eot');
+    src: font-url('thesanbp-webfont.eot?#iefix') format('embedded-opentype'),
+         font-url('thesanbp-webfont.woff') format('woff'),
+         font-url('thesanbp-webfont.ttf') format('truetype'),
+         font-url('thesanbp-webfont.svg#clarendon_btroman') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
 .message-container {
   @include border-radius(3px);
   @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
@@ -296,6 +327,87 @@ body {
 .title {
   font-size: 20px;
   padding: 8px 0 14px;
+}
+
+//-------------- Home --------------------------
+//----------------------------------------------
+
+.homepage {
+
+  .row-fluid {
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: TheSansBlack, Arial, Helvetica, sans-serif;
+    font-size: 46px;
+    color: #000000;
+    line-height: 35px;
+    margin: 5px 0 10px 0;
+
+    small {
+      font-family: TheSansPlain, Arial, Helvetica, sans-serif;
+      font-size: 24px;
+      color: inherit;
+      line-height: 24px;
+      margin-bottom: 18px;
+      margin-top: 10px;
+      display: block;
+    }
+  }
+
+  .main-img {
+    margin-top: 50px;
+    h1,
+    a {
+      color: #ff6600;
+    }
+  }
+
+  .btn-create {
+    @extend .btn;
+    @extend .btn-medium;
+    @extend .btn-warning;
+    @include gradient-vertical(#fe973a, #ff6600);
+    color: $white !important;
+  }
+
+  .what-can-i-use {
+    margin-bottom: 40px;
+
+    h1 + p {
+      font-size: 18px;
+      line-height: 22px;
+    }
+    span {
+      @include border-radius(6px);
+      @include box-shadow(0 1px 1px 0px rgba(0, 0, 0, 0.3) inset);
+      background-color: #d0d0d0;
+      margin: 0 12px 8px 0;
+      padding: 6px;
+      text-align: center;
+      display: block;
+      float: left;
+    }
+  }
+}
+
+body.centered {
+  .navbar.top {
+    .navbar-inner { padding: 0 }
+    .span3 {
+      position: relative;
+      >.btn-group {
+        position: absolute;
+        right: 50px;
+        top: -1px;
+        max-width: 230px;
+        .btn-link {
+          float:right;
+        }
+      }
+    }
+  }
 }
 
 //-------------- Testing Sandbox ---------------

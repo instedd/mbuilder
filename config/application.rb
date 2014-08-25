@@ -60,6 +60,9 @@ module Mbuilder
     # Enable the asset pipeline
     config.assets.enabled = true
 
+    # Enable the fonts asset pipeline
+    config.assets.paths << Rails.root.join("app", "assets", "fonts")
+
     # Don't initialize app for precompiling assets (needed by Heroku)
     config.assets.initialize_on_precompile = false
 
@@ -67,7 +70,6 @@ module Mbuilder
     config.assets.version = '1.0'
 
     # See http://alisdair.mcdiarmid.org/2013/02/02/fixing-rails-auto-loading-for-serialized-objects.html
-
     # Eager load all value objects, as they may be instantiated from
     # YAML before the symbol is referenced
     config.before_initialize do |app|
