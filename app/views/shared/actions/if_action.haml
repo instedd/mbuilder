@@ -4,7 +4,7 @@
   %span{'ng-repeat' => 'pill in [action.left]'}
     %span{dragover: 'dragOverIfOperand($event)', drop: 'dropOverIfLeft($event)'}
       %span(ng-include src='pillTemplateFor(pill)')
-  %span.combo{'ng-click' => 'showIfOperatorsPopup(action, $event)', 'ng-right-click' => 'showIfOperatorsPopup(action, $event)'} {{ifOperatorDescription(action.op)}}
+  %span.combo{'ng-click' => 'showIfOperatorsPopup(action, $event)', 'ng-right-click' => 'showIfOperatorsPopup(action, $event)'} {{ifOperatorDescription(action.op, action.all)}}
   %span{'ng-repeat' => 'pill in action.right'}
     %span{'ng-show' => '$index == 1'} and
     %span{dragover: 'dragOverIfOperand($event)', drop: 'dropOverIfRight($index, $event)', 'ng-mouseup' => 'convertIfRightToLiteral($index)'}
