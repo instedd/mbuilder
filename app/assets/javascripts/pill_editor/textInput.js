@@ -490,7 +490,11 @@ function TextInput(container) {
 					document.body.style.cursor = "auto";
 					self.dispatchEvent(new Event(Event.DROP, {pill:element, dropZone:e.target}));
 				} else {
-          // outside drop. without a _dragTarget
+          // drop from outside. without a _dragTarget
+          // in case e.target is not _display.source() this
+          // means is a drop on a foreign object. something we don't
+          // need to attend
+          if (e.target != _display.source()) return;
           self.dispatchEvent(new Event(Event.DROP, {pill:null}));
         }
 				break;
