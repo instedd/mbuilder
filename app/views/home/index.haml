@@ -9,13 +9,18 @@
       .row-fluid
         .span7
           %p SMS is the workhorse of mobile applications for resource-limited scenarios. mBuilder is a free and open-source tool that you can use to build scalable SMS applications without any programming knowledge. In a matter of minutes, you can design, prototype, test and launch applications that can range from simple keyword/response apps to complex tools such as chat groups or workflows.  You can use mBuilder to collect, store and query data, building your own tables. Your existing applications can easily be SMS-powered using mBuilder’s API.
-          %p
-            Get started:
-            %a.btn-create
-              Create an account
-          %p
-            Already a member?
-            %a{:href => "#"} Login
+          - if current_user
+            %p
+              Get started:
+              = link_to 'View your applications', applications_path, :class => "btn-create"
+          - else
+            %p
+              Get started:
+              = link_to 'Create an account', guisso_sign_up_path_for(:user), :class => "btn-create"
+            %p
+              Already a member?
+              = link_to 'Log in', guisso_sign_in_path_for(:user)
+
     .span5
       = image_tag "main-home.png"
 
