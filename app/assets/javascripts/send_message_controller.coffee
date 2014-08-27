@@ -89,6 +89,7 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     return if window.draggedPill == null
     $scope.action.recipient = window.draggedPill
     MessageParser.appendLastPieceTo(event.target)
+    window.draggedPill = null
     true
 
   $scope.mouseEnterOverValue = (event) ->
