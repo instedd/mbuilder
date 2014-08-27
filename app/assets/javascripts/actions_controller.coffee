@@ -284,6 +284,9 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
   $scope.dropOverIfLeft = (event) ->
     $scope.action.left = window.draggedPill
 
+  $scope.mouseDropOverIfLeft = (event) ->
+    $scope.dropOverIfLeft(event) if window.draggedPill
+
   $scope.dropOverIfRight = (index, event) ->
     $scope.action.right[index] = window.draggedPill
 
