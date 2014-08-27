@@ -183,6 +183,9 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       $scope.actions.splice index, 0, window.draggedAction.action
       return false
 
+    if window.draggedPill == null
+      return false
+
     if window.draggedPill.kind == 'table_ref'
       table = $scope.lookupTable window.draggedPill.guid
 
@@ -221,6 +224,13 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     $scope.actions.splice index, 0, action
 
     false
+
+  $scope.mouseEnterOverSpaceBetweenActions = (event) ->
+    $(event.target).closest('.space-between-actions').toggleClass('dropzone', window.draggedPill != null)
+
+  $scope.mouseDropOverSpaceBetweenActions = (index, event) ->
+    $(event.target).closest('.space-between-actions').removeClass('dropzone')
+    $scope.dropOverSpaceBetweenActions(index, event)
 
   $scope.actionMentionsTable = (action, table) ->
     switch action.kind

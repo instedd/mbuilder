@@ -6,7 +6,7 @@
 
   %div{'ng-controller' => 'ExternalTriggerController', 'ng-init' => external_trigger_to_angular(application, external_trigger)}
     %div{'ng-controller' => 'TriggerController'}
-      .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)'}
+      .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)', 'ng-mouseup' => 'mouseDropOverBoard($event)', 'ng-mouseenter' => 'mouseEnterOverBoard($event)'}
         %div.span6
           %div
             %label{for: :name} Name
