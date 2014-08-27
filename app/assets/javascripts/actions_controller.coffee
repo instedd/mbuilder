@@ -278,13 +278,19 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     else
       false
 
+  $scope.mouseEnterOverIfOperand = (event) ->
+    $(event.target).closest('.if-operand').toggleClass('dropzone', window.draggedPill != null)
+
   $scope.dropOverIfLeft = (event) ->
     $scope.action.left = window.draggedPill
 
   $scope.dropOverIfRight = (index, event) ->
     $scope.action.right[index] = window.draggedPill
 
-  $scope.convertIfRightToLiteral = (index) ->
+  $scope.convertIfRightToLiteral = (index, event) ->
+    if window.draggedPill
+      $scope.dropOverIfRight(index, event)
+      return
     action = $scope.action.right[index]
     if action.kind != 'literal'
       $scope.action.right[index] = {kind: 'literal', guid: window.guid(), text: '', editmode: true, focusmode: true}
