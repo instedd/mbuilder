@@ -488,7 +488,11 @@ function TextInput(container) {
 					_dragTarget = null;
 					self.caret(index + 1, insertBefore);
 					document.body.style.cursor = "auto";
-					self.dispatchEvent(new Event(Event.DROP, {pill:element, dropZone:e.target}));
+					self.dispatchEvent(new Event(Event.DROP, {
+            pill:element,
+            dropZone:e.target,
+            localDragAndDrop: $.contains(_display.source(), e.target) || _display.source() == e.target
+          }));
 				} else {
           // drop from outside. without a _dragTarget
           // in case e.target is not _display.source() this
