@@ -402,9 +402,12 @@ body.centered {
         right: 50px;
         top: -1px;
         max-width: 230px;
-        .btn-link {
-          float:right;
+        .button-link {
+          float: right;
         }
+      }
+      .sign_up_link {
+        margin-right: 5px;
       }
     }
   }
