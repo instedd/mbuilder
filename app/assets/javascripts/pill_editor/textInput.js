@@ -23,17 +23,17 @@ function TextInput(container) {
 	var _debug;
 
 	function init(container) {
-		_selection = new Selection();
-		_selection.addEventListener(Event.SELECT, selectHandler);
-		_keyTracker = new KeyTracker(self, _selection);
-		_clipboard = new Clipboard(self, _selection);
-		_display = new TextDisplay();
 		_container = container;
-    _container.addEventListener("mousedown", mouseHandler);
-    _container.addEventListener("dragover", mouseHandler);
-    _container.addEventListener("drop", mouseHandler);
+		_container.addEventListener("mousedown", mouseHandler, true);
 		_container.addEventListener("dblclick", doubleClickHandler);
 		_container.addEventListener("contextmenu", contextMenuHandler);
+		_selection = new Selection();
+		_selection.addEventListener(Event.SELECT, selectHandler);
+		_keyTracker = new KeyTracker(self);
+		_clipboard = new Clipboard(self, _selection);
+		_display = new TextDisplay();
+    _container.addEventListener("dragover", mouseHandler);
+    _container.addEventListener("drop", mouseHandler);
     _container.addEventListener("mousemove", function(){
       if (self.isForeignObjectDragged()) {
         trackMousePositionForDrop();
@@ -58,13 +58,13 @@ function TextInput(container) {
 		} else {
 			_focus = value;
 			if(_focus) {
-				document.addEventListener("mousedown", clickOutsideHandler);
+				window.addEventListener("mouseup", clickOutsideHandler, true);
 				_container.className = "svgInput svgInput-focus";
 				_display.focus(true);
 				_keyTracker.activate();
 				_clipboard.activate();
 			} else {
-				document.removeEventListener("mousedown", clickOutsideHandler);
+				window.removeEventListener("mouseup", clickOutsideHandler, true);
 				_container.className = "svgInput";
 				_display.focus(false);
 				_keyTracker.deactivate();
@@ -108,6 +108,10 @@ function TextInput(container) {
 	self.height = function() {
 		var style = window.getComputedStyle(_container);
 		return Number(style.getPropertyValue("height").match(/\d+/));
+	}
+
+	self.container = function() {
+		return _container;
 	}
 
 	self.data = function(value) {
@@ -196,7 +200,7 @@ function TextInput(container) {
 			if(!persistPlumb) {
 				_plumb = undefined;
 			}
-			if(self.debug()) console.log(self.toString());
+			if(self.debug()) self.toString();
 		}
 	}
 
@@ -354,7 +358,6 @@ function TextInput(container) {
 			return _debug;
 		} else {
 			_debug = value;
-			console.log(self.toString());
 		}
 	}
 
@@ -373,8 +376,8 @@ function TextInput(container) {
 	}
 
   function trackMousePositionForDrop() {
-    window.addEventListener("mousemove", mouseHandler);
-    window.addEventListener("mouseup", mouseHandler);
+    window.addEventListener("mousemove", mouseHandler, true);
+    window.addEventListener("mouseup", mouseHandler, true);
     _selection.clear();
   }
 
@@ -405,7 +408,7 @@ function TextInput(container) {
 				}
         trackMousePositionForDrop();
         _dragTarget = null;
-				if(_container.contains(e.target) && e.target.parentNode.getAttribute("type") == "pill") {
+        if(_container.contains(e.target) && e.target.parentNode.getAttribute("type") == "pill") {
 					_dragTarget = e.target.parentNode;
           var pill = self.getPillById(_dragTarget.getAttribute("data-id"));
 					var bounds = _dragTarget.getBBox();
@@ -428,10 +431,10 @@ function TextInput(container) {
 				}
 				break;
 			case "mouseup":
-      case "drop":
-        _wrapper.style.cursor = "text";
-				window.removeEventListener("mousemove", mouseHandler);
-				window.removeEventListener("mouseup", mouseHandler);
+			case "drop":
+				_wrapper.style.cursor = "text";
+				window.removeEventListener("mousemove", mouseHandler, true);
+				window.removeEventListener("mouseup", mouseHandler, true);
 				break;
 		}
 		var caret;
@@ -455,6 +458,8 @@ function TextInput(container) {
 					} else {
 						_selection.set(_caret, caret);
 					}
+				} else if(e.detail == 3) {
+					_selection.set(0, Number.MAX_VALUE);
 				} else {
 					_selection.clear();
 				}
@@ -469,6 +474,7 @@ function TextInput(container) {
 				} else {
 					self.caret(caret, insertBefore);
 				}
+				e.preventDefault();
 				break;
       case "mouseup":
 			case "drop":
@@ -501,6 +507,8 @@ function TextInput(container) {
           if (e.target != _display.source()) return;
           self.dispatchEvent(new Event(Event.DROP, {pill:null}));
         }
+        // this was preventing the drag and drop from one textInput to another
+        // e.stopImmediatePropagation();
 				break;
 		}
 	}
@@ -509,6 +517,7 @@ function TextInput(container) {
 		if(e.target.getAttribute("data-index")) {
 			var firstNode = e.target.parentNode.firstChild;
 			var lastNode = e.target.parentNode.lastChild;
+			/*
 			if(firstNode.textContent.match(TextDisplay.NBSP)) {
 				if(firstNode.parentNode.previousSibling) {
 					firstNode = firstNode.parentNode.previousSibling.firstChild;
@@ -518,6 +527,7 @@ function TextInput(container) {
 					lastNode = lastNode.parentNode.nextSibling.lastChild;
 				}
 			}
+			*/
 			_selection.set(Number(firstNode.getAttribute("data-index")), Number(lastNode.getAttribute("data-index")) + 1);
 		}
 	}
@@ -540,9 +550,12 @@ function TextInput(container) {
 			info.mouseX = mouse.x;
 			info.mouseY = mouse.y;
 			info.eventAt = "pill";
+			info.sourceEvent = e;
+			info.preventDefault = function() {
+				this.sourceEvent.preventDefault();
+			}
 			self.dispatchEvent(new Event(Event.CONTEXT_MENU, info));
 		}
-		e.preventDefault();
 	}
 
 	function clickOutsideHandler(e) {

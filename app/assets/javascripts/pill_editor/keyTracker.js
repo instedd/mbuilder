@@ -2,18 +2,40 @@ function KeyTracker(input) {
 
 	var self = this;
 	var _active = false;
-	var _input = input;
+	var _input;
+	var _container;
+	var _hiddenInput;
+	var _deadKey;
+	var _isMac;
+
+	function init(input) {
+		_input = input;
+		_container = _input.container();
+		_isMac = navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)? true : false;
+		_hiddenInput = document.createElement("input")
+		var hiddenInputContainer = _container.appendChild(document.createElement("div"));
+		hiddenInputContainer.style.opacity = 0;
+		hiddenInputContainer.style.width = 0;
+		hiddenInputContainer.style.height = 0;
+		hiddenInputContainer.style.overflows = "hidden";
+		hiddenInputContainer.style.pointerEvents = "none";
+		hiddenInputContainer.appendChild(_hiddenInput);
+	}
 
 	self.activate = function() {
 		_active = true;
-		document.addEventListener("keypress", keyPressHandler);
-		document.addEventListener("keydown", keyDownHandler);
+		_hiddenInput.focus();
+		_hiddenInput.select();
+		_hiddenInput.addEventListener("keypress", keyPressHandler);
+		_hiddenInput.addEventListener("keydown", keyDownHandler);
+		_hiddenInput.addEventListener("input", inputHandler);
 	}
 
 	self.deactivate = function() {
 		_active = false;
-		document.removeEventListener("keypress", keyPressHandler);
-		document.removeEventListener("keydown", keyDownHandler);
+		_hiddenInput.removeEventListener("keypress", keyPressHandler);
+		_hiddenInput.removeEventListener("keydown", keyDownHandler);
+		_hiddenInput.removeEventListener("input", inputHandler);
 	}
 
 	function select(shift, from, to) {
@@ -37,22 +59,28 @@ function KeyTracker(input) {
 		_input.caret(start + 1, charCode != 13);
 	}
 
+	function getKeyCode(e) {
+		return e.which? e.which : (e.keyCode? e.keyCode : (e.charCode? e.charCode : 0));
+	}
+
 	function keyPressHandler(e) {
-		e.preventDefault();
-		switch(e.charCode) {
+		var keyCode = getKeyCode(e);
+		switch(keyCode) {
 			case 13://Enter
 				break;
 			default:
-				insert(e.charCode);
+				insert(keyCode);
 				break;
 		}
+		e.preventDefault();
 	}
 
 	function keyDownHandler(e) {
+		var keyCode = getKeyCode(e);
 		var start, remove;
 		var caret = _input.caret();
 		var preventDefault = true;
-		switch(e.keyCode) {
+		switch(keyCode) {
 			case 8://Backspace
 				if(caret || _input.selection().length()) {
 					start = _input.selection().length()? _input.selection().start() : caret - 1;
@@ -68,7 +96,7 @@ function KeyTracker(input) {
 				_input.focus(false);
 				break;
 			case 13://Enter
-				insert(e.keyCode);
+				insert(keyCode);
 				break;
 			case 35://End
 				caret = Number.MAX_VALUE;
@@ -81,7 +109,7 @@ function KeyTracker(input) {
 				_input.caret(caret);
 				break;
 			case 37://Arrow left
-				if(e.ctrlKey || e.metaKey) {
+				if((_isMac && e.altKey) || (!_isMac && e.ctrlKey)) {
 					caret = _input.prevBoundary(caret - 1);
 				} else {
 					caret--;
@@ -94,7 +122,7 @@ function KeyTracker(input) {
 				select(e.shiftKey, caret, _input.caret());
 				break;
 			case 39://Arrow right
-				if(e.ctrlKey || e.metaKey) {
+				if((_isMac && e.altKey) || (!_isMac && e.ctrlKey)) {
 					var nextBoundary = _input.nextBoundary(caret);
 					if(nextBoundary != -1) {
 						caret = nextBoundary + 1;
@@ -125,4 +153,14 @@ function KeyTracker(input) {
 		}
 		if(preventDefault) e.preventDefault();
 	}
+
+	function inputHandler(e) {
+		if(_deadKey) {
+			insert(_hiddenInput.value.charCodeAt(0));
+			_hiddenInput.value = "";
+		}
+		_deadKey = _hiddenInput.value.length > 0;
+	}
+
+	init(input);
 }

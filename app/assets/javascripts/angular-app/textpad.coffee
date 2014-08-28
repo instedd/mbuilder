@@ -176,15 +176,20 @@ angular.module('mbuilder').directive 'textpad', ->
       window.addEventListener("mousemove", mouseHandler)
 
     input.addEventListener Event.DROP, (e) ->
-      if e.info.pill != null
-        # drag&drop inside pill
-        if phantom != null && phantom.parentNode
-          phantom.parentNode.removeChild(phantom)
-        window.removeEventListener("mousemove", mouseHandler)
+      if phantom != null && phantom.parentNode
+        phantom.parentNode.removeChild(phantom)
+      window.removeEventListener("mousemove", mouseHandler)
+
+      # exit if it was a drag and drop initiated from self but ended outside
+      try
+        return if phantom != null && !e.info.localDragAndDrop
+      finally
+        phantom = null
+
+      if e.info.localDragAndDrop
         ensureSpacesAroundPills()
-      else
-        if window.draggedPill
-          pill = mbuilderToInputDataPill(window.draggedPill)
-          input.insertPillAtCaret(pill.id, pill.label, pill.text, pill.hasMenu, pill.data)
+      else if window.draggedPill
+        pill = mbuilderToInputDataPill(window.draggedPill)
+        input.insertPillAtCaret(pill.id, pill.label, pill.text, pill.hasMenu, pill.data)
       window.draggedPill = null
 
