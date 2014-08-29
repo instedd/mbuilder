@@ -33,7 +33,7 @@
             %td
 
           %tr
-            %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)'}
+            %td{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', dragover: 'dragOverValue($event)', drop: 'dropOverValue($event)', :'ng-mouseup' => 'mouseDropOverValue($event)', :'ng-mouseenter' => 'mouseEnterOverValue($event)'}
               %span(ng-include src='pillTemplateFor(pill)')
             %td{'ng-hide' => 'table.readonly'}
     %br

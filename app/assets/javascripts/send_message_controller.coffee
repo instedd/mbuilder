@@ -86,9 +86,18 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     true
 
   $scope.dropOverRecipient = (event) ->
+    return if window.draggedPill == null
     $scope.action.recipient = window.draggedPill
     MessageParser.appendLastPieceTo(event.target)
+    window.draggedPill = null
     true
+
+  $scope.mouseEnterOverValue = (event) ->
+    $(event.target).closest('.message-input').toggleClass('dropzone', window.draggedPill != null)
+
+  $scope.mouseDropOverValue = (event) ->
+    $(event.target).closest('.message-input').removeClass('dropzone')
+    $scope.dropOverRecipient(event)
 
   $scope.handleRecipientKey = (event) ->
     hasPill = $scope.action.recipient.kind != 'text'
@@ -108,6 +117,6 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
 
     true
 
-  $scope.tryShowAggregateFunctionsPopup = (pill, event) ->
-    $scope.showAggregateFunctionsPopup pill, event
+  $scope.tryShowAggregateFunctionsPopup = (pill, actionScope, event) ->
+    $scope.showAggregateFunctionsPopup pill, actionScope, event
 ]

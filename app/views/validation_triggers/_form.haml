@@ -1,6 +1,7 @@
 %div{'ng-controller' => 'ValidationTriggerController', 'ng-init' => validation_trigger_to_angular(application, @validation_trigger)}
   %div{'ng-controller' => 'TriggerController'}
-    %div.row-fluid
+    .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)', 'ng-mouseup' => 'mouseDropOverBoard($event)', 'ng-mouseenter' => 'mouseEnterOverBoard($event)'}
+
       %div.span6
         %div
           When

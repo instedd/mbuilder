@@ -15,6 +15,9 @@ angular.module('mbuilder').controller 'MessageTriggerController', ['$scope', '$h
     window.draggedPill = {kind: "placeholder", guid: "received_at"}
     event.dataTransfer.setData("Text", 'yyyymmdd')
 
+  $scope.$on 'onPatternpadPicesChanged', ->
+    $scope.$broadcast 'onAllPillsChanged'
+
   addPiece = (pieces, kind, text, guid = window.guid()) ->
     text = $.trim(text)
     return if text.length == 0

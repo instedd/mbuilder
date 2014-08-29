@@ -216,6 +216,20 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
 
     event.stopPropagation()
 
+  $scope.dragOverBoard = (event) ->
+    event.preventDefault()
+    false
+
+  $scope.mouseEnterOverBoard = (event) ->
+    $scope.dragOverBoard(event)
+
+  $scope.dropOverBoard = (event) ->
+    window.draggedPill = null
+    false
+
+  $scope.mouseDropOverBoard = (event) ->
+    $scope.dropOverBoard(event)
+
   $scope.hidePopups = ->
     $('.popup').hide()
 
@@ -302,8 +316,9 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
   $scope.unselectAction = ->
     $scope.selectedAction = null
 
-  $scope.showAggregateFunctionsPopup = (pill, event) ->
+  $scope.showAggregateFunctionsPopup = (pill, actionScope, event) ->
     $scope.aggregateFunctionPopup.pill = pill
+    $scope.aggregateFunctionPopup.actionScope = actionScope
     id = if $scope.lookupTableByField(pill.guid).readonly
            '#aggregate-functions-error'
          else

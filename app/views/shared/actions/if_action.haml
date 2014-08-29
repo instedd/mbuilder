@@ -2,11 +2,11 @@
   If
   %span.combo{'ng-click' => 'showIfAggregatesPopup(action, $event)', 'ng-right-click' => 'showIfAggregatesPopup(action, $event)', 'ng-show' => 'mustShowIfAggregate(action)'} {{ifAggregateDescription(action.all)}}
   %span{'ng-repeat' => 'pill in [action.left]'}
-    %span{dragover: 'dragOverIfOperand($event)', drop: 'dropOverIfLeft($event)'}
+    %span.if-operand{dragover: 'dragOverIfOperand($event)', drop: 'dropOverIfLeft($event)', 'ng-mouseup' => 'mouseDropOverIfLeft($event)', 'ng-mouseenter' => 'mouseEnterOverIfOperand($event)'}
       %span(ng-include src='pillTemplateFor(pill)')
   %span.combo{'ng-click' => 'showIfOperatorsPopup(action, $event)', 'ng-right-click' => 'showIfOperatorsPopup(action, $event)'} {{ifOperatorDescription(action.op, action.all)}}
   %span{'ng-repeat' => 'pill in action.right'}
     %span{'ng-show' => '$index == 1'} and
-    %span{dragover: 'dragOverIfOperand($event)', drop: 'dropOverIfRight($index, $event)', 'ng-mouseup' => 'convertIfRightToLiteral($index)'}
+    %span.if-operand{dragover: 'dragOverIfOperand($event)', drop: 'dropOverIfRight($index, $event)', 'ng-mouseup' => 'convertIfRightToLiteral($index, $event)', 'ng-mouseenter' => 'mouseEnterOverIfOperand($event)'}
       %span(ng-include src='pillTemplateFor(pill)')
   = render 'shared/triggers/actions_contents'

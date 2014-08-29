@@ -183,6 +183,9 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       $scope.actions.splice index, 0, window.draggedAction.action
       return false
 
+    if window.draggedPill == null
+      return false
+
     if window.draggedPill.kind == 'table_ref'
       table = $scope.lookupTable window.draggedPill.guid
 
@@ -222,6 +225,13 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     false
 
+  $scope.mouseEnterOverSpaceBetweenActions = (event) ->
+    $(event.target).closest('.space-between-actions').toggleClass('dropzone', window.draggedPill != null)
+
+  $scope.mouseDropOverSpaceBetweenActions = (index, event) ->
+    $(event.target).closest('.space-between-actions').removeClass('dropzone')
+    $scope.dropOverSpaceBetweenActions(index, event)
+
   $scope.actionMentionsTable = (action, table) ->
     switch action.kind
       when 'create_entity', 'select_entity', 'store_entity_value'
@@ -255,9 +265,9 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     false
 
-  $scope.tryShowAggregateFunctionsPopup = (pill, event) ->
+  $scope.tryShowAggregateFunctionsPopup = (pill, actionScope, event) ->
     if $scope.action?.kind == 'if'
-      return $scope.showAggregateFunctionsPopup pill, event
+      return $scope.showAggregateFunctionsPopup pill, actionScope, event
 
     false
 
@@ -268,13 +278,22 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     else
       false
 
+  $scope.mouseEnterOverIfOperand = (event) ->
+    $(event.target).closest('.if-operand').toggleClass('dropzone', window.draggedPill != null)
+
   $scope.dropOverIfLeft = (event) ->
     $scope.action.left = window.draggedPill
+
+  $scope.mouseDropOverIfLeft = (event) ->
+    $scope.dropOverIfLeft(event) if window.draggedPill
 
   $scope.dropOverIfRight = (index, event) ->
     $scope.action.right[index] = window.draggedPill
 
-  $scope.convertIfRightToLiteral = (index) ->
+  $scope.convertIfRightToLiteral = (index, event) ->
+    if window.draggedPill
+      $scope.dropOverIfRight(index, event)
+      return
     action = $scope.action.right[index]
     if action.kind != 'literal'
       $scope.action.right[index] = {kind: 'literal', guid: window.guid(), text: '', editmode: true, focusmode: true}

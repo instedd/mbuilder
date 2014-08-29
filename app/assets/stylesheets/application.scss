@@ -13,6 +13,7 @@
  *= require recurring_select
  *= require pigeon
  *= require bootstrap-timepicker
+ *= require pill_editor
  */
 
 @import "instedd-bootstrap";
@@ -465,6 +466,22 @@ hr.shadow {
     }
   }
 
+}
+
+.dropzone {
+  cursor: copy;
+}
+
+.dropzone .pill {
+  cursor: copy;
+}
+
+.svgInputHelp {
+  float: right;
+}
+
+.svgInputHelp span {
+  color: #ddd;
 }
 
 /* all */
