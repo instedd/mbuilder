@@ -1,14 +1,4 @@
 GIT
-  remote: https://bitbucket.org/instedd/instedd-bootstrap.git
-  revision: 6ab002b47ba2a960f58e355fb8ff0d24d7f4e933
-  branch: master
-  specs:
-    instedd-bootstrap (0.0.1)
-      bootstrap-sass (~> 2.3.2)
-      rails (~> 3.2.13)
-      sass-rails (~> 3.2)
-
-GIT
   remote: git://github.com/manastech/listings.git
   revision: a79a1c32f091787bc8ae6935444115272d52c69e
   branch: master
@@ -21,15 +11,6 @@ GIT
       sass-rails (~> 3.2.3)
 
 GIT
-  remote: https://bitbucket.org/instedd/resource_map_api_client.git
-  revision: 07755f1b343b6a0972f7cd220894e4e126f7b782
-  branch: master
-  specs:
-    resource_map_api_client (0.0.1)
-      alto_guisso
-      memoist
-
-GIT
   remote: https://bitbucket.org/instedd/alto_guisso.git
   revision: 23d3c209edf172a8ef8d0e1771ffaf6085ffbe8d
   branch: master
@@ -40,6 +21,37 @@ GIT
       rack-oauth2
       rails (>= 3.0)
       ruby-openid
+
+GIT
+  remote: https://bitbucket.org/instedd/instedd-bootstrap.git
+  revision: 6ab002b47ba2a960f58e355fb8ff0d24d7f4e933
+  branch: master
+  specs:
+    instedd-bootstrap (0.0.1)
+      bootstrap-sass (~> 2.3.2)
+      rails (~> 3.2.13)
+      sass-rails (~> 3.2)
+
+GIT
+  remote: https://bitbucket.org/instedd/pigeon.git
+  revision: 0677d517873a900f9f02102eaa34ed1e28d414ff
+  branch: master
+  specs:
+    instedd-pigeon (0.3.1)
+      json
+      rails (~> 3.2)
+      rest-client
+      twilio-ruby
+      twitter_oauth
+
+GIT
+  remote: https://bitbucket.org/instedd/resource_map_api_client.git
+  revision: 07755f1b343b6a0972f7cd220894e4e126f7b782
+  branch: master
+  specs:
+    resource_map_api_client (0.0.1)
+      alto_guisso
+      memoist
 
 GIT
   remote: https://github.com/manastech/rack-oauth2.git
@@ -64,18 +76,6 @@ GIT
       jquery-rails (>= 3.0)
       rails (>= 3.2)
       sass-rails (>= 3.1)
-
-GIT
-  remote: https://bitbucket.org/instedd/pigeon.git
-  revision: 0677d517873a900f9f02102eaa34ed1e28d414ff
-  branch: master
-  specs:
-    instedd-pigeon (0.3.1)
-      json
-      rails (~> 3.2)
-      rest-client
-      twilio-ruby
-      twitter_oauth
 
 GEM
   remote: https://rubygems.org/
