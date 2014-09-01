@@ -38,17 +38,15 @@ angular.module('mbuilder').directive 'patternpad', ->
     ensureSpacesAroundPills = ->
       data = []
       originalData = input.data()
-      moveCarretToEnd = false
       for item, i in originalData
         if typeof(item) == 'string'
+          item = item.replace(/\s+/g, ' ')
           # space before a pill
           if !/\s/.test(_.last(item)) && i < originalData.length - 1
             item = item + ' '
           # space after a pill
           if !/\s/.test(_.first(item)) && i > 0
             item = ' ' + item
-            if i == originalData.length - 1
-              moveCarretToEnd = true
         else
           # two pills together
           if data.length > 0 && typeof(_.last(data)) != 'string'
@@ -59,10 +57,6 @@ angular.module('mbuilder').directive 'patternpad', ->
       if !_.isEqual(input.data(), data)
         input.data(data)
         input.render()
-        if moveCarretToEnd
-          window.setTimeout ->
-            input.caret(Number.MAX_VALUE, false)
-          , 0
 
     updateScopeFromInputData = ->
       scope.$apply ->
