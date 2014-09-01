@@ -2,7 +2,19 @@
   .span9
     %h4 Messages
     %p.small Total number of messages sent and received
-    = image_tag "img-placeholder1.png"
+    .well
+      %h1= number_with_delimiter @message_count_all
+      %span messages received
+
+      %p
+        = number_with_delimiter @message_count_today
+        from today
+      %p
+        = number_with_delimiter @message_count_7_days
+        from last 7 days
+      %p
+        = number_with_delimiter @message_count_30_days
+        from last 30 days
   .span3
 
 .row-fluid
