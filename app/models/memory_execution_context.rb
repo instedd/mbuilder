@@ -92,4 +92,9 @@ class MemoryExecutionContext < ExecutionContext
       end
     end
   end
+
+  def assign_value_to_entity_field(table, field, value)
+    entity = entity(table)
+    entity[field] = value
+  end
 end
