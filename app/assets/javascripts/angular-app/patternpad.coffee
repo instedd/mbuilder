@@ -55,7 +55,9 @@ angular.module('mbuilder').directive 'patternpad', ->
           data.push item
 
       if !_.isEqual(input.data(), data)
+        caret = input.caret()
         input.data(data)
+        input.caret(caret)
         input.render()
 
     updateScopeFromInputData = ->
