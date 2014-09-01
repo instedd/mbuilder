@@ -24,4 +24,8 @@ class Tables::Local < Table
   def each_value(context, restrictions, group_by, &block)
     context.each_local_value(guid, restrictions, group_by, &block)
   end
+
+  def assign_value_to_entity_field(context, entity, field, value)
+    context.assign_local_value_to_entity(entity, field, value)
+  end
 end

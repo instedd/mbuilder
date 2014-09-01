@@ -22,7 +22,7 @@ class Actions::StoreEntityValue < Actions::TableField
     end
 
     context.mark_store_entity_value_visited(table)
-    entity[field] = value
+    context.assign_value_to_entity_field(table, field, value)
   end
 
   def as_json

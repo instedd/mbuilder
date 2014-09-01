@@ -33,4 +33,22 @@ class Tables::ResourceMap < Table
     end]
     context.insert_in_resource_map id, mapped_properties
   end
+
+  def each_value(context, restrictions, group_by, &block)
+    mapped_restrictions = restrictions.map(&:clone).each do |restriction|
+      restriction[:field] = find_field(restriction[:field]).id
+    end
+    context.each_resource_map_value(id, mapped_restrictions, group_by, &block)
+  end
+
+  def assign_value_to_entity_field(context, entity, field, value)
+    resource_map_field = find_field(field).id
+    context.assign_resource_map_value_to_entity(entity, resource_map_field, value)
+  end
+
+  private
+
+  def resource_map_api
+    @resource_map_api ||= ResourceMap::Api.trusted(application.user.email, ResourceMap::Config.url, ResourceMap::Config.use_https)
+  end
 end
