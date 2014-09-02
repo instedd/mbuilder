@@ -36,6 +36,7 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
     $scope.dropOverValue(event)
 
   $scope.dropOverValue = (event) ->
+    return if window.draggedPill == null
     $scope.$emit 'pillOverFieldValue', pill: window.draggedPill, field: $scope.pill, table: $scope.table
 
   $scope.addNewValue = ->
