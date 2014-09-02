@@ -12,6 +12,13 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
     $scope.$emit 'pillOverFieldName', pill: window.draggedPill, field: $scope.pill, table: $scope.table
     window.draggedPill = null
 
+  $scope.mouseEnterOverName = (event) ->
+    $(event.target).closest('.logic-field-name').toggleClass('dropzone', window.draggedPill != null)
+
+  $scope.mouseDropOverName = (event) ->
+    $(event.target).closest('.logic-field-name').removeClass('dropzone')
+    $scope.dropOverName(event)
+
   $scope.dragOverValue = (event) ->
     return false unless window.draggedPill
 
