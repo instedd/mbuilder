@@ -9,6 +9,7 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
       true
 
   $scope.dropOverName = (event) ->
+    return if window.draggedPill == null
     $scope.$emit 'pillOverFieldName', pill: window.draggedPill, field: $scope.pill, table: $scope.table
     window.draggedPill = null
 
