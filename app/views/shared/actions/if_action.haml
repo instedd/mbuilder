@@ -1,4 +1,5 @@
 .if{'ng-controller' => 'ActionsController', 'ng-init' => 'actions=action.actions;action=action'}
+  %i.i25-condition
   If
   %span.combo{'ng-click' => 'showIfAggregatesPopup(action, $event)', 'ng-right-click' => 'showIfAggregatesPopup(action, $event)', 'ng-show' => 'mustShowIfAggregate(action)'} {{ifAggregateDescription(action.all)}}
   %span{'ng-repeat' => 'pill in [action.left]'}

@@ -74,9 +74,7 @@ input.n {
 }
 
 .message-input {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  @include border-radius(4px);
   border: 1px solid gray;
   height: 24px;
   padding: 10px;
@@ -109,10 +107,17 @@ input.n {
   cursor: move;
 }
 
-.action {
+.action-container {
   @include border-radius(3px);
   @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
-  padding: 10px;
+  margin-bottom: 30px;
+
+  > div > .space-between-actions {
+    background: url("action-separator.png") no-repeat center 10px;
+  }
+}
+.action {
+  padding: 10px 0 10px 10px;
   cursor: move;
 
   &:active {
@@ -121,31 +126,44 @@ input.n {
 
   &.selected {
     background: #cae3f1;
+
+    i[class^="i25-"] {
+      background-position-y: -25px;
+    }
+  }
+
+  &:hover > .delete {
+    display: block;
+  }
+  .action {
+    @include box-shadow(none);
+    border: none;
   }
 }
 
 .space-between-actions {
   height: 20px;
   width: 100%;
-  background-color: #fafafa;
 }
 
 .new-action {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  @include border-radius(4px);
   border: 1px solid #ddd;
   padding: 10px;
 }
 
+
+
 a.delete {
   float: right;
+  display: none;
+  .i25 {
+    background-position: -980px -40px;
+  }
 }
 
 .pill {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  @include border-radius(4px);
   padding-left: 4px;
   padding-right: 4px;
   display: inline-block;
@@ -260,18 +278,14 @@ table.fields .input-small {
 }
 
 .popup {
-  z-index: 1;
-  position: absolute;
+  @include border-radius(4px);
+  @include box-shadow(0px 10px 10px rgba(128, 128, 128, 0.5));
   background: white;
-  display: none;
   border: 1px solid #eee;
   padding: 4px 10px 4px 10px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-box-shadow: 0px 10px 10px rgba(128, 128, 128, 0.5);
-  -moz-box-shadow:    0px 10px 10px rgba(128, 128, 128, 0.5);
-  box-shadow:         0px 10px 10px rgba(128, 128, 128, 0.5);
+  display: none;
+  z-index: 1;
+  position: absolute;
 }
 
 .popup .selected {
@@ -489,3 +503,49 @@ hr.shadow {
 ::-moz-placeholder { font-style: italic; } /* firefox 19+ */
 :-ms-input-placeholder { font-style: italic; } /* ie */
 input:-moz-placeholder { font-style: italic; }
+
+
+
+//-------------- Icons --------------------
+//-----------------------------------------
+
+[class^="i25-"],
+[class*=" i25-"] {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  vertical-align: middle;
+  background-image: url("icons-25x25.png");
+  background-position: 25px 25px;
+  background-repeat: no-repeat;
+}
+
+.i25-condition          { background-position: 0         0; }
+.i25-loop               { background-position: -25px     0; }
+
+
+
+$icons40x40Path:          image-path("icons-40X40.png") !default;
+
+[class^="i40-"],
+[class*=" i40-"] {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  vertical-align: middle;
+  background-image: url($icons40x40Path);
+  background-position: 40px 40px;
+  background-repeat: no-repeat;
+}
+
+.i40-condition          { background-position: 0         0; }
+.i40-sms                { background-position: -40px     0; }
+.i40-intdata            { background-position: -80px     0; }
+.i40-select             { background-position: -120px    0; }
+.i40-date               { background-position: -160px    0; }
+.i40-email              { background-position: -200px    0; }
+.i40-loop               { background-position: -240px    0; }
+.i40-group              { background-position: -280px    0; }
+.i40-extdata            { background-position: -320px    0; }
