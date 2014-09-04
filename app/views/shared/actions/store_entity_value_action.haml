@@ -1,11 +1,15 @@
-Store
-= render 'shared/pill'
-as
-= render 'shared/field'
-of
-= render 'shared/table'
-%br
-%div{'ng-show'=>'isFirstStoreAfterSelect(action)'}
-  %label.checkbox
-    %input(type='checkbox' ng-model='action.create_or_update')
-    Create record if no matching exists
+.action-content
+  .action-icon
+    %i.i40-intdata
+  %div
+    Store
+    = render 'shared/pill'
+    as
+    = render 'shared/field'
+  %div
+    of
+    = render 'shared/table'
+  %div{'ng-show'=>'isFirstStoreAfterSelect(action)'}
+    %label.checkbox
+      %input(type='checkbox' ng-model='action.create_or_update')
+      Create record if no matching exists
