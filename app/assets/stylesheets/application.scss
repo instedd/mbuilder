@@ -112,12 +112,48 @@ input.n {
   @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
   margin-bottom: 30px;
 
-  > div > .space-between-actions {
-    background: url("action-separator.png") no-repeat center 10px;
+  > .space-between-actions + div .action {
+    background-image:none !important;
+    &.selected:before {
+      @include border-radius(5px 5px 0 0);
+      content:'';
+      display: block;
+      background: #cae3f1;
+      height: 35px;
+      width: 100%;
+      margin-top: -35px;
+      margin-left: -10px;
+      padding-right: 10px;
+      position: relative;
+    }
+  }
+  > div[ng-repeat^="action"] > .action {
+    background: url("action-separator.png") no-repeat center top;
+
+    &.selected {
+      background-color: #cae3f1;
+      + .space-between-actions {
+        background-color: #cae3f1;
+        position: relative;
+        &:after {
+          content:'';
+          display: block;
+          position: absolute;
+          left: 50%;
+          margin-left: -17px;
+          bottom: -7px;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 7px 15px 0 15px;
+          border-color: #cae3f1 transparent transparent transparent;
+        }
+      }
+    }
   }
 }
 .action {
-  padding: 10px 0 10px 10px;
+  padding: 15px 0 10px 10px;
   cursor: move;
 
   &:active {
@@ -148,14 +184,14 @@ input.n {
     @include box-sizing(border-box);
     width: 100%;
     padding: 0 10px 0 45px;
-    position: relative;
     > div {
       margin-bottom: 5px;
     }
     .action-icon {
-      position: absolute;
-      top: 0;
-      left: 0;
+      float: left;
+      position: relative;
+      margin-left: -45px;
+
     }
   }
 }
@@ -166,14 +202,21 @@ input.n {
 }
 
 .new-action {
+  background: #ffffff;
+  border-top: 1px solid #cdcdcd;
   padding: 10px;
+  position: relative;
+  z-index: 2;
 }
 
 
 
 a.delete {
   float: right;
+  margin-top: -10px;
   display: none;
+  position: relative;
+  z-index: 2;
   i {
     background-position-y:-40px;
   }
