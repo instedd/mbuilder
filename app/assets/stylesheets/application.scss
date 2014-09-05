@@ -172,9 +172,10 @@ input.n {
     }
   }
 
-  &:hover > .delete {
+  &.hover > .delete {
     display: block;
   }
+
   .action {
     @include box-shadow(none);
     border: none;

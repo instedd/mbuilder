@@ -40,5 +40,14 @@ $(function(){
     return false;
   });
 
+  $(window).mousemove(function(e){
+    var action = $(event.target).closest('.action');
+    if (action == null) {
+      $('.action.hover').removeClass('hover');
+    } else if (!action.hasClass('.action')) {
+      $('.action.hover').removeClass('hover');
+      action.addClass('hover');
+    }
+  });
 });
 
