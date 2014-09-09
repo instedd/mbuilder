@@ -123,6 +123,33 @@ class DatabaseExecutionContext < ExecutionContext
     end
   end
 
+  def each_resource_map_value(table, restrictions, group_by = nil, &block)
+    collection = resource_map_api.collections.find(table)
+    options = restrictions.each_with_object({}) do |restriction, hash|
+      hash[field_restriction_to_api_query restriction, collection] = restriction[:value].user_friendly
+    end
+    collection.sites.where(options).each do |result|
+      block.call result
+    end
+  end
+
+  def assign_value_to_entity_field(table, field, value)
+    entity = entity(table)
+    application.find_table(table).assign_value_to_entity_field(self, entity, field, value)
+  end
+
+  def assign_local_value_to_entity(entity, field, value)
+    entity[field] = value
+  end
+
+  def assign_resource_map_value_to_entity(entity, field, value)
+    collection = resource_map_api.collections.find(entity.table)
+    collection.sites.where(entity.restrictions).update({field => value})
+    # entity.each do |site|
+    #   site.update_properties({field => value})
+    # end
+  end
+
   def reserved? field
     ['name', 'lat', 'lng'].include? field
   end
