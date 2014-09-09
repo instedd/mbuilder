@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/alto_guisso.git
-  revision: 2ece45e117b04ed6b7de71e878c9df506156ee48
+  revision: 23d3c209edf172a8ef8d0e1771ffaf6085ffbe8d
   branch: master
   specs:
     alto_guisso (0.0.1)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/instedd-bootstrap.git
-  revision: 4ab7bdb72e99bae24825d08e3f177a776068a734
+  revision: 9c6f03fc3de17e986cedbe01644ea3b3e9fcb7ca
   branch: master
   specs:
     instedd-bootstrap (0.0.1)
@@ -46,7 +46,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/resource_map_api_client.git
-  revision: 3f32ecd2f9a7861b7f5ff2138ca370dd35675e75
+  revision: 07755f1b343b6a0972f7cd220894e4e126f7b782
   branch: master
   specs:
     resource_map_api_client (0.0.1)
@@ -176,11 +176,11 @@ GEM
       activesupport (>= 3.1, < 4.1)
       haml (>= 3.1, < 4.1)
       railties (>= 3.1, < 4.1)
-    hashie (2.0.5)
+    hashie (2.1.2)
     hashr (0.0.22)
     highline (1.6.21)
     hike (1.2.3)
-    httpclient (2.3.4.1)
+    httpclient (2.4.0)
     i18n (0.6.11)
     ice_cube (0.11.0)
     journey (1.0.4)
@@ -197,7 +197,7 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    memoist (0.9.1)
+    memoist (0.9.3)
     method_source (0.8.2)
     mime-types (1.25.1)
     multi_json (1.10.1)

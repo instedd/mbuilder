@@ -13,9 +13,41 @@
  *= require recurring_select
  *= require pigeon
  *= require bootstrap-timepicker
+ *= require pill_editor
  */
 
 @import "instedd-bootstrap";
+
+//-------------------- Fonts -----------------------
+//--------------------------------------------------
+@font-face {
+    font-family: 'TheSansPlain';
+    src: font-url('thesansp-webfont.eot');
+    src: font-url('thesansp-webfont.eot?#iefix') format('embedded-opentype'),
+         font-url('thesansp-webfont.woff') format('woff'),
+         font-url('thesansp-webfont.ttf') format('truetype'),
+         font-url('thesansp-webfont.svg#clarendon_btbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'TheSansBlack';
+    src: font-url('thesanbp-webfont.eot');
+    src: font-url('thesanbp-webfont.eot?#iefix') format('embedded-opentype'),
+         font-url('thesanbp-webfont.woff') format('woff'),
+         font-url('thesanbp-webfont.ttf') format('truetype'),
+         font-url('thesanbp-webfont.svg#clarendon_btroman') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
 
 .message-container {
   @include border-radius(3px);
@@ -42,10 +74,8 @@ input.n {
 }
 
 .message-input {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  border: 1px solid gray;
+  @include border-radius(4px);
+  border: 1px solid #cdcdcd;
   height: 24px;
   padding: 10px;
   cursor: default;
@@ -77,10 +107,53 @@ input.n {
   cursor: move;
 }
 
-.action {
+.action-container {
   @include border-radius(3px);
   @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
-  padding: 10px;
+  margin-bottom: 30px;
+
+  > .space-between-actions + div .action {
+    background-image:none !important;
+    &.selected:before {
+      @include border-radius(5px 5px 0 0);
+      content:'';
+      display: block;
+      background: #cae3f1;
+      height: 35px;
+      width: 100%;
+      margin-top: -35px;
+      margin-left: -10px;
+      padding-right: 10px;
+      position: relative;
+    }
+  }
+  > div[ng-repeat^="action"] > .action {
+    background: url("action-separator.png") no-repeat center top;
+
+    &.selected {
+      background-color: #cae3f1;
+      + .space-between-actions {
+        background-color: #cae3f1;
+        position: relative;
+        &:after {
+          content:'';
+          display: block;
+          position: absolute;
+          left: 50%;
+          margin-left: -17px;
+          bottom: -7px;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 7px 15px 0 15px;
+          border-color: #cae3f1 transparent transparent transparent;
+        }
+      }
+    }
+  }
+}
+.action {
+  padding: 15px 0 10px 10px;
   cursor: move;
 
   &:active {
@@ -89,31 +162,69 @@ input.n {
 
   &.selected {
     background: #cae3f1;
+
+    i[class^="i25-"] {
+      background-position-y: -25px;
+    }
+
+    i[class^="i40-"] {
+      background-position-y: -40px;
+    }
+  }
+
+  &.hover > .delete {
+    display: block;
+  }
+
+  .action {
+    @include box-shadow(none);
+    border: none;
+  }
+
+  .action-content {
+    @include box-sizing(border-box);
+    width: 100%;
+    padding: 0 10px 0 45px;
+    > div {
+      margin-bottom: 5px;
+    }
+    .action-icon {
+      float: left;
+      position: relative;
+      margin-left: -45px;
+
+    }
   }
 }
 
 .space-between-actions {
   height: 20px;
   width: 100%;
-  background-color: #fafafa;
 }
 
 .new-action {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
+  background: #ffffff;
+  border-top: 1px solid #cdcdcd;
   padding: 10px;
+  position: relative;
+  z-index: 2;
 }
+
+
 
 a.delete {
   float: right;
+  margin-top: -10px;
+  display: none;
+  position: relative;
+  z-index: 2;
+  i {
+    background-position-y:-40px;
+  }
 }
 
 .pill {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  @include border-radius(4px);
   padding-left: 4px;
   padding-right: 4px;
   display: inline-block;
@@ -228,18 +339,14 @@ table.fields .input-small {
 }
 
 .popup {
-  z-index: 1;
-  position: absolute;
+  @include border-radius(4px);
+  @include box-shadow(0px 10px 10px rgba(128, 128, 128, 0.5));
   background: white;
-  display: none;
   border: 1px solid #eee;
   padding: 4px 10px 4px 10px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-box-shadow: 0px 10px 10px rgba(128, 128, 128, 0.5);
-  -moz-box-shadow:    0px 10px 10px rgba(128, 128, 128, 0.5);
-  box-shadow:         0px 10px 10px rgba(128, 128, 128, 0.5);
+  display: none;
+  z-index: 1;
+  position: absolute;
 }
 
 .popup .selected {
@@ -248,7 +355,7 @@ table.fields .input-small {
   color: black;
 }
 
-#aggregate-functions a, #if-operators a, #if-aggregates a {
+#aggregate-functions a, .if-operators a, #if-aggregates a {
   color: black;
 }
 
@@ -296,6 +403,90 @@ body {
 .title {
   font-size: 20px;
   padding: 8px 0 14px;
+}
+
+//-------------- Home --------------------------
+//----------------------------------------------
+
+.homepage {
+
+  .row-fluid {
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: TheSansBlack, Arial, Helvetica, sans-serif;
+    font-size: 46px;
+    color: #000000;
+    line-height: 35px;
+    margin: 5px 0 10px 0;
+
+    small {
+      font-family: TheSansPlain, Arial, Helvetica, sans-serif;
+      font-size: 24px;
+      color: inherit;
+      line-height: 24px;
+      margin-bottom: 18px;
+      margin-top: 10px;
+      display: block;
+    }
+  }
+
+  .main-img {
+    margin-top: 50px;
+    h1,
+    a {
+      color: #ff6600;
+    }
+  }
+
+  .btn-create {
+    @extend .btn;
+    @extend .btn-medium;
+    @extend .btn-warning;
+    @include gradient-vertical(#fe973a, #ff6600);
+    color: $white !important;
+  }
+
+  .what-can-i-use {
+    margin-bottom: 40px;
+
+    h1 + p {
+      font-size: 18px;
+      line-height: 22px;
+    }
+    span {
+      @include border-radius(6px);
+      @include box-shadow(0 1px 1px 0px rgba(0, 0, 0, 0.3) inset);
+      background-color: #d0d0d0;
+      margin: 0 12px 8px 0;
+      padding: 6px;
+      text-align: center;
+      display: block;
+      float: left;
+    }
+  }
+}
+
+body.centered {
+  .navbar.top {
+    .navbar-inner { padding: 0 }
+    .span3 {
+      position: relative;
+      >.btn-group {
+        position: absolute;
+        right: 50px;
+        top: -1px;
+        max-width: 230px;
+        .button-link {
+          float: right;
+        }
+      }
+      .sign_up_link {
+        margin-right: 5px;
+      }
+    }
+  }
 }
 
 //-------------- Testing Sandbox ---------------
@@ -351,3 +542,70 @@ hr.shadow {
   }
 
 }
+
+.dropzone {
+  cursor: copy;
+}
+
+.dropzone .pill {
+  cursor: copy;
+}
+
+.svgInputHelp {
+  float: right;
+}
+
+.svgInputHelp span {
+  color: #ddd;
+}
+
+/* all */
+::-webkit-input-placeholder { font-style: italic; }
+::-moz-placeholder { font-style: italic; } /* firefox 19+ */
+:-ms-input-placeholder { font-style: italic; } /* ie */
+input:-moz-placeholder { font-style: italic; }
+
+
+
+//-------------- Icons --------------------
+//-----------------------------------------
+
+[class^="i25-"],
+[class*=" i25-"] {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  vertical-align: middle;
+  background-image: url("icons-25x25.png");
+  background-position: 25px 25px;
+  background-repeat: no-repeat;
+}
+
+.i25-condition          { background-position: 0         0; }
+.i25-loop               { background-position: -25px     0; }
+
+
+
+
+[class^="i40-"],
+[class*=" i40-"] {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  vertical-align: middle;
+  background-image: url("icons-40x40.png");
+  background-position: 40px 40px;
+  background-repeat: no-repeat;
+}
+
+.i40-condition          { background-position: 0         0; }
+.i40-sms                { background-position: -40px     0; }
+.i40-intdata            { background-position: -80px     0; }
+.i40-select             { background-position: -120px    0; }
+.i40-date               { background-position: -160px    0; }
+.i40-email              { background-position: -200px    0; }
+.i40-loop               { background-position: -240px    0; }
+.i40-group              { background-position: -280px    0; }
+.i40-extdata            { background-position: -320px    0; }

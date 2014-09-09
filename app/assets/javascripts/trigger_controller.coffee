@@ -12,7 +12,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
   ]
 
   $scope.ifOperatorsPopup = { action: null }
-  $scope.ifOperators = [
+
+  $scope.ifOperatorsPlural = [
     {id: '==', desc: 'equals'},
     {id: '!=', desc: 'does not equal'},
     {id: 'contains', desc: 'contains'},
@@ -20,6 +21,16 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
     {id: '>', desc: 'is greater than'},
     {id: 'between', desc: 'is between'},
     {id: 'not between', desc: 'is not between'},
+  ]
+
+  $scope.ifOperatorsSingular = [
+    {id: '==', desc: 'equal'},
+    {id: '!=', desc: 'do not equal'},
+    {id: 'contains', desc: 'contain'},
+    {id: '<', desc: 'are less than'},
+    {id: '>', desc: 'are greater than'},
+    {id: 'between', desc: 'are between'},
+    {id: 'not between', desc: 'are not between'},
   ]
 
   $scope.ifAggregatesPopup = { action : null }
@@ -205,6 +216,20 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
 
     event.stopPropagation()
 
+  $scope.dragOverBoard = (event) ->
+    event.preventDefault()
+    false
+
+  $scope.mouseEnterOverBoard = (event) ->
+    $scope.dragOverBoard(event)
+
+  $scope.dropOverBoard = (event) ->
+    window.draggedPill = null
+    false
+
+  $scope.mouseDropOverBoard = (event) ->
+    $scope.dropOverBoard(event)
+
   $scope.hidePopups = ->
     $('.popup').hide()
 
@@ -291,8 +316,9 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
   $scope.unselectAction = ->
     $scope.selectedAction = null
 
-  $scope.showAggregateFunctionsPopup = (pill, event) ->
+  $scope.showAggregateFunctionsPopup = (pill, actionScope, event) ->
     $scope.aggregateFunctionPopup.pill = pill
+    $scope.aggregateFunctionPopup.actionScope = actionScope
     id = if $scope.lookupTableByField(pill.guid).readonly
            '#aggregate-functions-error'
          else
@@ -305,10 +331,14 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
 
   $scope.showIfOperatorsPopup = (action, event) ->
     $scope.ifOperatorsPopup.action = action
-    $scope.showPopup '#if-operators', event
+    selectedValue = !! action.all
+    gramaticalNumber = if selectedValue then 'singular' else 'plural'
+    $scope.showPopup ("#if-operators-" + gramaticalNumber), event
 
-  $scope.ifOperatorDescription = (op) ->
-    _.find($scope.ifOperators, (a) -> a.id == op).desc
+  $scope.ifOperatorDescription = (op, ifAggregator) ->
+    ifAggregator = !!ifAggregator
+    operators = if ifAggregator then $scope.ifOperatorsSingular else $scope.ifOperatorsPlural
+    _.find(operators, (a) -> a.id == op).desc
 
   $scope.showIfAggregatesPopup = (action, event) ->
     $scope.ifAggregatesPopup.action = action

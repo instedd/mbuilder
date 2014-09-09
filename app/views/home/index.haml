@@ -1,2 +1,74 @@
-Hey! We are still working in wrapping things up here. You might experience a few hiccups but feel free to create an account and we’ll let you know when this application is ready for production use. Feel free to reach out to us with ideas or suggestions at:
-%a(href="https://groups.google.com/forum/#!forum/instedd-tech") https://groups.google.com/forum/#!forum/instedd-tech
+.homepage
+  .row-fluid.main-img
+    .span7
+      %h1.span12
+        Scalable SMS applications
+        %small
+          you can build in minutes and change
+          %br whenever you want
+      .row-fluid
+        .span7
+          %p SMS is the workhorse of mobile applications for resource-limited scenarios. mBuilder is a free and open-source tool that you can use to build scalable SMS applications without any programming knowledge. In a matter of minutes, you can design, prototype, test and launch applications that can range from simple keyword/response apps to complex tools such as chat groups or workflows.  You can use mBuilder to collect, store and query data, building your own tables. Your existing applications can easily be SMS-powered using mBuilder’s API.
+          - if current_user
+            %p
+              Get started:
+              = link_to 'View your applications', applications_path, :class => "btn-create"
+          - else
+            %p
+              Get started:
+              = link_to 'Create an account', guisso_sign_up_path_for(:user), :class => "btn-create"
+            %p
+              Already a member?
+              = link_to 'Log in', guisso_sign_in_path_for(:user)
+
+    .span5
+      = image_tag "main-home.png"
+
+  .what-can-i-use
+    .row-fluid
+      .span12
+        %h1 What can I use it for?
+        %p mBuilder is an ideal tool if you need to build flexible SMS apps and don’t want to spend lots of time building something custom from scratch.
+
+    .row-fluid
+      .span6
+        %h2 Group Chat
+        %p
+          %span
+            %i.i96.chat
+          Staying in touch with your team even in remote or disconnected situations is key for successful collaboration. You don’t need to adapt to existing chat tools neither build your custom application from scratch. mBuilder will let you define exactly the behaviour you need for your group chat. You can add and change commands as you learn from what works best for your team.
+
+      .span6
+        %h2 Data Collection
+        %p
+          %span
+            %i.i96.database
+          Having timely, reliable, quality data on your programs is the first step to understanding what’s going on. With mBuilder you can build a customized data collection application and store each piece of data in tables designed by you. These data can be integrated with other apps or viewed online in real-time. Use your own formats, try different things and even have coexisting different methods tailored to different users.
+
+    .row-fluid
+      .span6
+        %h2 Social Media over SMS
+
+        %p
+          %span
+            %i.i96.social
+          In many situations, enabling sparse communities to have a digital space where they can share best practices, tips or keep each other updated on what they are doing is all you need for social change. You can build your own Twitter in minutes with mBuilder and have it work in any setting.
+
+      .span6
+        %h2 Event notifications
+        %p
+          %span
+            %i.i96.event
+          Do you want to keep a broad range of people notified about different events? Your users could subscribe by sending an SMS with a few keywords indicating the topics they are interested in. You could push notifications to interested users by simply sending an SMS with those same keywords.
+
+
+  / .row-fluid
+  /   .span12
+  /     You might experience a few hiccups but feel free to create an account and we’ll let you know when this application is ready for production use. Feel free to reach out to us with ideas or suggestions at:
+  /     %a(href="https://groups.google.com/forum/#!forum/instedd-tech") https://groups.google.com/forum/#!forum/instedd-tech
+
+
+
+
+:javascript
+  $('body').addClass('centered')

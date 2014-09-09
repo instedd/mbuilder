@@ -1,7 +1,10 @@
-%div{'ng-controller' => 'ActionsController'}
+.action-container{'ng-controller' => 'ActionsController'}
   = render 'shared/triggers/actions_contents'
   .new-action
-    %a{'ng-click' => 'addSendMessageAction()', href: 'javascript:'} [+] Add "Send message" step
+    %a{'ng-click' => 'addSendMessageAction()', href: 'javascript:'}
+      %span.btn-icon.blue
+        %i.icc-add
+      %span Add step
   %br
 
   .modal.hide#actions-modal-delete{'tabindex' => "-1", 'role' => "dialog"}

@@ -1,0 +1,57 @@
+patternpad.standalone {
+  display: block;
+  padding: 10px;
+}
+.svgInput {
+  height:100px;
+  background: #ffffff;
+  border-top: 1px #cccccc solid;
+  position:relative;
+  width: 100%;
+
+  &.svgInput-focus {
+    /*border: 1px #999999 solid;*/
+  }
+}
+svg {
+  width: 100%;
+  height: 100%;
+
+  .char {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    font-size:14px;
+    font-family: "Arial";
+    fill:#000000;
+  }
+
+  .char-focus {
+    fill:#ffffff;
+  }
+
+  .operator {
+    fill: rgba(0, 0, 0, 0.66);
+    font-style: italic;
+    pointer-events: none;
+  }
+
+  .pill {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    font-size:14px;
+    font-family: "Arial";
+    fill:#ddd;
+  }
+
+  .pill-focus {
+    fill:#ff6600;
+  }
+
+  .arrow {
+    cursor: pointer;
+  }
+}

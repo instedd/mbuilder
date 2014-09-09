@@ -1,12 +1,17 @@
-%span{'ng-show' => "isFirstFilter(action)"}
-  Select
-%span{'ng-hide' => "isFirstFilter(action)"}
-  Filter
-= render 'shared/table'
-where
-= render 'shared/field'
-%span{'ng-show' => "action.pill.kind == 'field_value'"}
-  is one of the
-%span{'ng-hide' => "action.pill.kind == 'field_value'"}
-  is
-= render 'shared/pill'
+.action-content
+  .action-icon
+    %i.i40-select
+  %div
+    %span{'ng-show' => "isFirstFilter(action)"}
+      Select
+    %span{'ng-hide' => "isFirstFilter(action)"}
+      Filter
+    = render 'shared/table'
+    where
+    = render 'shared/field'
+  %div
+    %span{'ng-show' => "action.pill.kind == 'field_value'"}
+      is one of the
+    %span{'ng-hide' => "action.pill.kind == 'field_value'"}
+      is
+    = render 'shared/pill'

@@ -12,6 +12,11 @@ class ApplicationsController < ApplicationController
     add_breadcrumb application.name, application
     add_breadcrumb 'Overview'
     set_application_tab :overview
+
+    @message_count_all = application.logs.count
+    @message_count_today = application.logs.where('created_at >= ?', Date.today).count
+    @message_count_7_days = application.logs.where('created_at >= ?', 7.days.ago).count
+    @message_count_30_days = application.logs.where('created_at >= ?', 30.days.ago).count
   end
 
   def create

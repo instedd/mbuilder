@@ -16,8 +16,12 @@
   %div{style: 'margin-top: 8px'}
     %button.btn{'ng-click' => 'hidePopups()'} Close
 
-%div#if-operators.popup{'ng-controller' => 'IfOperatorsController'}
-  %div{'ng-repeat' => 'operator in ifOperators'}
+%div.if-operators#if-operators-singular.popup{'ng-controller' => 'IfOperatorsController'}
+  %div{'ng-repeat' => 'operator in ifOperatorsSingular'}
+    %a{'href' => 'javascript:', 'ng-class' => '{ selected: ifOperatorsPopup.action.op == operator.id }', 'ng-click' => 'select(operator)'} {{operator.desc}}
+
+%div.if-operators#if-operators-plural.popup{'ng-controller' => 'IfOperatorsController'}
+  %div{'ng-repeat' => 'operator in ifOperatorsPlural'}
     %a{'href' => 'javascript:', 'ng-class' => '{ selected: ifOperatorsPopup.action.op == operator.id }', 'ng-click' => 'select(operator)'} {{operator.desc}}
 
 %div#if-aggregates.popup{'ng-controller' => 'IfAggregatesController'}

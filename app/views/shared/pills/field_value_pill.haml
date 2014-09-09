@@ -1,3 +1,3 @@
-.pill.field{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', 'ng-click' => 'addNewValue()', 'ng-right-click' => 'tryShowAggregateFunctionsPopup(pill, $event)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}', aggregate: '{{pill.aggregate}}'}}
+.pill.field{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', 'ng-click' => 'addNewValue()', 'ng-right-click' => 'tryShowAggregateFunctionsPopup(pill, $scope, $event)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}', aggregate: '{{pill.aggregate}}'}}
   %span.aggregate {{aggregateLabel(pill.aggregate)}}
   {{lookupPillName(pill)}}
