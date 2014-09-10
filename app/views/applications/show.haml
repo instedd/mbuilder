@@ -1,10 +1,11 @@
 .row-fluid
-  .span9
+  .span12
     %h4 Messages
     %p.small Total number of messages sent and received
-    .well
-      %h1= number_with_delimiter @message_count_all
-      %span messages received
+    .messages-box
+      %h1
+        = number_with_delimiter @message_count_all
+        %small messages received
 
       %p
         = number_with_delimiter @message_count_today
@@ -15,13 +16,10 @@
       %p
         = number_with_delimiter @message_count_30_days
         from last 30 days
-  .span3
 
 .row-fluid
-  .span3
+  .span12
     = icon_link_to :'icf-export', 'Export application', application_export_path(application)
-
-  .span3
     = icon_link_to :'icf-import', 'Import application', '#import-form', data: { toggle: 'collapse' }
 
 #import-form.collapse(style="width: 400px")

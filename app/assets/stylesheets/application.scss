@@ -396,6 +396,20 @@ body {
     display: block;
   }
 }
+.messages-box {
+  @include border-radius(3px);
+  border: 1px solid #cdcdcd;
+  display: inline-block;
+  padding: 5px 15px 15px;
+  margin-bottom: 10px;
+
+  h1 small {
+    font-size: 35%;
+    line-height: 1.2em;
+    color: inherit;
+    display: block;
+  }
+}
 
 //-------------------- Classes -----------------------
 //----------------------------------------------------
