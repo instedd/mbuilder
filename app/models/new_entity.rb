@@ -16,4 +16,8 @@ class NewEntity
   def save
     @context.insert @table, @properties
   end
+
+  def new?
+    true
+  end
 end

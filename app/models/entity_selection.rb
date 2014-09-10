@@ -67,4 +67,8 @@ class EntitySelection
     end
     str
   end
+
+  def new?
+    false
+  end
 end

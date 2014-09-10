@@ -73,10 +73,7 @@ class DatabaseExecutionContext < ExecutionContext
   def select_resource_map_field(table, restrictions, field, group_by, aggregate)
     collection = resource_map_api.collections.find(table)
     field_code = field_code_of field.id, collection
-
-    query = restrictions.each_with_object({}) do |restriction, hash|
-      hash[field_restriction_to_api_query restriction, collection] = restriction[:value].user_friendly
-    end
+    query = restrictions_to_resource_map(restrictions, collection)
     sites = collection.sites.where(query)
 
     if multiple_options? field.kind
@@ -125,9 +122,7 @@ class DatabaseExecutionContext < ExecutionContext
 
   def each_resource_map_value(table, restrictions, group_by = nil, &block)
     collection = resource_map_api.collections.find(table)
-    options = restrictions.each_with_object({}) do |restriction, hash|
-      hash[field_restriction_to_api_query restriction, collection] = restriction[:value].user_friendly
-    end
+    options = restrictions_to_resource_map(restrictions, collection)
     collection.sites.where(options).each do |result|
       block.call result
     end
@@ -143,11 +138,17 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def assign_resource_map_value_to_entity(entity, field, value)
-    collection = resource_map_api.collections.find(entity.table)
-    collection.sites.where(entity.restrictions).update({field => value})
-    # entity.each do |site|
-    #   site.update_properties({field => value})
-    # end
+    unless entity.new?
+      table = application.find_table(entity.table)
+      collection = resource_map_api.collections.find(table.id)
+      resource_map_field = table.find_field(field).id
+      mapped_restrictions = entity.restrictions.map(&:clone).each do |restriction|
+        restriction[:field] = table.find_field(restriction[:field]).id
+      end
+      resource_map_restrictions = restrictions_to_resource_map(mapped_restrictions, collection)
+      collection.sites.where(resource_map_restrictions).update({resource_map_field => value})
+    end
+    entity[field] = value
   end
 
   def reserved? field
@@ -177,5 +178,11 @@ class DatabaseExecutionContext < ExecutionContext
 
   def resource_map_api
     @resource_map_api ||= ResourceMap::Api.trusted(application.user.email, ResourceMap::Config.url, ResourceMap::Config.use_https)
+  end
+
+  def restrictions_to_resource_map(restrictions, collection)
+    restrictions.each_with_object({}) do |restriction, hash|
+      hash[field_restriction_to_api_query restriction, collection] = restriction[:value].user_friendly
+    end
   end
 end
