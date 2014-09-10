@@ -22,6 +22,43 @@ angular.module('mbuilder').directive 'textpad', ->
       input.data(inputData)
       input.render()
 
+      # update labels of pills
+      # for pill, i in scopeModelCopy
+      #   if pill.kind == 'placeholder'
+      #     textInputPill = input.getPillById(guidsByScopePillIndex[i])
+      #     if not textInputPill?
+      #       input.getPillById(guidsByScopePillIndex[i])
+      #     textInputPill.label(scope.$parent.lookupPillName(pill))
+
+    ensureSpacesAroundPills = ->
+      data = []
+      originalData = input.data()
+      moveCarretToEnd = false
+      for item, i in originalData
+        if typeof(item) == 'string'
+          # space before a pill
+          if !/\s/.test(_.last(item)) && i < originalData.length - 1
+            item = item + ' '
+          # space after a pill
+          if !/\s/.test(_.first(item)) && i > 0
+            item = ' ' + item
+            if i == originalData.length - 1
+              moveCarretToEnd = true
+        else
+          # two pills together
+          if data.length > 0 && typeof(_.last(data)) != 'string'
+            data.push ' '
+        unless i == originalData.length - 1 && i == ' '
+          data.push item
+
+      if !_.isEqual(input.data(), data)
+        input.data(data)
+        input.render()
+        if moveCarretToEnd
+          window.setTimeout ->
+            input.caret(Number.MAX_VALUE, false)
+          , 0
+
     updateScopeFromInputData = ->
       scope.$apply ->
         scope.model.splice(0, scope.model.length)
@@ -76,6 +113,7 @@ angular.module('mbuilder').directive 'textpad', ->
       window.setTimeout updateInputDataFromScope, 0
       e.stopPropagation()
 
+    ensureSpacesAroundPills()
     input.render();
 
     # begin context menu
@@ -117,6 +155,7 @@ angular.module('mbuilder').directive 'textpad', ->
     input.addEventListener Event.CHANGE, (e) ->
       return if skipInputChange
       skipInputChange = true
+      ensureSpacesAroundPills()
       updateScopeFromInputData()
       skipInputChange = false
 
@@ -150,7 +189,9 @@ angular.module('mbuilder').directive 'textpad', ->
       finally
         phantom = null
 
-      if !e.info.localDragAndDrop and window.draggedPill
+      if e.info.localDragAndDrop
+        ensureSpacesAroundPills()
+      else if window.draggedPill
         pill = mbuilderToInputDataPill(window.draggedPill)
         input.insertPillAtCaret(pill.id, pill.label, pill.text, pill.hasMenu, pill.data)
       window.draggedPill = null
