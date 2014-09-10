@@ -39,5 +39,6 @@
         = render 'shared/triggers/tables'
 
       %button.btn{'ng-click' => 'save()'} Save
+      = link_to "Cancel", application_message_triggers_path(application), class: "btn btn-link"
 
       = render 'shared/triggers/popups'

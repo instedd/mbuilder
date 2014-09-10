@@ -29,7 +29,7 @@
     .row-fluid
       .span6
         %button.btn{'ng-click' => 'save()'} Save
-        %button.btn.btn-link Cancel
+        = link_to "Cancel", application_message_triggers_path(application), class: "btn btn-link"
         = icon_link_to :'icf-delete', 'Delete this trigger', '#', class: "pull-right"
 
     = render 'shared/triggers/popups'
