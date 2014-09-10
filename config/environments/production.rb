@@ -66,4 +66,6 @@ Mbuilder::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.action_mailer.default_url_options = { host: 'mbuilder-stg.instedd.org' }
+
+  RestClient.log = 'stdout'
 end
