@@ -15,6 +15,21 @@ describe Message do
     "register Foo bar now".should_not match(msg.pattern)
   end
 
+
+  it "compiles message with single word with spaces" do
+    msg = Message.from_hash({
+      'pieces' => [
+        {'kind' => 'text', 'text' => ' register '},
+        {'kind' => 'placeholder', 'text' => 'John'},
+        {'kind' => 'text', 'text' => ' now '},
+      ]
+    })
+    msg.pattern.source.should eq("\\A\\s*register\\s+([^0-9\s]\\S*)\\s+now\\s*\\Z")
+
+    "register  Foo  now".should match(msg.pattern)
+    "register  Foo  bar  now".should_not match(msg.pattern)
+  end
+
   it "compiles message with single word disease code" do
     msg = Message.from_hash({
       'pieces' => [

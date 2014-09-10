@@ -18,7 +18,7 @@ class MessagePiece
   def append_pattern(pattern, index, total)
     case kind
     when "text"
-      pattern << Regexp.escape(text)
+      pattern << Regexp.escape(text.strip)
     when "placeholder"
       pattern << "("
       case infer_pattern
