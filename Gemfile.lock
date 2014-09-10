@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/instedd-bootstrap.git
-  revision: 9c6f03fc3de17e986cedbe01644ea3b3e9fcb7ca
+  revision: 11ab521d6df455f3b179af4f496bcf5871c11f39
   branch: master
   specs:
     instedd-bootstrap (0.0.1)
@@ -46,7 +46,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/resource_map_api_client.git
-  revision: 07755f1b343b6a0972f7cd220894e4e126f7b782
+  revision: 0cb2ce2944b742cea8486eefb225378e56e57fd4
   branch: master
   specs:
     resource_map_api_client (0.0.1)
