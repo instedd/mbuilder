@@ -71,7 +71,7 @@ class ElasticRecord
     client.indices.refresh index: index
     begin
       result = client.indices.get_mapping(index: index, type: type)
-      result[type]['properties']['properties']['properties'] || {} rescue {}
+      result[index]['mappings'][type]['properties']['properties']['properties'] || {} rescue {}
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
       {}
     end
@@ -111,14 +111,14 @@ class ElasticRecord
     if object.invalid?
       throw ActiveRecord::RecordInvalid.new(object)
     end
-
     updated_at = Time.now
     created_at = object.created_at || updated_at
-    response = client.index index: index, type: type, id: object.id, body: {properties: object.properties, created_at: created_at.utc.iso8601, updated_at: updated_at.utc.iso8601}, refresh: true
-    if response["ok"]
+    begin
+      response = client.index index: index, type: type, id: object.id, body: {properties: object.properties, created_at: created_at.utc.iso8601, updated_at: updated_at.utc.iso8601}, refresh: true
       object.created_at = created_at
       object.updated_at = updated_at
       object.id = response["_id"]
+    rescue
     end
     object
   end
