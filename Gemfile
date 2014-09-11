@@ -20,7 +20,7 @@ gem "elasticsearch"
 gem 'rack-cors', :require => 'rack/cors'
 
 gem "ice_cube"
-gem 'recurring_select', git: "https://github.com/nekron/recurring_select", branch: 'master'
+gem 'recurring_select', git: "https://github.com/instedd/recurring_select", branch: 'instedd'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 
