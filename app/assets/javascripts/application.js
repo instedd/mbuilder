@@ -40,14 +40,28 @@ $(function(){
     return false;
   });
 
-  $(window).mousemove(function(e){
-    var action = $(event.target).closest('.action');
-    if (action == null) {
+  var changeHoverAction = function(action) {
+    if (action.length == 0) {
       $('.action.hover').removeClass('hover');
     } else if (!action.hasClass('.action')) {
       $('.action.hover').removeClass('hover');
       action.addClass('hover');
     }
+  }
+
+  $(window).on('click', function(e){
+    var a = $(e.target).closest('a.delete');
+    var action = $(e.target).closest('.action');
+    if (action.length > 0 && a.length > 0) {
+      var elementAtMouse = document.elementFromPoint(e.pageX - window.pageXOffset, e.pageY - window.pageYOffset);
+      var nextAction = $(elementAtMouse).closest('.action');
+      changeHoverAction(nextAction);
+    }
+  });
+
+  $(window).mousemove(function(e){
+    var action = $(e.target).closest('.action');
+    changeHoverAction(action);
   });
 });
 
