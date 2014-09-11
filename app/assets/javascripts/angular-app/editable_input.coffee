@@ -13,6 +13,9 @@ angular.module('mbuilder').directive 'editableInput', ->
     if scope.focusmode
       window.setTimeout (-> $('input', elem).focus()), 0
 
+    scope.$parent.$on 'makeEditable', (e) ->
+      scope.makeEditable({originalEvent: {button: 0}})
+
     scope.makeEditable = (event) ->
       return unless event.originalEvent.button == 0
 

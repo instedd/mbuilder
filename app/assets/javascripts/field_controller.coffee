@@ -1,4 +1,4 @@
-angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
+angular.module('mbuilder').controller 'FieldController', ['$scope', '$timeout', ($scope, $timeout) ->
   $scope.dragOverName = (event) ->
     return false unless window.draggedPill
 
@@ -42,6 +42,8 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', ($scope) ->
 
   $scope.addNewValue = ->
     $scope.$emit 'pillOverFieldValue', pill: {kind: 'literal', guid: window.guid(), text: '', editmode: true}, field: $scope.pill, table: $scope.table
+    $timeout ->
+      $scope.$broadcast 'makeEditable',
 
   $scope.showValidValuesPopup = (field, event) ->
     $scope.hidePopups()
