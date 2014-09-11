@@ -89,9 +89,40 @@
             %i.i96.event
           Do you want to keep a broad range of people notified about different events? Your users could subscribe by sending an SMS with a few keywords indicating the topics they are interested in. You could push notifications to interested users by simply sending an SMS with those same keywords.
 
+  %br
+  %br
+  %hr
+  %br
+  %br
 
-  / .row-fluid
-  /   .span12
-  /     You might experience a few hiccups but feel free to create an account and we’ll let you know when this application is ready for production use. Feel free to reach out to us with ideas or suggestions at:
-  /     %a(href="https://groups.google.com/forum/#!forum/instedd-tech") https://groups.google.com/forum/#!forum/instedd-tech
+  .how-does-it-work
+    .row-fluid
+      .span6
+        %h1 How does it work?
+        %p mBuilder works in a very intuitive way. To create an application in mBuilder, you start by writing an example of the message your user would send. You build your tables the same way you would do it in a spreadsheet. You then select portions of the user message and drag them to the column where you want to store them. To use a value from a table in your response you drag the field and drop it inside your reply text.
+      .span1
+      .span4
+        #screens.carousel.slide
+          %ol.carousel-indicators
+            %li.active{"data-slide-to" => "0", "data-target" => "#screens"}
+            %li{"data-slide-to" => "1", "data-target" => "#screens"}
+            %li{"data-slide-to" => "2", "data-target" => "#screens"}
+            %li{"data-slide-to" => "3", "data-target" => "#screens"}
+            %li{"data-slide-to" => "4", "data-target" => "#screens"}
+            %li{"data-slide-to" => "5", "data-target" => "#screens"}
+            %li{"data-slide-to" => "6", "data-target" => "#screens"}
+          .carousel-inner
+            .active.item= image_tag "home-tour01.gif"
+            .item= image_tag "home-tour02.gif"
+            .item= image_tag "home-tour03.gif"
+            .item= image_tag "home-tour04.gif"
+            .item= image_tag "home-tour05.gif"
+            .item= image_tag "home-tour06.gif"
+      .span1
 
+:javascript
+  $(function(){
+    $('.carousel').carousel({
+      interval: 2000
+    })
+  });
