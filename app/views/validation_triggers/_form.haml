@@ -14,6 +14,15 @@
         = render 'shared/triggers/actions'
       = render 'shared/triggers/tables'
 
-    %button.btn{'ng-click' => 'save()'} Save
+    .row-fluid
+      .span6
+        %button.btn{'ng-click' => 'save()'} Save
+        = link_to "Cancel", application_message_triggers_path(application), class: "btn btn-link"
+
+        - if @validation_trigger.id
+          = icon_link_to :'icf-delete', 'Delete this trigger', "/applications/#{application.id}/validation_triggers/#{@validation_trigger.id}", {method: :delete, class: "pull-right"}
+        - else
+          = icon_link_to :'icf-delete', 'Delete this trigger', "/applications/#{application.id}/message_triggers/", { class: "pull-right"}
+
 
     = render 'shared/triggers/popups'
