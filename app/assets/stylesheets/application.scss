@@ -482,6 +482,14 @@ body {
   }
 }
 
+.onepager {
+  text-align: right;
+  padding-top: 40px;
+  a {
+    color: #555555 !important;
+  }
+}
+
 body.centred {
   .navbar.top {
     .navbar-inner { padding: 0 }
@@ -517,6 +525,11 @@ body.centred {
     }
   }
 }
+
+.how-can-i-help .muted {
+  color: #555555;
+}
+
 //-------------- Testing Sandbox ---------------
 //----------------------------------------------
 

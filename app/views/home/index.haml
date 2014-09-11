@@ -24,6 +24,9 @@
     .span5
       = image_tag "main-home.png"
 
+      .onepager
+        = icon_link_to :'icf-pdf', 'Download One-Pager pdf (1.15 MB)', 'OnePager.pdf', {target: '_blank'}
+
   - feature_carrousel do
     - feature_carrousel_item 'Design', image_class: 'icfl-settings' do
       your SMS application in minutes without programming
@@ -119,6 +122,22 @@
             .item= image_tag "home-tour05.gif"
             .item= image_tag "home-tour06.gif"
       .span1
+
+  %br
+  %br
+  %hr
+  %br
+  %br
+
+  .how-can-i-help
+    .row-fluid
+      .span12
+        %h3 How Can I Help?
+        %p.muted Got suggestions or feature requests? Join the discussion.
+        %p= icon_link_to :'icf-chat', 'Join our discussion list', 'https://groups.google.com/group/instedd-tech', {target: '_blank'}
+        %br
+        %p.muted Got a way with code? Help us develop our tools (and make the world a better place at the same time).
+        %p= icon_link_to :'icf-bulb', 'Visit our backlog', 'https://bitbucket.org/instedd/mbuilder/issues?status=new&status=open', {target: '_blank'}
 
 :javascript
   $(function(){

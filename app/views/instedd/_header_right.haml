@@ -1,11 +1,11 @@
 .pull-right
   - if current_user
-    - dropdown current_user.email do
-      - dropdown_item 'Settings', guisso_settings_path(:user), target: '_blank'
-      - dropdown_item 'Report a bug', "mailto:support@instedd.org?subject=[mBuilder-bug]"
-      - dropdown_divider
-      - dropdown_item 'Sign out', destroy_session_path(:user, after_sign_out_url: root_url), method: :delete
-    = icon_link_to :'icf-settings', '', guisso_settings_path(:user)
+    .btn-group
+      - dropdown current_user.email do
+        - dropdown_item 'Settings', guisso_settings_path(:user), target: '_blank'
+        - dropdown_item 'Report a bug', "mailto:support@instedd.org?subject=[mBuilder-bug]"
+        - dropdown_divider
+        - dropdown_item 'Sign out', destroy_session_path(:user, after_sign_out_url: root_url), method: :delete
   - else
     = icon_link_to :'icf-edit', 'Create Account', guisso_sign_up_path_for(:user), class: 'sign_up_link'
     = icon_link_to :'icf-user', 'Log In', guisso_sign_in_path_for(:user)
