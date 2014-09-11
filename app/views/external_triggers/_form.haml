@@ -41,4 +41,9 @@
       %button.btn{'ng-click' => 'save()'} Save
       = link_to "Cancel", application_message_triggers_path(application), class: "btn btn-link"
 
+      - if external_trigger.id
+        = icon_link_to :'icf-delete', 'Delete this trigger', "/applications/#{application.id}/message_triggers/#{external_trigger.id}", {method: :delete, class: "pull-right"}
+      - else
+        = icon_link_to :'icf-delete', 'Delete this trigger', "/applications/#{application.id}/message_triggers/", { class: "pull-right"}
+
       = render 'shared/triggers/popups'
