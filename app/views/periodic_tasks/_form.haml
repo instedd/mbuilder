@@ -19,12 +19,14 @@
         = render 'shared/triggers/actions'
       = render 'shared/triggers/tables'
 
-    %button.btn{'ng-click' => 'save()'} Save
-    = link_to "Cancel", application_message_triggers_path(application), class: "btn btn-link"
+    .row-fluid
+      .span6
+        %button.btn{'ng-click' => 'save()'} Save
+        = link_to "Cancel", application_message_triggers_path(application), class: "btn btn-link"
 
-    - if periodic_task.id
-      = icon_link_to :'icf-delete', 'Delete this trigger', "/applications/#{application.id}/message_triggers/#{periodic_task.id}", {method: :delete, class: "pull-right"}
-    - else
-      = icon_link_to :'icf-delete', 'Delete this trigger', "/applications/#{application.id}/message_triggers/", { class: "pull-right"}
+        - if periodic_task.id
+          = icon_link_to :'icf-delete', 'Delete this trigger', "/applications/#{application.id}/periodic_tasks/#{periodic_task.id}", {method: :delete, class: "pull-right"}
+        - else
+          = icon_link_to :'icf-delete', 'Delete this trigger', "/applications/#{application.id}/message_triggers/", { class: "pull-right"}
 
     = render 'shared/triggers/popups'
