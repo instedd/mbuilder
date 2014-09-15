@@ -22,8 +22,15 @@ angular.module('mbuilder').directive 'textpad', ->
           dom.text("???").addClass('unbound')
     )
 
+    skipPillInputChange = false
     pillInput.on 'pillinput:changed', ->
-      console.log(pillInput.value())
+      return if skipPillInputChange
+      skipPillInputChange = true
+      scope.$apply ->
+        scope.model.splice(0, scope.model.length)
+        for item in pillInput.value()
+          scope.model.push(pillInputValueToMbuilder(item))
+      skipPillInputChange = false
 
     svgInput = $('.svgInput', elem)
 
@@ -107,6 +114,13 @@ angular.module('mbuilder').directive 'textpad', ->
         pill.guid # pills here seems to store the text in the guid property. this is why patternpad != textpad
       else
         pill
+
+    pillInputValueToMbuilder = (value) ->
+      if typeof(value) == 'string'
+        {kind: 'text', guid: value}
+      else
+        value
+
 
     labelForMbuilderPill = (pill) ->
       return pill.text if pill.kind == 'literal'
