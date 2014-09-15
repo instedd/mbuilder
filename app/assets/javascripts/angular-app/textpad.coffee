@@ -22,6 +22,9 @@ angular.module('mbuilder').directive 'textpad', ->
           dom.text("???").addClass('unbound')
     )
 
+    pillInput.on 'pillinput:changed', ->
+      console.log(pillInput.value())
+
     svgInput = $('.svgInput', elem)
 
     scope.textselection = ''

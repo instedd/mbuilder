@@ -1,7 +1,15 @@
 class PillInput
+  # options
+  #  - renderPill: function(pill, pillDom)
+  #    manipulates pillDom in order to reflect pill
   constructor: (@dom, @options) ->
     @dom.attr('contentEditable', true)
+    @dom.on 'input', =>
+      @dom.trigger 'pillinput:changed'
     @safe_html = $('<div/>')
+
+  on: (eventName, callback) ->
+    @dom.on eventName, callback
 
   # [String | objects for pills]
   value: (value) ->
@@ -15,7 +23,17 @@ class PillInput
           innerHTML += @_renderObject(piece)
       @dom.html(innerHTML)
     else
-      # TODO val getter
+      $.map @dom.contents(), (elem) =>
+        if elem.nodeType == Node.TEXT_NODE
+          elem.textContent
+        else
+          @pillData($(elem))
+
+  pillData : (pillDom, object) ->
+    if arguments.length == 1
+      pillDom.data('pill-info')
+    else if arguments.length == 2
+      pillDom.attr('data-pill-info', JSON.stringify(object))
 
   _htmlEscape : (string) ->
     @safe_html.text(string).html()
@@ -25,7 +43,7 @@ class PillInput
       .addClass('pill')
       .attr('draggable', true)
       .attr('contentEditable', false)
-      .text('df')
+    @pillData(pillDom, object)
     @options.renderPill(object, pillDom)
     res = pillDom[0].outerHTML
     pillDom.remove()
