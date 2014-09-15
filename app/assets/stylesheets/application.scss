@@ -14,6 +14,7 @@
  *= require pigeon
  *= require bootstrap-timepicker
  *= require pill_editor
+ *= require pill_input
  */
 
 @import "instedd-bootstrap";
@@ -243,6 +244,7 @@ a.delete {
   margin-left: 4px;
   margin-right: 4px;
   cursor: move;
+  color: inherit;
 }
 
 .pill.new {

@@ -1,0 +1,22 @@
+.pillInput {
+  display: inline-block;
+  vertical-align: top;
+  border: 1px #CCCCCC solid;
+  border-radius: 3px;
+  overflow: auto;
+  padding: 5px;
+
+  width: 525px;
+  height: 60px;
+
+  background: white;
+
+  &:empty {
+    background: #EEEEEE !important;
+  }
+
+  &:focus {
+    border: 1px #999999 solid;
+    outline: none;
+  }
+}

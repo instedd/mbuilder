@@ -5,6 +5,23 @@ angular.module('mbuilder').directive 'textpad', ->
   }
   templateUrl: 'textpad'
   link: (scope, elem, attrs) ->
+    pillInput = new PillInput(
+      $('.pillInput', elem),
+      renderPill: (pill, dom) =>
+        if pill.kind == 'literal'
+          dom.text(pill.text).addClass('literal')
+          return
+
+        aggDesc = scope.$parent.aggregateLabel(pill.aggregate) || ""
+        pillDesc = scope.$parent.lookupPillName(pill)
+        if pillDesc
+          # TODO add span for aggDesc
+          # TODO menu support
+          dom.text(aggDesc + pillDesc).addClass('bound')
+        else
+          dom.text("???").addClass('unbound')
+    )
+
     svgInput = $('.svgInput', elem)
 
     scope.textselection = ''
@@ -21,6 +38,9 @@ angular.module('mbuilder').directive 'textpad', ->
         inputData.push(mbuilderToInputDataPill(pill))
       input.data(inputData)
       input.render()
+
+      pillInput.value(_.map(scopeModelCopy, mbuilderToPillInputValue))
+
 
       # update labels of pills
       # for pill, i in scopeModelCopy
@@ -78,6 +98,12 @@ angular.module('mbuilder').directive 'textpad', ->
             mbuilder_pill: pill
           }
         }
+
+    mbuilderToPillInputValue = (pill) ->
+      if pill.kind == 'text'
+        pill.guid # pills here seems to store the text in the guid property. this is why patternpad != textpad
+      else
+        pill
 
     labelForMbuilderPill = (pill) ->
       return pill.text if pill.kind == 'literal'
