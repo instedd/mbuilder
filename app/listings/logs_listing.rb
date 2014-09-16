@@ -30,7 +30,7 @@ class LogsListing < Listings::Base
     content_tag :ul do
       (log.actions_as_strings.map do |item|
         content_tag :li do
-          item
+          item[:text]
         end
       end).join.html_safe
     end

@@ -23,8 +23,8 @@
       %hr
       %label Performed actions
       %ul.p-actions
-        %li{'ng-repeat' => 'action in actions'}
-          {{action}}
+        %li{'ng-repeat' => 'action in actions', 'ng-class' => "{{action.kind}}" }
+          {{action.text}}
         / %li
         /   Create User, then store +54 (11) 4876 0917 as Phone number
         / %li
