@@ -30,6 +30,22 @@ describe Message do
     "register  Foo  bar  now".should_not match(msg.pattern)
   end
 
+  it "compiles message with single word with non-break whitespaces" do
+    # The ending space is the non-breaking space copy and pasted
+    # This was being added by the svg pill
+    msg = Message.from_hash({
+      'pieces' => [
+        {'kind' => 'text', 'text' => "\u00A0register "},
+        {'kind' => 'placeholder', 'text' => 'John'},
+        {'kind' => 'text', 'text' => ' now '},
+      ]
+    })
+    msg.pattern.source.should eq("\\A\\s*register\\s+([^0-9\s]\\S*)\\s+now\\s*\\Z")
+
+    "register Foo now".should match(msg.pattern)
+    "register  Foo  bar now".should_not match(msg.pattern)
+  end
+
   it "compiles message with single word disease code" do
     msg = Message.from_hash({
       'pieces' => [
