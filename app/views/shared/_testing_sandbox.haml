@@ -24,12 +24,5 @@
       %label Performed actions
       %ul.p-actions
         %li{'ng-repeat' => 'action in actions', 'ng-class' => "{{action.kind}}" }
+          %i
           {{action.text}}
-        / %li
-        /   Create User, then store +54 (11) 4876 0917 as Phone number
-        / %li
-        /   Store john doe as Name
-        / %li
-        /   To: +54 (11) 4876 0917
-        /   %br
-        /   Thanks for registering john doe

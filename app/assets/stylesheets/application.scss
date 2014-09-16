@@ -609,6 +609,56 @@ hr.shadow {
 input:-moz-placeholder { font-style: italic; }
 
 
+.p-actions {
+  padding: 0;
+  margin: 10px 0;
+
+  li {
+    background: url("t-sand-sep.png") no-repeat center top;
+    list-style: none;
+    margin: 0;
+    padding: 10px 0;
+
+    i {
+      background-image: url("icons-40x40.png");
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      vertical-align: middle;
+      background-position: 40px 40px;
+      background-repeat: no-repeat;
+      background-position-y: -80px !important;
+    }
+
+    &[ng-class="send_message"] i {
+      @extend .i40-sms;
+    }
+
+    &[ng-class="insert"] i {
+      @extend .i40-intdata;
+    }
+
+    &[ng-class="update"] i {
+      @extend .i40-loop;
+    }
+
+    &[ng-class="invalid_value"] i {
+      @extend .i40-condition;
+    }
+
+    &[ng-class="info"] i {
+      @extend .i40-rarrow;
+    }
+
+    &[ng-class="error"] i {
+      @extend .i40-loop;
+    }
+    &:first-child {
+      background: none;
+    }
+  }
+}
 
 //-------------- Icons --------------------
 //-----------------------------------------
@@ -652,3 +702,4 @@ input:-moz-placeholder { font-style: italic; }
 .i40-loop               { background-position: -240px    0; }
 .i40-group              { background-position: -280px    0; }
 .i40-extdata            { background-position: -320px    0; }
+.i40-rarrow             { background-position: -360px    0; }
