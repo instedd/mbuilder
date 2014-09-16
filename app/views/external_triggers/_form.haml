@@ -7,34 +7,34 @@
   %div{'ng-controller' => 'ExternalTriggerController', 'ng-init' => external_trigger_to_angular(application, external_trigger)}
     %div{'ng-controller' => 'TriggerController'}
       .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)', 'ng-mouseup' => 'mouseDropOverBoard($event)', 'ng-mouseenter' => 'mouseEnterOverBoard($event)'}
-        %div.span6
-          %div
-            %label{for: :name} Trigger name
-            %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name"}
-
-          %div
-            %label{for: :message} When a post to this url is received:
-            .message-container
-              .from
-                %strong
-                  = "#{root_url}external/application/#{application.id}/trigger/{{$parent.name}}?"
-                  %span{'ng-repeat' => 'pill in parameters'}
-                    {{pill.name}}=
-                    %span(ng-include src='pillTemplateFor(pill)')
-                    &
+        .span6
+          %label{for: :name} Trigger name
+          %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name", class: 'span12 n'}
+          %br
+          %br
+          %label{for: :message} When a post to this url is received:
+          .message-container
+            .from
+              %strong
+                = "#{root_url}external/application/#{application.id}/trigger/{{$parent.name}}?"
+                %span{'ng-repeat' => 'pill in parameters'}
+                  {{pill.name}}=
+                  %span(ng-include src='pillTemplateFor(pill)')
+                  &
+            %div
               %span{'ng-repeat' => 'pill in parameters'}
-                .message-container
+                %div
                   %input{:'ng-model'=>"pill.name", :type=>"text"}
                   \=
                   %span(ng-include src='pillTemplateFor(pill)')
                   %a.delete{href: 'javascript:', 'ng-click' => 'deleteParameter($index)'} x
                 .space-between-actions
-              %a{'ng-click' => 'addParameter()', href: 'javascript:'} [+] Add additional parameter
+              = icon_link_to :'icc-add', 'Add additional parameter', 'javascript:', {:class => 'blue', 'ng-click' => 'addParameter()'}
               .received-at
                 %strong Received at:
                 .pill.bound{draggable: 'true', dragstart: 'receivedAtDragStart($event)'}
                   yyyymmdd
-
+          %br
           = render 'shared/triggers/actions'
         = render 'shared/triggers/tables'
 

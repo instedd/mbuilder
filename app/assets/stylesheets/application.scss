@@ -410,6 +410,9 @@ body {
     display: block;
   }
 }
+.received-at {
+  margin-top: 8px;
+}
 
 //-------------------- Classes -----------------------
 //----------------------------------------------------
@@ -456,7 +459,6 @@ body {
 
   .btn-create {
     @extend .btn;
-    @extend .btn-medium;
     @extend .btn-warning;
     @include gradient-vertical(#fe973a, #ff6600);
     color: $white !important;
