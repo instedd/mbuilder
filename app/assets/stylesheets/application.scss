@@ -196,6 +196,17 @@ input.n {
     }
   }
 }
+.if,
+.foreach {
+
+  > div.ng-scope {
+    margin-left: 30px;
+  }
+  .ng-scope + .ng-scope {
+    background: url("action-separator-in.png") no-repeat center top;
+    padding-top: 20px;
+  }
+}
 
 .space-between-actions {
   height: 20px;
