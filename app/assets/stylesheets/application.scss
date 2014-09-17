@@ -165,6 +165,7 @@ input.n {
 
     i[class^="i25-"] {
       background-position-y: -25px;
+      background-color: #cae3f1;
     }
 
     i[class^="i40-"] {
@@ -205,6 +206,47 @@ input.n {
   .ng-scope + .ng-scope {
     background: url("action-separator-in.png") no-repeat center top;
     padding-top: 20px;
+  }
+}
+
+.if.ng-scope {
+  background-image:url("back-if.png");
+  background-repeat: repeat-y;
+  background-position: 12px 10px;
+
+  .i25-condition {
+    background-color: #ffffff;
+  }
+
+  &:after {
+    content:'';
+    display: table;
+    background: url("back-if-arrow.png")no-repeat;
+    width: 14px;
+    height: 12px;
+    margin-left: 12px;
+    margin-top: -5px;
+    float: left;
+  }
+}
+.foreach.ng-scope {
+  background-image:url("back-foreach.png");
+  background-repeat: repeat-y;
+  background-position: 14px 10px;
+
+  .i25-loop {
+    background-color: #ffffff;
+  }
+
+  &:after {
+    content:'';
+    display: table;
+    background: url("back-foreach-arrow.png")no-repeat;
+    width: 14px;
+    height: 12px;
+    margin-left: 14px;
+    margin-top: -5px;
+    float: left;
   }
 }
 
