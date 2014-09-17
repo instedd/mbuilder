@@ -19,7 +19,8 @@ class MessagePiece
     case kind
     when "text"
       # Striping and removing non-breaking spaces
-      striped_text = text.strip.gsub("\u00A0", "")
+      striped_text = text.gsub("\u00A0", " ").strip
+
       pattern << Regexp.escape(striped_text)
     when "placeholder"
       pattern << "("
