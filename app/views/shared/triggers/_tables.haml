@@ -38,11 +38,11 @@
             %td{'ng-hide' => 'table.readonly'}
     %br
   %div
-    = icon_link_to :'icf-add', 'New table', 'javascript:', {'ng-click' => 'newTable()'}
+    = icon_link_to :'icf-add', 'New data', 'javascript:', {'ng-click' => 'newTable()'}
     %br
     %br
     %div{'ng-controller' => 'ResourceMapController'}
-      = icon_link_to :'icf-add', 'Add a Resource Map collection', 'javascript:', {'ng-click' => 'listCollections($event)'}
+      = icon_link_to :'icf-connect', 'Add a Resource Map collection', 'javascript:', {'ng-click' => 'listCollections($event)'}
       %div#add-resource-map-collection.popup
         %div{'ng-show' => 'loading'}
           Loading...

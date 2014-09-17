@@ -651,19 +651,23 @@ input:-moz-placeholder { font-style: italic; }
     }
 
     &[ng-class="update"] i {
-      @extend .i40-loop;
-    }
-
-    &[ng-class="invalid_value"] i {
-      @extend .i40-condition;
+      @extend .i40-intdata;
     }
 
     &[ng-class="info"] i {
       @extend .i40-rarrow;
     }
 
+    &[ng-class="invalid_value"] i {
+      @extend .i40-invalid;
+    }
+
     &[ng-class="error"] i {
-      @extend .i40-loop;
+      @extend .i40-error;
+    }
+
+    &[ng-class="warning"] i {
+      @extend .i40-error;
     }
     &:first-child {
       background: none;
@@ -714,3 +718,5 @@ input:-moz-placeholder { font-style: italic; }
 .i40-group              { background-position: -280px    0; }
 .i40-extdata            { background-position: -320px    0; }
 .i40-rarrow             { background-position: -360px    0; }
+.i40-error              { background-position: -400px    0; }
+.i40-invalid            { background-position: -440px    0; }
