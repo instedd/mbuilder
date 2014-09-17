@@ -17,5 +17,5 @@
         .modal-body
           When deleting the foreach, do you want to also delete its actions or to keep them?
         .modal-footer
-          %button.btn.btn-primary{'ng-click' => 'modalDeleteForeachAndActions()'} Delete foreach and its actions
-          %button.btn.btn-primary{'ng-click' => 'modalDeleteForeachKeepActions()'} Delete foreach, keep its actions
+          %button.btn.btn-danger{'ng-click' => 'modalDeleteForeachAndActions()'} Delete foreach and its actions
+          %button.btn{'ng-click' => 'modalDeleteForeachKeepActions()'} Delete foreach, keep its actions
