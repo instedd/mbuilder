@@ -114,7 +114,7 @@ input.n {
 
   > .space-between-actions + div .action {
     background-image:none !important;
-    &.selected:before {
+/*    &.selected:before {
       @include border-radius(5px 5px 0 0);
       content:'';
       display: block;
@@ -125,7 +125,7 @@ input.n {
       margin-left: -10px;
       padding-right: 10px;
       position: relative;
-    }
+    }*/
   }
   > div[ng-repeat^="action"] > .action {
     background: url("action-separator.png") no-repeat center top;
@@ -133,7 +133,7 @@ input.n {
     &.selected {
       background-color: #cae3f1;
       + .space-between-actions {
-        background-color: #cae3f1;
+        /*background-color: #cae3f1;*/
         position: relative;
         &:after {
           content:'';
@@ -148,6 +148,10 @@ input.n {
           border-width: 7px 15px 0 15px;
           border-color: #cae3f1 transparent transparent transparent;
         }
+      }
+      .pill {
+        background: #ffffff;
+        border-color: #cdcccc;
       }
     }
   }
@@ -251,7 +255,8 @@ input.n {
 }
 
 .space-between-actions {
-  height: 20px;
+  @include transition(all ease 0.3s);
+  height: 0px;
   width: 100%;
 }
 
@@ -276,76 +281,6 @@ a.delete {
   }
 }
 
-.pill {
-  @include border-radius(4px);
-  padding-left: 4px;
-  padding-right: 4px;
-  display: inline-block;
-}
-
-.pill.sample {
-  border: 1px solid #ddd;
-  background: #ddd;
-  margin-left: 4px;
-  margin-right: 4px;
-}
-
-.pill.bound {
-  border: 1px solid #ddd;
-  background: #ddd;
-  margin-left: 4px;
-  margin-right: 4px;
-  cursor: move;
-}
-
-.pill.new {
-  border: 1px dashed #ddd;
-  color: #aaa;
-}
-
-.pill.field {
-  border: 1px dashed #ddd;
-  color: #999;
-  background: #f3f3f3;
-  cursor: move;
-}
-
-.pill.unbound {
-  border: 1px dashed red;
-  color: #ff6666;
-  background-color: #ffeeee;
-  cursor: move;
-}
-
-.pill.table-ref {
-  border: 1px solid #999;
-  background: #f9f9f9;
-  margin-left: 4px;
-  margin-right: 4px;
-}
-
-.pill.field-ref {
-  border: 1px solid #ddd;
-  background: #f9f9f9;
-  margin-left: 4px;
-  margin-right: 4px;
-}
-
-.pill.literal {
-  border: 1px solid #ddd;
-  background: #f1FFf1;
-  margin-left: 4px;
-  margin-right: 4px;
-  height: 20px !important;
-  cursor: move;
-}
-
-.pill.literal input {
-  margin: 0;
-  padding: 0;
-  margin-top: -2px;
-  height: 18px !important;
-}
 
 .text {
   display: inline-block;
@@ -465,6 +400,188 @@ body {
 }
 .received-at {
   margin-top: 8px;
+}
+
+
+//-------------------- Dragging ----------------------
+//----------------------------------------------------
+body {
+  &.dragging-table,
+  &.dragging-action {
+
+    .action-container > .space-between-actions,
+    .action-container > div > .space-between-actions {
+      @include transition(all ease 0.3s);
+      height: 34px;
+      position: relative;
+
+      &:before {
+        content:'';
+        display: block;
+        margin: 2px 10px;
+        background: #cae3f1;
+        height: 14px;
+        @include border-radius(4px);
+        border: 1px dashed #5ba0d3;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+      }
+
+      &:after {
+        content: 'drop here';
+        display: block;
+        font-size: 11px;
+        color: #5ba0d3;
+        position: absolute;
+        width: 100%;
+        top: 11px;
+        text-align: center;
+      }
+    }
+  }
+
+  &.dragging-pill {
+    .pill:not(.table-ref) {
+      border-color: #1e86c8;
+      background-color: #cae3f1;
+    }
+    .pill.new,
+    .pill.literal span,
+    .pill.field {
+      color: #1e86c8 !important;
+    }
+  }
+}
+
+
+
+//-------------------- Pills -------------------------
+//----------------------------------------------------
+
+.pill {
+  @include border-radius(15px);
+  padding: 2px 8px;
+  display: inline-block;
+  line-height: 20px;
+
+  &.sample {
+    border: 1px solid transparent;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  &.bound {
+    border: 1px solid transparent;
+    margin-left: 4px;
+    margin-right: 4px;
+    cursor: move;
+  }
+
+  &.new {
+    border: 1px dashed transparent;
+    color: #aaa;
+  }
+
+  &.field {
+    border: 1px dashed transparent;
+    line-height: 20px;
+    color: #999;
+    padding: 2px 14px;
+    cursor: move;
+  }
+
+  &.unbound {
+    border: 1px dashed transparent;
+    color: #ff6666;
+    cursor: move;
+  }
+
+  &.table-ref {
+    border: 1px solid transparent;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  &.field-ref {
+    border: 1px solid transparent;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  &.literal {
+    border: 1px solid transparent;
+    margin-left: 4px;
+    margin-right: 4px;
+    height: 20px !important;
+    cursor: move;
+  }
+
+  &.literal input {
+    margin: 0;
+    padding: 0;
+    margin-top: -2px;
+    height: 18px !important;
+  }
+}
+
+.action:hover,
+.message-container:hover {
+
+  .pill {
+
+    &.sample {
+      border: 1px solid #ddd;
+      /*background: #ddd;*/
+    }
+
+    &.bound {
+      border: 1px solid #ddd;
+      /*background: #ddd;*/
+      cursor: move;
+    }
+
+    &.new {
+      border: 1px dashed #ddd;
+      color: #aaa;
+    }
+
+    &.field {
+      border: 1px dashed #ddd;
+      color: #999;
+      /*background: #f3f3f3;*/
+      cursor: move;
+    }
+
+    &.unbound {
+      border: 1px dashed red;
+      color: #ff6666;
+      /*background-color: #ffeeee;*/
+      cursor: move;
+    }
+
+    &.table-ref {
+      border: 1px solid #999;
+      /*background: #f9f9f9;*/
+    }
+
+    &.field-ref {
+      border: 1px solid #ddd;
+      /*background: #f9f9f9;*/
+    }
+
+    &.literal {
+      border: 1px solid #ddd;
+      background: #e8e7e7;
+      cursor: move;
+    }
+
+    &.literal input {
+    }
+  }
+
 }
 
 //-------------------- Classes -----------------------
@@ -762,3 +879,76 @@ input:-moz-placeholder { font-style: italic; }
 .i40-rarrow             { background-position: -360px    0; }
 .i40-error              { background-position: -400px    0; }
 .i40-invalid            { background-position: -440px    0; }
+
+
+/*
+.pill {
+  @include border-radius(4px);
+  padding-left: 4px;
+  padding-right: 4px;
+  display: inline-block;
+
+  &.sample {
+    border: 1px solid #ddd;
+    background: #ddd;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  &.bound {
+    border: 1px solid #ddd;
+    background: #ddd;
+    margin-left: 4px;
+    margin-right: 4px;
+    cursor: move;
+  }
+
+  &.new {
+    border: 1px dashed #ddd;
+    color: #aaa;
+  }
+
+  &.field {
+    border: 1px dashed #ddd;
+    color: #999;
+    background: #f3f3f3;
+    cursor: move;
+  }
+
+  &.unbound {
+    border: 1px dashed red;
+    color: #ff6666;
+    background-color: #ffeeee;
+    cursor: move;
+  }
+
+  &.table-ref {
+    border: 1px solid #999;
+    background: #f9f9f9;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  &.field-ref {
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  &.literal {
+    border: 1px solid #ddd;
+    background: #f1FFf1;
+    margin-left: 4px;
+    margin-right: 4px;
+    height: 20px !important;
+    cursor: move;
+  }
+
+  &.literal input {
+    margin: 0;
+    padding: 0;
+    margin-top: -2px;
+    height: 18px !important;
+  }
+}*/
