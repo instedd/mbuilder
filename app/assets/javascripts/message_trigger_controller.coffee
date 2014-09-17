@@ -10,10 +10,12 @@ angular.module('mbuilder').controller 'MessageTriggerController', ['$scope', '$h
   $scope.phoneNumberDragStart = (event) ->
     window.draggedPill = {kind: "placeholder", guid: "phone_number"}
     event.dataTransfer.setData("Text", $scope.from)
+    $scope.$broadcast 'dragStart'
 
   $scope.receivedAtDragStart = (event) ->
     window.draggedPill = {kind: "placeholder", guid: "received_at"}
     event.dataTransfer.setData("Text", 'yyyymmdd')
+    $scope.$broadcast 'dragStart'
 
   $scope.$on 'onPatternpadPicesChanged', ->
     $scope.$broadcast 'onAllPillsChanged'

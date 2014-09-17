@@ -255,6 +255,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
   $scope.actionDragStart = (scope, action, index, event) ->
     window.draggedAction = {scope: scope, action: action, index: index}
     window.draggedPill = null
+    $scope.$emit 'dragStart'
 
     event.stopPropagation()
 
