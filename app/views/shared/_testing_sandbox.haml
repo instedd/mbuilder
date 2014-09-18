@@ -23,6 +23,6 @@
       %hr
       %label Performed actions
       %ul.p-actions
-        %li{'ng-repeat' => 'action in actions', 'ng-class' => "{{action.kind}}" }
+        %li{'ng-repeat' => 'action in actions', 'class' => "{{action.kind}}" }
           %i
           {{action.text}}

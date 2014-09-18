@@ -1,5 +1,5 @@
-.space-between-actions{'dragover' => 'dragOverSpaceBetweenActions($event)', 'drop' => 'dropOverSpaceBetweenActions(0, $event)', 'ng-click' => 'unselectAction()', 'ng-mouseup' => 'mouseDropOverSpaceBetweenActions(0, $event)', 'ng-mouseenter' => 'mouseEnterOverSpaceBetweenActions($event)'}
-%div{'ng-repeat' => 'action in actions'}
+.space-between-actions.padded{'dragover' => 'dragOverSpaceBetweenActions($event)', 'drop' => 'dropOverSpaceBetweenActions(0, $event)', 'ng-click' => 'unselectAction()', 'ng-mouseup' => 'mouseDropOverSpaceBetweenActions(0, $event)', 'ng-mouseenter' => 'mouseEnterOverSpaceBetweenActions($event)'}
+.a-container{'ng-repeat' => 'action in actions'}
   .action{draggable: 'true', dragstart: 'actionDragStart(this, action, $index, $event)', dragend: 'actionDragEnd($event)', 'ng-class' => '{selected: actionIsSelected(action)}', 'ng-click' => 'selectAction(action, $event)', 'class' => '{{action.kind}}'}
     %a.delete{href: 'javascript:', 'ng-click' => 'deleteAction($index)'}
       %i.icf-delete

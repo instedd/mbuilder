@@ -114,20 +114,8 @@ input.n {
 
   > .space-between-actions + div .action {
     background-image:none !important;
-/*    &.selected:before {
-      @include border-radius(5px 5px 0 0);
-      content:'';
-      display: block;
-      background: #cae3f1;
-      height: 35px;
-      width: 100%;
-      margin-top: -35px;
-      margin-left: -10px;
-      padding-right: 10px;
-      position: relative;
-    }*/
   }
-  > div[ng-repeat^="action"] > .action {
+  > .a-container > .action {
     background: url("action-separator.png") no-repeat center top;
 
     &.selected {
@@ -162,6 +150,10 @@ input.n {
 
   &:active {
     background: #e8e7e7 !important;
+
+    i[class^="i25-"] {
+      background-color: #e8e7e7;
+    }
   }
 
   &.selected {
@@ -204,10 +196,11 @@ input.n {
 .if,
 .foreach {
 
-  > div.ng-scope {
+  > .a-container,
+  > .space-between-actions {
     margin-left: 30px;
   }
-  .ng-scope + .ng-scope {
+  .a-container + .a-container {
     background: url("action-separator-in.png") no-repeat center top;
     padding-top: 20px;
   }
@@ -257,7 +250,9 @@ input.n {
 .space-between-actions {
   @include transition(all ease 0.3s);
   height: 0px;
-  width: 100%;
+  &:hover {
+    background:blue;
+  }
 }
 
 .new-action {
@@ -409,8 +404,7 @@ body {
   &.dragging-table,
   &.dragging-action {
 
-    .action-container > .space-between-actions,
-    .action-container > div > .space-between-actions {
+    .space-between-actions {
       @include transition(all ease 0.3s);
       height: 34px;
       position: relative;
@@ -453,6 +447,38 @@ body {
     .pill.field {
       color: #1e86c8 !important;
     }
+
+    .space-between-actions {
+      height: 34px;
+      position: relative;
+
+      &:before {
+        content:'';
+        display: block;
+        margin: 2px 10px;
+        background: #cae3f1;
+        height: 14px;
+        @include border-radius(4px);
+        border: 1px dashed #5ba0d3;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+      }
+
+      &:after {
+        content: 'drop here';
+        display: block;
+        font-size: 11px;
+        color: #5ba0d3;
+        position: absolute;
+        width: 100%;
+        top: 11px;
+        text-align: center;
+      }
+    }
+
   }
 }
 
@@ -801,31 +827,31 @@ input:-moz-placeholder { font-style: italic; }
       background-position-y: -80px !important;
     }
 
-    &[ng-class="send_message"] i {
+    &.send_message i {
       @extend .i40-sms;
     }
 
-    &[ng-class="insert"] i {
+    &.insert i {
       @extend .i40-intdata;
     }
 
-    &[ng-class="update"] i {
+    &.update i {
       @extend .i40-intdata;
     }
 
-    &[ng-class="info"] i {
+    &.info i {
       @extend .i40-rarrow;
     }
 
-    &[ng-class="invalid_value"] i {
+    &.invalid_value i {
       @extend .i40-invalid;
     }
 
-    &[ng-class="error"] i {
+    &.error i {
       @extend .i40-error;
     }
 
-    &[ng-class="warning"] i {
+    &.warning i {
       @extend .i40-error;
     }
     &:first-child {
@@ -880,75 +906,3 @@ input:-moz-placeholder { font-style: italic; }
 .i40-error              { background-position: -400px    0; }
 .i40-invalid            { background-position: -440px    0; }
 
-
-/*
-.pill {
-  @include border-radius(4px);
-  padding-left: 4px;
-  padding-right: 4px;
-  display: inline-block;
-
-  &.sample {
-    border: 1px solid #ddd;
-    background: #ddd;
-    margin-left: 4px;
-    margin-right: 4px;
-  }
-
-  &.bound {
-    border: 1px solid #ddd;
-    background: #ddd;
-    margin-left: 4px;
-    margin-right: 4px;
-    cursor: move;
-  }
-
-  &.new {
-    border: 1px dashed #ddd;
-    color: #aaa;
-  }
-
-  &.field {
-    border: 1px dashed #ddd;
-    color: #999;
-    background: #f3f3f3;
-    cursor: move;
-  }
-
-  &.unbound {
-    border: 1px dashed red;
-    color: #ff6666;
-    background-color: #ffeeee;
-    cursor: move;
-  }
-
-  &.table-ref {
-    border: 1px solid #999;
-    background: #f9f9f9;
-    margin-left: 4px;
-    margin-right: 4px;
-  }
-
-  &.field-ref {
-    border: 1px solid #ddd;
-    background: #f9f9f9;
-    margin-left: 4px;
-    margin-right: 4px;
-  }
-
-  &.literal {
-    border: 1px solid #ddd;
-    background: #f1FFf1;
-    margin-left: 4px;
-    margin-right: 4px;
-    height: 20px !important;
-    cursor: move;
-  }
-
-  &.literal input {
-    margin: 0;
-    padding: 0;
-    margin-top: -2px;
-    height: 18px !important;
-  }
-}*/
