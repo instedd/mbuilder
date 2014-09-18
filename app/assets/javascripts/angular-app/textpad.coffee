@@ -164,6 +164,7 @@ angular.module('mbuilder').directive 'textpad', ->
 
     input.addEventListener Event.DRAG, (e) ->
       window.draggedPill = inputDataToMbuilderPill(e.info.pill)
+      scope.$emit 'dragStart'
       phantom = document.body.appendChild(e.info.phantom)
       phantom.style.position = "absolute"
       phantom.style.opacity = 0.5
@@ -189,4 +190,5 @@ angular.module('mbuilder').directive 'textpad', ->
         pill = mbuilderToInputDataPill(window.draggedPill)
         input.insertPillAtCaret(pill.id, pill.label, pill.text, pill.hasMenu, pill.data)
       window.draggedPill = null
+      scope.$emit 'dragEnd'
 
