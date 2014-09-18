@@ -1,4 +1,4 @@
-angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '$document', ($scope, $http, $document) ->
+angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '$document', '$timeout', ($scope, $http, $document, $timeout) ->
   $scope.tableAndFieldRebinds = []
 
   $scope.aggregateFunctionPopup = { pill: null }
@@ -179,12 +179,18 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
   $scope.$on 'dragStart', (event) ->
     if window.draggedPill?
       if window.draggedPill.kind == 'table_ref'
-        body.addClass 'dragging-table'
+        $timeout( ->
+          body.addClass 'dragging-table'
+        , 200)
       else
-        body.addClass 'dragging-pill'
+        $timeout( ->
+          body.addClass 'dragging-pill'
+        , 200)
 
     if window.draggedAction?
-      body.addClass 'dragging-action'
+      $timeout( ->
+        body.addClass 'dragging-action'
+      , 200)
 
   $scope.$on 'dragEnd', (event) ->
     body.removeClass('dragging-table').removeClass('dragging-pill').removeClass('dragging-action')

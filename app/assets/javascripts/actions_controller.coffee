@@ -177,6 +177,12 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     false
 
+  $scope.dragEnterSpaceBetweenActions = (event) ->
+    $(event.target).addClass('drop-preview')
+
+  $scope.dragLeaveSpaceBetweenActions = (event) ->
+    $(event.target).removeClass('drop-preview')
+
   $scope.dropOverSpaceBetweenActions = (index, event) ->
     if window.draggedAction
       window.draggedAction.scope.actions.splice window.draggedAction.index, 1

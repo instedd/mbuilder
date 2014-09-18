@@ -250,9 +250,6 @@ input.n {
 .space-between-actions {
   @include transition(all ease 0.3s);
   height: 0px;
-  &:hover {
-    background:blue;
-  }
 }
 
 .new-action {
@@ -478,7 +475,19 @@ body {
         text-align: center;
       }
     }
+  }
 
+  &.dragging-table,
+  &.dragging-action,
+  &.dragging-pill {
+    .space-between-actions {
+      &.drop-preview:before {
+        background: darken(#cae3f1, 15%);
+      }
+      &.drop-preview:after {
+        color: $white;
+      }
+    }
   }
 }
 
