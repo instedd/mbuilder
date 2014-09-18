@@ -158,6 +158,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
   $scope.dragPill = (pill) ->
     window.draggedPill = pill
     event.dataTransfer.setData("Text", $scope.lookupPillName(pill))
+    event.stopPropagation()
     $scope.$emit 'dragStart'
 
   $scope.fieldValueDragStart = (fieldGuid) ->
