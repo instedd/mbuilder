@@ -232,11 +232,17 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     false
 
   $scope.mouseEnterOverSpaceBetweenActions = (event) ->
-    $(event.target).closest('.space-between-actions').toggleClass('dropzone', window.draggedPill != null)
+    $(event.target).closest('.space-between-actions')
+      .toggleClass('dropzone', window.draggedPill != null)
+      .toggleClass('drop-preview', window.draggedPill != null)
 
   $scope.mouseDropOverSpaceBetweenActions = (index, event) ->
-    $(event.target).closest('.space-between-actions').removeClass('dropzone')
+    $(event.target).closest('.space-between-actions').removeClass('dropzone').removeClass('drop-preview')
+
     $scope.dropOverSpaceBetweenActions(index, event)
+
+  $scope.mouseLeaveSpaceBetweenActions = (event) ->
+    $(event.target).closest('.space-between-actions').removeClass('dropzone').removeClass('drop-preview')
 
   $scope.actionMentionsTable = (action, table) ->
     switch action.kind
