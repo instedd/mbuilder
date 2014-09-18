@@ -187,7 +187,6 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
       body.addClass 'dragging-action'
 
   $scope.$on 'dragEnd', (event) ->
-    console.log 'drag end'
     body.removeClass('dragging-table').removeClass('dragging-pill').removeClass('dragging-action')
 
   $scope.dragOverUnboundPill = (pill, event) ->
