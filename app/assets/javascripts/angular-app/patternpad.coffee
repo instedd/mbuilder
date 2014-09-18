@@ -97,6 +97,7 @@ angular.module('mbuilder').directive 'patternpad', ->
 
     input.addEventListener Event.DRAG, (e) ->
       window.draggedPill = inputDataToMbuilderPill(e.info.pill)
+      scope.$emit 'dragStart'
       phantom = document.body.appendChild(e.info.phantom)
       phantom.style.position = "absolute"
       phantom.style.opacity = 0.5
@@ -113,3 +114,5 @@ angular.module('mbuilder').directive 'patternpad', ->
       if e.info.localDragAndDrop
         ensureSpacesAroundPills()
         window.draggedPill = null
+      scope.$emit 'dragEnd'
+

@@ -1,4 +1,4 @@
-angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', ($scope, $http) ->
+angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '$document', ($scope, $http, $document) ->
   $scope.tableAndFieldRebinds = []
 
   $scope.aggregateFunctionPopup = { pill: null }
@@ -158,18 +158,36 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
   $scope.dragPill = (pill) ->
     window.draggedPill = pill
     event.dataTransfer.setData("Text", $scope.lookupPillName(pill))
+    $scope.$emit 'dragStart'
 
   $scope.fieldValueDragStart = (fieldGuid) ->
     window.draggedPill = {kind: 'field_value', guid: fieldGuid}
     event.dataTransfer.setData("Text", $scope.lookupFieldName(fieldGuid))
+    $scope.$emit 'dragStart'
 
   $scope.tableDragStart = (tableGuid, event) ->
     window.draggedPill = {kind: 'table_ref', guid: tableGuid}
     event.dataTransfer.setData("Text", $scope.lookupTableName(tableGuid))
+    $scope.$emit 'dragStart'
 
   $scope.fieldDragStart = (fieldGuid, event) ->
     window.draggedPill = {kind: 'field_value', guid: fieldGuid}
     event.dataTransfer.setData("Text", $scope.lookupFieldName(fieldGuid))
+    $scope.$emit 'dragStart'
+
+  body = $document.find('body')
+  $scope.$on 'dragStart', (event) ->
+    if window.draggedPill?
+      if window.draggedPill.kind == 'table_ref'
+        body.addClass 'dragging-table'
+      else
+        body.addClass 'dragging-pill'
+
+    if window.draggedAction?
+      body.addClass 'dragging-action'
+
+  $scope.$on 'dragEnd', (event) ->
+    body.removeClass('dragging-table').removeClass('dragging-pill').removeClass('dragging-action')
 
   $scope.dragOverUnboundPill = (pill, event) ->
     event.preventDefault()
@@ -225,6 +243,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', (
 
   $scope.dropOverBoard = (event) ->
     window.draggedPill = null
+    $scope.$emit 'dragEnd'
     false
 
   $scope.mouseDropOverBoard = (event) ->

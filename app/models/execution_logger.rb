@@ -75,7 +75,7 @@ class ExecutionLogger < ActiveRecord::Base
 
   def actions_as_strings
     (actions || []).map do |action|
-      case action[0]
+      text = case action[0]
       when :insert
         kind, table_guid, properties = action
         table = find_table(table_guid)
@@ -99,6 +99,8 @@ class ExecutionLogger < ActiveRecord::Base
         kind, to, body = action
         "Send message to #{to}: #{body}"
       end
+
+      {kind: action[0], text: text}
     end
   end
 end

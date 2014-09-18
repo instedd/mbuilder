@@ -2,10 +2,12 @@ angular.module('mbuilder').controller 'ValidationTriggerController', ['$scope', 
   $scope.phoneNumberDragStart = (event) ->
     window.draggedPill = {kind: "placeholder", guid: "phone_number"}
     event.dataTransfer.setData("Text", $scope.invalid_value)
+    $scope.$broadcast 'dragStart'
 
   $scope.invalidValueDragStart = (event) ->
     window.draggedPill = {kind: "placeholder", guid: "invalid_value"}
     event.dataTransfer.setData("Text", $scope.invalid_value)
+    $scope.$broadcast 'dragStart'
 
   $scope.allPills = ->
     $scope.implicitPills()

@@ -21,6 +21,7 @@ angular.module('mbuilder').controller 'ExternalTriggerController', ['$scope', '$
   $scope.receivedAtDragStart = (event) ->
     window.draggedPill = {kind: "placeholder", guid: "received_at"}
     event.dataTransfer.setData("Text", 'yyyymmdd')
+    $scope.$broadcast 'dragStart'
 
   $scope.save = ->
     data =

@@ -18,7 +18,10 @@ class MessagePiece
   def append_pattern(pattern, index, total)
     case kind
     when "text"
-      pattern << Regexp.escape(text.strip)
+      # Striping and removing non-breaking spaces
+      striped_text = text.gsub("\u00A0", " ").strip
+
+      pattern << Regexp.escape(striped_text)
     when "placeholder"
       pattern << "("
       case infer_pattern
