@@ -5,7 +5,8 @@ class MessagePiece
 
   def initialize(kind, text, guid)
     @kind = kind
-    @text = text
+    # Striping and removing non-breaking spaces
+    @text = text.gsub("\u00A0", " ").strip
     @guid = guid
   end
 
@@ -18,10 +19,7 @@ class MessagePiece
   def append_pattern(pattern, index, total)
     case kind
     when "text"
-      # Striping and removing non-breaking spaces
-      striped_text = text.gsub("\u00A0", " ").strip
-
-      pattern << Regexp.escape(striped_text)
+      pattern << Regexp.escape(text)
     when "placeholder"
       pattern << "("
       case infer_pattern
