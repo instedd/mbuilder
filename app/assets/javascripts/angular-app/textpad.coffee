@@ -205,16 +205,16 @@ angular.module('mbuilder').directive 'textpad', ->
       phantom.style.left = mouse.x + "px"
       phantom.style.top = mouse.y + "px"
 
-    input.addEventListener Event.DRAG, (e) ->
-      window.draggedPill = inputDataToMbuilderPill(e.info.pill)
-      scope.$emit 'dragStart'
-      phantom = document.body.appendChild(e.info.phantom)
-      phantom.style.position = "absolute"
-      phantom.style.opacity = 0.5
-      phantom.style.left = e.info.mouseX + "px"
-      phantom.style.top = e.info.mouseY + "px"
-      phantom.style.zIndex = 100;
-      window.addEventListener("mousemove", mouseHandler)
+    # input.addEventListener Event.DRAG, (e) ->
+    #   window.draggedPill = inputDataToMbuilderPill(e.info.pill)
+    #   scope.$emit 'dragStart'
+    #   phantom = document.body.appendChild(e.info.phantom)
+    #   phantom.style.position = "absolute"
+    #   phantom.style.opacity = 0.5
+    #   phantom.style.left = e.info.mouseX + "px"
+    #   phantom.style.top = e.info.mouseY + "px"
+    #   phantom.style.zIndex = 100;
+    #   window.addEventListener("mousemove", mouseHandler)
 
     input.addEventListener Event.DROP, (e) ->
       if phantom != null && phantom.parentNode

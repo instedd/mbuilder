@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <link href="/assets/application.css" media="all" rel="stylesheet" type="text/css">
+    <script src="/assets/application.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(function(){
+      pillInput = new PillInput($('.pillInput'),
+        {
+          renderPill: function (pill, dom) {
+            dom.text(pill.text).addClass('bound')
+          }
+        }
+      );
+
+      pillInput.on('pillinput:changed', function(){
+        console.log('pillinput:changed', pillInput.value())
+      });
+
+      pillInput.value(["Lorem ipsum", {text: 'dolor sit'}, "amet. ", {text: 'Lorem'}, "ipsum."]);
+
+    });
+    </script>
+  </head>
+  <body>
+
+    <div class="action">
+      <div class="pillInput">
+      </div>
+    </div>
+  </body>
+</html>
