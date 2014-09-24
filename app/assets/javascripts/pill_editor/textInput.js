@@ -22,6 +22,8 @@ function TextInput(container) {
 	var _displayHiddenCharacters;
 	var _debug;
 
+  var _selectionForPillStarted;
+
 	function init(container) {
 		_container = container;
 		_container.addEventListener("mousedown", mouseHandler, true);
@@ -46,6 +48,8 @@ function TextInput(container) {
 		self.invalidate();
 		self.margin(5);
 		self.displayHiddenCharacters(false);
+
+    _selectionForPillStarted = false;
 	}
 
   self.isForeignObjectDragged = function() {
@@ -394,6 +398,7 @@ function TextInput(container) {
 		mouse.y -= _container.offsetTop - _container.scrollTop + _margin;
 		switch(e.type) {
 			case "mousedown":
+        _selectionForPillStarted = true;
         $(document.activeElement).blur();
 				if(e.target.textContent == TextDisplay.ARROW_DOWN) {
 					e.stopImmediatePropagation();
@@ -431,6 +436,13 @@ function TextInput(container) {
 				}
 				break;
 			case "mouseup":
+        if (_selectionForPillStarted) {
+          _selectionForPillStarted = false;
+
+          if (self.selectionText(_selection.start(), _selection.end()) != "") {
+            self.dispatchEvent(new Event(Event.SELECTION_COMPLETE));
+          }
+        }
 			case "drop":
 				_wrapper.style.cursor = "text";
 				window.removeEventListener("mousemove", mouseHandler, true);

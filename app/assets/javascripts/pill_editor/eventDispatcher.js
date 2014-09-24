@@ -64,3 +64,4 @@ Event.SELECT = "select";
 Event.DRAG = "drag";
 Event.DROP = "drop";
 Event.CONTEXT_MENU = "contextMenu";
+Event.SELECTION_COMPLETE = "selectionComplete"

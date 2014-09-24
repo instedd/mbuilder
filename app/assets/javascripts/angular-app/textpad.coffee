@@ -7,8 +7,6 @@ angular.module('mbuilder').directive 'textpad', ->
   link: (scope, elem, attrs) ->
     svgInput = $('.svgInput', elem)
 
-    scope.textselection = ''
-
     input = new TextInput(svgInput[0]);
     input.autoExpand(true);
     input.isForeignObjectDragged = ->
