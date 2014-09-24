@@ -250,6 +250,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
 
   $scope.dropOverBoard = (event) ->
     window.draggedPill = null
+    event.stopPropagation()
+    event.preventDefault()
     $scope.$emit 'dragEnd'
     false
 
