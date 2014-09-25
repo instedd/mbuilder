@@ -40,5 +40,6 @@ Mbuilder::Application.routes.draw do
 
   mount Listings::Engine => '/listings'
 
+  get 'test' => 'home#test'
   root :to => 'home#index'
 end

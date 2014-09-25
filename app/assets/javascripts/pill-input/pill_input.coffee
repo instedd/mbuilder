@@ -245,6 +245,7 @@ class PillInputController
     if data
       e.originalEvent.dataTransfer.effectAllowed = MOVE
       e.originalEvent.dataTransfer.setData(TEXT, data)
+      e.stopPropagation()
 
   dragEnterHandler : (e) =>
     target = e.target

@@ -242,11 +242,13 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     $scope.dragOverBoard(event)
 
   $scope.dropOverBoard = (event) ->
+    console.log 'dropOverBoard'
     window.draggedPill = null
     $scope.$emit 'dragEnd'
     false
 
   $scope.mouseDropOverBoard = (event) ->
+    console.log 'mouseDropOverBoard'
     $scope.dropOverBoard(event)
 
   $scope.hidePopups = ->

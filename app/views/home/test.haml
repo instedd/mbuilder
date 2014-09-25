@@ -1,0 +1,41 @@
+:javascript
+  $(function(){
+    pillInput = new PillInput($('.xxx'),
+      {
+        renderPill: function (pill, dom) {
+          dom.text(pill.text).addClass('bound')
+        }
+      }
+    );
+
+    pillInput.on('pillinput:changed', function(){
+      console.log('pillinput:changed', pillInput.value())
+    });
+
+    pillInput.value(["Lorem ipsum", {text: 'dolor sit'}, "amet. ", {text: 'Lorem'}, "ipsum."]);
+
+  });
+
+
+.action
+  .pillInput.xxx
+
+
+%div(ng-app="mbuilder" ng-init="pieces=[];actions = [{kind: 'send_message', message : [{kind: 'text', 'guid':'Lorem ipsum'}, {kind: 'literal', guid: 'aa1', text: 'dolor sit'}, {kind: 'text', 'guid':'amet. '}, {kind: 'literal', guid: 'aa2', text: 'Lorem'}, {kind: 'text', 'guid':'ipsum.'}], recipient: {kind: 'text', 'guid':'myself'} }];")
+
+  - angular_templates "shared/angular"
+  - angular_templates "shared/actions"
+  - angular_templates "shared/pieces"
+  - angular_templates "shared/pills"
+  - angular_templates "shared/schedules"
+
+  %div{'ng-controller' => 'MessageTriggerController'}
+
+    %div{'ng-controller' => 'TriggerController'}
+      .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)', 'ng-mouseup' => 'mouseDropOverBoard($event)', 'ng-mouseenter' => 'mouseEnterOverBoard($event)'}
+
+      .span6
+        = render 'shared/triggers/actions'
+
+        / %div(ng-controller='ActionsController')
+        /   = render 'shared/triggers/actions_contents'

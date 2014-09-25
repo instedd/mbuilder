@@ -4,7 +4,7 @@
     <script src="/assets/application.js" type="text/javascript"></script>
     <script type="text/javascript">
     $(function(){
-      pillInput = new PillInput($('.pillInput'),
+      pillInput = new PillInput($('.xxx'),
         {
           renderPill: function (pill, dom) {
             dom.text(pill.text).addClass('bound')
@@ -24,8 +24,77 @@
   <body>
 
     <div class="action">
-      <div class="pillInput">
+      <div class="pillInput xxx">
       </div>
+    </div>
+
+
+    <h1>new</h1>
+
+    <div ng-app="mbuilder" ng-init="action = {message : ['Lorem ipsum', {kind: 'literal', text: 'dolor sit'}, 'amet. ', {kind: 'literal', text: 'Lorem'}, 'ipsum.']};">
+      <script id="textpad" type="text/ng-template">
+        <div class='svgInput'></div>
+        <div>
+          <div class='pillInput'></div>
+        </div>
+        <div>
+          {{model}}
+        </div>
+      </script>
+
+<div class="action send_message selected" dragend="actionDragEnd($event)" draggable="true" ng-class="{selected: actionIsSelected(action)}" ng-click="selectAction(action, $event)">
+                          <a class="delete" href="javascript:" ng-click="deleteAction($index)">
+                            <i class="icf-delete"></i>
+                          </a>
+                          <div>
+
+      <div class="action-content" ng-controller='SendMessageController'>
+        <div class="action-icon">
+          <i class="i40-sms"></i>
+        </div>
+        <div>
+          Send this message
+          <br />
+          <textpad model="action.message"></textpad>
+          to
+        </div>
+  <!--       <div class="message-input" contenteditable='{{action.recipientEditable}}' ng-blur='makeRecipientNotEditable($event)' ng-mousedown='makeRecipientEditable($event)' dragover='dragOverRecipient($event)' drop='dropOverRecipient($event)' ng-keydown='handleRecipientKey($event)' ng-mouseup='mouseDropOverValue($event)' ng-mouseenter='mouseEnterOverValue($event)'>
+          <span class="piece-container" ng-repeat='pill in [action.recipient]' ng-include="true" src='pillTemplateFor(pill)'>
+          </span>
+        </div>
+   -->
+      </div>
+    </div>
+
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+
+
+
+
+
+<!--     <h1>old</h1>
+    <div ng-app="mbuilder" ng-init="message = ['Lorem ipsum', {kind: 'literal', text: 'dolor sit'}, 'amet. ', {kind: 'literal', text: 'Lorem'}, 'ipsum.'];">
+      <script id="textpad" type="text/ng-template">
+        <div class='svgInput'></div>
+        <div>
+          <div class='pillInput'></div>
+        </div>
+        <div>
+          {{model}}
+        </div>
+      </script>
+
+      <div class="action">
+        <textpad model="message" />
+      </div>
+    </div> -->
+
     </div>
   </body>
 </html>
