@@ -6,7 +6,6 @@
   overflow: auto;
   padding: 5px;
 
-  width: 525px;
   height: 60px;
 
   background: white;
@@ -16,8 +15,28 @@
     background: #EEEEEE !important;
   }
 
+  .pill .arrow {
+    margin: 0px 0px 1px 5px;
+    cursor: pointer;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 4px 0 4px;
+    border-color: #000000 transparent transparent transparent;
+  }
+
+  &.rtl .pill .arrow {
+    margin: 0px 5px 0px 0px;
+  }
+
   &:focus {
     border: 1px #999999 solid;
     outline: none;
+
+    .pill.focus .arrow {
+      border-color: #1E86C8 transparent transparent transparent;
+    }
   }
+
 }

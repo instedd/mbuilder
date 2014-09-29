@@ -5,7 +5,6 @@ BR = "BR"
 A = "A"
 
 MENU = "menu"
-DROP_ZONE = "dropZone"
 INPUT = "input"
 PILL = "pill"
 ARROW = "arrow"
@@ -39,23 +38,23 @@ class PillInput
     @dom.attr('contentEditable', true)
     @dom.addClass(INPUT)
     @dom.on 'input', =>
-      @dom.trigger 'pillinput:changed'
+      @trigger('pillinput:changed')
+    unless @options.droppedObject
+      @options.droppedObject = ->
+        null
     @controller = new PillInputController(@)
     @safe_html = $('<div/>')
 
   on: (eventName, callback) ->
     @dom.on eventName, callback
 
+  trigger: ->
+    @dom.trigger.apply(@dom, arguments)
+
   # [String | objects for pills]
   value: (value) ->
     if arguments.length == 1
-      innerHTML = ""
-      for piece in value
-        if typeof(piece) == "string"
-          innerHTML += @_htmlEscape(piece)
-        else
-          innerHTML += @_renderObject(piece)
-      @dom.html(innerHTML)
+      @_renderValue(@dom, value)
     else
       $.map @dom.contents(), (elem) =>
         if elem.nodeType == Node.TEXT_NODE
@@ -63,11 +62,23 @@ class PillInput
         else
           @pillData($(elem))
 
+  droppedObject : ->
+    @options.droppedObject()
+
   pillData : (pillDom, object) ->
     if arguments.length == 1
       pillDom.data('pill-info')
     else if arguments.length == 2
       pillDom.attr('data-pill-info', JSON.stringify(object))
+
+  _renderValue : (domTarget, value) ->
+    innerHTML = ""
+    for piece in value
+      if typeof(piece) == "string"
+        innerHTML += @_htmlEscape(piece)
+      else
+        innerHTML += @_renderObject(piece)
+    domTarget.html(innerHTML)
 
   _htmlEscape : (string) ->
     @safe_html.text(string).html()
@@ -94,7 +105,7 @@ class PillInputController
 
     @pillInput.dom.on("keydown", @keyDownHandler)
     @pillInput.dom.on("keyup", @keyUpHandler)
-    # @pillInput.dom.on("contextmenu", @clickHandler)
+    @pillInput.dom.on("contextmenu", @clickHandler)
     @pillInput.dom.on("click", @clickHandler)
     @pillInput.dom.on("mousedown", @mouseDownHandler)
     @pillInput.dom.on("blur", @blurHandler, true)
@@ -266,6 +277,7 @@ class PillInputController
         @dragElement = pill
         @dragSource = pill.parentNode
         data = pill.outerHTML
+        @pillInput.trigger 'pillinput:pilldragstart', {pill:@pillInput.pillData($(pill))}
     else if (@inputContainsRange(range))
       @dragElement = @getElementsFromRange(range, true)
       @dragSource = @getAncestor(INPUT, range.commonAncestorContainer)
@@ -277,20 +289,20 @@ class PillInputController
       e.stopPropagation()
 
   dragEndHandler : (e) =>
-    document.activeElement.blur()
+    # document.activeElement.blur()
     @dragSource = null
 
   dragEnterHandler : (e) =>
     target = e.target
-    if target.classList and target.classList.contains(DROP_ZONE)
-      target.classList.add DRAG_OVER
-      e.preventDefault()
+    # if target.classList and target.classList.contains(DROP_ZONE)
+    #   target.classList.add DRAG_OVER
+    #   e.preventDefault()
 
   dragLeaveHandler : (e) =>
     target = e.target
-    if target.classList and target.classList.contains(DROP_ZONE)
-      target.classList.remove DRAG_OVER
-      e.preventDefault()
+    # if target.classList and target.classList.contains(DROP_ZONE)
+    #   target.classList.remove DRAG_OVER
+    #   e.preventDefault()
 
   dragOverHandler : (e) =>
     target = e.target
@@ -300,17 +312,22 @@ class PillInputController
     console.log 'drop'
     target = e.target
     wrapper = document.createElement(DIV)
-    wrapper.innerHTML = e.originalEvent.dataTransfer.getData(TEXT)
+    droppedObject = @pillInput.droppedObject()
+    if droppedObject
+      @pillInput._renderValue($(wrapper), [droppedObject])
+    else
+      wrapper.innerHTML = e.originalEvent.dataTransfer.getData(TEXT)
     console.log(e.originalEvent.dataTransfer.getData(TEXT))
     target.classList.remove DRAG_OVER
-    if target.classList.contains(DROP_ZONE)
-      unless target is @dragSource
-        pills = @toArray(wrapper.querySelectorAll("." + PILL))
-        pills.forEach (pill) ->
-          target.appendChild pill
-          return
+    # if target.classList.contains(DROP_ZONE)
+    #   unless target is @dragSource
+    #     pills = @toArray(wrapper.querySelectorAll("." + PILL))
+    #     pills.forEach (pill) ->
+    #       target.appendChild pill
+    #       return
 
-    else if target.classList.contains(INPUT)
+    # else
+    if target.classList.contains(INPUT)
       elements = @toArray(wrapper.childNodes)
       # jquery bug(?): event clientX/Y is undefined in drop
       @insertAtPosition elements, e.originalEvent.clientX, e.originalEvent.clientY
@@ -319,7 +336,7 @@ class PillInputController
         @dragElement.parentNode.removeChild @dragElement  if @dragElement.classList and @dragElement.classList.contains(PILL)
     @sanitize(target)
     @clearSelection()
-    e.stopPropagation()
+    # e.stopPropagation()
     e.preventDefault()
 
   keyDownHandler : (e) =>
@@ -352,22 +369,26 @@ class PillInputController
     @sanitize input
 
   clickHandler : (e) =>
-    console.log 'click'
-    if e.target.classList.contains(PILL_BUTTON)
-      @createPill()
-      @clearSelection()
-      @selectHandler getAncestor(INPUT, e.target.parentNode.querySelector("." + INPUT))
-    else
-      pill = @getAncestor(PILL, e.target)
-      input = @getAncestor(INPUT, e.target)
-      arrow = e.target.className is ARROW
-      rightButton = e.which is 3
-      console.log 'click 2'
-      @selectHandler input
-      return  if not pill or (not arrow and not rightButton)
-      e.preventDefault()  if e.type is CONTEXT_MENU
-      # TODO @hideMenu()
-      # TODO @showMenu pill
+    # if e.target.classList.contains(PILL_BUTTON)
+    #   @createPill()
+    #   @clearSelection()
+    #   @selectHandler getAncestor(INPUT, e.target.parentNode.querySelector("." + INPUT))
+    # else
+    pill = @getAncestor(PILL, e.target)
+    input = @getAncestor(INPUT, e.target)
+    arrow = e.target.className is ARROW
+    rightButton = e.which is 3
+    @selectHandler input
+    return  if not pill or (not arrow and not rightButton)
+    e.stopPropagation()
+    e.preventDefault() # if e.type is CONTEXT_MENU
+
+    @pillInput.trigger 'pillinput:pillclick', {
+      pill: @pillInput.pillData($(pill))
+      dom: $(pill)
+    }
+    # TODO @hideMenu()
+    # TODO @showMenu pill
 
   mouseDownHandler : (e) =>
     console.log 'mouse down'
@@ -432,7 +453,7 @@ class PillInputController
       @setSelection range
       @selectHandler input
       e.preventDefault()
+      @pillInput.trigger('pillinput:changed')
 
 
 window.PillInput = PillInput
-# window.PillInputController = new PillInputController()

@@ -322,7 +322,6 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     div = $(id)
     div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
     div.show()
-
     event.preventDefault()
     event.stopPropagation()
 

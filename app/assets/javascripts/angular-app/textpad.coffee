@@ -12,14 +12,23 @@ angular.module('mbuilder').directive 'textpad', ->
           dom.text(pill.text).addClass('literal')
           return
 
-        aggDesc = scope.$parent.aggregateLabel(pill.aggregate) || ""
         pillDesc = scope.$parent.lookupPillName(pill)
+
         if pillDesc
-          # TODO add span for aggDesc
           # TODO menu support
-          dom.text(aggDesc + pillDesc).addClass('bound')
+          dom.text(pillDesc).addClass('bound')
         else
           dom.text("???").addClass('unbound')
+
+        if pill.kind == 'field_value'
+          dom.append($("<span/>").addClass("arrow"))
+          dom.prepend($("<span/>").addClass("aggregate").text(scope.$parent.aggregateLabel(pill.aggregate)))
+
+      droppedObject: =>
+        if window.draggedPill
+          mbuilderToPillInputValue(window.draggedPill)
+        else
+          null
     )
 
     skipPillInputChange = false
@@ -31,6 +40,11 @@ angular.module('mbuilder').directive 'textpad', ->
         for item in pillInput.value()
           scope.model.push(pillInputValueToMbuilder(item))
       skipPillInputChange = false
+
+    pillInput.on 'pillinput:pilldragstart', (event, data) ->
+      window.draggedPill = pillInputValueToMbuilder(data.pill)
+      scope.$apply ->
+        scope.$emit 'dragStart'
 
     svgInput = $('.svgInput', elem)
 
@@ -155,6 +169,23 @@ angular.module('mbuilder').directive 'textpad', ->
 
     # begin context menu
     pillContextMenu = false
+
+    pillInput.on 'pillinput:pillclick', (e, data) ->
+      pill = _.find scope.model, (elem) ->
+        _.isEqual(elem, pillInputValueToMbuilder(data.pill))
+
+      if pill.kind == 'field_value'
+        popup_width = $(if scope.$parent.lookupTableByField(pill.guid).readonly
+           '#aggregate-functions-error'
+         else
+           '#aggregate-functions').outerWidth()
+
+        scope.$parent.tryShowAggregateFunctionsPopup pill, scope, {
+          originalEvent : {
+            pageX : data.dom.offset().left,
+            pageY : data.dom.offset().top + data.dom.height() + 9
+          }
+        }
 
     svgInput.click (e) ->
       if pillContextMenu
