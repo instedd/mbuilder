@@ -242,7 +242,6 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     event.stopPropagation()
 
   $scope.dragOverBoard = (event) ->
-    event.preventDefault()
     false
 
   $scope.mouseEnterOverBoard = (event) ->
