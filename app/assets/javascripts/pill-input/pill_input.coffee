@@ -97,52 +97,39 @@ class PillInputController
     # @pillInput.dom.on("contextmenu", @clickHandler)
     @pillInput.dom.on("click", @clickHandler)
     @pillInput.dom.on("mousedown", @mouseDownHandler)
-    # @pillInput.dom.on("blur", @blurHandler, true)
+    @pillInput.dom.on("blur", @blurHandler, true)
 
-    # document.addEventListener("copy", @copyHandler);
-    # document.addEventListener("cut", @cutHandler);
-    # document.addEventListener("paste", @pasteHandler);
+    @pillInput.dom.on("copy", @copyHandler);
+    @pillInput.dom.on("cut", @cutHandler);
+    @pillInput.dom.on("paste", @pasteHandler);
+
     @dragElement = null
     @dragSource = null
 
-  clearSelection : ->
-    if window.getSelection
-      window.getSelection().removeAllRanges()
+  insert : (elements) ->
+    elements = [elements]  unless elements instanceof Array
+    range = @getRange()
+    if range and not range.collapsed
+      @deleteSelection()
+      range = @getRange()
+    node = range.startContainer
+    if node.nodeType is Node.TEXT_NODE
+      node = node.splitText(range.startOffset)
+      container = node.parentNode
+      elements.forEach (element) ->
+        container.insertBefore element, node
+        return
+
     else
-      if document.selection
-        document.selection.empty()
+      if node.classList.contains(INPUT)
+        elements.forEach (element) ->
+          node.appendChild element
+          return
 
-  deleteSelection : ->
-    if window.getSelection
-      selection = window.getSelection()
-      selection.deleteFromDocument()
-      selection.collapseToEnd()  unless selection.isCollapsed
-    else
-      document.selection.clear()  if document.selection
-
-  getAncestor : (className, node) ->
-    ancestor = null
-    while (node && node != document && ancestor == null)
-      if (node.classList && node.classList.contains(className))
-        ancestor = node
-      node = node.parentNode
-
-    ancestor
-
-  toArray : (obj) ->
-    [].map.call obj, (element) ->
-      element
-
-  documentFragmentToString : (documentFragment) ->
-    string = ""
-    @toArray(documentFragment.childNodes).forEach (element) ->
-      switch element.nodeType
-        when Node.ELEMENT_NODE
-          string += element.outerHTML
-        when Node.TEXT_NODE
-          string += element.data
-
-    string
+      else
+        elements.forEach (element) ->
+          container.insertBefore element, node
+          return
 
   insertAtPosition : (elements, x, y) ->
     elements = [elements]  unless elements instanceof Array
@@ -199,6 +186,48 @@ class PillInputController
     else
       range.extractContents()
 
+  setSelection : (range) ->
+    window.getSelection().addRange range
+
+  clearSelection : ->
+    if window.getSelection
+      window.getSelection().removeAllRanges()
+    else
+      if document.selection
+        document.selection.empty()
+
+  deleteSelection : ->
+    if window.getSelection
+      selection = window.getSelection()
+      selection.deleteFromDocument()
+      selection.collapseToEnd()  unless selection.isCollapsed
+    else
+      document.selection.clear()  if document.selection
+
+  getAncestor : (className, node) ->
+    ancestor = null
+    while (node && node != document && ancestor == null)
+      if (node.classList && node.classList.contains(className))
+        ancestor = node
+      node = node.parentNode
+
+    ancestor
+
+  toArray : (obj) ->
+    [].map.call obj, (element) ->
+      element
+
+  documentFragmentToString : (documentFragment) ->
+    string = ""
+    @toArray(documentFragment.childNodes).forEach (element) ->
+      switch element.nodeType
+        when Node.ELEMENT_NODE
+          string += element.outerHTML
+        when Node.TEXT_NODE
+          string += element.data
+
+    string
+
   # Handlers
   selectHandler : (dispatcher) =>
     return  unless @getAncestor(INPUT, dispatcher)
@@ -247,6 +276,10 @@ class PillInputController
       e.originalEvent.dataTransfer.setData(TEXT, data)
       e.stopPropagation()
 
+  dragEndHandler : (e) =>
+    document.activeElement.blur()
+    @dragSource = null
+
   dragEnterHandler : (e) =>
     target = e.target
     if target.classList and target.classList.contains(DROP_ZONE)
@@ -280,7 +313,6 @@ class PillInputController
     else if target.classList.contains(INPUT)
       elements = @toArray(wrapper.childNodes)
       # jquery bug(?): event clientX/Y is undefined in drop
-      console.log 'drop2', e.originalEvent.clientX, e.originalEvent.clientY
       @insertAtPosition elements, e.originalEvent.clientX, e.originalEvent.clientY
       if target is @dragSource
         @deleteSelection()
@@ -361,6 +393,45 @@ class PillInputController
 
   blurHandler : (e) =>
     @selectHandler e.target
+
+  copyHandler : (e) =>
+    console.log('copy')
+    input = @getAncestor(INPUT, e.target)
+    range = @getRange()
+    if @inputContainsRange(range)
+      elements = @toArray(@getElementsFromRange(range, true).childNodes)
+      data = ""
+      elements.forEach (element) ->
+        switch element.nodeType
+          when Node.TEXT_NODE
+            data += element.data
+          when Node.ELEMENT_NODE
+            data += element.outerHTML
+
+      e.originalEvent.clipboardData.setData TEXT, data
+      e.preventDefault()
+
+  cutHandler : (e) =>
+    @copyHandler e
+    input = @getAncestor(INPUT, e.target)
+    range = @getRange()
+    @deleteSelection()  if input and range
+
+  pasteHandler : (e) =>
+    console.log('paste')
+    input = @getAncestor(INPUT, e.target)
+    if input
+      console.log(input)
+      wrapper = document.createElement(DIV)
+      wrapper.innerHTML = e.originalEvent.clipboardData.getData(TEXT)
+      elements = @toArray(wrapper.childNodes)
+      @insert elements
+      range = document.createRange()
+      range.setStartAfter elements[elements.length - 1]
+      @clearSelection()
+      @setSelection range
+      @selectHandler input
+      e.preventDefault()
 
 
 window.PillInput = PillInput
