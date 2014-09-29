@@ -107,6 +107,10 @@ input.n {
   cursor: move;
 }
 
+.field-header.active {
+  background: #e8e7e7 !important;
+}
+
 .action-container {
   @include border-radius(3px);
   @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
@@ -327,12 +331,21 @@ table.fields .input-small {
   display: none;
   z-index: 1;
   position: absolute;
+
+  .description {
+    font-size: .9em;
+    color: #777777;
+  }
 }
 
 .popup .selected {
   text-decoration: none;
   font-weight: bold;
   color: black;
+}
+
+.popup#valid-values {
+  width: 230px;
 }
 
 #aggregate-functions a, .if-operators a, #if-aggregates a {

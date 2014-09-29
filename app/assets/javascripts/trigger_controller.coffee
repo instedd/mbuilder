@@ -258,6 +258,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     $scope.dropOverBoard(event)
 
   $scope.hidePopups = ->
+    if $scope.validValuesPopup.field
+      $scope.validValuesPopup.field.active = false
     $('.popup').hide()
 
   $(window.document).click (event) ->
