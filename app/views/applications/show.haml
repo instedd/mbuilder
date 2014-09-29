@@ -19,14 +19,15 @@
 
 .row-fluid
   .span12
-    = icon_link_to :'icf-export', 'Export application', application_export_path(application)
-    = icon_link_to :'icf-import', 'Import application', '#import-form', data: { toggle: 'collapse' }
+    .span3
+      = icon_link_to :'icf-export', 'Export application', application_export_path(application)
 
-#import-form.collapse(style="width: 400px")
-  .well.well-small
-    = form_tag application_import_path(application), multipart: true, class: 'form-inline' do |f|
-      = file_field_tag 'mba'
-      = button_tag 'Upload', class: 'btn'
+    .span9
+      - collapsible_form_for application_import_path(application), icon: 'import', title: 'Import application', description: 'Upload an .mba in order to import an application', submit: 'Import', id: 'import-form' do |f|
+        %input#choose-file{:disabled => "disabled", :placeholder => "Choose File"}/
+        .file-upload
+          = icon_link_to :'icf-arrow', 'Choose a file', '#'
+          = file_field_tag 'mba', class: 'choose'
 
 %hr
 
