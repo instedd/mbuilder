@@ -17,7 +17,7 @@
       .scroll
         %table.table.table-bordered.fields.graygrad
           %tr
-            %th{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)'}
+            %th.field-header{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)', 'ng-class'=> "{active: pill.active == true}"}
               %span{'ng-hide' => 'table.readonly'}
                 %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
               .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)', 'dragover' => 'dragOverName($event)', 'drop' => 'dropOverName($event)', :'ng-mouseup' => 'mouseDropOverName($event)', :'ng-mouseenter' => 'mouseEnterOverName($event)'}

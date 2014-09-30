@@ -4,14 +4,12 @@ angular.module('mbuilder').directive 'patternpad', ->
   link: (scope, elem, attrs) ->
     svgInput = $('.svgInput', elem)
 
-    scope.textselection = ''
-
     input = new TextInput(svgInput[0]);
     input.GUIDgenerator = window.guid;
     input.autoExpand(true);
-    input.addEventListener Event.SELECT, (e) ->
-      scope.$apply ->
-        scope.textselection = input.selectionText(e.info.start, e.info.end)
+
+    input.addEventListener Event.SELECTION_COMPLETE, (e) ->
+      scope.createPill()
 
     scope.createPill = ->
       # in order to exit angular event loop.

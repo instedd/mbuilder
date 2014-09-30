@@ -53,6 +53,8 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', '$timeout', 
     div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
     div.show()
 
+    field.active = true
+
     window.setTimeout (-> $('#valid-values input').focus()), 0
 
     event.preventDefault()

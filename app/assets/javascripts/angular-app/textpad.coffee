@@ -45,7 +45,6 @@ angular.module('mbuilder').directive 'textpad', ->
       scope.$apply ->
         scope.$emit 'dragStart'
 
-
     updateInputDataFromScope = ->
       pillInput.value(_.map(scope.model, mbuilderToPillInputValue))
 

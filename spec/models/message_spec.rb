@@ -1,6 +1,7 @@
 require "spec_helper"
 
 describe Message do
+
   it "compiles message with single word" do
     msg = Message.from_hash({
       'pieces' => [
@@ -27,28 +28,6 @@ describe Message do
 
     "register  Foo  now".should match(msg.pattern)
     "register  Foo  bar  now".should_not match(msg.pattern)
-  end
-
-  it "should initialize pattern correctly for a multi-word with non-break whitespaces text without pills" do
-    pieces = [MessagePiece.new("text", "\u00A0count\u00A0all\u00A0users\u00A0", "ce947362-990f-4749-beaa-3878ff9fd94d")]
-    message = Message.new('1234', pieces)
-    message.pattern.should eq(/\A\s*count\ all\ users\s*\Z/i)
-  end
-
-  it "compiles message with single word with non-break whitespaces" do
-    # The ending space is the non-breaking space copy and pasted
-    # This was being added by the svg pill
-    msg = Message.from_hash({
-      'pieces' => [
-        {'kind' => 'text', 'text' => "\u00A0register "},
-        {'kind' => 'placeholder', 'text' => 'John'},
-        {'kind' => 'text', 'text' => ' now '},
-      ]
-    })
-    msg.pattern.source.should eq("\\A\\s*register\\s+([^0-9\s]\\S*)\\s+now\\s*\\Z")
-
-    "register Foo now".should match(msg.pattern)
-    "register  Foo  bar now".should_not match(msg.pattern)
   end
 
   it "compiles message with single word disease code" do
@@ -152,4 +131,47 @@ describe Message do
     "register Foo".should match(msg.pattern)
     "register Foo bar".should_not match(msg.pattern)
   end
+
+  context "non-break whitespaces" do
+
+    it "should initialize pattern correctly for a multi-word text without pills" do
+      pieces = [MessagePiece.new("text", "\u00A0count\u00A0all\u00A0users\u00A0", "ce947362-990f-4749-beaa-3878ff9fd94d")]
+      message = Message.new('1234', pieces)
+      message.pattern.should eq(/\A\s*count\ all\ users\s*\Z/i)
+    end
+
+    it "compiles message with single word" do
+      # The ending space is the non-breaking space copy and pasted
+      # This was being added by the svg pill
+      msg = Message.from_hash({
+        'pieces' => [
+          {'kind' => 'text', 'text' => "\u00A0register "},
+          {'kind' => 'placeholder', 'text' => 'John'},
+          {'kind' => 'text', 'text' => ' now '},
+        ]
+      })
+      msg.pattern.source.should eq("\\A\\s*register\\s+([^0-9\s]\\S*)\\s+now\\s*\\Z")
+
+      "register Foo now".should match(msg.pattern)
+      "register  Foo  bar now".should_not match(msg.pattern)
+    end
+
+    it "should match multi-word pills" do
+      msg = Message.from_hash({
+        'pieces' => [
+          {'kind' => 'text', 'text' => 'register'},
+          {'kind' => 'placeholder', 'text' => "John\u00A0Doe"},
+          {'kind' => 'text', 'text' => 'as user'},
+        ]
+      })
+      msg.pattern.source.should eq("\\A\\s*register\\s+(.+?)\\s+as\\ user\\s*\\Z")
+
+      "register Foo as user".should match(msg.pattern)
+      "register Foo bar as user".should match(msg.pattern)
+      "register 123 456 as user".should match(msg.pattern)
+      "register as user".should_not match(msg.pattern)
+      "register foo user".should_not match(msg.pattern)
+    end
+  end
+
 end
