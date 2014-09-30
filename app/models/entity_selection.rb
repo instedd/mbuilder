@@ -9,6 +9,14 @@ class EntitySelection
     @group_by = group_by
   end
 
+  def table
+    @table
+  end
+
+  def restrictions
+    @restrictions
+  end
+
   def eq(field, value)
     @restrictions.push op: :eq, field: field, value: value
     self
@@ -58,5 +66,9 @@ class EntitySelection
       end
     end
     str
+  end
+
+  def new?
+    false
   end
 end
