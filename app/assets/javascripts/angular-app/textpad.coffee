@@ -15,7 +15,6 @@ angular.module('mbuilder').directive 'textpad', ->
         pillDesc = scope.$parent.lookupPillName(pill)
 
         if pillDesc
-          # TODO menu support
           dom.text(pillDesc).addClass('bound')
         else
           dom.text("???").addClass('unbound')
