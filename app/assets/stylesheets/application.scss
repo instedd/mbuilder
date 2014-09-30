@@ -928,3 +928,21 @@ input:-moz-placeholder { font-style: italic; }
 .i40-error              { background-position: -400px    0; }
 .i40-invalid            { background-position: -440px    0; }
 
+//-------------- Empty Trigers list ------------
+//----------------------------------------------
+
+.empty-triggers {
+  margin-top: 70px;
+  text-align: center;
+  color: #999999;
+  p {
+    text-align: center;
+    font-style: italic;
+    font-size: 1.15em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  a {
+    color: #555555;
+  }
+}
