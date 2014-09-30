@@ -12,7 +12,6 @@ OPTION = "option"
 PILL_BUTTON = "pillButton"
 
 DATA_OPTION = "data-option"
-DATA_LABEL = "data-label"
 MOVE = "move"
 TEXT = "text"
 
@@ -71,6 +70,12 @@ class PillInput
     else if arguments.length == 2
       pillDom.attr('data-pill-info', JSON.stringify(object))
 
+  selectedText : ->
+    @controller.selectedText()
+
+  replaceSelectedTextWith : (value) ->
+    @controller.replaceSelectedTextWith(value)
+
   _renderValue : (domTarget, value) ->
     innerHTML = ""
     for piece in value
@@ -116,6 +121,44 @@ class PillInputController
 
     @dragElement = null
     @dragSource = null
+
+  selectedText : ->
+    range = @getRange()
+    if @inputContainsRange(range)
+      insertTarget = range.endContainer.nextSibling
+      elements = @toArray(@getElementsFromRange(range, true).childNodes)
+      input = @getAncestor(INPUT, range.endContainer)
+      label = ""
+      elements.forEach (element) ->
+        switch element.nodeType
+          when Node.ELEMENT_NODE
+            label += element.textContent
+          when Node.TEXT_NODE
+            label += element.data
+
+      return label
+    else
+      null
+
+  replaceSelectedTextWith : (value) ->
+    range = @getRange()
+    if @inputContainsRange(range)
+      @getElementsFromRange(range, false) # strip selection
+      input = @pillInput.dom[0]
+      console.log 'fooo', input
+
+      wrapper = document.createElement(DIV)
+      @pillInput._renderValue($(wrapper), [value])
+      console.log(wrapper.innerHTML)
+
+      insertTarget = range.endContainer.nextSibling
+      console.log insertTarget and input.contains(insertTarget)
+
+      if insertTarget and input.contains(insertTarget)
+        input.insertBefore(wrapper, insertTarget)
+      else
+        input.appendChild(wrapper)
+
 
   insert : (elements) ->
     elements = [elements]  unless elements instanceof Array
@@ -411,6 +454,7 @@ class PillInputController
     # document.removeEventListener MOUSE_MOVE, @mouseMoveHandler
     # document.removeEventListener MOUSE_UP, @mouseUpHandler
     @selectHandler e.target
+    @pillInput.trigger 'pillinput:selection'
 
   blurHandler : (e) =>
     @selectHandler e.target
