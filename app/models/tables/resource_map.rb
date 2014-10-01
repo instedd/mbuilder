@@ -42,8 +42,7 @@ class Tables::ResourceMap < Table
   end
 
   def assign_value_to_entity_field(context, entity, field, value)
-    resource_map_field = find_field(field).id
-    context.assign_resource_map_value_to_entity(entity, resource_map_field, value)
+    context.assign_resource_map_value_to_entity(entity, field, value)
   end
 
   private

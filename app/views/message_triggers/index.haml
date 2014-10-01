@@ -43,24 +43,47 @@
 
   / = render_listing :external_triggers
 
-.row-fluid
-  .span12
-    / = icon_link_to :'icc-add', 'Add Trigger', '#', class: "add-trigger"
-    %a.add-trigger{:href => "#"}
-      %span.btn-icon.blue
-        %i.icc-add
-      Add Trigger
-    .triggers-menu
-      = link_to new_application_message_trigger_path(application) do
-        = image_tag "trigger-message.png"
-        Message trigger
-      = link_to new_application_periodic_task_path(application) do
-        = image_tag "trigger-date.png"
-        Periodic task
-      / Validations triggers are created from another trigger
-      / %a{:href => "#"}
-      /   = image_tag "trigger-validation.png"
-      /   Validation trigger
-      = link_to new_application_external_trigger_path(application) do
-        = image_tag "trigger-external.png"
-        External Trigger
+- if external_triggers.present? || validation_triggers.present? || periodic_tasks.present? || message_triggers.present?
+  .row-fluid
+    .span12
+      / = icon_link_to :'icc-add', 'Add Trigger', '#', class: "add-trigger"
+      %a.add-trigger{:href => "#"}
+        %span.btn-icon.blue
+          %i.icc-add
+        Add Trigger
+      .triggers-menu
+        = link_to new_application_message_trigger_path(application) do
+          = image_tag "trigger-message.png"
+          Message trigger
+        = link_to new_application_periodic_task_path(application) do
+          = image_tag "trigger-date.png"
+          Periodic task
+        / Validations triggers are created from another trigger
+        / %a{:href => "#"}
+        /   = image_tag "trigger-validation.png"
+        /   Validation trigger
+        = link_to new_application_external_trigger_path(application) do
+          = image_tag "trigger-external.png"
+          External Trigger
+- else
+  .empty-triggers.span4.offset4
+    .row-fluid
+      .span4.offset4
+        = image_tag "trigger-new.png"
+    .row-fluid
+      .span6.offset3
+        %p
+          You have no triggers yet, add a trigger
+    .row-fluid
+      .span2.offset3
+        = link_to new_application_message_trigger_path(application) do
+          = image_tag "trigger-message.png"
+          Message trigger
+      .span2
+        = link_to new_application_periodic_task_path(application) do
+          = image_tag "trigger-date.png"
+          Periodic task
+      .span2
+        = link_to new_application_external_trigger_path(application) do
+          = image_tag "trigger-external.png"
+          External Trigger

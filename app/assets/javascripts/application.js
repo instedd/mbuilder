@@ -40,12 +40,21 @@ $(function(){
     return false;
   });
 
-  var changeHoverAction = function(action) {
-    if (action.length == 0) {
-      $('.action.hover').removeClass('hover');
-    } else if (!action.hasClass('.action')) {
-      $('.action.hover').removeClass('hover');
-      action.addClass('hover');
+  var changeClosestHoverAction = function(target) {
+    changeClosestHover(target, '.action');
+  }
+
+  var changeClosestHoverTable = function(target) {
+    changeClosestHover(target, '.table');
+  }
+
+  var changeClosestHover = function(target, matcher) {
+    var element = $(target).closest(matcher);
+    if (element.length == 0) {
+      $(matcher + '.hover').removeClass('hover');
+    } else if (!element.hasClass(matcher)) {
+      $(matcher + '.hover').removeClass('hover');
+      element.addClass('hover');
     }
   }
 
@@ -54,14 +63,13 @@ $(function(){
     var action = $(e.target).closest('.action');
     if (action.length > 0 && a.length > 0) {
       var elementAtMouse = document.elementFromPoint(e.pageX - window.pageXOffset, e.pageY - window.pageYOffset);
-      var nextAction = $(elementAtMouse).closest('.action');
-      changeHoverAction(nextAction);
+      changeClosestHoverAction(elementAtMouse);
     }
   });
 
   $(window).mousemove(function(e){
-    var action = $(e.target).closest('.action');
-    changeHoverAction(action);
+    changeClosestHoverAction(e.target);
+    changeClosestHoverTable(e.target);
   });
 });
 
