@@ -297,8 +297,6 @@ class PillInputController
       return
 
   dragStartHandler : (e) =>
-    console.log 'dragStartHandler'
-
     range = @getRange()
     pill = @getAncestor(PILL, e.target)
     data = null
@@ -344,7 +342,6 @@ class PillInputController
     e.preventDefault()  if target.contenteditable isnt "true" and not bowser.firefox
 
   dropHandler : (e) =>
-    console.log 'drop'
     target = e.target
     wrapper = document.createElement(DIV)
     droppedObject = @pillInput.droppedObject()
@@ -352,7 +349,6 @@ class PillInputController
       @pillInput._renderValue($(wrapper), [droppedObject])
     else
       wrapper.innerHTML = e.originalEvent.dataTransfer.getData(TEXT)
-    console.log(e.originalEvent.dataTransfer.getData(TEXT))
     target.classList.remove DRAG_OVER
     # if target.classList.contains(DROP_ZONE)
     #   unless target is @dragSource
@@ -426,9 +422,7 @@ class PillInputController
     # TODO @showMenu pill
 
   mouseDownHandler : (e) =>
-    console.log 'mouse down'
     #TODO @hideMenu()  if @menu and not menu.contains(e.target)
-    console.log @pillInput.dom
     @pillInput.dom.on(MOUSE_MOVE, @mouseMoveHandler)
     @pillInput.dom.on(MOUSE_UP, @mouseUpHandler)
     # document.addEventListener MOUSE_MOVE, @mouseMoveHandler
@@ -436,11 +430,9 @@ class PillInputController
     @selectHandler e.target
 
   mouseMoveHandler : (e) =>
-    console.log 'mouse mouve'
     @selectHandler e.target
 
   mouseUpHandler : (e) =>
-    console.log 'mouse up'
     @pillInput.dom.off(MOUSE_MOVE)
     @pillInput.dom.off(MOUSE_UP)
     # document.removeEventListener MOUSE_MOVE, @mouseMoveHandler
@@ -452,7 +444,6 @@ class PillInputController
     @selectHandler e.target
 
   copyHandler : (e) =>
-    console.log('copy')
     input = @getAncestor(INPUT, e.target)
     range = @getRange()
     if @inputContainsRange(range)
@@ -475,10 +466,8 @@ class PillInputController
     @deleteSelection()  if input and range
 
   pasteHandler : (e) =>
-    console.log('paste')
     input = @getAncestor(INPUT, e.target)
     if input
-      console.log(input)
       wrapper = document.createElement(DIV)
       wrapper.innerHTML = e.originalEvent.clipboardData.getData(TEXT)
       elements = @toArray(wrapper.childNodes)

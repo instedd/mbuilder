@@ -248,7 +248,6 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     $scope.dragOverBoard(event)
 
   $scope.dropOverBoard = (event) ->
-    console.log 'dropOverBoard'
     window.draggedPill = null
     event.stopPropagation()
     event.preventDefault()
@@ -256,7 +255,6 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     false
 
   $scope.mouseDropOverBoard = (event) ->
-    console.log 'mouseDropOverBoard'
     $scope.dropOverBoard(event)
 
   $scope.hidePopups = ->
