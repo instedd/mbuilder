@@ -145,20 +145,12 @@ class PillInputController
     if @inputContainsRange(range)
       @getElementsFromRange(range, false) # strip selection
       input = @pillInput.dom[0]
-      console.log 'fooo', input
 
       wrapper = document.createElement(DIV)
       @pillInput._renderValue($(wrapper), [value])
-      console.log(wrapper.innerHTML)
 
-      insertTarget = range.endContainer.nextSibling
-      console.log insertTarget and input.contains(insertTarget)
-
-      if insertTarget and input.contains(insertTarget)
-        input.insertBefore(wrapper, insertTarget)
-      else
-        input.appendChild(wrapper)
-
+      range.insertNode(wrapper.firstChild)
+      @pillInput.trigger('pillinput:changed')
 
   insert : (elements) ->
     elements = [elements]  unless elements instanceof Array
