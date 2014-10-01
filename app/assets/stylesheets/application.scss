@@ -53,8 +53,12 @@
   @include border-radius(3px);
   @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
 
-  >div {
+  > div {
     padding: 10px;
+  }
+
+  > div + div {
+    padding-top: 0px;
   }
 }
 input.n {
