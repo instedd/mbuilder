@@ -398,6 +398,7 @@ class PillInputController
     return  unless input
     @selectHandler input
     @sanitize input
+    @pillInput.trigger 'pillinput:changed'
 
   clickHandler : (e) =>
     # if e.target.classList.contains(PILL_BUTTON)
