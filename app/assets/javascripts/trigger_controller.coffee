@@ -241,18 +241,12 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
   $scope.dragOverBoard = (event) ->
     false
 
-  $scope.mouseEnterOverBoard = (event) ->
-    $scope.dragOverBoard(event)
-
   $scope.dropOverBoard = (event) ->
     window.draggedPill = null
     event.stopPropagation()
     event.preventDefault()
     $scope.$emit 'dragEnd'
     false
-
-  $scope.mouseDropOverBoard = (event) ->
-    $scope.dropOverBoard(event)
 
   $scope.hidePopups = ->
     if $scope.validValuesPopup.field
@@ -327,7 +321,6 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     div = $(id)
     div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
     div.show()
-
     event.preventDefault()
     event.stopPropagation()
 

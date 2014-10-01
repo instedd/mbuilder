@@ -2,115 +2,50 @@ angular.module('mbuilder').directive 'patternpad', ->
   restrict: 'E'
   templateUrl: 'patternpad'
   link: (scope, elem, attrs) ->
-    svgInput = $('.svgInput', elem)
+    # TODO add allowDrop: false option to PillInput
+    pillInput = new PillInput(
+      $('.pillInput', elem),
+      renderPill: (pill, dom) =>
+        dom.text(pill.text)
+    )
 
-    input = new TextInput(svgInput[0]);
-    input.GUIDgenerator = window.guid;
-    input.autoExpand(true);
+    skipPillInputChange = false
+    pillInput.on 'pillinput:changed', ->
+      return if skipPillInputChange
+      skipPillInputChange = true
+      scope.$apply ->
+        scope.pieces.splice(0, scope.pieces.length)
+        for item in pillInput.value()
+          scope.pieces.push(pillInputValueToMbuilder(item))
+        scope.$emit 'onPatternpadPicesChanged'
+      skipPillInputChange = false
 
-    input.addEventListener Event.SELECTION_COMPLETE, (e) ->
-      scope.createPill()
+    pillInput.on 'pillinput:pilldragstart', (event, data) ->
+      window.draggedPill = pillInputValueToMbuilder(data.pill)
+      scope.$apply ->
+        scope.$emit 'dragStart'
 
-    scope.createPill = ->
-      # in order to exit angular event loop.
-      # because the Event.SELECT uses $apply
-      window.setTimeout ->
-        input.createPill()
-        ensureSpacesAroundPills()
-        updateScopeFromInputData()
-      , 0
+    pillInput.on 'pillinput:selection', (event, data) ->
+      pillInput.replaceSelectedTextWith({
+        kind:'placeholder',
+        text: pillInput.selectedText(),
+        guid: window.guid()
+      })
 
     updateInputDataFromScope = ->
-      inputData = []
-      for pill in scope.pieces
-        if pill.kind == 'text'
-          inputData.push pill.text
-        else if pill.kind == 'placeholder'
-          inputData.push {
-            id: pill.guid
-            text: pill.text
-            hasMenu : false
-          }
-      input.data(inputData)
+      pillInput.value(_.map(scope.pieces, mbuilderToPillInputValue))
 
-    ensureSpacesAroundPills = ->
-      data = []
-      originalData = input.data()
-      for item, i in originalData
-        if typeof(item) == 'string'
-          item = item.replace(/\s+/g, ' ')
-          # space before a pill
-          if !/\s/.test(_.last(item)) && i < originalData.length - 1
-            item = item + ' '
-          # space after a pill
-          if !/\s/.test(_.first(item)) && i > 0
-            item = ' ' + item
-        else
-          # two pills together
-          if data.length > 0 && typeof(_.last(data)) != 'string'
-            data.push ' '
-        unless i == originalData.length - 1 && i == ' '
-          data.push item
-
-      if !_.isEqual(input.data(), data)
-        caret = input.caret()
-        input.data(data)
-        input.caret(caret)
-        input.render()
-
-    updateScopeFromInputData = ->
-      scope.$apply ->
-        newPieces = []
-        for item in input.data()
-          newPieces.push(inputDataToMbuilderPill(item))
-
-        args = [0, scope.pieces.length].concat(newPieces)
-        Array.prototype.splice.apply(scope.pieces, args)
-      scope.$emit 'onPatternpadPicesChanged'
-
-    inputDataToMbuilderPill = (item) ->
-      if typeof(item) == 'string'
-        { kind: 'text', text: item, guid: window.guid() }
+    mbuilderToPillInputValue = (pill) ->
+      if pill.kind == 'text'
+        pill.text # pills here seems to store the text in the guid property. this is why patternpad != textpad
       else
-        { kind: 'placeholder', text: item.text, guid: item.id }
+        pill
 
-    updateInputDataFromScope()
-    ensureSpacesAroundPills()
-    input.render();
+    pillInputValueToMbuilder = (value) ->
+      if typeof(value) == 'string'
+        {kind: 'text', text: value, guid: window.guid()}
+      else
+        value
 
-    skipInputChange = false
-    input.addEventListener Event.CHANGE, (e) ->
-      return if skipInputChange
-      skipInputChange = true
-      ensureSpacesAroundPills()
-      updateScopeFromInputData()
-      skipInputChange = false
-
-    phantom = null
-
-    mouseHandler = (e) ->
-      mouse = mousePosition(e)
-      phantom.style.left = mouse.x + "px"
-      phantom.style.top = mouse.y + "px"
-
-    input.addEventListener Event.DRAG, (e) ->
-      window.draggedPill = inputDataToMbuilderPill(e.info.pill)
-      scope.$emit 'dragStart'
-      phantom = document.body.appendChild(e.info.phantom)
-      phantom.style.position = "absolute"
-      phantom.style.opacity = 0.5
-      phantom.style.left = e.info.mouseX + "px"
-      phantom.style.top = e.info.mouseY + "px"
-      phantom.style.zIndex = 100;
-      window.addEventListener("mousemove", mouseHandler)
-
-    input.addEventListener Event.DROP, (e) ->
-      if phantom != null && phantom.parentNode
-        phantom.parentNode.removeChild(phantom)
-      window.removeEventListener("mousemove", mouseHandler)
-
-      if e.info.localDragAndDrop
-        ensureSpacesAroundPills()
-        window.draggedPill = null
-      scope.$emit 'dragEnd'
-
+    scope.$watch 'pieces', ->
+      window.setTimeout updateInputDataFromScope, 0

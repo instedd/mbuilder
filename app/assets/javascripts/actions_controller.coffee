@@ -226,19 +226,6 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     false
 
-  $scope.mouseEnterOverSpaceBetweenActions = (event) ->
-    $(event.target).closest('.space-between-actions')
-      .toggleClass('dropzone', window.draggedPill != null)
-      .toggleClass('drop-preview', window.draggedPill != null)
-
-  $scope.mouseDropOverSpaceBetweenActions = (index, event) ->
-    $(event.target).closest('.space-between-actions').removeClass('dropzone').removeClass('drop-preview')
-
-    $scope.dropOverSpaceBetweenActions(index, event)
-
-  $scope.mouseLeaveSpaceBetweenActions = (event) ->
-    $(event.target).closest('.space-between-actions').removeClass('dropzone').removeClass('drop-preview')
-
   $scope.actionMentionsTable = (action, table) ->
     switch action.kind
       when 'create_entity', 'select_entity', 'store_entity_value'
@@ -286,14 +273,8 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     else
       false
 
-  $scope.mouseEnterOverIfOperand = (event) ->
-    $(event.target).closest('.if-operand').toggleClass('dropzone', window.draggedPill != null)
-
   $scope.dropOverIfLeft = (event) ->
     $scope.action.left = window.draggedPill
-
-  $scope.mouseDropOverIfLeft = (event) ->
-    $scope.dropOverIfLeft(event) if window.draggedPill
 
   $scope.dropOverIfRight = (index, event) ->
     $scope.action.right[index] = window.draggedPill
