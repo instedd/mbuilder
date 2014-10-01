@@ -82,17 +82,6 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       if action
         addToActions(actions, action, index)
 
-  $scope.$on 'addSendMessageActionDown', (event) ->
-    $scope.onActionTarget (actions, index) ->
-      action =
-        kind: 'send_message'
-        message: []
-        recipient: {kind: 'text', guid: ''}
-        messageeditable: 'false'
-        recipienteditable: 'false'
-
-      addToActions actions, action, index
-
   $rootScope.$on 'groupByField', (event, args) ->
     unless $scope.action
       if tableIsUsedInAGroupByAction(args.table.guid)
@@ -106,8 +95,14 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       $rootScope.$broadcast 'updateCollection', args
 
   $scope.addSendMessageAction = ->
-    unless $scope.action
-      $scope.$emit 'addSendMessageActionUp'
+    action =
+      kind: 'send_message'
+      message: []
+      recipient: {kind: 'text', guid: ''}
+      messageeditable: 'false'
+      recipienteditable: 'false'
+
+    $scope.actions.push(action)
 
   $scope.deleteAction = (index) ->
     action = $scope.actions[index]
