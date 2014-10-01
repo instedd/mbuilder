@@ -528,7 +528,7 @@ body {
     margin-right: 4px;
   }
 
-  &.bound {
+  &.bound, &.placeholder {
     border: 1px solid transparent;
     margin-left: 4px;
     margin-right: 4px;
@@ -595,7 +595,7 @@ body {
       /*background: #ddd;*/
     }
 
-    &.bound {
+    &.bound, &.placeholder {
       border: 1px solid #ddd;
       /*background: #ddd;*/
       cursor: move;

@@ -6,7 +6,7 @@ angular.module('mbuilder').directive 'patternpad', ->
     pillInput = new PillInput(
       $('.pillInput', elem),
       renderPill: (pill, dom) =>
-        dom.text(pill.text)
+        dom.text(pill.text).addClass('placeholder')
     )
 
     skipPillInputChange = false
