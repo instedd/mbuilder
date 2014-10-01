@@ -113,7 +113,7 @@ class PillInputController
     @pillInput.dom.on("contextmenu", @clickHandler)
     @pillInput.dom.on("click", @clickHandler)
     @pillInput.dom.on("mousedown", @mouseDownHandler)
-    @pillInput.dom.on("blur", @blurHandler, true)
+    @pillInput.dom.on("blur", @blurHandler)
 
     @pillInput.dom.on("copy", @copyHandler);
     @pillInput.dom.on("cut", @cutHandler);
@@ -281,10 +281,6 @@ class PillInputController
     rect = range and range.getBoundingClientRect()
     container = @getAncestor(INPUT, dispatcher)
     if container
-      # TODO create pill
-      # pillButton = container.querySelector("." + PILL_BUTTON)
-      # pillButton.style.display = (if range and not range.collapsed then "block" else "none")
-      # input = container.querySelector("." + INPUT)
       input = @pillInput.dom[0]
     @toArray(input.childNodes).forEach (element) ->
       if element.nodeType is Node.ELEMENT_NODE
