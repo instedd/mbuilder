@@ -199,7 +199,6 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
 
   $scope.dropOverUnboundPill = (pill, event) ->
     $scope.replacePills(pill.guid, window.draggedPill)
-    event.stopPropagation()
 
   $scope.dragOverUnboundTable = (tableGuid, event) ->
     return false unless window.draggedPill
