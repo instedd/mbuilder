@@ -24,7 +24,6 @@
 //= require pigeon
 //= require message_parser
 //= require_directory ./pill-input/
-//= require_directory ./pill_editor/
 //= require_directory .
 
 $(function(){

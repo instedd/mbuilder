@@ -1,7 +1,7 @@
-.space-between-actions{'dragover' => 'dragOverSpaceBetweenActions($event)', 'drop' => 'dropOverSpaceBetweenActions(0, $event)', 'ng-click' => 'unselectAction()', 'ng-mouseup' => 'mouseDropOverSpaceBetweenActions(0, $event)', 'ng-mouseenter' => 'mouseEnterOverSpaceBetweenActions($event)', 'ng-mouseleave' => 'mouseLeaveSpaceBetweenActions($event)', 'dragenter' => 'dragEnterSpaceBetweenActions($event)', 'dragleave' => 'dragLeaveSpaceBetweenActions($event)'}
+.space-between-actions{'dragover' => 'dragOverSpaceBetweenActions($event)', 'drop' => 'dropOverSpaceBetweenActions(0, $event)', 'ng-click' => 'unselectAction()', 'dragenter' => 'dragEnterSpaceBetweenActions($event)', 'dragleave' => 'dragLeaveSpaceBetweenActions($event)'}
 .a-container{'ng-repeat' => 'action in actions'}
   .action{draggable: 'true', dragstart: 'actionDragStart(this, action, $index, $event)', dragend: 'actionDragEnd($event)', 'ng-class' => '{selected: actionIsSelected(action)}', 'ng-click' => 'selectAction(action, $event)', 'class' => '{{action.kind}}'}
     %a.delete{href: 'javascript:', 'ng-click' => 'deleteAction($index)'}
       %i.icf-delete
     %div(ng-include src='actionTemplateFor(action.kind)')
-  .space-between-actions{'dragover' => 'dragOverSpaceBetweenActions($event)', 'drop' => 'dropOverSpaceBetweenActions($index + 1, $event)', 'ng-click' => 'unselectAction()', 'ng-mouseup' => 'mouseDropOverSpaceBetweenActions($index + 1, $event)', 'ng-mouseenter' => 'mouseEnterOverSpaceBetweenActions($event)', 'ng-mouseleave' => 'mouseLeaveSpaceBetweenActions($event)', 'dragenter' => 'dragEnterSpaceBetweenActions($event)', 'dragleave' => 'dragLeaveSpaceBetweenActions($event)'}
+  .space-between-actions{'dragover' => 'dragOverSpaceBetweenActions($event)', 'drop' => 'dropOverSpaceBetweenActions($index + 1, $event)', 'ng-click' => 'unselectAction()', 'dragenter' => 'dragEnterSpaceBetweenActions($event)', 'dragleave' => 'dragLeaveSpaceBetweenActions($event)'}
