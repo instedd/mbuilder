@@ -85,8 +85,11 @@ input.n {
 
   .table {
     border-top: 3px solid #555555;
-  }
 
+    th.field-header {
+      padding-left: 16px;
+    }
+  }
 }
 
 .logic-table-name {
@@ -301,7 +304,6 @@ table.fields td {
 table.fields td div {
   min-height: 22px;
   padding-top: 1px;
-  padding-left: 1px;
 }
 
 .logic-table input {
@@ -530,6 +532,8 @@ body {
 
   &.new {
     border: 1px dashed transparent;
+    margin-left: 4px;
+    margin-right: 4px;
     color: #aaa;
   }
 
@@ -576,6 +580,7 @@ body {
 }
 
 .action:hover,
+.table:hover,
 .message-container:hover {
 
   .pill {
