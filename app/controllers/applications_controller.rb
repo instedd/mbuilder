@@ -66,9 +66,14 @@ class ApplicationsController < ApplicationController
   end
 
   def import
-    application.import! File.read(params[:mba].tempfile.path)
-    flash.notice = 'Application imported'
-    redirect_to application
+    begin
+      application.import! File.read(params[:mba].tempfile.path)
+      flash.notice = 'Application imported'
+      redirect_to application
+    rescue
+      flash.alert = 'Error importing application'
+      redirect_to application
+    end
   end
 
   def request_api_token
