@@ -367,6 +367,7 @@ class PillInputController
         @dragElement.parentNode.removeChild @dragElement  if @dragElement.classList and @dragElement.classList.contains(PILL)
     @sanitize(target)
     @clearSelection()
+    @pillInput.trigger('pillinput:changed')
     # e.stopPropagation()
     e.preventDefault()
 
@@ -414,7 +415,6 @@ class PillInputController
     return  if not pill or (not arrow and not rightButton)
     e.stopPropagation()
     e.preventDefault() # if e.type is CONTEXT_MENU
-
     @pillInput.trigger 'pillinput:pillclick', {
       pill: @pillInput.pillData($(pill))
       dom: $(pill)
