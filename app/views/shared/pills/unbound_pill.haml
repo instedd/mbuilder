@@ -1,2 +1,2 @@
-.pill.unbound{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', dragover: 'dragOverUnboundPill(pill, $event)', drop: 'dropOverUnboundPill(pill, $event)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}'}}
+.pill.unbound{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', dragover: 'dragOverUnboundPill(pill, $event)', drop: 'dropOverUnboundPill(pill, $event)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}'}, 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)'}
   ???

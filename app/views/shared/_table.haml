@@ -1,4 +1,4 @@
-.pill.table-ref{'ng-show' => 'tableExists(action.table)', 'dragover' => 'dragOverUnboundTable(action.table, $event)', 'drop' => 'dropOverUnboundTable(action, action.table, $event)'}
+.pill.table-ref{'ng-show' => 'tableExists(action.table)', 'dragover' => 'dragOverUnboundTable(action.table, $event)', 'drop' => 'dropOverUnboundTable(action, action.table, $event)', 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)}
   {{lookupTableName(action.table)}}
 .pill.unbound{'ng-hide' => 'tableExists(action.table)', 'dragover' => 'dragOverUnboundTable(action.table, $event)', 'drop' => 'dropOverUnboundTable(action, action.table, $event)'}
   ???

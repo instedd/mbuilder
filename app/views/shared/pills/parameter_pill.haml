@@ -1,2 +1,2 @@
-.pill.bound{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}'}}<>
+.pill.bound{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}'}, 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)'}<>
   {{lookupPillName(pill)}}

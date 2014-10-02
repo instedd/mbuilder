@@ -198,6 +198,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     true
 
   $scope.dropOverUnboundPill = (pill, event) ->
+    $scope.$emit 'dragEnd'
+    $(event.target).removeClass('drop-preview')
     $scope.replacePills(pill.guid, window.draggedPill)
 
   $scope.dragOverUnboundTable = (tableGuid, event) ->
@@ -215,6 +217,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
       if action.table == tableGuid
         action.table = window.draggedPill.guid
 
+    $scope.$emit 'dragEnd'
+    $(event.target).removeClass('drop-preview')
     event.stopPropagation()
 
   $scope.dragOverUnboundField = (fieldGuid, event) ->
@@ -229,6 +233,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
 
     draggedPillTableGuid = $scope.lookupTableByField(draggedPillGuid).guid
 
+    $scope.$emit 'dragEnd'
+    $(event.target).removeClass('drop-preview')
     $scope.tableAndFieldRebinds.push kind: 'field', fromField: destinationPillGuid, toField: draggedPillGuid
 
     for action in $scope.actions
@@ -239,6 +245,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     event.stopPropagation()
 
   $scope.dragOverBoard = (event) ->
+    event.preventDefault()
     false
 
   $scope.dropOverBoard = (event) ->
@@ -246,6 +253,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     event.stopPropagation()
     event.preventDefault()
     $scope.$emit 'dragEnd'
+    $(event.target).removeClass('drop-preview')
     false
 
   $scope.hidePopups = ->
