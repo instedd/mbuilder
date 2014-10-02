@@ -5,6 +5,7 @@ module Hasheable
 
   module ClassMethods
     def from_list(list)
+      return nil if list == nil
       list.map do |hash|
         from_hash hash
       end

@@ -35,6 +35,22 @@ describe Application do
     app2.validation_triggers.all.should eq(application.validation_triggers.all)
   end
 
+  it "exports and imports an empty application" do
+    app = Application.make
+    hash_app_before = app.to_json
+
+    file = Tempfile.new("app")
+    path = file.path
+    app.export file
+    file.close
+
+    file = File.new(path, "r")
+
+    app.import! file
+
+    app.to_json.should eq(hash_app_before)
+  end
+
   it "rebuilds local tables data" do
     users = application.elastic_record_for application.find_table_by_name('Users')
     users.create [{phone: 234567, name: 'john'},{phone: 234567, name: 'mary'}]
