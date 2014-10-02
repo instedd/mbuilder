@@ -199,6 +199,9 @@ class PillInputController
     if element.hasChildNodes() and element.firstChild.nodeName is BR
       element.removeChild(element.firstChild)
 
+    # backspace generates spans in chrome
+    $('span', $(element)).contents().unwrap()
+
   inputContainsRange : (range) ->
     result = false
     if range and not range.collapsed
