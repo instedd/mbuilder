@@ -5,8 +5,6 @@
     Send this message
     %br
     %textpad(model='action.message')
-    / .message-area{contenteditable: '{{action.messageEditable}}', 'ng-blur' => 'makeMessageNotEditable($event)', 'ng-mousedown' => 'makeMessageEditable($event)', dragover: 'dragOverMessage($event)', drop: 'dropOverMessage($event)', 'preserve-ng-repeat' => true}
-    /   %span.piece-container{'ng-repeat' => 'pill in action.message', 'ng-include' => true, 'src' => 'pillTemplateFor(pill)'}<>
     to
   .message-input{contenteditable: '{{action.recipientEditable}}', 'ng-blur' => 'makeRecipientNotEditable($event)', 'ng-mousedown' => 'makeRecipientEditable($event)', dragover: 'dragOverRecipient($event)', drop: 'dropOverRecipient($event)', 'ng-keydown' => 'handleRecipientKey($event)'}
     %span.piece-container{'ng-repeat' => 'pill in [action.recipient]', 'ng-include' => true, 'src' => 'pillTemplateFor(pill)'}<>

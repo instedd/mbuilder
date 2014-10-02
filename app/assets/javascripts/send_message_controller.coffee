@@ -40,25 +40,6 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     args = [0, $scope.action.message.length].concat(bindings)
     Array.prototype.splice.apply($scope.action.message, args)
 
-  $scope.makeMessageNotEditable = (event) ->
-    $scope.parseMessage(event)
-    $scope.action.messageEditable = 'false'
-
-  $scope.makeMessageEditable = (event) ->
-    unless $(event.originalEvent.target).hasClass('pill')
-      $scope.action.messageEditable = 'true'
-
-  $scope.dragOverMessage = (event) ->
-    return false unless window.draggedPill
-
-    event.preventDefault()
-    true
-
-  $scope.dropOverMessage = (event) ->
-    $scope.action.message.push window.draggedPill
-    MessageParser.appendLastPieceTo(event.target)
-    true
-
   $scope.parseRecipient = (event) ->
     parser = new MessageParser(event.originalEvent.currentTarget)
     parser.onText (text) ->
