@@ -36,7 +36,9 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', '$timeout', 
     $scope.validValuesPopup.field = field
 
     div = $('#valid-values')
-    div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
+    closest_th = $(event.originalEvent.toElement).closest('th')
+    closest_th_positon = closest_th.position()
+    div.css left: closest_th_positon.left, top: closest_th_positon.top + $(closest_th).height()
     div.show()
 
     field.active = true
