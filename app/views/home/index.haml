@@ -14,11 +14,11 @@
           - if current_user
             %p
               Get started:
-              = link_to 'View your applications', applications_path, :class => "btn-create"
+              = link_to 'View your applications', applications_path, :class => "btn btn-warning"
           - else
             %p
               Get started:
-              = link_to 'Create an account', guisso_sign_up_path_for(:user), :class => "btn-create"
+              = link_to 'Create an account', guisso_sign_up_path_for(:user), :class => "btn btn-warning"
             %p
               Already a member?
               = link_to 'Log in', guisso_sign_in_path_for(:user)

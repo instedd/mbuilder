@@ -683,17 +683,9 @@ body {
 
   .main-img {
     margin-top: 50px;
-    h1,
-    a {
+    h1 {
       color: #ff6600;
     }
-  }
-
-  .btn-create {
-    @extend .btn;
-    @extend .btn-warning;
-    @include gradient-vertical(#fe973a, #ff6600);
-    color: $white !important;
   }
 
   .what-can-i-use {
