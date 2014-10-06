@@ -46,11 +46,7 @@
 - if external_triggers.present? || validation_triggers.present? || periodic_tasks.present? || message_triggers.present?
   .row-fluid
     .span12
-      / = icon_link_to :'icc-add', 'Add Trigger', '#', class: "add-trigger"
-      %a.add-trigger{:href => "#"}
-        %span.btn-icon.blue
-          %i.icc-add
-        Add Trigger
+      = icon_link_to :'icc-add', 'Add Trigger', '#', class: "add-trigger blue"
       .triggers-menu
         = link_to new_application_message_trigger_path(application) do
           = image_tag "trigger-message.png"
