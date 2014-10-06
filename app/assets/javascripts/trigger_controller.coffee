@@ -324,6 +324,13 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     event.stopPropagation()
 
   $scope.selectAction = (action, event) ->
+    # skip click if the target of the action was the Add step
+    # so the document handler opens the menu
+    return if $(event.target).closest('.dropdown-toggle').attr('data-toggle')
+    # since a stopPropagation will be raised to play nice with nested if/for selection
+    # we need to hide manually the dropdowns
+    $('.btn-group.open .dropdown-menu').closest('.btn-group').removeClass('open')
+
     $scope.hidePopups()
     if $scope.selectedAction == action
       $scope.unselectAction()

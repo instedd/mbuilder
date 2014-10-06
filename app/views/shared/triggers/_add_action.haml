@@ -1,4 +1,11 @@
-%a{'ng-click' => 'addSendMessageAction()', href: 'javascript:'}
-  %span.btn-icon.blue
-    %i.icc-add
-  %span Add step
+.btn-group
+  %a.btn.btn-link.button-icon.blue.dropdown-toggle(data-toggle="dropdown" href="#")
+    %span.btn-icon
+      %i.icc-add
+    Add step
+  %ul.dropdown-menu
+    %li
+      %a.btn.btn-link.button-icon.plain{'ng-click' => 'addSendMessageAction()', href: 'javascript:'}
+        %span.btn.btn-link.btn-icon
+          %i.i40-sms
+        %span Send SMS
