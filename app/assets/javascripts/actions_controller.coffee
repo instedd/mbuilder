@@ -104,6 +104,15 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     $scope.actions.push(action)
 
+  $scope.addLoopAction = ->
+    action =
+      kind: 'foreach'
+      table: null
+      actions: []
+
+    $scope.actions.push(action)
+
+
   $scope.deleteAction = (index) ->
     action = $scope.actions[index]
     if action.kind == 'foreach'
