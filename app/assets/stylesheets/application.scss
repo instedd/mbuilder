@@ -175,6 +175,12 @@ input.n {
       background-color: #cae3f1;
     }
 
+    // otherwise style of icons in dropdown menu where affected if the action is selected
+    .dropdown-menu i[class^="i25-"] {
+      background-position-y: 0px;
+      background-color: transparent;
+    }
+
     i[class^="i40-"] {
       background-position-y: -40px;
     }

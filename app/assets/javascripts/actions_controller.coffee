@@ -112,6 +112,18 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     $scope.actions.push(action)
 
+  $scope.addIfAction = ->
+    action =
+      kind: 'if'
+      all: true,
+      left: {}
+      op: '=='
+      right: [
+        {kind: 'literal', guid: window.guid(), text: ''},
+      ]
+      actions: []
+
+    $scope.actions.push(action)
 
   $scope.deleteAction = (index) ->
     action = $scope.actions[index]
