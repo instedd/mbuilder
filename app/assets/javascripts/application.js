@@ -45,7 +45,11 @@ $(function(){
   }
 
   var changeClosestHoverTable = function(target) {
-    changeClosestHover(target, '.table');
+    changeClosestHover(target, '.logic-table');
+  }
+
+  var changeClosestHoverColumn = function(target) {
+    changeClosestHover(target, '.field-header');
   }
 
   var changeClosestHover = function(target, matcher) {
@@ -70,6 +74,7 @@ $(function(){
   $(window).mousemove(function(e){
     changeClosestHoverAction(e.target);
     changeClosestHoverTable(e.target);
+    changeClosestHoverColumn(e.target);
   });
 });
 

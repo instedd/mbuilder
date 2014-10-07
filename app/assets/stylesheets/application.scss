@@ -85,7 +85,33 @@ input.n {
   cursor: default;
 }
 
+a.delete {
+  float: right;
+  display: none;
+  position: relative;
+  z-index: 2;
+  i {
+    background-position-y:-40px;
+  }
+}
+
+.action .delete {
+  margin-top: -10px;
+}
+
+.field-header .delete {
+  margin-top: -3px;
+}
+
+.field-header.hover .delete {
+  display: block;
+}
+
 .logic-table {
+
+  &.hover > .delete {
+    display: block;
+  }
 
   .table {
     border-top: 3px solid #555555;
@@ -282,18 +308,6 @@ input.n {
   position: relative;
   z-index: 2;
 }
-
-a.delete {
-  float: right;
-  margin-top: -10px;
-  display: none;
-  position: relative;
-  z-index: 2;
-  i {
-    background-position-y:-40px;
-  }
-}
-
 
 .text {
   display: inline-block;

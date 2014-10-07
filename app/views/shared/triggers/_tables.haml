@@ -3,7 +3,6 @@
 
   %div{'ng-repeat' => 'table in tables', 'ng-controller' => 'TableController'}
     .logic-table
-      / = icon_link_to :'icf-delete', '', '{href: 'javascript:', 'ng-click' => 'deleteTable($index)'}'
       %a.delete{href: 'javascript:', 'ng-click' => 'deleteTable($index)', title: 'Delete table'}
         %i.icf-delete
       .logic-table-name{draggable: 'true', dragstart: 'tableDragStart(table.guid, $event)'}
@@ -18,8 +17,8 @@
         %table.table.table-bordered.fields.graygrad
           %tr
             %th.field-header{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)', 'ng-class'=> "{active: pill.active == true}"}
-              %span{'ng-hide' => 'table.readonly'}
-                %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)'} x
+              %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)', 'ng-hide' => 'table.readonly'}
+                %i.icf-delete
               .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)', 'dragover' => 'dragOverName($event)', 'drop' => 'dropOverName($event)'}
                 %div{'ng-hide' => 'table.readonly'}
                   %editable-input{'model' => 'pill.name', 'editmode' => 'pill.editmode', 'focusmode' => 'pill.focusmode'}
