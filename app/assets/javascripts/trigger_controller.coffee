@@ -207,10 +207,11 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     event.preventDefault()
     true
 
-  $scope.dropOverUnboundTable = (tableGuid, event) ->
+  $scope.dropOverUnboundTable = (loop_action, tableGuid, event) ->
     $scope.tableAndFieldRebinds.push kind: 'table', from: tableGuid, to: window.draggedPill.guid
 
-    for action in $scope.actions
+    loop_action.table = window.draggedPill.guid
+    for action in loop_action.actions
       if action.table == tableGuid
         action.table = window.draggedPill.guid
 
