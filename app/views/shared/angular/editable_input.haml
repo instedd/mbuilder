@@ -1,5 +1,5 @@
 %span{'ng-show' => 'editmode || model.length > 0'}
   %input{'ng-model' => 'model', 'ng-show' => 'editmode', 'ng-blur' => 'makeNotEditable()', 'ng-keydown' => 'checkEnter($event)', type: 'text', size: "{{size()}}", style: 'width:auto'}
-  %span{'ng-bind' => 'model', 'ng-hide' => 'editmode', 'ng-mouseup' => 'makeEditable($event)', dragover: 'dragover($event)', drop: 'drop($event)'}
+  %span{'ng-bind' => 'model', 'ng-hide' => 'editmode', 'ng-mouseup' => 'makeEditable($event)', dragover: 'dragover($event)', drop: 'drop($event)', 'ng-class' => '{ellipsis: (model.length > 20)}', 'data-tooltip-content' =>'{{model}}'}
 %span{'ng-hide' => 'editmode || model.length > 0', 'ng-mouseup' => 'makeEditable($event)'}
   (empty)

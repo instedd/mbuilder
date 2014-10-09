@@ -1,4 +1,5 @@
-.pill.field-ref{'ng-show' => 'fieldExists(action.field)'}
-  {{lookupFieldName(action.field)}}
-.pill.unbound{'ng-hide' => 'fieldExists(action.field)', 'dragover' => 'dragOverUnboundField(action.field, $event)', 'drop' => 'dropOverUnboundField(action.field, $event)'}
-  ???
+.pill-container
+  .pill.field-ref{'ng-show' => 'fieldExists(action.field)', 'data-tooltip-content' =>'{{lookupFieldName(action.field)}}', 'ng-class' => '{ellipsis: (lookupFieldName(action.field).length > 20)}'}
+    {{lookupFieldName(action.field)}}
+  .pill.unbound{'ng-hide' => 'fieldExists(action.field)', 'dragover' => 'dragOverUnboundField(action.field, $event)', 'drop' => 'dropOverUnboundField(action.field, $event)'}
+    ???

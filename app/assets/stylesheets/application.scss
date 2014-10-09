@@ -86,9 +86,9 @@ input.n {
 }
 
 a.delete {
-  float: right;
   display: none;
-  position: relative;
+  position: absolute;
+  right: 0%;
   z-index: 2;
   i {
     background-position-y:-40px;
@@ -98,6 +98,7 @@ a.delete {
 .action .delete {
   margin-top: -10px;
 }
+.action
 
 .field-header .delete {
   margin-top: -3px;
@@ -184,6 +185,7 @@ a.delete {
 .action {
   padding: 15px 0 10px 10px;
   cursor: move;
+  position: relative;
 
   &:active {
     background: #e8e7e7 !important;
@@ -571,11 +573,66 @@ body {
 //-------------------- Pills -------------------------
 //----------------------------------------------------
 
+.pill-container {
+  display: inline-block;
+  position:relative;
+}
+
+th .ellipsis {
+  &:hover:after {
+    top: 26px;
+    bottom: initial;
+    padding: 5px 15px;
+  }
+  &:hover:before {
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 0 6px 6px 6px;
+    top: 20px;
+  }
+}
+
+.ellipsis {
+  margin-top: -3px;
+  vertical-align:middle;
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 150px;
+  overflow: hidden;
+
+  &:hover:after {
+    background: rgba(0,0,0,.8) !important;
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(data-tooltip-content);
+    left: 10%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 99;
+    max-width: none;
+    display: inline-block;
+    overflow: visible;
+  }
+  &:hover:before {
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 98;
+  }
+}
+
 .pill {
   @include border-radius(15px);
   padding: 2px 8px;
   display: inline-block;
   line-height: 20px;
+  white-space: nowrap;
 
   &.sample {
     border: 1px solid transparent;
@@ -637,7 +694,7 @@ body {
   &.literal input {
     margin: 0;
     padding: 0;
-    margin-top: -2px;
+    margin-top: -3px;
     height: 18px !important;
   }
 }

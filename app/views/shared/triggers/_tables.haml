@@ -7,7 +7,8 @@
         %i.icf-delete
       .logic-table-name{draggable: 'true', dragstart: 'tableDragStart(table.guid, $event)'}
         %div{'ng-hide' => 'table.readonly'}
-          %editable-input{'model' => 'table.name', 'editmode' => 'table.editmode', 'focusmode' => 'table.focusmode'}
+          .pill-container
+            %editable-input{'model' => 'table.name', 'editmode' => 'table.editmode', 'focusmode' => 'table.focusmode'}
         %span{'ng-show' => 'table.readonly'}
           {{table.name}} (from {{table.kind}})
           %a.refresh{href: 'javascript:', 'ng-click' => 'updateCollection(table)'}
@@ -21,7 +22,8 @@
                 %i.icf-delete
               .logic-field-name{draggable: 'true', dragstart: 'fieldDragStart(pill.guid, $event)', 'dragover' => 'dragOverName($event)', 'drop' => 'dropOverName($event)'}
                 %div{'ng-hide' => 'table.readonly'}
-                  %editable-input{'model' => 'pill.name', 'editmode' => 'pill.editmode', 'focusmode' => 'pill.focusmode'}
+                  .pill-container
+                    %editable-input{'model' => 'pill.name', 'editmode' => 'pill.editmode', 'focusmode' => 'pill.focusmode'}
                 %span{'ng-show' => 'table.readonly'} {{pill.name}}
             %th{'ng-hide' => 'table.readonly'}
               %a{'ng-click' => 'newField()', href: 'javascript:', title: 'Add column'}

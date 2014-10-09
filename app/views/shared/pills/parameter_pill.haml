@@ -1,2 +1,3 @@
-.pill.bound{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}'}, 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)'}<>
-  {{lookupPillName(pill)}}
+.pill-container
+  .pill.bound{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}'}, 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)', 'data-tooltip-content' =>'{{lookupPillName(pill)}}', 'ng-class' => '{ellipsis: (lookupPillName(pill).length > 20)}'}<>
+    {{lookupPillName(pill)}}

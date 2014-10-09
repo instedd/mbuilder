@@ -1,4 +1,5 @@
-.pill.table-ref{'ng-show' => 'tableExists(action.table)', 'dragover' => 'dragOverUnboundTable(action.table, $event)', 'drop' => 'dropOverUnboundTable(action, action.table, $event)', 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)'}
-  {{lookupTableName(action.table)}}
-.pill.unbound{'ng-hide' => 'tableExists(action.table)', 'dragover' => 'dragOverUnboundTable(action.table, $event)', 'drop' => 'dropOverUnboundTable(action, action.table, $event)'}
-  ???
+.pill-container
+  %span.pill.table-ref{'ng-show' => 'tableExists(action.table)', 'dragover' => 'dragOverUnboundTable(action.table, $event)', 'drop' => 'dropOverUnboundTable(action, action.table, $event)', 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)', 'data-tooltip-content' =>'{{lookupTableName(action.table)}}', 'ng-class' => '{ellipsis: (lookupTableName(action.table).length > 20)}'}
+    {{lookupTableName(action.table)}}
+  .pill.unbound{'ng-hide' => 'tableExists(action.table)', 'dragover' => 'dragOverUnboundTable(action.table, $event)', 'drop' => 'dropOverUnboundTable(action, action.table, $event)'}
+    ???
