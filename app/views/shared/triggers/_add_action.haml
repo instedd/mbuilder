@@ -1,8 +1,5 @@
 .btn-group
-  %a.btn.btn-link.button-icon.blue.dropdown-toggle(data-toggle="dropdown" href="#")
-    %span.btn-icon
-      %i.icc-add
-    Add step
+  = icon_link_to :'icc-add', 'Add step', '#', class: 'btn btn-link blue dropdown-toggle', :'data-toggle' => "dropdown"
   %ul.dropdown-menu
     %li
       %a{'ng-click' => 'addSendMessageAction()', href: 'javascript:'}
