@@ -88,20 +88,16 @@ input.n {
 a.delete {
   display: none;
   position: absolute;
-  right: 0%;
+  right: 0px;
+  top: 3px;
   z-index: 2;
   i {
     background-position-y:-40px;
   }
 }
 
-.action .delete {
-  margin-top: -10px;
-}
-.action
-
 .field-header .delete {
-  margin-top: -3px;
+  top: 1px;
 }
 
 .field-header.hover .delete {
@@ -109,6 +105,8 @@ a.delete {
 }
 
 .logic-table {
+
+  position: relative;
 
   &.hover > .delete {
     display: block;
