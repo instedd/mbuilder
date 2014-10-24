@@ -10,13 +10,10 @@ class Actions::SendMessage < Action
   generate_equals :message, :recipient
 
   def execute(context)
-    message = @message.map do |binding|
+    message = (@message.map do |binding|
       values = Array(binding.value_in(context).user_friendly)
       values.join ", "
-    end.join(" ").strip
-
-    # remove non breaking space in messages
-    message.gsub!("\u00A0", " ")
+    end.map{|s| s.gsub("\u00A0", " ").strip}).join(" ").strip
 
     # TODO: maybe this is wrong
     message.gsub!(" .", ".")
