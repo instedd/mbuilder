@@ -15,6 +15,9 @@ class Actions::SendMessage < Action
       values.join ", "
     end.join(" ").strip
 
+    # remove non breaking space in messages
+    message.gsub!("\u00A0", " ")
+
     # TODO: maybe this is wrong
     message.gsub!(" .", ".")
     message.gsub!(" ,", ",")
