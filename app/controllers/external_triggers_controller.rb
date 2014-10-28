@@ -68,6 +68,7 @@ class ExternalTriggersController < MbuilderApplicationController
     data = JSON.parse request.raw_post
 
     trigger.name = data['name']
+    trigger.auth_method = data['auth_method']
     trigger.parameters = Pill.from_list(data['parameters'])
     trigger.actions = Action.from_list(data['actions'])
 

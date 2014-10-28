@@ -12,6 +12,15 @@
           %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name", class: 'span12 n'}
           %br
           %br
+          .radio
+            %label
+              %input{'type' => 'radio', 'name' => 'auth_method', 'value' => 'basic_auth', 'ng-model' => '$parent.authMethod'}
+              Basic auth: Use this if a 3rd party application will be calling this trigger and you can specify user and password
+          .radio
+            %label
+              %input{'type' => 'radio', 'name' => 'auth_method', 'value' => 'oauth', 'ng-model' => '$parent.authMethod'}
+              Oauth token: Use this if you are going to call this trigger from another InSTEDD application."
+          %br
           %label{for: :message} When a post to this url is received:
           .message-container
             .from

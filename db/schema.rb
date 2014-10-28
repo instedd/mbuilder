@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140307165308) do
+ActiveRecord::Schema.define(:version => 20141028164201) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(:version => 20140307165308) do
     t.text     "parameters"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.string   "auth_method"
   end
 
   add_index "external_triggers", ["application_id"], :name => "index_external_triggers_on_application_id"

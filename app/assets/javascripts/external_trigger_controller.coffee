@@ -30,6 +30,7 @@ angular.module('mbuilder').controller 'ExternalTriggerController', ['$scope', '$
       parameters: $scope.parameters
       actions: $scope.actions
       tableAndFieldRebinds: $scope.tableAndFieldRebinds
+      auth_method: $scope.authMethod
 
     if $scope.id?
       url = "/applications/#{$scope.applicationId}/external_triggers/#{$scope.id}"

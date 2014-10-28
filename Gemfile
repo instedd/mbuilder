@@ -18,6 +18,7 @@ gem 'ng-rails-csrf'
 gem "tire"
 gem "elasticsearch"
 gem 'rack-cors', :require => 'rack/cors'
+gem 'symbolize'
 
 gem "ice_cube"
 gem 'recurring_select', git: "https://github.com/instedd/recurring_select", branch: 'instedd'
