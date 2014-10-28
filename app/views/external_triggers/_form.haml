@@ -18,8 +18,13 @@
               Basic auth: Use this if a 3rd party application will be calling this trigger and you can specify user and password
           .radio
             %label
+              %input{'type' => 'radio', 'name' => 'auth_method', 'value' => 'auth_token', 'ng-model' => '$parent.authMethod'}
+              Auth token: Use this if a 3rd party application will be calling this trigger and you can specify an
+              =link_to "authentication token", edit_application_path(application)
+          .radio
+            %label
               %input{'type' => 'radio', 'name' => 'auth_method', 'value' => 'oauth', 'ng-model' => '$parent.authMethod'}
-              Oauth token: Use this if you are going to call this trigger from another InSTEDD application."
+              Oauth: Use this if you are going to call this trigger from another InSTEDD application.
           %br
           %label{for: :message} When a post to this url is received:
           .message-container
