@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe ExternalTrigger do
-  let(:application) {Application.make name: "App Name"}
+  let(:application) { Application.make name: "App Name" }
   let(:external_trigger) { ExternalTrigger.make name: "Trigger Name", application: application }
 
   it "should build url" do
@@ -22,8 +22,8 @@ describe ExternalTrigger do
 
     description = trigger_with_parameters.api_action_description("test.com")
     description[:parameters].should eq([
-      {:name=>:phone, :type=>"string"},
-      {:name=>:name, :type=>"string"}
+      {name: :phone, type: "string"},
+      {name: :name, type:"string"}
     ])
   end
 end
