@@ -62,8 +62,7 @@ class ApiController < ApplicationController
   def actions
     external_actions = []
     current_user.applications.includes(:external_triggers).each do | application |
-      # For the moment listing all external triggers
-      external_actions = external_actions + application.external_triggers.map { |ex| ex.api_action_description(request.host_with_port)}
+      external_actions = external_actions + application.external_triggers.oauth.map { |ex| ex.api_action_description(request.host_with_port)}
     end
     render_json external_actions
   end
