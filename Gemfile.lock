@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/alto_guisso.git
-  revision: 23d3c209edf172a8ef8d0e1771ffaf6085ffbe8d
+  revision: 086a2d234fb7fa24112527fa7927575a5f38de35
   branch: master
   specs:
     alto_guisso (0.0.1)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/instedd-bootstrap.git
-  revision: e3dd7bb922cb89c5007cc371afafb31ac391bdf1
+  revision: 855d92699e8b375e1f57a50af4aa4f70c563f5a5
   branch: master
   specs:
     instedd-bootstrap (0.0.1)
@@ -249,6 +249,8 @@ GEM
       activesupport (= 3.2.19)
       bundler (~> 1.0)
       railties (= 3.2.19)
+    rails_config (0.4.2)
+      activesupport (>= 3.0)
     railties (3.2.19)
       actionpack (= 3.2.19)
       activesupport (= 3.2.19)
@@ -357,6 +359,7 @@ DEPENDENCIES
   rack-cors
   rack-oauth2!
   rails (~> 3.2.17)
+  rails_config
   recurring_select!
   resource_map_api_client!
   rspec

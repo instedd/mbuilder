@@ -9,25 +9,23 @@ class ExternalTrigger < Trigger
 
   symbolize :auth_method, :in => [:basic_auth, :auth_token, :oauth], :scopes => true, :default => :basic_auth, :scopes => :shallow
 
-  def api_action_description(host)
+  def api_action_description
     description = {
-      action: "#{application.name} - #{name}",
+      action: "#{name}",
       method: "POST",
-      url: trigger_run_url(host),
+      id: id,
+      url: trigger_run_url,
     }
 
-    description[:parameters] = (parameters || []).map do |param|
-      {name: param.name, type: "string"}
+    description[:parameters] = (parameters || []).inject Hash.new do |params, param|
+      params[param.name] = {label: param.name.to_s.titleize, type: "string"}
+      params
     end
 
     description
   end
 
-  def trigger_run_url(host)
-    url_for(controller: 'external_triggers', action:'run', format: :json, application_id: application_id, trigger_name: name, host: host)
+  def trigger_run_url
+    url_for(controller: 'external_triggers', action:'run', format: :json, application_id: application_id, trigger_name: name, host: Settings.host)
   end
-
-  # def route
-  #   name + (parameters.map {|parameter| "#{parameter.name}=#{parameter.name}" }.join '&')
-  # end
 end
