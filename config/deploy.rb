@@ -4,7 +4,7 @@ require 'rvm/capistrano'
 set :rvm_ruby_string, '2.0.0-p353'
 set :rvm_type, :system
 set :application, "mbuilder"
-set :repository,  "https://bitbucket.org/instedd/mbuilder"
+set :repository,  "https://github.com/instedd/mbuilder.git"
 set :scm, :git
 set :user, 'ubuntu'
 set :group, 'ubuntu'
