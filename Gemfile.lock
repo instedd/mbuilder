@@ -1,4 +1,16 @@
 GIT
+  remote: git://github.com/instedd/alto_guisso.git
+  revision: cda34b8e0bdc6a3758f1de429c5ee30197bd9dcf
+  branch: master
+  specs:
+    alto_guisso (0.0.1)
+      omniauth
+      omniauth-openid
+      rack-oauth2
+      rails (>= 3.0)
+      ruby-openid
+
+GIT
   remote: git://github.com/manastech/listings.git
   revision: a79a1c32f091787bc8ae6935444115272d52c69e
   branch: master
@@ -11,16 +23,16 @@ GIT
       sass-rails (~> 3.2.3)
 
 GIT
-  remote: https://bitbucket.org/instedd/alto_guisso.git
-  revision: 086a2d234fb7fa24112527fa7927575a5f38de35
+  remote: git://github.com/manastech/rack-oauth2.git
+  revision: 192e4d020a84432179297deb035f9716d4bf6622
   branch: master
   specs:
-    alto_guisso (0.0.1)
-      omniauth
-      omniauth-openid
-      rack-oauth2
-      rails (>= 3.0)
-      ruby-openid
+    rack-oauth2 (1.0.5)
+      activesupport (>= 2.3)
+      attr_required (>= 0.0.5)
+      httpclient (>= 2.2.0.2)
+      multi_json (>= 1.3.6)
+      rack (>= 1.1)
 
 GIT
   remote: https://bitbucket.org/instedd/instedd-bootstrap.git
@@ -65,18 +77,6 @@ GIT
       jquery-rails (>= 3.0)
       rails (>= 3.2)
       sass-rails (>= 3.1)
-
-GIT
-  remote: https://github.com/manastech/rack-oauth2.git
-  revision: 192e4d020a84432179297deb035f9716d4bf6622
-  branch: master
-  specs:
-    rack-oauth2 (1.0.5)
-      activesupport (>= 2.3)
-      attr_required (>= 0.0.5)
-      httpclient (>= 2.2.0.2)
-      multi_json (>= 1.3.6)
-      rack (>= 1.1)
 
 GEM
   remote: https://rubygems.org/
@@ -181,7 +181,7 @@ GEM
     hashr (0.0.22)
     highline (1.6.21)
     hike (1.2.3)
-    httpclient (2.4.0)
+    httpclient (2.5.3.2)
     i18n (0.6.11)
     ice_cube (0.11.0)
     journey (1.0.4)
