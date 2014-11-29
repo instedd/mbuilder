@@ -1,18 +1,34 @@
 GIT
   remote: git://github.com/instedd/alto_guisso.git
-  revision: cda34b8e0bdc6a3758f1de429c5ee30197bd9dcf
+  revision: 5236f5f0fc5072cc294758089cebd8314706006a
   branch: master
   specs:
-    alto_guisso (0.0.1)
+    alto_guisso (0.0.2)
+      rack-oauth2
+
+GIT
+  remote: git://github.com/instedd/alto_guisso_rails.git
+  revision: a9bb41430e636e3dec1a85a2be2af0fc27358a9c
+  branch: master
+  specs:
+    alto_guisso_rails (0.0.1)
+      alto_guisso
       omniauth
       omniauth-openid
-      rack-oauth2
       rails (>= 3.0)
       ruby-openid
 
 GIT
+  remote: git://github.com/instedd/ruby-hub_client.git
+  revision: 2dfe1ffca0767b8aa2cce4ab487801cb967bb82a
+  branch: master
+  specs:
+    hub_client (0.0.1)
+      rest-client
+
+GIT
   remote: git://github.com/manastech/listings.git
-  revision: a79a1c32f091787bc8ae6935444115272d52c69e
+  revision: 0b82a1d7a86a499a456530cb0279af1726562b21
   branch: master
   specs:
     listings (0.0.2)
@@ -23,20 +39,8 @@ GIT
       sass-rails (~> 3.2.3)
 
 GIT
-  remote: git://github.com/manastech/rack-oauth2.git
-  revision: 192e4d020a84432179297deb035f9716d4bf6622
-  branch: master
-  specs:
-    rack-oauth2 (1.0.5)
-      activesupport (>= 2.3)
-      attr_required (>= 0.0.5)
-      httpclient (>= 2.2.0.2)
-      multi_json (>= 1.3.6)
-      rack (>= 1.1)
-
-GIT
   remote: https://bitbucket.org/instedd/instedd-bootstrap.git
-  revision: 855d92699e8b375e1f57a50af4aa4f70c563f5a5
+  revision: abd90e62cb8eaa922719acc18e3d7570b3b9b106
   branch: master
   specs:
     instedd-bootstrap (0.0.1)
@@ -81,12 +85,12 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    actionmailer (3.2.19)
-      actionpack (= 3.2.19)
+    actionmailer (3.2.21)
+      actionpack (= 3.2.21)
       mail (~> 2.5.4)
-    actionpack (3.2.19)
-      activemodel (= 3.2.19)
-      activesupport (= 3.2.19)
+    actionpack (3.2.21)
+      activemodel (= 3.2.21)
+      activesupport (= 3.2.21)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
       journey (~> 1.0.4)
@@ -94,18 +98,18 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.2.1)
-    activemodel (3.2.19)
-      activesupport (= 3.2.19)
+    activemodel (3.2.21)
+      activesupport (= 3.2.21)
       builder (~> 3.0.0)
-    activerecord (3.2.19)
-      activemodel (= 3.2.19)
-      activesupport (= 3.2.19)
+    activerecord (3.2.21)
+      activemodel (= 3.2.21)
+      activesupport (= 3.2.21)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
-    activeresource (3.2.19)
-      activemodel (= 3.2.19)
-      activesupport (= 3.2.19)
-    activesupport (3.2.19)
+    activeresource (3.2.21)
+      activemodel (= 3.2.21)
+      activesupport (= 3.2.21)
+    activesupport (3.2.21)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     angularjs-rails (1.0.7)
@@ -177,11 +181,11 @@ GEM
       activesupport (>= 3.1, < 4.1)
       haml (>= 3.1, < 4.1)
       railties (>= 3.1, < 4.1)
-    hashie (2.1.2)
+    hashie (3.3.2)
     hashr (0.0.22)
     highline (1.6.21)
     hike (1.2.3)
-    httpclient (2.5.3.2)
+    httpclient (2.5.3.3)
     i18n (0.6.11)
     ice_cube (0.11.0)
     journey (1.0.4)
@@ -215,8 +219,8 @@ GEM
     ng-rails-csrf (0.1.0)
     oauth (0.4.7)
     oj (2.3.0)
-    omniauth (1.2.1)
-      hashie (>= 1.2, < 3)
+    omniauth (1.2.2)
+      hashie (>= 1.2, < 4)
       rack (~> 1.0)
     omniauth-openid (1.0.1)
       omniauth (~> 1.0)
@@ -234,6 +238,12 @@ GEM
     rack-cache (1.2)
       rack (>= 0.4)
     rack-cors (0.2.9)
+    rack-oauth2 (1.0.8)
+      activesupport (>= 2.3)
+      attr_required (>= 0.0.5)
+      httpclient (>= 2.2.0.2)
+      multi_json (>= 1.3.6)
+      rack (>= 1.1)
     rack-openid (1.3.1)
       rack (>= 1.1.0)
       ruby-openid (>= 2.1.8)
@@ -241,24 +251,24 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
-    rails (3.2.19)
-      actionmailer (= 3.2.19)
-      actionpack (= 3.2.19)
-      activerecord (= 3.2.19)
-      activeresource (= 3.2.19)
-      activesupport (= 3.2.19)
+    rails (3.2.21)
+      actionmailer (= 3.2.21)
+      actionpack (= 3.2.21)
+      activerecord (= 3.2.21)
+      activeresource (= 3.2.21)
+      activesupport (= 3.2.21)
       bundler (~> 1.0)
-      railties (= 3.2.19)
+      railties (= 3.2.21)
     rails_config (0.4.2)
       activesupport (>= 3.0)
-    railties (3.2.19)
-      actionpack (= 3.2.19)
-      activesupport (= 3.2.19)
+    railties (3.2.21)
+      actionpack (= 3.2.21)
+      activesupport (= 3.2.21)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
-    rake (10.3.2)
+    rake (10.4.0)
     rdoc (3.12.2)
       json (~> 1.4)
     rest-client (1.6.7)
@@ -278,7 +288,7 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
-    ruby-openid (2.5.0)
+    ruby-openid (2.6.0)
     rvm-capistrano (1.2.2)
       capistrano (>= 2.0.0)
     sass (3.2.13)
@@ -287,7 +297,7 @@ GEM
       sass (>= 3.1.10)
       tilt (~> 1.3)
     slop (3.5.0)
-    sprockets (2.2.2)
+    sprockets (2.2.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
@@ -317,7 +327,7 @@ GEM
       json (>= 1.8.0)
       mime-types (>= 1.16)
       oauth (>= 0.4.7)
-    tzinfo (0.3.41)
+    tzinfo (0.3.42)
     uglifier (2.1.2)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
@@ -330,6 +340,7 @@ PLATFORMS
 
 DEPENDENCIES
   alto_guisso!
+  alto_guisso_rails!
   angularjs-rails
   bootstrap-sass (~> 2.3.2.1)
   capistrano (= 2.14.2)
@@ -343,6 +354,7 @@ DEPENDENCIES
   foreman
   guid
   haml-rails
+  hub_client!
   ice_cube
   instedd-bootstrap!
   instedd-pigeon!
@@ -357,14 +369,12 @@ DEPENDENCIES
   omniauth-openid
   pry-byebug
   rack-cors
-  rack-oauth2!
   rails (~> 3.2.17)
   rails_config
   recurring_select!
   resource_map_api_client!
   rspec
   rspec-rails
-  ruby-openid
   rvm-capistrano
   sass-rails (~> 3.2.3)
   symbolize
