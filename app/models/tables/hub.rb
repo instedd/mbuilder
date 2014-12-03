@@ -19,12 +19,7 @@ class Tables::Hub < Table
   end
 
   def select_field_in(context, restrictions, field, group_by, aggregate)
-    # mapped_restrictions = restrictions.map(&:clone).each do |restriction|
-    #   f = find_field(restriction[:field])
-    #   restriction[:field] = f.id
-    #   restriction[:modifier] = f.modifier if f.modifier.present?
-    # end
-    # context.select_resource_map_field(id, mapped_restrictions, find_field(field), group_by, aggregate)
+    context.select_hub_field(self, restrictions, find_field(field), group_by, aggregate)
   end
 
   def insert_in(context, properties)

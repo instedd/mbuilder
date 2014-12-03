@@ -95,6 +95,19 @@ class DatabaseExecutionContext < ExecutionContext
     results.to_f_if_looks_like_number
   end
 
+  def select_hub_field(table, restrictions, field, group_by, aggregate)
+    # TODO does hub support projection?
+    # TODO support group_by?
+    # TODO support aggregations? probably not since resmap doesnt
+    # binding.pry
+    entites = hub_api.entity_set(table.path).paged_where(restrictions_to_hub(restrictions, table))
+
+    results = entites.map { |entity| entity[field.name] }
+
+    results = results.first if (results.is_an? Array) && results.one?
+    results.to_f_if_looks_like_number
+  end
+
   def each_value(table, restrictions, group_by, &block)
     application.find_table(table).each_value(self, restrictions, group_by, &block)
   end
@@ -180,9 +193,19 @@ class DatabaseExecutionContext < ExecutionContext
     @resource_map_api ||= ResourceMap::Api.trusted(application.user.email, ResourceMap::Config.url, ResourceMap::Config.use_https)
   end
 
+  def hub_api
+    @hub_api ||= HubClient::Api.trusted(application.user.email)
+  end
+
   def restrictions_to_resource_map(restrictions, collection)
     restrictions.each_with_object({}) do |restriction, hash|
       hash[field_restriction_to_api_query restriction, collection] = restriction[:value].user_friendly
+    end
+  end
+
+  def restrictions_to_hub(restrictions, table)
+    restrictions.each_with_object({}) do |restriction, hash|
+      hash[table.find_field(restriction[:field]).name] = restriction[:value].user_friendly
     end
   end
 end
