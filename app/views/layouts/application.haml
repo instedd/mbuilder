@@ -6,6 +6,8 @@
 
 - content_for :app_logo do
   - image_tag "/assets/instedd-bootstrap/header/logos/mbuilder.png"
+  :javascript
+    window.hub_url = "#{HubClient.current.url}"
 
 - content_for :app_version do
   = Mbuilder::Application.config.version_name

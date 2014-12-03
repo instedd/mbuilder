@@ -52,8 +52,4 @@
             %a{'href' => 'javascript:', 'ng-click' => 'addCollection(collection)'} {{collection.name}}
     %br
     %div{'ng-controller' => 'HubController'}
-      = icon_link_to :'icf-connect', 'Add data form Hub', 'javascript:', {'ng-click' => 'addNewHubData(new_hub_data_path)'}
-      .control-group
-        %label
-          Path:
-        %input(type="text" ng-model="new_hub_data_path")
+      = icon_link_to :'icf-connect', 'Add data form Hub', 'javascript:', {'ng-click' => 'openEntitySetPicker()'}

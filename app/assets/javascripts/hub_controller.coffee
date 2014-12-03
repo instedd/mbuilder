@@ -6,11 +6,21 @@ angular.module('mbuilder').controller 'HubController', ['$scope', '$http', ($sco
     return unless table.kind == 'hub'
     console.error('not implemented')
 
+
+  $scope.openEntitySetPicker = (path) ->
+    hubJsApi = new HubJsApi(window.hub_url)
+    hubJsApi.openPicker('entity_set')
+      .then((path) ->
+        $scope.$apply ->
+          $scope.addNewHubData(path)
+      )
+
   $scope.addNewHubData = (path) ->
+    # TODO missing UI feedback the table is been added
 
     $http.get("/hub/reflect/#{path}")
       .success (data) ->
-        # TODO would be nice to allow fields no be updated after the table was pushed
+        # TODO would be nice to allow fields to be updated after the table was pushed
 
         fields = []
         for name, descriptor of data.entity_definition.properties
