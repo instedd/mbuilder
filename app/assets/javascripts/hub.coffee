@@ -12,8 +12,18 @@ class HubJsApi
 
 
   openPicker: (type) ->
-    pickerWin = window.open("#{@url}/api/picker")
-    pr = new PickerResult(@, pickerWin)
+
+    pickerWin = $("<iframe>").width(800).height(400)
+      .attr('src', "#{@url}/api/picker")
+      .css('position', 'absolute')
+      .css('left', 50)
+      .css('right', 50)
+      .css('top', 50)
+      .css('bottom', 50)
+      .css('z-index', 100)
+
+    $('body').append(pickerWin)
+    pr = new PickerResult(@, pickerWin, pickerWin[0].contentWindow)
     @pickers[pr.id] = pr
     pr
 
@@ -25,7 +35,7 @@ class HubJsApi
     @pickers[data.target][data.message](data)
 
 class PickerResult
-  constructor: (@api, @pickerWin) ->
+  constructor: (@api, @container, @pickerWin) ->
     @id = Date.now()
     @waitingTimer = window.setInterval( =>
       @pickerWin.postMessage(JSON.stringify({source: @id, message:"waiting"}), @api.url)
@@ -38,7 +48,7 @@ class PickerResult
     window.clearInterval(@waitingTimer)
 
   selected: (event) ->
-    @pickerWin.close()
+    @container.remove()
     @then(event.path)
 
   then: (callback) ->
