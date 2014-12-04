@@ -8,8 +8,8 @@ angular.module('mbuilder').controller 'HubController', ['$scope', '$http', ($sco
 
 
   $scope.openEntitySetPicker = (path) ->
-    hubJsApi = new HubJsApi(window.hub_url)
-    hubJsApi.openPicker('entity_set')
+    hubApi = new HubApi(window.hub_url)
+    hubApi.openPicker('entity_set')
       .then((path) ->
         $scope.$apply ->
           $scope.addNewHubData(path)
