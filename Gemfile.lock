@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/instedd/ruby-hub_client.git
-  revision: 3b397ac9385d9d9782f26074501e2c6905a4fd2a
+  revision: 73d5fb0a37213602c463a64b35ba42f4784965e8
   branch: master
   specs:
     hub_client (0.0.1)

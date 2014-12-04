@@ -175,8 +175,14 @@ class DatabaseExecutionContext < ExecutionContext
 
   def assign_hub_value_to_entity(entity, field, value)
     unless entity.new?
-      # TODO complete
-      raise "not implemented"
+      table = application.find_table(entity.table)
+      entity_set = hub_api.entity_set(table.path)
+      hub_field = table.find_field(field).name
+      mapped_restrictions = entity.restrictions.map(&:clone).each do |restriction|
+        restriction[:field] = table.find_field(restriction[:field]).guid
+      end
+      hub_restrictions = restrictions_to_hub(mapped_restrictions, table)
+      entity_set.update_many(hub_restrictions, {hub_field => value})
     end
     entity[field] = value
   end
