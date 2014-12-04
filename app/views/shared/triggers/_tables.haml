@@ -53,3 +53,5 @@
     %br
     %div{'ng-controller' => 'HubController'}
       = icon_link_to :'icf-connect', 'Add data form Hub', 'javascript:', {'ng-click' => 'openEntitySetPicker()'}
+      %span{'ng-show' => 'loading'}
+        Loading...

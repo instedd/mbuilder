@@ -4,6 +4,7 @@ angular.module('mbuilder').controller 'HubController', ['$scope', '$http', ($sco
 
   $scope.$on 'updateCollection', (event, table) ->
     return unless table.kind == 'hub'
+    # TODO implement update schema
     console.error('not implemented')
 
 
@@ -16,11 +17,10 @@ angular.module('mbuilder').controller 'HubController', ['$scope', '$http', ($sco
       )
 
   $scope.addNewHubData = (path) ->
-    # TODO missing UI feedback the table is been added
-
+    $scope.loading = true
     $http.get("/hub/reflect/#{path}")
       .success (data) ->
-        # TODO would be nice to allow fields to be updated after the table was pushed
+        $scope.loading = false
 
         fields = []
         for name, descriptor of data.entity_definition.properties
