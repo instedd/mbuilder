@@ -45,6 +45,10 @@ class DatabaseExecutionContext < ExecutionContext
     collection.sites.create values
   end
 
+  def insert_in_hub(path, properties)
+    hub_api.entity_set(path).insert(properties)
+  end
+
   def update_many(table, restrictions, properties)
     results = TireHelper.perform_search(application.tire_search(table), restrictions)
 
@@ -141,6 +145,11 @@ class DatabaseExecutionContext < ExecutionContext
     end
   end
 
+  # assign_value_to_entity_field is used when a new record is
+  # created and there are values updated.
+  # TODO probably the logic for entity.new? should be refactored to
+  #      the generic method and the !entity.new? case can be handled
+  #      through the update_many.
   def assign_value_to_entity_field(table, field, value)
     entity = entity(table)
     application.find_table(table).assign_value_to_entity_field(self, entity, field, value)
@@ -160,6 +169,14 @@ class DatabaseExecutionContext < ExecutionContext
       end
       resource_map_restrictions = restrictions_to_resource_map(mapped_restrictions, collection)
       collection.sites.where(resource_map_restrictions).update({resource_map_field => value})
+    end
+    entity[field] = value
+  end
+
+  def assign_hub_value_to_entity(entity, field, value)
+    unless entity.new?
+      # TODO complete
+      raise "not implemented"
     end
     entity[field] = value
   end

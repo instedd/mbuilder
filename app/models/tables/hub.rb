@@ -23,10 +23,11 @@ class Tables::Hub < Table
   end
 
   def insert_in(context, properties)
-    # mapped_properties = Hash[properties.map do |field_guid, value|
-    #   [find_field(field_guid).id, value]
-    # end]
-    # context.insert_in_resource_map id, mapped_properties
+    mapped_properties = Hash[properties.map do |field_guid, value|
+      [find_field(field_guid).name, value.user_friendly]
+    end]
+
+    context.insert_in_hub(path, mapped_properties)
   end
 
   def each_value(context, restrictions, group_by, &block)
@@ -37,7 +38,7 @@ class Tables::Hub < Table
   end
 
   def assign_value_to_entity_field(context, entity, field, value)
-    # context.assign_resource_map_value_to_entity(entity, field, value)
+    context.assign_hub_value_to_entity(entity, field, value)
   end
 
   private
