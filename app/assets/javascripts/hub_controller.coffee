@@ -4,9 +4,18 @@ angular.module('mbuilder').controller 'HubController', ['$scope', '$http', ($sco
 
   $scope.$on 'updateCollection', (event, table) ->
     return unless table.kind == 'hub'
-    # TODO implement update schema
-    console.error('not implemented')
 
+    $http.get("/hub/reflect/#{table.path}")
+      .success (data) ->
+        new_fields = $scope.build_fields(data)
+
+        for new_field in new_fields
+          existing_field = _.detect table.fields, (f) -> new_field.name == f.name
+          if existing_field
+            new_field.guid = existing_field.guid
+            new_field.valid_values = existing_field.valid_values
+
+        table.fields = new_fields
 
   $scope.openEntitySetPicker = (path) ->
     hubApi = new HubApi(window.hub_url)
@@ -22,12 +31,7 @@ angular.module('mbuilder').controller 'HubController', ['$scope', '$http', ($sco
       .success (data) ->
         $scope.loading = false
 
-        fields = []
-        for name, descriptor of data.entity_definition.properties
-          fields.push {
-            guid: window.guid()
-            name: name
-          }
+        fields = $scope.build_fields(data)
 
         $scope.tables.push
           guid: window.guid()
@@ -38,5 +42,15 @@ angular.module('mbuilder').controller 'HubController', ['$scope', '$http', ($sco
           editmode: false
           focusmode: false
           readonly: true
+
+  $scope.build_fields = (data) ->
+    fields = []
+    for name, descriptor of data.entity_definition.properties
+      fields.push {
+        guid: window.guid()
+        name: name
+      }
+
+    fields
 
 ]

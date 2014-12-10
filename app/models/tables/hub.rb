@@ -19,31 +19,37 @@ class Tables::Hub < Table
   end
 
   def select_field_in(context, restrictions, field, group_by, aggregate)
-    context.select_hub_field(self, restrictions, find_field(field), group_by, aggregate)
+    context.select_hub_field(self, restrictions_to_hub(restrictions), find_field(field), group_by, aggregate)
   end
 
   def insert_in(context, properties)
-    mapped_properties = Hash[properties.map do |field_guid, value|
-      [find_field(field_guid).name, value.user_friendly]
-    end]
-
+    mapped_properties = properties_to_hub(properties)
     context.insert_in_hub(path, mapped_properties)
   end
 
   def each_value(context, restrictions, group_by, &block)
-    # mapped_restrictions = restrictions.map(&:clone).each do |restriction|
-    #   restriction[:field] = find_field(restriction[:field]).id
-    # end
-    # context.each_resource_map_value(id, mapped_restrictions, group_by, &block)
+    context.each_hub_value(self, restrictions_to_hub(restrictions), group_by, &block)
   end
 
   def assign_value_to_entity_field(context, entity, field, value)
     context.assign_hub_value_to_entity(entity, field, value)
   end
 
-  private
+  def restrictions_to_hub(restrictions)
+    restrictions.each_with_object({}) do |restriction, hash|
+      hash[find_field(restriction[:field]).name] = restriction[:value].user_friendly
+    end
+  end
 
-  def hub_api
-    @hub_api ||= HubClient::Api.trusted(application.user.email)
+  def properties_to_hub(properties)
+    Hash[properties.map do |field_guid, value|
+      [find_field(field_guid).name, value.user_friendly]
+    end]
+  end
+
+  def hub_entity_to_mbuilder_hash(hub_entity)
+    fields.each_with_object({}) do |field, hash|
+      hash[field.guid] = hub_entity[field.name]
+    end
   end
 end

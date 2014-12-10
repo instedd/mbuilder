@@ -101,10 +101,8 @@ class DatabaseExecutionContext < ExecutionContext
 
   def select_hub_field(table, restrictions, field, group_by, aggregate)
     # TODO does hub support projection?
-    # TODO support group_by?
     # TODO support aggregations? probably not since resmap doesnt
-    # binding.pry
-    entites = hub_api.entity_set(table.path).paged_where(restrictions_to_hub(restrictions, table))
+    entites = hub_api.entity_set(table.path).paged_where(restrictions)
 
     results = entites.map { |entity| entity[field.name] }
 
@@ -145,6 +143,13 @@ class DatabaseExecutionContext < ExecutionContext
     end
   end
 
+  def each_hub_value(table, restrictions, group_by = nil, &block)
+    entites = hub_api.entity_set(table.path).paged_where(restrictions)
+    entites.each do |result|
+      block.call table.hub_entity_to_mbuilder_hash(result)
+    end
+  end
+
   # assign_value_to_entity_field is used when a new record is
   # created and there are values updated.
   # TODO probably the logic for entity.new? should be refactored to
@@ -178,11 +183,7 @@ class DatabaseExecutionContext < ExecutionContext
       table = application.find_table(entity.table)
       entity_set = hub_api.entity_set(table.path)
       hub_field = table.find_field(field).name
-      mapped_restrictions = entity.restrictions.map(&:clone).each do |restriction|
-        restriction[:field] = table.find_field(restriction[:field]).guid
-      end
-      hub_restrictions = restrictions_to_hub(mapped_restrictions, table)
-      entity_set.update_many(hub_restrictions, {hub_field => value})
+      entity_set.update_many(table.restrictions_to_hub(entity.restrictions), {hub_field => value})
     end
     entity[field] = value
   end
@@ -223,12 +224,6 @@ class DatabaseExecutionContext < ExecutionContext
   def restrictions_to_resource_map(restrictions, collection)
     restrictions.each_with_object({}) do |restriction, hash|
       hash[field_restriction_to_api_query restriction, collection] = restriction[:value].user_friendly
-    end
-  end
-
-  def restrictions_to_hub(restrictions, table)
-    restrictions.each_with_object({}) do |restriction, hash|
-      hash[table.find_field(restriction[:field]).name] = restriction[:value].user_friendly
     end
   end
 end
