@@ -41,7 +41,7 @@ class ExternalTriggersController < MbuilderApplicationController
     logger.info "Executing trigger '#{trigger.name}'"
     logger.trigger = trigger
     begin
-      @context = DatabaseExecutionContext.execute(application, trigger, ParameterPlaceholderSolver.new(params), logger)
+      @context = DatabaseExecutionContext.execute(application, trigger, ParameterPlaceholderSolver.new(params, Time.now), logger)
       if @context.messages.present?
         nuntium = Pigeon::Nuntium.from_config
         nuntium.send_ao @context.messages
