@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe "Foreach" do
-  let(:application) { new_application "Users: Phone, Name; Copied: PhoneCopy, NameCopy" }
+  let(:application) { new_application "Users: Phone, Name, NameOld; Copied: PhoneCopy, NameCopy" }
 
   it "loops and creates entities" do
     add_data "users", [
@@ -25,6 +25,30 @@ describe "Foreach" do
       {"phone_copy" => 1234.0, "name_copy" => "John"},
       {"phone_copy" => 1234.0, "name_copy" => "Peter"}
   end
+
+  it "loops and update entities" do
+    add_data "users", [
+      {"phone" => 1234.0, "name" => "John"},
+      {"phone" => 1234.0, "name" => "Peter"},
+      {"phone" => 5678.0, "name" => "Doe", "name_old" => "n/a"},
+    ]
+
+    new_trigger do
+      message "update {1111}"
+      select_entity "users.phone = {1111}"
+      foreach("users") do
+        store_entity_value "users.name_old = *name"
+      end
+    end
+
+    accept_message 'sms://1234', 'update 1234'
+
+    assert_data "users",
+      {"phone" => 1234.0, "name" => "John", "name_old" => "John"},
+      {"phone" => 1234.0, "name" => "Peter", "name_old" => "Peter"},
+      {"phone" => 5678.0, "name" => "Doe", "name_old" => "n/a"}
+  end
+
 
   it "loops and selects entities" do
     add_data "users", [

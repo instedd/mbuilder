@@ -44,7 +44,7 @@ class IterationEntity
   end
 
   def []=(field, value)
-    @entity[field] = value
+    @context.update_many(table, restrictions, {field.to_s => value})
     @written_properties[field] = value
   end
 
