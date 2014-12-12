@@ -19,7 +19,9 @@ class IterationEntity
   end
 
   def save
-    # Nothing to do
+    return if @properties.empty?
+
+    @context.update_many(table, restrictions, @written_properties)
   end
 
   def empty?
@@ -39,13 +41,12 @@ class IterationEntity
     # used to update the entity in a foreach
     # in case a value is updated, use that as restriction
     @properties.map do |field_guid, value|
-      { op: :eq, field: field_guid, value: @written_properties[field_guid] || value  }
+      { op: :eq, field: field_guid, value: value  }
     end
   end
 
   def []=(field, value)
-    @context.update_many(table, restrictions, {field.to_s => value})
-    @written_properties[field] = value
+    @written_properties[field.to_s] = value
   end
 
 end

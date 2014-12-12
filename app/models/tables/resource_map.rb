@@ -41,8 +41,11 @@ class Tables::ResourceMap < Table
     context.each_resource_map_value(id, mapped_restrictions, group_by, &block)
   end
 
-  def assign_value_to_entity_field(context, entity, field, value)
-    context.assign_resource_map_value_to_entity(entity, field, value)
+  def update_many(context, restrictions, properties)
+    mapped_properties = Hash[properties.map do |field_guid, value|
+      [find_field(field_guid).id, value]
+    end]
+    context.update_many_local(self, restrictions, mapped_properties)
   end
 
   private

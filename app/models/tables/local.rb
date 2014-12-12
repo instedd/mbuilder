@@ -25,7 +25,7 @@ class Tables::Local < Table
     context.each_local_value(guid, restrictions, group_by, &block)
   end
 
-  def assign_value_to_entity_field(context, entity, field, value)
-    context.assign_local_value_to_entity(entity, field, value)
+  def update_many(context, restrictions, properties)
+    context.update_many_local(self, restrictions, properties)
   end
 end

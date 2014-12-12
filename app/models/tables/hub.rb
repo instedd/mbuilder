@@ -31,8 +31,9 @@ class Tables::Hub < Table
     context.each_hub_value(self, restrictions_to_hub(restrictions), group_by, &block)
   end
 
-  def assign_value_to_entity_field(context, entity, field, value)
-    context.assign_hub_value_to_entity(entity, field, value)
+  def update_many(context, restrictions, properties)
+    mapped_properties = properties_to_hub(properties)
+    context.update_many_hub(self, restrictions_to_hub(restrictions), mapped_properties)
   end
 
   def restrictions_to_hub(restrictions)

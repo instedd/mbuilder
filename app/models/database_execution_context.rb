@@ -50,7 +50,11 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def update_many(table, restrictions, properties)
-    results = TireHelper.perform_search(application.tire_search(table), restrictions)
+    application.find_table(table).update_many(self, restrictions, properties)
+  end
+
+  def update_many_local(table, restrictions, properties)
+    results = TireHelper.perform_search(application.tire_search(table.guid), restrictions)
 
     now = Tire.format_date(Time.now)
 
@@ -58,12 +62,27 @@ class DatabaseExecutionContext < ExecutionContext
       old_properties = result["_source"]["properties"]
       new_properties = old_properties.merge(properties)
 
-      @index.store type: table, id: result["_id"], properties: new_properties, updated_at: now
+      @index.store type: table.guid, id: result["_id"], properties: new_properties, updated_at: now
 
-      @logger.update_values(table, result["_id"], old_properties, new_properties)
+      @logger.update_values(table.guid, result["_id"], old_properties, new_properties)
     end
 
     @index.refresh
+  end
+
+  def update_many_resource_map(table, restrictions, properties)
+    collection = resource_map_api.collections.find(table.id)
+    resource_map_field = table.find_field(field).id
+    mapped_restrictions = restrictions.map(&:clone).each do |restriction|
+      restriction[:field] = table.find_field(restriction[:field]).id
+    end
+    resource_map_restrictions = restrictions_to_resource_map(mapped_restrictions, collection)
+    collection.sites.where(resource_map_restrictions).update(properties)
+  end
+
+  def update_many_hub(table, restrictions, properties)
+    entity_set = hub_api.entity_set(table.path)
+    entity_set.update_many(restrictions, properties)
   end
 
   def select_table_field(table, restrictions, field, group_by, aggregate)
@@ -148,44 +167,6 @@ class DatabaseExecutionContext < ExecutionContext
     entites.each do |result|
       block.call table.hub_entity_to_mbuilder_hash(result)
     end
-  end
-
-  # assign_value_to_entity_field is used when a new record is
-  # created and there are values updated.
-  # TODO probably the logic for entity.new? should be refactored to
-  #      the generic method and the !entity.new? case can be handled
-  #      through the update_many.
-  def assign_value_to_entity_field(table, field, value)
-    entity = entity(table)
-    application.find_table(table).assign_value_to_entity_field(self, entity, field, value)
-  end
-
-  def assign_local_value_to_entity(entity, field, value)
-    entity[field] = value
-  end
-
-  def assign_resource_map_value_to_entity(entity, field, value)
-    unless entity.new?
-      table = application.find_table(entity.table)
-      collection = resource_map_api.collections.find(table.id)
-      resource_map_field = table.find_field(field).id
-      mapped_restrictions = entity.restrictions.map(&:clone).each do |restriction|
-        restriction[:field] = table.find_field(restriction[:field]).id
-      end
-      resource_map_restrictions = restrictions_to_resource_map(mapped_restrictions, collection)
-      collection.sites.where(resource_map_restrictions).update({resource_map_field => value})
-    end
-    entity[field] = value
-  end
-
-  def assign_hub_value_to_entity(entity, field, value)
-    unless entity.new?
-      table = application.find_table(entity.table)
-      entity_set = hub_api.entity_set(table.path)
-      hub_field = table.find_field(field).name
-      entity_set.update_many(table.restrictions_to_hub(entity.restrictions), {hub_field => value})
-    end
-    entity[field] = value
   end
 
   def reserved? field
