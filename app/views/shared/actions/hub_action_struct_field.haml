@@ -1,0 +1,5 @@
+{{field.name()}}
+
+%ul
+  %li(ng-repeat='field in field.fields()' ng-controller='HubActionArgController')
+    %span(ng-include src='fieldViewFor(field)' )

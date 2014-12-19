@@ -1,4 +1,4 @@
-angular.module('mbuilder').controller 'HubController', ['$scope', '$http', ($scope, $http) ->
+angular.module('mbuilder').controller 'HubController', ['$scope', '$http', 'HubApi', ($scope, $http, HubApi) ->
 
   $scope.new_hub_data_path = "connectors/1d5fc682-a580-6337-dfd9-f2361238b76f/indices/hub_unicef/types/patients"
 
@@ -18,8 +18,7 @@ angular.module('mbuilder').controller 'HubController', ['$scope', '$http', ($sco
         table.fields = new_fields
 
   $scope.openEntitySetPicker = (path) ->
-    hubApi = new HubApi(window.hub_url)
-    hubApi.openPicker('entity_set')
+    HubApi.openPicker('entity_set')
       .then((path) ->
         $scope.$apply ->
           $scope.addNewHubData(path)

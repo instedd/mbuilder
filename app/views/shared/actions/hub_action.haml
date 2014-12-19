@@ -1,0 +1,11 @@
+.action-content{'ng-controller' => 'HubActionController'}
+  .action-icon
+    %i.i40-condition
+  %div
+    Execute hub action ({{action.path}})
+
+    %ul
+      %li(ng-repeat='field in reflect.args()' ng-controller='HubActionArgController')
+        %span(ng-include src='fieldViewFor(field)' )
+
+
