@@ -194,6 +194,11 @@ class DatabaseExecutionContext < ExecutionContext
     end
   end
 
+  def hub_action_invoke(path, params)
+    hub_api.action(path).invoke(params)
+    @logger.hub_invoke(path, params)
+  end
+
   def resource_map_api
     @resource_map_api ||= ResourceMap::Api.trusted(application.user.email, ResourceMap::Config.url, ResourceMap::Config.use_https)
   end

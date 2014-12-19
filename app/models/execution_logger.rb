@@ -40,6 +40,10 @@ class ExecutionLogger < ActiveRecord::Base
     append_action :invalid_value, table_guid, field_guid, value
   end
 
+  def hub_invoke(path, params)
+    append_action :hub_invoke, path, params
+  end
+
   def info(description)
     append_action :info, description
   end
@@ -81,6 +85,9 @@ class ExecutionLogger < ActiveRecord::Base
         table = find_table(table_guid)
         named_properties = map_properties(table, properties)
         "Create #{table.name} with: #{named_properties}"
+      when :hub_invoke
+        kind, path, params = action
+        "Invoke hub action #{path} with #{params}"
       when :update
         kind, table_guid, id, old_properties, new_properties = action
         table = find_table(table_guid)

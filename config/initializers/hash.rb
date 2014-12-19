@@ -9,4 +9,12 @@ class Hash
     end
     self
   end
+
+  def value_in(context)
+    res = {}
+    each do |key, value|
+      res[key] = value.value_in(context)
+    end
+    res
+  end
 end
