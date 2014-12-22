@@ -127,13 +127,14 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
   $scope.addHubAction = ->
     HubApi.openPicker('action')
-      .then((path) ->
+      .then((path, selection) ->
         HubApi.reflect(path)
           .then (result) ->
             $scope.$apply ->
               action =
                 kind: 'hub'
                 path: path
+                selection: selection
                 reflect: result.toJson()
                 pills: result.visitArgs -> {kind: 'literal', guid: window.guid(), text: ''}
 
