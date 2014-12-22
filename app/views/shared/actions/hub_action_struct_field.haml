@@ -3,3 +3,14 @@
 %ul
   %li(ng-repeat='field in field.fields()' ng-controller='HubActionArgController')
     %span(ng-include src='fieldViewFor(field)' )
+
+  %li(ng-show='field.isOpen()')
+    %input.input-small(type='text' ng-model='new_field.name')
+    .btn-group
+      %button.btn.btn-small.dropdown-toggle(data-toggle="dropdown")
+        Add field
+        %span.caret
+      %ul.dropdown-menu
+        %li
+          %a(href='javascript:' ng-click='addField("string")') Add value field
+          %a(href='javascript:' ng-click='addField("struct")') Add struct field
