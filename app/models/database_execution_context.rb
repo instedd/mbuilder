@@ -45,8 +45,9 @@ class DatabaseExecutionContext < ExecutionContext
     collection.sites.create values
   end
 
-  def insert_in_hub(path, properties)
-    hub_api.entity_set(path).insert(properties)
+  def insert_in_hub(table, properties)
+    hub_api.entity_set(table.path).insert(table.properties_to_hub(properties))
+    @logger.insert_values(table.guid, properties)
   end
 
   def update_many(table, restrictions, properties)
@@ -82,7 +83,9 @@ class DatabaseExecutionContext < ExecutionContext
 
   def update_many_hub(table, restrictions, properties)
     entity_set = hub_api.entity_set(table.path)
-    entity_set.update_many(restrictions, properties)
+    entity_set.update_many(table.restrictions_to_hub(restrictions), table.properties_to_hub(properties))
+
+    @logger.update_values(table.guid, nil, table.restrictions_to_properties(restrictions), properties)
   end
 
   def select_table_field(table, restrictions, field, group_by, aggregate)

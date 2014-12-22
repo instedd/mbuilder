@@ -23,8 +23,7 @@ class Tables::Hub < Table
   end
 
   def insert_in(context, properties)
-    mapped_properties = properties_to_hub(properties)
-    context.insert_in_hub(path, mapped_properties)
+    context.insert_in_hub(self, properties)
   end
 
   def each_value(context, restrictions, group_by, &block)
@@ -32,8 +31,7 @@ class Tables::Hub < Table
   end
 
   def update_many(context, restrictions, properties)
-    mapped_properties = properties_to_hub(properties)
-    context.update_many_hub(self, restrictions_to_hub(restrictions), mapped_properties)
+    context.update_many_hub(self, restrictions, properties)
   end
 
   def restrictions_to_hub(restrictions)

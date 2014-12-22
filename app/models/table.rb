@@ -14,4 +14,10 @@ class Table
       fields: fields.map(&:as_json)
     }
   end
+
+  def restrictions_to_properties(restrictions)
+    restrictions.each_with_object({}) do |restriction, hash|
+      hash[restriction[:field]] = restriction[:value]
+    end
+  end
 end
