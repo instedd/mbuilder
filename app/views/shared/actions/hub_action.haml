@@ -9,8 +9,11 @@
           %span
           {{p.label}}
 
-    %ul
+    %ul.unstyled
       %li(ng-repeat='field in reflect.args()' ng-controller='HubActionArgController')
+
+        %hr(ng-hide='$first || !field.isStruct()')
+
         %span(ng-include src='fieldViewFor(field)' )
 
 
