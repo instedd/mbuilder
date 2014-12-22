@@ -29,6 +29,10 @@ class Actions::Hub < Action
   end
 
   def self.pills_from_hash_of_pills(hash)
+    # pills are saved as hash, within a hash in this case
+    # so we need to navigate the hash until the values that has hashes without hashes as values.
+    # this works because in the hash the only values we care are pills
+    # and the pills only have atomic values
     actual_hash = hash.values.any? { |e| e.is_a? Hash }
     if actual_hash
       res = {}
