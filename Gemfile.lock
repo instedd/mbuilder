@@ -1,9 +1,18 @@
 GIT
   remote: git://github.com/instedd/alto_guisso.git
-  revision: cda34b8e0bdc6a3758f1de429c5ee30197bd9dcf
+  revision: b767af4621523215b79fccafd1cb94ccd88df828
   branch: master
   specs:
-    alto_guisso (0.0.1)
+    alto_guisso (0.0.2)
+      rack-oauth2
+
+GIT
+  remote: git://github.com/instedd/alto_guisso_rails.git
+  revision: d9dcdce816f0633acb2515724157aa0d8c48fda2
+  branch: master
+  specs:
+    alto_guisso_rails (0.0.1)
+      alto_guisso
       omniauth
       omniauth-openid
       rack-oauth2
@@ -330,6 +339,7 @@ PLATFORMS
 
 DEPENDENCIES
   alto_guisso!
+  alto_guisso_rails!
   angularjs-rails
   bootstrap-sass (~> 2.3.2.1)
   capistrano (= 2.14.2)
