@@ -28,7 +28,6 @@ gem 'delayed_job_active_record'
 
 gem 'foreman'
 gem 'ruby-openid'
-gem 'rack-oauth2', github: "manastech/rack-oauth2", branch: 'master'
 gem 'alto_guisso', github: "instedd/alto_guisso", branch: 'master'
 gem 'alto_guisso_rails', github: "instedd/alto_guisso_rails", branch: 'master'
 gem 'resource_map_api_client', git: "https://bitbucket.org/instedd/resource_map_api_client.git", branch: 'master'
