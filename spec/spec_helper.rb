@@ -100,7 +100,7 @@ RSpec.configure do |config|
       {'kind' => 'field_value', 'guid' => $1}
     when /'(.+)'/
       {'kind' => 'literal', 'guid' => "literal_#{$1}", 'text' => $1}
-    when /\{(phone_number|invalid_value)\}/
+    when /\{(phone_number|invalid_value|received_at)\}/
       {'kind' => 'placeholder', 'guid' => $1}
     when /\{(.+)\}/
       {'kind' => 'placeholder', 'guid' => "placeholder_#{$1}"}

@@ -14,4 +14,15 @@ describe ExternalTriggersController do
     post :run, application_id: application.id, trigger_name: trigger.name, phone: 1234, format: :json
     assert_data "users", {"phone" => 1234.0}
   end
+
+  it "creates an entity with timestamp" do
+    Timecop.freeze(Time.utc(2013, 9, 17, 6, 0, 0))
+    trigger = new_external_trigger do
+      params :phone
+      create_entity "users.phone = {{received_at}}"
+    end
+    post :run, application_id: application.id, trigger_name: trigger.name, phone: 1234, format: :json
+    assert_data "users", {"phone" => Time.now.strftime("%Y%m%d").to_f}
+    Timecop.return
+  end
 end
