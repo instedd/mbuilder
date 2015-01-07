@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/instedd/alto_guisso.git
-  revision: b767af4621523215b79fccafd1cb94ccd88df828
+  revision: bdd04569e1f1925664f839f18cba3c2807aafe19
   branch: master
   specs:
     alto_guisso (0.0.2)
@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/instedd/alto_guisso_rails.git
-  revision: a9bb41430e636e3dec1a85a2be2af0fc27358a9c
+  revision: d9dcdce816f0633acb2515724157aa0d8c48fda2
   branch: master
   specs:
     alto_guisso_rails (0.0.1)
@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/instedd/ruby-hub_client.git
-  revision: 0040d0df85e622ee1052f75aecb75ce47c576c5b
+  revision: 661ccf2ba7261afb11c8d9675b1eae2205cc0ac8
   branch: master
   specs:
     hub_client (0.0.1)

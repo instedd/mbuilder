@@ -19,7 +19,7 @@ class IterationEntity
   end
 
   def save
-    return if @properties.empty?
+    return if @written_properties.empty?
 
     @context.update_many(table, restrictions, @written_properties)
   end
