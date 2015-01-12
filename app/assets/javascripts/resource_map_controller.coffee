@@ -45,6 +45,7 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
         readonly: true
 
   $scope.$on 'updateCollection', (event, table) ->
+    return unless table.kind == 'resource_map'
     table = table
     call = $http.get("/resource_map/collections/#{table.id}/fields.json")
     call.success (data, status, headers, config) ->

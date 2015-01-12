@@ -1,4 +1,9 @@
 class ExternalTriggersController < MbuilderApplicationController
+  skip_before_filter :verify_authenticity_token, only: :run
+  skip_before_filter :add_application_breadcrumb, only: :run
+  skip_before_filter :authenticate_user!, only: :run
+  before_filter :authenticate_api_user!, only: :run
+
   before_filter do
     add_breadcrumb 'Triggers', application_message_triggers_path(application)
   end

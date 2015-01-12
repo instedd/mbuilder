@@ -60,7 +60,7 @@ describe ApiController do
       description[:action].should eq("Trigger Name")
       description[:method].should eq("POST")
       description[:id].should eq(trigger_with_parameters.id)
-      description[:url].should eq("http://localhost:3000/external/application/#{trigger_with_parameters.application_id}/trigger/Trigger%20Name")
+      description[:url].should eq("http://#{Settings.host}/external/application/#{trigger_with_parameters.application_id}/trigger/Trigger%20Name")
       description[:parameters].should eq({
         "phone" => {"label" => "Phone", "type" => "string"},
         "name" => {"label" => "Name", "type" => "string"}

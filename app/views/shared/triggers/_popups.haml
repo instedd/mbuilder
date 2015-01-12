@@ -3,7 +3,7 @@
     %a{'href' => 'javascript:', 'ng-class' => '{ selected : aggregateFunctionPopup.pill.aggregate == aggregate.id }', 'ng-click' => 'select(aggregate)'} {{aggregate.name}}
 
 %div#aggregate-functions-error.popup{'ng-controller' => 'AggregateFunctionsController'}
-  Aggregate is not supported for Resource Map columns
+  Aggregate is not supported for Resource Map or Hub columns
 
 %div#valid-values.popup{'ng-controller' => 'ValidValuesController'}
   %label{for: 'valid-values'} Valid values for {{lookupFieldName(validValuesPopup.field.guid)}}

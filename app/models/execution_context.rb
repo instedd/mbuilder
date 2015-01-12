@@ -76,6 +76,11 @@ class ExecutionContext
     entity.field_values(field, aggregate)
   end
 
+  def assign_value_to_entity_field(table, field, value)
+    entity = entity(table)
+    entity[field] = value
+  end
+
   def insert(table, properties)
     subclass_responsibility
   end

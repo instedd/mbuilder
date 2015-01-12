@@ -45,8 +45,17 @@ class DatabaseExecutionContext < ExecutionContext
     collection.sites.create values
   end
 
+  def insert_in_hub(table, properties)
+    hub_api.entity_set(table.path).insert(table.properties_to_hub(properties))
+    @logger.insert_values(table.guid, properties)
+  end
+
   def update_many(table, restrictions, properties)
-    results = TireHelper.perform_search(application.tire_search(table), restrictions)
+    application.find_table(table).update_many(self, restrictions, properties)
+  end
+
+  def update_many_local(table, restrictions, properties)
+    results = TireHelper.perform_search(application.tire_search(table.guid), restrictions)
 
     now = Tire.format_date(Time.now)
 
@@ -54,12 +63,29 @@ class DatabaseExecutionContext < ExecutionContext
       old_properties = result["_source"]["properties"]
       new_properties = old_properties.merge(properties)
 
-      @index.store type: table, id: result["_id"], properties: new_properties, updated_at: now
+      @index.store type: table.guid, id: result["_id"], properties: new_properties, updated_at: now
 
-      @logger.update_values(table, result["_id"], old_properties, new_properties)
+      @logger.update_values(table.guid, result["_id"], old_properties, new_properties)
     end
 
     @index.refresh
+  end
+
+  def update_many_resource_map(table, restrictions, properties)
+    collection = resource_map_api.collections.find(table.id)
+    resource_map_field = table.find_field(field).id
+    mapped_restrictions = restrictions.map(&:clone).each do |restriction|
+      restriction[:field] = table.find_field(restriction[:field]).id
+    end
+    resource_map_restrictions = restrictions_to_resource_map(mapped_restrictions, collection)
+    collection.sites.where(resource_map_restrictions).update(properties)
+  end
+
+  def update_many_hub(table, restrictions, properties)
+    entity_set = hub_api.entity_set(table.path)
+    entity_set.update_many(table.restrictions_to_hub(restrictions), table.properties_to_hub(properties))
+
+    @logger.update_values(table.guid, nil, table.restrictions_to_properties(restrictions), properties)
   end
 
   def select_table_field(table, restrictions, field, group_by, aggregate)
@@ -91,6 +117,17 @@ class DatabaseExecutionContext < ExecutionContext
         end
       end
     end
+    results = results.first if (results.is_an? Array) && results.one?
+    results.to_f_if_looks_like_number
+  end
+
+  def select_hub_field(table, restrictions, field, group_by, aggregate)
+    # TODO does hub support projection?
+    # TODO support aggregations? probably not since resmap doesnt
+    entites = hub_api.entity_set(table.path).paged_where(restrictions)
+
+    results = entites.map { |entity| entity[field.name] }
+
     results = results.first if (results.is_an? Array) && results.one?
     results.to_f_if_looks_like_number
   end
@@ -128,27 +165,11 @@ class DatabaseExecutionContext < ExecutionContext
     end
   end
 
-  def assign_value_to_entity_field(table, field, value)
-    entity = entity(table)
-    application.find_table(table).assign_value_to_entity_field(self, entity, field, value)
-  end
-
-  def assign_local_value_to_entity(entity, field, value)
-    entity[field] = value
-  end
-
-  def assign_resource_map_value_to_entity(entity, field, value)
-    unless entity.new?
-      table = application.find_table(entity.table)
-      collection = resource_map_api.collections.find(table.id)
-      resource_map_field = table.find_field(field).id
-      mapped_restrictions = entity.restrictions.map(&:clone).each do |restriction|
-        restriction[:field] = table.find_field(restriction[:field]).id
-      end
-      resource_map_restrictions = restrictions_to_resource_map(mapped_restrictions, collection)
-      collection.sites.where(resource_map_restrictions).update({resource_map_field => value})
+  def each_hub_value(table, restrictions, group_by = nil, &block)
+    entites = hub_api.entity_set(table.path).paged_where(restrictions)
+    entites.each do |result|
+      block.call table.hub_entity_to_mbuilder_hash(result)
     end
-    entity[field] = value
   end
 
   def reserved? field
@@ -176,8 +197,17 @@ class DatabaseExecutionContext < ExecutionContext
     end
   end
 
+  def hub_action_invoke(path, params)
+    hub_api.action(path).invoke(params)
+    @logger.hub_invoke(path, params)
+  end
+
   def resource_map_api
     @resource_map_api ||= ResourceMap::Api.trusted(application.user.email, ResourceMap::Config.url, ResourceMap::Config.use_https)
+  end
+
+  def hub_api
+    @hub_api ||= HubClient::Api.trusted(application.user.email)
   end
 
   def restrictions_to_resource_map(restrictions, collection)

@@ -30,6 +30,7 @@ gem 'foreman'
 gem 'ruby-openid'
 gem 'alto_guisso', github: "instedd/alto_guisso", branch: 'master'
 gem 'alto_guisso_rails', github: "instedd/alto_guisso_rails", branch: 'master'
+
 gem 'resource_map_api_client', git: "https://bitbucket.org/instedd/resource_map_api_client.git", branch: 'master'
 
 gem 'listings', github: "manastech/listings", branch: 'master'
@@ -38,6 +39,7 @@ gem 'oj'
 gem 'guid'
 
 gem 'instedd-bootstrap', git: "https://bitbucket.org/instedd/instedd-bootstrap.git", branch: 'master'
+gem 'hub_client', github: 'instedd/ruby-hub_client', branch: 'master'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

@@ -20,4 +20,8 @@ class NewEntity
   def new?
     true
   end
+
+  def table
+    @table
+  end
 end

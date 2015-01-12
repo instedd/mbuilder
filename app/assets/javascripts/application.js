@@ -23,6 +23,7 @@
 //= require guid
 //= require pigeon
 //= require message_parser
+//= require hub_client
 //= require_directory ./pill-input/
 //= require_directory .
 

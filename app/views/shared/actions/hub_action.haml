@@ -1,0 +1,19 @@
+.action-content{'ng-controller' => 'HubActionController'}
+  .action-icon
+    %i.i40-condition
+  %div
+    Execute the following Hub action
+    %ul.breadcrumb
+      %li(ng-repeat='p in action.selection.parents' ng-class='{active: $last}')
+        %a(href='javascript:' class='{{p.kind}}')
+          %span
+          {{p.label}}
+
+    %ul.unstyled
+      %li(ng-repeat='field in reflect.args()' ng-controller='HubActionArgController')
+
+        %hr(ng-hide='$first || !field.isStruct()')
+
+        %span(ng-include src='fieldViewFor(field)' )
+
+

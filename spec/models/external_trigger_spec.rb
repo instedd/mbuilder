@@ -5,14 +5,14 @@ describe ExternalTrigger do
   let(:external_trigger) { ExternalTrigger.make name: "Trigger Name", application: application }
 
   it "should build url" do
-    external_trigger.trigger_run_url.should eq("http://localhost:3000/external/application/#{external_trigger.application_id}/trigger/Trigger%20Name")
+    external_trigger.trigger_run_url.should eq("http://#{Settings.host}/external/application/#{external_trigger.application_id}/trigger/Trigger%20Name")
   end
 
   it "should generate api decription for basic fields" do
     description = external_trigger.api_action_description
     description[:action].should eq("Trigger Name")
     description[:method].should eq("POST")
-    description[:url].should eq("http://localhost:3000/external/application/#{external_trigger.application_id}/trigger/Trigger%20Name")
+    description[:url].should eq("http://#{Settings.host}/external/application/#{external_trigger.application_id}/trigger/Trigger%20Name")
   end
 
   it "should generate api decription for triggers' parameters" do
@@ -21,9 +21,9 @@ describe ExternalTrigger do
     end
 
     description = trigger_with_parameters.api_action_description
-    description[:parameters].should eq([
-      {name: :phone, type: "string"},
-      {name: :name, type:"string"}
-    ])
+    description[:parameters].should eq({
+      :phone=>{:label=>"Phone", :type=>"string"},
+      :name=>{:label=>"Name", :type=>"string"}
+    })
   end
 end

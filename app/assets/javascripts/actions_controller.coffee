@@ -1,4 +1,4 @@
-angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScope', ($scope, $rootScope) ->
+angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScope', 'HubApi', ($scope, $rootScope, HubApi) ->
 
   tableIsUsedInAnCreateOrSelectAction = (tableGuid) ->
     _.any $scope.actions, (action) ->
@@ -124,6 +124,22 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       actions: []
 
     $scope.actions.push(action)
+
+  $scope.addHubAction = ->
+    HubApi.openPicker('action')
+      .then((path, selection) ->
+        HubApi.reflect(path)
+          .then (result) ->
+            $scope.$apply ->
+              action =
+                kind: 'hub'
+                path: path
+                selection: selection
+                reflect: result.toJson()
+                pills: result.visitArgs -> {kind: 'literal', guid: window.guid(), text: ''}
+
+              $scope.actions.push(action)
+      )
 
   $scope.deleteAction = (index) ->
     action = $scope.actions[index]

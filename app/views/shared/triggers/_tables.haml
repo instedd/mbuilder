@@ -50,3 +50,8 @@
         %div{'ng-hide' => 'loading'}
           %div{'ng-repeat' => 'collection in collections'}
             %a{'href' => 'javascript:', 'ng-click' => 'addCollection(collection)'} {{collection.name}}
+    %br
+    %div{'ng-controller' => 'HubController'}
+      = icon_link_to :'icf-connect', 'Add data form Hub', 'javascript:', {'ng-click' => 'openEntitySetPicker()'}
+      %span{'ng-show' => 'loading'}
+        Loading...
