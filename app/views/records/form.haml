@@ -11,4 +11,7 @@
           %span.help-inline
             = record.errors.get(field.guid.to_sym).join(', ')
 
-  = f.submit 'Create Record', class: 'btn btn-primary'
+  - if record.persisted?
+    = f.submit 'Update Record', class: 'btn btn-primary'
+  - else
+    = f.submit 'Create Record', class: 'btn btn-primary'
