@@ -10,16 +10,30 @@ class RecordsController < ApplicationController
     end
   end
 
+  add_breadcrumb 'Applications', :applications_path
+
+
   def edit
-    @application_tab = :data
+    add_breadcrumb application.name, application
+    add_breadcrumb 'Data', :application_data
+    add_breadcrumb 'Edit record'
+
     render 'form'
   end
 
   def new
+    add_breadcrumb application.name, application
+    add_breadcrumb 'Data', :application_data
+    add_breadcrumb 'New record'
+
     render 'form'
   end
 
   def update
+    add_breadcrumb application.name, application
+    add_breadcrumb 'Data', :application_data
+    add_breadcrumb 'Edit record'
+
     if record.update_attributes params[:record].to_f_if_looks_like_number
       redirect_to controller: :applications, action: :data
     else
@@ -29,6 +43,10 @@ class RecordsController < ApplicationController
   end
 
   def create
+    add_breadcrumb application.name, application
+    add_breadcrumb 'Data', :application_data
+    add_breadcrumb 'New record'
+
     if record.save
       redirect_to controller: :applications, action: :data
     else
