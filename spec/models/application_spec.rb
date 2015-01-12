@@ -17,6 +17,13 @@ describe Application do
       send_message "{phone_number}", "You sent the invalid value '{{invalid_value}}'"
     end
 
+    trigger_with_parameters = new_external_trigger do
+      params ['phone', 'name']
+      send_message "{phone_number}", "Hello {{name}}!"
+    end
+    trigger_with_parameters.name = "External hello"
+    trigger_with_parameters.auth_method = :oauth
+
     file = Tempfile.new("app")
     path = file.path
 
@@ -33,6 +40,7 @@ describe Application do
     app2.message_triggers.all.should eq(application.message_triggers.all)
     app2.periodic_tasks.all.should eq(application.periodic_tasks.all)
     app2.validation_triggers.all.should eq(application.validation_triggers.all)
+    app2.external_triggers.all.should eq(application.external_triggers.all)
   end
 
   it "exports and imports an empty application" do

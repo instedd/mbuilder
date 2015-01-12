@@ -110,6 +110,7 @@ class Application < ActiveRecord::Base
       message_triggers: message_triggers,
       periodic_tasks: periodic_tasks,
       validation_triggers: validation_triggers,
+      external_triggers: external_triggers
     }
 
     file.write data.to_json_oj
@@ -122,6 +123,7 @@ class Application < ActiveRecord::Base
     self.message_triggers = MessageTrigger.from_list(data["message_triggers"])
     self.periodic_tasks = PeriodicTask.from_list(data["periodic_tasks"])
     self.validation_triggers = ValidationTrigger.from_list(data["validation_triggers"])
+    self.external_triggers = ExternalTrigger.from_list(data["external_triggers"])
 
     save!
   end

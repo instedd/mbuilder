@@ -2,12 +2,16 @@ class ExternalTrigger < Trigger
   include Rails.application.routes.url_helpers
 
   belongs_to :application
-  attr_accessible :actions, :name, :parameters
+  attr_accessible :actions, :name, :parameters, :auth_method
   validates_uniqueness_of :name, scope: :application_id
   serialize :parameters
   serialize :actions
 
   symbolize :auth_method, :in => [:basic_auth, :auth_token, :oauth], :scopes => true, :default => :basic_auth, :scopes => :shallow
+
+  def ==(other)
+    other.is_a?(ExternalTrigger) && name == other.name && actions == other.actions && parameters.as_json == other.parameters.as_json && auth_method == other.auth_method
+  end
 
   def api_action_description
     description = {
@@ -23,6 +27,23 @@ class ExternalTrigger < Trigger
     end
 
     description
+  end
+
+  def self.from_hash(hash)
+    new name: hash["name"],
+      auth_method: hash["auth_method"],
+      actions: Action.from_list(hash["actions"]),
+      parameters: hash["parameters"].map{|parameter_hash| Pills::ParameterPill.from_hash(parameter_hash)}
+  end
+
+  def as_json
+    {
+      name: name,
+      parameters: parameters,
+      kind: kind,
+      auth_method: auth_method,
+      actions: actions.map(&:as_json)
+    }
   end
 
   def trigger_run_url
