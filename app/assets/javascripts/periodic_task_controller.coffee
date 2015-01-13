@@ -1,9 +1,14 @@
 angular.module('mbuilder').controller 'PeriodicTaskController', ['$scope', '$http', ($scope, $http) ->
   $scope.allPills = ->
-    $scope.pieces.concat $scope.implicitPills()
+    $scope.implicitPills()
 
   $scope.implicitPills = ->
-    [{text: $scope.from, guid:"phone_number"}]
+    [{text: 'yyyymmdd', guid:"received_at"}]
+
+  $scope.receivedAtDragStart = (event) ->
+    window.draggedPill = {kind: "placeholder", guid: "received_at"}
+    event.dataTransfer.setData("Text", 'yyyymmdd')
+    $scope.$broadcast 'dragStart'
 
   $scope.save = ->
     data =
