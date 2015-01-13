@@ -15,7 +15,11 @@
               %input(type="text" ng-model="$parent.scheduleTime" bs-timepicker data-show-meridian="false" data-show-seconds="true" data-minute-step=1)
               %button.btn{type:"button", 'data-toggle'=>"timepicker"}
                 %i.icon-time
-
+        .message-container
+          .received-at
+            %strong Received at:
+            .pill.bound{draggable: 'true', dragstart: 'receivedAtDragStart($event)'}
+              yyyymmdd
         = render 'shared/triggers/actions'
       = render 'shared/triggers/tables'
 
