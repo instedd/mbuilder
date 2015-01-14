@@ -762,6 +762,36 @@ th .ellipsis {
   padding: 8px 0 14px;
 }
 
+.time-picker {
+  .time-schedule {
+    border-bottom: 1px dashed #cdcdcd;
+    display: inline-block;
+    margin: 0 4px;
+  }
+  select {
+    border: none;
+    font-weight: bold;
+    width: auto;
+    vertical-align: baseline;
+    margin: 0;
+  }
+  .bootstrap-timepicker {
+    display: inline-block;
+    border-bottom: 1px dashed #cdcdcd;
+    margin: 0 4px;
+  }
+  input[type="text"]{
+    @include box-shadow(none);
+    background: none;
+    font-weight: bold;
+    border: none;
+    width: 60px;
+    margin: 0;
+    vertical-align: baseline;
+    cursor: pointer;
+  }
+}
+
 //-------------- Home --------------------------
 //----------------------------------------------
 

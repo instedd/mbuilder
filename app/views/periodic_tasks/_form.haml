@@ -8,12 +8,14 @@
 
         %div
           = form_for [application, periodic_task] do |f|
-            %p This trigger will run:
-            = f.select_recurring :rule, [periodic_task.rule], {allow_blank: false}, {'id' => 'scheduleRule'}
-            at:
-            .control-group.input-append.bootstrap-timepicker
-              %input(type="text" ng-model="$parent.scheduleTime" bs-timepicker data-show-meridian="false" data-show-seconds="true" data-minute-step=1)
-              %button.btn{type:"button", 'data-toggle'=>"timepicker"}
+            .time-picker
+              This trigger will run:
+              .time-schedule
+                = f.select_recurring :rule, [periodic_task.rule], {allow_blank: false}, {'id' => 'scheduleRule'}
+              at:
+              .bootstrap-timepicker
+                %input(type="text" ng-model="$parent.scheduleTime" bs-timepicker data-show-meridian="false" data-show-seconds="true" data-minute-step=1)
+              %button.btn.btn-mini{type:"button", 'data-toggle'=>"timepicker"}
                 %i.icon-time
         .message-container
           .received-at
