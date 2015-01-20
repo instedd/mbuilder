@@ -1,6 +1,10 @@
 - @data.each do |table|
   %h4{style: 'display: inline-block'}=table.name
   = link_to "Add new record", new_application_table_record_path(application.id, table.guid), class: 'btn btn-default', style: 'margin-left: 20px'
+  = link_to "Import CSV", import_application_tables_path(application.id, table_guid: table.guid), class: 'btn btn-default'
   = render_listing "es__#{application.id}__#{application.tire_name}__#{table.guid}".to_sym
 
   %hr
+
+= link_to "Create from CSV", import_application_tables_path(application.id), class: 'btn btn-default'
+

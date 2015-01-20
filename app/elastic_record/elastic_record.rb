@@ -81,7 +81,7 @@ class ElasticRecord
     self.properties_mapping.keys
   end
 
-  def self.human_attribute_name(name)
+  def self.human_attribute_name(name, options = {})
     name
   end
 
