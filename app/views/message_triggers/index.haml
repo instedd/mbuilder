@@ -62,24 +62,18 @@
           = image_tag "trigger-external.png"
           External Trigger
 - else
-  .empty-triggers.span4.offset4
+  .empty-triggers
     .row-fluid
-      .span4.offset4
+      .span12
         = image_tag "trigger-new.png"
-    .row-fluid
-      .span6.offset3
-        %p
-          You have no triggers yet, add a trigger
-    .row-fluid
-      .span2.offset3
-        = link_to new_application_message_trigger_path(application) do
-          = image_tag "trigger-message.png"
-          Message trigger
-      .span2
-        = link_to new_application_periodic_task_path(application) do
-          = image_tag "trigger-date.png"
-          Periodic task
-      .span2
-        = link_to new_application_external_trigger_path(application) do
-          = image_tag "trigger-external.png"
-          External Trigger
+        %p You have no triggers yet, add a trigger
+        .add-new-trigger
+          = link_to new_application_message_trigger_path(application) do
+            = image_tag "trigger-message.png"
+            Message trigger
+          = link_to new_application_periodic_task_path(application) do
+            = image_tag "trigger-date.png"
+            Periodic task
+          = link_to new_application_external_trigger_path(application) do
+            = image_tag "trigger-external.png"
+            External Trigger

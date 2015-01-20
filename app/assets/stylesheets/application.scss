@@ -1075,9 +1075,10 @@ input:-moz-placeholder { font-style: italic; }
 //----------------------------------------------
 
 .empty-triggers {
-  margin-top: 70px;
-  text-align: center;
   color: #999999;
+  text-align: center;
+  margin-top: 70px;
+  min-width: 400px;
   p {
     text-align: center;
     font-style: italic;
@@ -1087,5 +1088,11 @@ input:-moz-placeholder { font-style: italic; }
   }
   a {
     color: #555555;
+  }
+  .add-new-trigger a {
+    display: inline-block;
+    width: 60px;
+    margin: 0 5px;
+    vertical-align: top;
   }
 }
