@@ -49,6 +49,42 @@ describe Tables::Importer do
     end
   end
 
+  describe "validation" do
+    context "for creating tables" do
+      before(:each) do
+        @importer = Tables::Importer.new user, application, nil
+        @importer.rows = [['foo', 'bar'], ['abc', 123]]
+      end
+
+      it "should validate the presence of table name" do
+        @importer.should_not be_valid
+        @importer.errors[:table_name].should_not be_blank
+      end
+
+      it "should validate that the number of column specs and imported columns match" do
+        @importer.column_specs = [{action: 'ignore'}]
+
+        @importer.should_not be_valid
+        @importer.errors[:base].should_not be_blank
+      end
+    end
+
+    context "for updating tables" do
+      before(:each) do
+        @importer = Tables::Importer.new user, application, application.tables.first
+        @importer.rows = [['foo', 'bar'], ['abc', 123]]
+      end
+
+      it "should allow only one identifier column" do
+        @importer.column_specs = [{action: 'existing_identifier', field: 'phone'},
+                                  {action: 'existing_identifier', field: 'name'}]
+
+        @importer.should_not be_valid
+        @importer.errors[:base].should_not be_blank
+      end
+    end
+  end
+
   describe "execute!" do
     it "should create a new table" do
       @importer = Tables::Importer.new user, application, nil

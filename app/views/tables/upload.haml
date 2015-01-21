@@ -16,7 +16,7 @@
       %table.table.table-bordered.graygrad.import-specs
         %thead
           %tr
-            %th.control-group{'ng-repeat' => 'column in columnSpecs', 'ng-class' => '{error: errors["column[" + $index + "]"]}'}
+            %th.control-group{'ng-repeat' => 'column in columnSpecs', 'ng-class' => '{error: errors["column_specs[" + $index + "]"]}'}
               %select{'ng-model' => 'column.action', 'ng-options' => 'action as action.label for action in actions', 'ng-change' => 'actionTypeChanged(column)'}
               %br
               %input{'type' => 'text', 'ng-model' => 'column.name', 'ng-show' => 'column.action.action == "new_field"'}

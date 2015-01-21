@@ -13,6 +13,7 @@ class Tables::Importer
     @table_name = table.name if table.present?
 
     @rows = []
+    @column_specs = []
   end
 
   def save_csv(file_param)
@@ -79,23 +80,20 @@ class Tables::Importer
     headers = read_csv.first
     errors.add(:base, 'Number of column specifications and imported columns must match') if headers.count != column_specs.count
 
-    prev_identifier = nil
+    if column_specs.select {|col| col[:action].to_s == 'existing_identifier'}.count > 1
+      errors.add(:base, "Only one identifier column is allowed")
+    end
+
     column_specs.each_with_index do |col, i|
+      error_key = "column_specs[#{i}]"
       case col[:action].to_s
       when 'ignore'
       when 'new_field'
-        errors.add("column[#{i}]", 'is missing a name') unless col[:name].present?
-      when 'existing_field'
-        errors.add("column[#{i}]", 'has no field selected') unless table_has_field?(col[:field])
-      when 'existing_identifier'
-        if prev_identifier.nil?
-          prev_identifier = col
-          errors.add("column[#{i}]", 'has no field selected') unless table_has_field?(col[:field])
-        else
-          errors.add(:base, "Only one identifier column is allowed")
-        end
+        errors.add(error_key, 'is missing a name') unless col[:name].present?
+      when 'existing_field', 'existing_identifier'
+        errors.add(error_key, 'has no field selected') unless table_has_field?(col[:field])
       else
-        errors.add("column[#{i}]", 'action is invalid')
+        errors.add(error_key, 'action is invalid')
       end
     end
   end
