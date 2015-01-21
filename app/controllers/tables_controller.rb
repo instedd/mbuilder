@@ -22,8 +22,14 @@ class TablesController < ApplicationController
     @importer.table_name = params[:name] if application_table.blank?
     @importer.column_specs = params[:column_specs]
     if @importer.valid?
-      @importer.execute!
-      render status: 200, text: 'Import OK'
+      result = @importer.execute!
+      message = if application_table.blank?
+                  "Created table #{@importer.table_name} with #{result[:inserted]} records (#{result[:failed]} failed)"
+                else
+                  "Imported data into #{@importer.table_name}: #{result[:inserted]} inserts, #{result[:updated]} updates, #{result[:failed]} failed"
+                end
+      flash.notice = message
+      render status: 200, text: message
     else
       render status: 400, text: 'Invalid import column specifications'
     end

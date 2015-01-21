@@ -1,6 +1,6 @@
 class Tables::Importer
-  attr_reader :user, :application, :table, :rows
-  attr_accessor :column_specs, :table_name
+  attr_reader :user, :application, :table
+  attr_accessor :rows, :column_specs, :table_name
 
   TmpDir = "#{Rails.root}/tmp"
 
@@ -30,8 +30,13 @@ class Tables::Importer
   def guess_column_specs
     headers = read_csv.first
     headers.map do |col|
-      col_spec = { action: :new_field, name: col, field: nil }
-      col_spec[:action] = :ignore if col.blank?
+      guessed_field = find_table_field_by_name(col)
+      col_spec = if guessed_field
+                   {action: 'existing_field', name: guessed_field.name, field: guessed_field.guid}
+                 else
+                   {action: 'new_field', name: col.strip, field: nil}
+                 end
+      col_spec[:action] = 'ignore' if col.blank?
       col_spec
     end
   end
@@ -47,6 +52,19 @@ class Tables::Importer
 
   def table_has_field?(field_guid)
     table.present? and table.fields.detect {|f| f.guid == field_guid}
+  end
+
+  def find_table_field_by_name(name)
+    name = name.strip.downcase
+    table.presence and table.fields.detect {|f| f.name.downcase == name}
+  end
+
+  def find_table_record(elastic_record, field_guid, value)
+    value = value.to_f_if_looks_like_number
+    candidates = elastic_record.where(field_guid => value).to_a
+    candidates.detect do |candidate|
+      candidate.properties[field_guid] == value
+    end
   end
 
   def valid?
@@ -98,20 +116,30 @@ class Tables::Importer
     failed = 0
     updated = 0
 
+    identifier_index = column_specs.find_index {|col| col[:action] == 'existing_identifier'}
+    identifier_spec = column_specs[identifier_index] unless identifier_index.nil?
+
     elastic_record = application.elastic_record_for(@table)
     rows = read_csv
     rows.drop(1).each do |row|
-      attrs = {}
+      record = find_table_record(elastic_record, identifier_spec[:field], row[identifier_index]) if identifier_index
+      record = elastic_record.new if record.nil?
+
       row.each_with_index do |cell, i|
         col_spec = column_specs[i]
         unless col_spec[:action] == 'ignore'
           field = col_spec[:field]
-          attrs[field] = cell.to_f_if_looks_like_number
+          record.properties[field] = cell.to_f_if_looks_like_number
         end
       end
-      record = elastic_record.new attrs
+      is_new = !record.persisted?
+
       if record.save
-        inserted += 1
+        if is_new
+          inserted += 1
+        else
+          updated += 1
+        end
       else
         failed += 1
       end
@@ -120,6 +148,7 @@ class Tables::Importer
     {inserted: inserted, updated: updated, failed: failed}
   end
 
+  # Returns an array of TableField objects for new fields *and* updates field/guid attribute
   def new_fields
     column_specs.select do |col|
       col[:action] == 'new_field'
