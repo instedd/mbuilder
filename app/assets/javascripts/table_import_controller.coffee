@@ -31,7 +31,7 @@ angular.module('mbuilder-import').controller 'TableImportController', ['$scope',
       name: $scope.tableName
       column_specs: columnSpecs
 
-    url = "/applications/#{$scope.applicationId}/tables/do_import"
+    url = "/applications/#{$scope.applicationId}/tables/import"
 
     $scope.busy = true
     call = $http.post(url, JSON.stringify(data))

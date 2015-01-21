@@ -1089,3 +1089,25 @@ input:-moz-placeholder { font-style: italic; }
     color: #555555;
   }
 }
+
+//------------------ Table import -------------------
+//---------------------------------------------------
+
+.table-import-collapsible {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+table.graygrad.import-specs {
+  tr {
+    th {
+      select, input {
+        width: 100%;
+        padding: 4px 6px;
+        margin: 0;
+      }
+      padding-bottom: 5px;
+    }
+  }
+}
+
