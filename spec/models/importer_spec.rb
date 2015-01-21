@@ -48,5 +48,59 @@ describe Tables::Importer do
       end
     end
   end
+
+  describe "execute!" do
+    it "should create a new table" do
+      @importer = Tables::Importer.new user, application, nil
+      @importer.table_name = "NewTable"
+      @importer.rows = [['foo', 'bar'], ['abc', 123]]
+      @importer.guess_column_specs!
+
+      @importer.should be_new_table
+      lambda do
+        result = @importer.execute!
+        result[:inserted].should == 1
+      end.should change(application.tables, :count).by(1)
+
+      new_table = application.find_table_by_name('NewTable')
+      new_table.fields.count.should == 2
+      application.elastic_record_for(new_table).count.should == 1
+    end
+
+    it "should update existing table" do
+      @importer = Tables::Importer.new user, application, application.tables.first
+      @importer.rows = [['Name', 'Email'], ['foo', 'a@b.com']]
+      @importer.guess_column_specs!
+
+      @importer.should_not be_new_table
+      lambda do
+        result = @importer.execute!
+        result[:inserted].should == 1
+      end.should_not change(application.tables, :count)
+
+      @importer.table.fields.count.should == 3
+      application.elastic_record_for(@importer.table).count.should == 1
+    end
+
+    it "should update records when using an identifier column" do
+      table = application.tables.first
+      users = application.elastic_record_for table
+      users.create [{'phone' => 123.0, 'name' => 'foo'}, {'phone' => 456.0, 'name' => 'bar'}]
+
+      @importer = Tables::Importer.new user, application, table
+      @importer.rows = [['Phone', 'Name'], [456, 'quux']]
+      col_specs = @importer.guess_column_specs
+      col_specs[0][:action] = 'existing_identifier'
+      @importer.column_specs = col_specs
+
+      result = @importer.execute!
+      result[:inserted].should == 0
+      result[:updated].should == 1
+
+      users.count.should == 2
+      rows = users.all.to_a.map {|record| [record.properties['phone'], record.properties['name']]}
+      rows.sort_by(&:first).should == [[123, 'foo'], [456, 'quux']]
+    end
+  end
 end
 

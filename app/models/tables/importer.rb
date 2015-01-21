@@ -46,6 +46,10 @@ class Tables::Importer
     @column_specs = specs.map &:with_indifferent_access
   end
 
+  def guess_column_specs!
+    self.column_specs = guess_column_specs
+  end
+
   def new_table?
     table.blank?
   end
@@ -99,13 +103,13 @@ class Tables::Importer
 
   def execute!
     # Create/update table definition
-    fields = new_fields
+    new_imported_fields = prepare_column_specs
     if new_table?
-      @table = Tables::Local.new table_name, Guid.new.to_s, fields
+      @table = Tables::Local.new table_name, Guid.new.to_s, new_imported_fields
       application.tables << @table
     else
       @table = application.find_table(@table.guid)
-      fields.each do |field|
+      new_imported_fields.each do |field|
         @table.fields << field
       end
     end
@@ -122,6 +126,7 @@ class Tables::Importer
     elastic_record = application.elastic_record_for(@table)
     rows = read_csv
     rows.drop(1).each do |row|
+      # Lookup record to update if using a column as identifier
       record = find_table_record(elastic_record, identifier_spec[:field], row[identifier_index]) if identifier_index
       record = elastic_record.new if record.nil?
 
@@ -149,7 +154,7 @@ class Tables::Importer
   end
 
   # Returns an array of TableField objects for new fields *and* updates field/guid attribute
-  def new_fields
+  def prepare_column_specs
     column_specs.select do |col|
       col[:action] == 'new_field'
     end.map do |col|

@@ -37,6 +37,14 @@ describe "ElasticRecord" do
       other = users.new age: 'abc', name: 'foo'
       other.should be_invalid
     end
+
+    it "should allow nil or empty string for nil numbers" do
+      users.create age: 10.0, name: 'foo'
+      other = users.new age: nil, name: 'foo'
+      other.should be_valid
+      other = users.new age: '', name: 'foo'
+      other.should be_valid
+    end
   end
 
   it "records should be able to be copied" do
