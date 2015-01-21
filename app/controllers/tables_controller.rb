@@ -28,7 +28,7 @@ class TablesController < ApplicationController
       flash.notice = message
       render status: 200, text: message
     else
-      render status: 400, text: 'Invalid import column specifications'
+      render status: 400, json: @importer.errors
     end
   end
 

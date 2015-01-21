@@ -5,9 +5,10 @@
       %h2 Import data into #{application_table.name}
     - else
       %h2 Create a new table
-      %div
+      %div.control-group{'ng-class' => '{error: errors["table_name"]}'}
         %label Table name
         %input{'type' => 'text', 'ng-model' => 'tableName'}
+        %span.help-inline {{errors["table_name"][0]}}
 
     %p Specify how you want to convert the columns imported from the CSV below.
 
@@ -15,7 +16,7 @@
       %table.table.table-bordered.graygrad.import-specs
         %thead
           %tr
-            %th{'ng-repeat' => 'column in columnSpecs'}
+            %th.control-group{'ng-repeat' => 'column in columnSpecs', 'ng-class' => '{error: errors["column[" + $index + "]"]}'}
               %select{'ng-model' => 'column.action', 'ng-options' => 'action as action.label for action in actions', 'ng-change' => 'actionTypeChanged(column)'}
               %br
               %input{'type' => 'text', 'ng-model' => 'column.name', 'ng-show' => 'column.action.action == "new_field"'}

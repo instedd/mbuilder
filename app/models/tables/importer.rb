@@ -2,6 +2,8 @@ class Tables::Importer
   attr_reader :user, :application, :table
   attr_accessor :rows, :column_specs, :table_name
 
+  include ActiveModel::Validations
+
   TmpDir = "#{Rails.root}/tmp"
 
   def initialize(user, application, table=nil)
@@ -71,32 +73,29 @@ class Tables::Importer
     end
   end
 
-  def valid?
-    return false if table_name.blank?
+  validate do
+    errors.add(:table_name, 'Table name cannot be blank') unless table_name.present?
 
     headers = read_csv.first
-    return false if headers.count != column_specs.count
+    errors.add(:base, 'Number of column specifications and imported columns must match') if headers.count != column_specs.count
 
     prev_identifier = nil
-    column_specs.all? do |col|
+    column_specs.each_with_index do |col, i|
       case col[:action].to_s
-      when 'new_field'
-        col[:name].present?
       when 'ignore'
-        true
+      when 'new_field'
+        errors.add("column[#{i}]", 'is missing a name') unless col[:name].present?
       when 'existing_field'
-        table_has_field? col[:field]
+        errors.add("column[#{i}]", 'has no field selected') unless table_has_field?(col[:field])
       when 'existing_identifier'
         if prev_identifier.nil?
           prev_identifier = col
-          table_has_field?(col[:field])
+          errors.add("column[#{i}]", 'has no field selected') unless table_has_field?(col[:field])
         else
-          # more than one column used as identifier
-          false
+          errors.add(:base, "Only one identifier column is allowed")
         end
       else
-        # unknown action
-        false
+        errors.add("column[#{i}]", 'action is invalid')
       end
     end
   end

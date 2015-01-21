@@ -34,10 +34,11 @@ angular.module('mbuilder-import').controller 'TableImportController', ['$scope',
     url = "/applications/#{$scope.applicationId}/tables/import"
 
     $scope.busy = true
+    $scope.errors = {}
     call = $http.post(url, JSON.stringify(data))
     call.success (data, status, headers, config) =>
       window.location = "/applications/#{$scope.applicationId}/data"
     call.error (data, status, headers, config) =>
       $scope.busy = false
-      alert "Error: #{data}"
+      $scope.errors = data
 ]
