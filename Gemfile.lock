@@ -52,7 +52,7 @@ GIT
 
 GIT
   remote: https://bitbucket.org/instedd/pigeon.git
-  revision: 0677d517873a900f9f02102eaa34ed1e28d414ff
+  revision: 084a7e5058d524381d04cdcac832ffde4b08a3fe
   branch: master
   specs:
     instedd-pigeon (0.3.1)
