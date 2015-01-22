@@ -1,0 +1,33 @@
+%div{'ng-app' => 'mbuilder-import'}
+  %div{'ng-controller' => "TableImportController", 'ng-init' => "initialize(#{table_importer_to_angular(@importer, @column_specs)});"}
+
+    - if application_table
+      %h2 Import data into #{application_table.name}
+    - else
+      %h2 Create a new table
+      %div.control-group{'ng-class' => '{error: errors["table_name"]}'}
+        %label Table name
+        %input{'type' => 'text', 'ng-model' => 'tableName'}
+        %span.help-inline {{errors["table_name"][0]}}
+
+    %p Specify how you want to convert the columns imported from the CSV below.
+
+    .scroll
+      %table.table.table-bordered.graygrad.import-specs
+        %thead
+          %tr
+            %th.control-group{'ng-repeat' => 'column in columnSpecs', 'ng-class' => '{error: errors["column_specs[" + $index + "]"]}'}
+              %select{'ng-model' => 'column.action', 'ng-options' => 'action as action.label for action in actions', 'ng-change' => 'actionTypeChanged(column)'}
+              %br
+              %input{'type' => 'text', 'ng-model' => 'column.name', 'ng-show' => 'column.action.action == "new_field"'}
+              %select{'ng-model' => 'column.field', 'ng-options' => 'field as field.name for field in fields', 'ng-show' => 'column.action.action == "existing_field" || column.action.action == "existing_identifier"'}
+        %tbody
+          - @importer.rows.take(11).drop(1).each do |row|
+            %tr
+              - row.each do |cell|
+                %td= cell
+
+    - if @importer.rows.count > 11
+      %p Showing the first 10 records of (#{@importer.rows.count - 1}) to import
+
+    %button.btn.btn-default{'ng-click' => 'import()', 'ng-disabled' => 'busy'} Import

@@ -16,6 +16,10 @@ Mbuilder::Application.routes.draw do
     get :data
     resources :tables, only: [] do
       resources :records, except: [:index, :show]
+      collection do
+        post :upload
+        post :import
+      end
     end
 
     get :export

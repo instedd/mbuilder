@@ -81,7 +81,7 @@ class ElasticRecord
     self.properties_mapping.keys
   end
 
-  def self.human_attribute_name(name)
+  def self.human_attribute_name(name, options = {})
     name
   end
 
@@ -144,16 +144,10 @@ class ElasticRecord
     values = self.properties.with_indifferent_access
     self.class.properties_mapping.each do |column, mapping|
       value = values[column]
-      if mapping["type"] == "double" && !(value.is_a?(Float) || value.is_a?(Fixnum))
+      if (mapping["type"] == "double" && !(value.is_a?(Float) || value.is_a?(Fixnum))) or
+         (mapping["type"] == "long" && !value.is_a?(Fixnum))
         # nil numbers are empty strings
-        unless value.is_a?(String) && value.blank?
-          errors.add(column, "must be a number")
-        end
-      end
-
-      if mapping["type"] == "long" && !value.is_a?(Fixnum)
-        # nil numbers are empty strings
-        unless value.is_a?(String) && value.blank?
+        unless value.nil? || (value.is_a?(String) && value.blank?)
           errors.add(column, "must be a number")
         end
       end
