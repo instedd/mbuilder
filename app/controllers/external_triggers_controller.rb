@@ -38,6 +38,10 @@ class ExternalTriggersController < MbuilderApplicationController
     redirect_to application_message_triggers_path(application)
   end
 
+  def new
+    add_breadcrumb 'New external trigger'
+  end
+
   def run
     trigger = application.external_triggers.find_by_name(params['trigger_name'])
 

@@ -25,6 +25,10 @@ class PeriodicTasksController < MbuilderApplicationController
     redirect_to application_message_triggers_path(application)
   end
 
+  def new
+    add_breadcrumb 'New periodic task'
+  end
+
   private
 
   def set_periodic_task_data(periodic_task)

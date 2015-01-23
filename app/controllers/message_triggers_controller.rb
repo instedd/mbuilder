@@ -37,6 +37,10 @@ class MessageTriggersController < MbuilderApplicationController
     redirect_to application_message_triggers_path(application)
   end
 
+  def new
+    add_breadcrumb 'New message trigger'
+  end
+
   private
 
   def set_message_trigger_data(trigger)

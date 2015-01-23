@@ -51,7 +51,7 @@
 
 .message-container {
   @include border-radius(3px);
-  @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
+  @include box-shadow(0px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
 
   > div {
     padding: 10px;
@@ -62,13 +62,21 @@
   }
 }
 input.n {
+  @include box-shadow(none);
   border: none;
 
   &:focus {
     @include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.3) inset);
   }
 }
+h1, h2, h3, h4, h5, h6 {
 
+  & + p.desc {
+    font-size: 14px;
+    color: #777777;
+    margin-top: -5px;
+  }
+}
 .message-area {
   border-top: 1px solid #e7e7e7;
   padding: 10px;
