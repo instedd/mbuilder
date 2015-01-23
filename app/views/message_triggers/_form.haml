@@ -3,8 +3,9 @@
     .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)'}
       .span6
         %label{for: :name} Trigger name
-        %input.n.span12{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name"}
-
+        %input.n.span12#name{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name"}
+        %br
+        %br
         %div
           %label{for: :message} When a message like this is received:
           .message-container
