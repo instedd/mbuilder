@@ -17,4 +17,10 @@ class Hash
     end
     res
   end
+
+  def user_friendly
+    Hash[map do |key, value|
+      [key, value.user_friendly]
+    end]
+  end
 end

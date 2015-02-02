@@ -11,7 +11,7 @@ class Actions::Hub < Action
   generate_equals :path, :selection, :reflect, :pills
 
   def execute(context)
-    context.hub_action_invoke path, pills.value_in(context)
+    context.hub_action_invoke path, pills.value_in(context).user_friendly
   end
 
   def as_json
