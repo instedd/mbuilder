@@ -29,6 +29,16 @@ angular.module('mbuilder')
     else
       false
 
+  # Support for Hub's enum type parameters
+  $scope.pillTemplateFor = (pill) ->
+    if pill.kind == 'literal' and !$scope.field.isStruct() and $scope.field.isEnum()
+      'enum_literal_pill'
+    else
+      $scope.$parent.pillTemplateFor(pill)
+
+  $scope.enumOptions = ->
+    [{value: null, label: '(empty)'}].concat $scope.field.enumOptions()
+
   $scope.dropOverHubOperand = (event) ->
     $scope.pill = window.draggedPill
     $scope.$parent.pills[$scope.field.name()] = $scope.pill

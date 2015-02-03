@@ -694,6 +694,15 @@ th .ellipsis {
     margin-top: -3px;
     height: 18px !important;
   }
+  &.literal select {
+    background: none;
+    border: none;
+    width: auto;
+    position: relative;
+    top: -3px;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .action:hover,
