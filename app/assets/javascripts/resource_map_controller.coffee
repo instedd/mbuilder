@@ -43,6 +43,7 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
         editmode: false
         focusmode: false
         readonly: true
+        protocol: ['query', 'update', 'insert']
 
   $scope.$on 'updateCollection', (event, table) ->
     return unless table.kind == 'resource_map'

@@ -23,6 +23,11 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
         action.pill = args.pill
       null
     else
+      if args.table.protocol
+        if (kind == 'store_entity_value' and 'update' not in args.table.protocol) or \
+           (kind == 'create_entity' and 'insert' not in args.table.protocol)
+          return
+
       newAction =
         kind: kind
         pill: args.pill

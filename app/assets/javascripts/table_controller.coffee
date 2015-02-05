@@ -10,6 +10,12 @@ angular.module('mbuilder').controller 'TableController', ['$scope', ($scope) ->
   $scope.deleteField = (index) ->
     $scope.table.fields.splice(index, 1)
 
+  $scope.isUpdateable = ->
+    !$scope.table.protocol or 'update' in $scope.table.protocol
+
+  $scope.isInsertable = ->
+    !$scope.table.protocol or 'insert' in $scope.table.protocol
+
   $scope.pillTemplateFor = (field) ->
     # This is repeated here because of the "self problem". The controller's scopes are composed, not inherited
     status = $scope.lookupPillStatus(field)

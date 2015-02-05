@@ -15,7 +15,7 @@
             %i.icon-refresh
 
       .scroll
-        %table.table.table-bordered.fields.graygrad
+        %table.table.table-bordered.fields.graygrad{'ng-class' => '{immutable: !isUpdateable()}'}
           %tr
             %th.field-header{'ng-repeat' => 'pill in table.fields', 'ng-controller' => 'FieldController', 'ng-right-click' => 'showValidValuesPopup(pill, $event)', 'ng-class'=> "{active: pill.active == true}"}
               %a.delete{href: 'javascript:', 'ng-click' => 'deleteField($index)', 'ng-hide' => 'table.readonly'}
@@ -52,6 +52,6 @@
             %a{'href' => 'javascript:', 'ng-click' => 'addCollection(collection)'} {{collection.name}}
     %br
     %div{'ng-controller' => 'HubController'}
-      = icon_link_to :'icf-connect', 'Add data form Hub', 'javascript:', {'ng-click' => 'openEntitySetPicker()'}
+      = icon_link_to :'icf-connect', 'Add data from Hub', 'javascript:', {'ng-click' => 'openEntitySetPicker()'}
       %span{'ng-show' => 'loading'}
         Loading...
