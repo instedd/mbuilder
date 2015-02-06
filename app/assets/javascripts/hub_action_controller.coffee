@@ -44,6 +44,7 @@ angular.module('mbuilder')
     $scope.$parent.pills[$scope.field.name()] = $scope.pill
 
   $scope.addField = (type) ->
+    return unless $scope.new_field.name and !$scope.pills[$scope.new_field.name]
     f = $scope.field.addOpenField($scope.new_field.name, type)
     if f.isStruct()
       $scope.pills[$scope.new_field.name] = {}
