@@ -470,7 +470,7 @@ class PillInputController
     input = @getAncestor(INPUT, e.target)
     if input
       wrapper = document.createElement(DIV)
-      wrapper.innerHTML = e.originalEvent.clipboardData.getData(TEXT)
+      wrapper.innerHTML = e.originalEvent.clipboardData.getData(TEXT).replace(/\r?\n/g, ' ')
       elements = @toArray(wrapper.childNodes)
       @insert elements
       range = document.createRange()
