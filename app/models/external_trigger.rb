@@ -3,6 +3,7 @@ class ExternalTrigger < Trigger
 
   belongs_to :application
   attr_accessible :actions, :name, :parameters, :auth_method
+  validates_presence_of :name
   validates_uniqueness_of :name, scope: :application_id
   serialize :parameters
   serialize :actions
