@@ -36,3 +36,5 @@
         %p No rows to import, table will be created empty.
 
     %button.btn.btn-default{'ng-click' => 'import()', 'ng-disabled' => 'busy'} Import
+    = link_to "Cancel", application_data_path(application), class: "btn btn-link"
+
