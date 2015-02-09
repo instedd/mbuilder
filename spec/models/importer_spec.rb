@@ -1,8 +1,37 @@
 require "spec_helper"
+require "fakefs/spec_helpers"
 
 describe Tables::Importer do
   let(:user) { User.make }
   let(:application) { new_application "Users: Phone, Name" }
+
+  describe "save_csv" do
+    include FakeFS::SpecHelpers
+
+    before(:each) do
+      @importer = Tables::Importer.new user, application, nil
+      FileUtils.mkdir_p Tables::Importer::TmpDir
+    end
+
+    it "should succeed with a valid CSV file" do
+      valid_file = double()
+      valid_file.stub(:read) { "foo,bar\n1,2\n" }
+      @importer.save_csv(valid_file).should be_true
+      File.file?(@importer.csv_filename).should be_true
+    end
+
+    it "should return false for an empty file" do
+      empty_file = double()
+      empty_file.stub(:read) { '' }
+      @importer.save_csv(empty_file).should be_false
+    end
+
+    it "should return false for an invalid CSV file" do
+      invalid_file = double()
+      invalid_file.stub(:read) { "foo,bar\n\"\"\"\"\n" }
+      @importer.save_csv(invalid_file).should be_false
+    end
+  end
 
   describe "guess_column_specs" do
     context "for a new table" do
