@@ -28,6 +28,11 @@
                 %td= cell
 
     - if @importer.rows.count > 11
-      %p Showing the first 10 records of #{@importer.rows.count - 1} to import
+      %p Showing the first 10 records of #{@importer.rows.count - 1} to import.
+    - elsif @importer.rows.count == 1
+      - if application_table
+        %p No rows to import.
+      - else
+        %p No rows to import, table will be created empty.
 
     %button.btn.btn-default{'ng-click' => 'import()', 'ng-disabled' => 'busy'} Import

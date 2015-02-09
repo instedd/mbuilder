@@ -26,7 +26,7 @@ class Tables::Importer
 
     # Validate that all rows have the same length
     rows = read_csv rescue []
-    rows.size > 1 and rows.all? {|row| row.size == rows[0].size}
+    rows.size >= 1 and rows.all? {|row| row.size == rows[0].size}
     # TODO: report reason for invalid file
   end
 

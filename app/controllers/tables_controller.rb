@@ -9,7 +9,7 @@ class TablesController < ApplicationController
     if params[:file].present? and @importer.save_csv(params[:file])
       @column_specs = @importer.guess_column_specs
     else
-      flash[:alert] = 'The CSV file is invalid'
+      flash[:alert] = 'The CSV file is blank or invalid'
       redirect_to application_data_path(application)
     end
   end
