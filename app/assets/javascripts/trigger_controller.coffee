@@ -245,8 +245,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     event.stopPropagation()
 
   $scope.dragOverBoard = (event) ->
-    event.preventDefault()
-    false
+    true
 
   $scope.dropOverBoard = (event) ->
     window.draggedPill = null
@@ -255,6 +254,9 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     $scope.$emit 'dragEnd'
     $(event.target).removeClass('drop-preview')
     false
+
+  $scope.dragEnd = (event) ->
+    $scope.$emit 'dragEnd'
 
   $scope.hidePopups = ->
     if $scope.validValuesPopup.field

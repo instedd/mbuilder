@@ -1,5 +1,5 @@
 %div{'ng-controller' => 'PeriodicTaskController', 'ng-init' => periodic_task_to_angular(application, periodic_task)}
-  %div{'ng-controller' => 'TriggerController'}
+  %div{'ng-controller' => 'TriggerController', 'dragend' => 'dragEnd($event)'}
     %div.row-fluid
       %div.span6
         %div

@@ -1,6 +1,6 @@
 %div{'ng-controller' => 'MessageTriggerController', 'ng-init' => message_trigger_to_angular(application, message_trigger)}
   %div{'ng-controller' => 'TriggerController'}
-    .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)'}
+    .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)', dragend: 'dragEnd($event)'}
       .span6
         %label{for: :name} Trigger name
         %input.n.span12{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name"}
