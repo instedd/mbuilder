@@ -262,7 +262,10 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     $('.popup').hide()
 
   $(window.document).click (event) ->
-    unless $(event.target).closest($('.popup')).length > 0
+    # event.button == 2 checks if this is a right click
+    # this solves the issue with FF that doesnt stop the propagation
+    # of the event that originally triggered the popup
+    unless $(event.target).closest($('.popup')).length > 0 || event.button == 2
       $scope.hidePopups()
 
   $(window.document).keydown (event) ->
