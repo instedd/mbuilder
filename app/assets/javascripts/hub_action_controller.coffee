@@ -24,10 +24,12 @@ angular.module('mbuilder')
 
   $scope.dragOverHubOperand = (event) ->
     if window.draggedPill
+      event.dataTransfer.allowedEffect = "link"
+      event.dataTransfer.dropEffect = "link"
       event.preventDefault()
-      true
-    else
       false
+    else
+      true
 
   # Support for Hub's enum type parameters
   $scope.pillTemplateFor = (pill) ->
