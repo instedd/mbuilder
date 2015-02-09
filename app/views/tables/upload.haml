@@ -28,6 +28,6 @@
                 %td= cell
 
     - if @importer.rows.count > 11
-      %p Showing the first 10 records of (#{@importer.rows.count - 1}) to import
+      %p Showing the first 10 records of #{@importer.rows.count - 1} to import
 
     %button.btn.btn-default{'ng-click' => 'import()', 'ng-disabled' => 'busy'} Import
