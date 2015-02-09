@@ -147,24 +147,46 @@ describe Tables::Importer do
       application.elastic_record_for(@importer.table).count.should == 1
     end
 
-    it "should update records when using an identifier column" do
-      table = application.tables.first
-      users = application.elastic_record_for table
-      users.create [{'phone' => 123.0, 'name' => 'foo'}, {'phone' => 456.0, 'name' => 'bar'}]
+    context "updates using an identifier column" do
+      before(:each) do
+        @table = application.tables.first
+        @users = application.elastic_record_for @table
+        @users.create [{'phone' => 123.0, 'name' => 'foo'}, {'phone' => 456.0, 'name' => 'bar'}]
 
-      @importer = Tables::Importer.new user, application, table
-      @importer.rows = [['Phone', 'Name'], [456, 'quux']]
-      col_specs = @importer.guess_column_specs
-      col_specs[0][:action] = 'existing_identifier'
-      @importer.column_specs = col_specs
+        @importer = Tables::Importer.new user, application, @table
+        @importer.rows = [['Phone', 'Name'], [456, 'quux']]
+        col_specs = @importer.guess_column_specs
+        col_specs[0][:action] = 'existing_identifier'
+        @importer.column_specs = col_specs
+      end
 
-      result = @importer.execute!
-      result[:inserted].should == 0
-      result[:updated].should == 1
+      it "should succeed" do
+        result = @importer.execute!
+        result[:inserted].should == 0
+        result[:updated].should == 1
 
-      users.count.should == 2
-      rows = users.all.to_a.map {|record| [record.properties['phone'], record.properties['name']]}
-      rows.sort_by(&:first).should == [[123, 'foo'], [456, 'quux']]
+        @users.count.should == 2
+        rows = @users.all.to_a.map {|record| [record.properties['phone'], record.properties['name']]}
+        rows.sort_by(&:first).should == [[123, 'foo'], [456, 'quux']]
+      end
+
+      it "should ignore rows with blank identifier" do
+        @importer.rows = [['Phone', 'Name'], ['', 'quux']]
+
+        result = @importer.execute!
+        result[:inserted].should == 0
+        result[:updated].should == 0
+        result[:failed].should == 1
+      end
+
+      it "should fail for rows that have an invalid identifier" do
+        @importer.rows = [['Phone', 'Name'], ['foo', 'quux']]
+
+        result = @importer.execute!
+        result[:inserted].should == 0
+        result[:updated].should == 0
+        result[:failed].should == 1
+      end
     end
   end
 end
