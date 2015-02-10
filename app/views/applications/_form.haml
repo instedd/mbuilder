@@ -9,5 +9,8 @@
   %div
     = f.label :name
     = f.text_field :name, autofocus: true
+  %div
+    = f.label :time_zone
+    = f.time_zone_select :time_zone
 
   = f.submit class: 'btn'
