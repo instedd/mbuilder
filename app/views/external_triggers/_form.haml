@@ -27,7 +27,7 @@
           .message-container
             .from
               %strong
-                = "#{root_url}external/application/#{application.id}/trigger/{{$parent.name}}?"
+                = "#{root_url}external/application/#{application.id}/trigger/{{$parent.nameForUrl()}}?"
                 %span{'ng-repeat' => 'pill in parameters'}
                   {{pill.name}}=
                   %span(ng-include src='pillTemplateFor(pill)')

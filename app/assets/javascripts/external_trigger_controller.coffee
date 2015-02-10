@@ -23,6 +23,9 @@ angular.module('mbuilder').controller 'ExternalTriggerController', ['$scope', '$
     event.dataTransfer.setData("Text", 'yyyymmdd')
     $scope.$broadcast 'dragStart'
 
+  $scope.nameForUrl = () ->
+    encodeURIComponent($scope.name)
+
   $scope.save = ->
     data =
       name: $scope.name
