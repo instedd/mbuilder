@@ -16,6 +16,7 @@
               at:
               .bootstrap-timepicker
                 %input(type="text" ng-model="$parent.scheduleTime" bs-timepicker data-show-meridian="false" data-show-seconds="true" data-minute-step=1)
+              = ActiveSupport::TimeZone.new(application.time_zone).to_s
         .message-container
           .received-at
             %strong Received at:
