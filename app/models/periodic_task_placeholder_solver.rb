@@ -1,13 +1,14 @@
-class PeriodicTaskPlaceholderSolver < PlaceholderSolver
+class PeriodicTaskPlaceholderSolver < ApplicationPlaceholderSolver
 
-  def initialize(time)
+  def initialize(application, time)
+    super(application)
     @time = time
   end
 
   def piece_value(guid, trigger)
     case guid
     when 'received_at'
-      @time.strftime("%Y%m%d")
+      format_time @time
     else
       nil
     end

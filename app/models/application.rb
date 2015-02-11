@@ -1,5 +1,5 @@
 class Application < ActiveRecord::Base
-  attr_accessible :name, :user_id
+  attr_accessible :name, :user_id, :time_zone
 
   belongs_to :user
   has_many :message_triggers, dependent: :destroy
@@ -9,8 +9,7 @@ class Application < ActiveRecord::Base
   has_many :channels, dependent: :destroy
   has_many :logs, class_name: :ExecutionLogger, dependent: :destroy
 
-  validates_presence_of :user
-  validates_presence_of :name
+  validates_presence_of :user, :name, :time_zone
 
   after_save :create_index
   before_destroy :delete_tire_index
