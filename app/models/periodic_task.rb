@@ -20,7 +20,7 @@ class PeriodicTask < Trigger
   end
 
   def self.from_hash(hash)
-    hash['schedule']['start_date'] = in_time_zone Time.parse(hash['schedule']['start_date'])
+    hash['schedule']['start_date'] = Time.parse(hash['schedule']['start_date'])
 
     schedule = IceCube::Schedule.from_hash(hash['schedule'])
 
@@ -41,7 +41,7 @@ class PeriodicTask < Trigger
   end
 
   def schedule_job
-    schedule_job_for schedule.next_occurrence Time.now
+    schedule_job_for next_occurrence(Time.now)
   end
 
   def schedule_job_for scheduled_time, run_at=nil
@@ -54,7 +54,7 @@ class PeriodicTask < Trigger
   def execute_at scheduled_time
     context = DatabaseExecutionContext.new(application, PeriodicTaskPlaceholderSolver.new(application, Time.now), ExecutionLogger.new(application: application, trigger: self))
     context.execute self
-    schedule_job_for schedule.next_occurrence scheduled_time
+    schedule_job_for next_occurrence(scheduled_time)
     if context.messages.present?
       nuntium = Pigeon::Nuntium.from_config
       nuntium.send_ao context.messages
@@ -73,19 +73,17 @@ class PeriodicTask < Trigger
   end
 
   def update_schedule_with(rule, time)
-    s = IceCube::Schedule.new(in_time_zone(time))
+    s = IceCube::Schedule.new(time)
     s.add_recurrence_rule rule
     self.schedule = s
   end
 
-  def start_time
-    from_time_zone schedule.start_time
-  end
-
   private
 
-  def from_time_zone(time)
-    time_zone.utc_to_local(time)
+  def next_occurrence(from_time)
+    # shift start time to applications time_zone
+    self.schedule.start_time = in_time_zone(self.schedule.start_time)
+    self.schedule.next_occurrence from_time
   end
 
   def in_time_zone(time)

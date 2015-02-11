@@ -12,7 +12,7 @@ module PeriodicTasksHelper
       str << "actions=[];"
     end
 
-    str << "scheduleTime = #{trigger.start_time.strftime("%H:%M:%S").to_json_oj};"
+    str << "scheduleTime = #{trigger.schedule.start_time.strftime("%H:%M:%S").to_json_oj};"
 
     if application.tables
       str << "tables=#{application.tables.map(&:as_json).to_json_oj};"
