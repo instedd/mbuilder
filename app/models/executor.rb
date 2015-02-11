@@ -23,7 +23,7 @@ class Executor
         @logger.info "Executing trigger '#{trigger.name}'"
         @matching_triggers << trigger
         begin
-          context = DatabaseExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(message, trigger, match), @logger)
+          context = DatabaseExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(@application, message, trigger, match), @logger)
           @messages.concat context.messages
         rescue Exception => e
           puts e.message

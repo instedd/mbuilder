@@ -52,7 +52,7 @@ class PeriodicTask < Trigger
   end
 
   def execute_at scheduled_time
-    context = DatabaseExecutionContext.new(application, PeriodicTaskPlaceholderSolver.new(Time.now), ExecutionLogger.new(application: application, trigger: self))
+    context = DatabaseExecutionContext.new(application, PeriodicTaskPlaceholderSolver.new(application, Time.now), ExecutionLogger.new(application: application, trigger: self))
     context.execute self
     schedule_job_for schedule.next_occurrence scheduled_time
     if context.messages.present?
