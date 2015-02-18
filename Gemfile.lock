@@ -374,6 +374,7 @@ DEPENDENCIES
   rails_config
   recurring_select!
   resource_map_api_client!
+  rest-client
   rspec
   rspec-rails
   ruby-openid

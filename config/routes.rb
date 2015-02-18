@@ -12,6 +12,11 @@ Mbuilder::Application.routes.draw do
     resources :external_triggers
     resources :messages, only: :create
     resources :logs, only: :index
+    resources :external_services, except: [:show] do
+      member do
+        put :update_manifest
+      end
+    end
 
     get :data
     resources :tables, only: [] do

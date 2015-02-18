@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150210170842) do
+ActiveRecord::Schema.define(:version => 20150213180308) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -63,6 +63,36 @@ ActiveRecord::Schema.define(:version => 20150210170842) do
 
   add_index "execution_loggers", ["application_id"], :name => "index_execution_loggers_on_application_id"
   add_index "execution_loggers", ["trigger_id"], :name => "index_execution_loggers_on_trigger_id"
+
+  create_table "external_service_steps", :force => true do |t|
+    t.integer  "external_service_id"
+    t.string   "name"
+    t.string   "display_name"
+    t.string   "icon"
+    t.string   "callback_url"
+    t.text     "variables"
+    t.string   "response_type"
+    t.text     "response_variables"
+    t.string   "guid"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  add_index "external_service_steps", ["external_service_id"], :name => "index_external_service_steps_on_external_service_id"
+
+  create_table "external_services", :force => true do |t|
+    t.integer  "application_id"
+    t.string   "name"
+    t.string   "url"
+    t.text     "data"
+    t.text     "global_settings"
+    t.string   "guid"
+    t.string   "base_url"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "external_services", ["application_id"], :name => "index_external_services_on_application_id"
 
   create_table "external_triggers", :force => true do |t|
     t.integer  "application_id"

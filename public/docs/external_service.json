@@ -1,0 +1,33 @@
+{
+  "name": "Health Center",
+  "steps": [
+    {
+      "name": "results",
+      "display_name": "Analysis Results",
+      "icon": "medicalkit",
+      "callback_url": "/results",
+      "variables": [
+        {"name": "pin", "display_name": "Patient pin"}
+      ],
+      "response": {
+        "type": "variables",
+        "variables": [
+          {"name": "result", "display_name": "Result"}
+        ]
+      }
+    },
+    {
+      "name": "make_appointment",
+      "display_name": "Make Appoinment",
+      "icon": "medicalkit",
+      "callback_url": "/make_appointment",
+      "variables": [
+        {"name": "pin", "display_name": "Patient pin"},
+        {"name": "date_option", "display_name": "Date option"}
+      ],
+      "response": {
+        "type": "none"
+      }
+    }
+  ]
+}
