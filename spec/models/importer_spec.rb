@@ -132,6 +132,17 @@ describe Tables::Importer do
       application.elastic_record_for(new_table).count.should == 1
     end
 
+    it "should create a table in an empty application" do
+      empty_app = Application.make
+      @importer = Tables::Importer.new user, empty_app, nil
+      @importer.table_name = "NewTable"
+      @importer.rows = [['foo', 'bar'], ['abc', 123]]
+      @importer.guess_column_specs!
+
+      @importer.execute!
+      empty_app.tables.count.should == 1
+    end
+
     it "should update existing table" do
       @importer = Tables::Importer.new user, application, application.tables.first
       @importer.rows = [['Name', 'Email'], ['foo', 'a@b.com']]

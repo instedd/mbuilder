@@ -104,6 +104,7 @@ class Tables::Importer
     new_imported_fields = prepare_column_specs
     if new_table?
       @table = Tables::Local.new table_name, Guid.new.to_s, new_imported_fields
+      application.tables ||= []
       application.tables << @table
     else
       @table = application.find_table(@table.guid)
