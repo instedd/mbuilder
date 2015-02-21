@@ -1,0 +1,18 @@
+.action-content{'ng-controller' => 'ExternalServiceActionController'}
+  .action-icon
+    %i.i40-conditional
+  %div
+    Input:
+    %ul.unstyled
+      %li(ng-repeat='variable in variables' ng-controller='ExternalServiceActionVariableController')
+        %span {{variable.display_name}}
+        \=
+        %span{dragover: 'dragOverVariable($event)', drop: 'dropOverVariable($event)', 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)'}
+          %span(ng-include src='pillTemplateFor(pill)')
+  %div
+    Output:
+    %ul.unstyled
+      %li(ng-repeat='pill in parameters')
+        %span {{pill.name}}
+        \=
+        %span(ng-include src='pillTemplateFor(pill)')

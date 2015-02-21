@@ -141,6 +141,22 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
               $scope.actions.push(action)
       )
 
+  $scope.addExternalServiceAction = ->
+    # TODO present a picker to select external service and setup action using
+    # the service guid, variables (pills) and response variables (parameters)
+    action =
+      kind: 'external_service'
+      guid: '6b44fd18-2529-fd82-123d-63bdc1d7d826'
+      pills:
+        var1: {kind: 'literal', guid: window.guid(), text: ''}
+        var2: {kind: 'literal', guid: window.guid(), text: ''}
+      parameters: [
+        {kind: 'parameter', name: 'param1', guid: window.guid()},
+        {kind: 'parameter', name: 'param2', guid: window.guid()}
+      ]
+
+    $scope.actions.push(action)
+
   $scope.deleteAction = (index) ->
     action = $scope.actions[index]
     if action.kind == 'foreach'
