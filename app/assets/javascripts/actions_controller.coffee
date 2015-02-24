@@ -23,6 +23,11 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
         action.pill = args.pill
       null
     else
+      if args.table.protocol
+        if (kind == 'store_entity_value' and 'update' not in args.table.protocol) or \
+           (kind == 'create_entity' and 'insert' not in args.table.protocol)
+          return
+
       newAction =
         kind: kind
         pill: args.pill
@@ -200,17 +205,21 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       me = $scope
       while me
         if me == scope
-          return false
+          return true
         me = me.$parent
 
+      event.dataTransfer.effectAllowed = "move"
+      event.dataTransfer.dropEffect = "move"
       event.preventDefault()
-      return true
+      return false
 
     if window.draggedPill
+      event.dataTransfer.effectAllowed = "copy"
+      event.dataTransfer.dropEffect = "copy"
       event.preventDefault()
-      return true
+      return false
 
-    false
+    true
 
   $scope.dragEnterPlaceholder = (event) ->
     $(event.target).addClass('drop-preview')
@@ -308,10 +317,12 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
   $scope.dragOverIfOperand = (event) ->
     if window.draggedPill
+      event.dataTransfer.allowedEffect = "link"
+      event.dataTransfer.dropEffect = "link"
       event.preventDefault()
-      true
-    else
       false
+    else
+      true
 
   $scope.dropOverIfLeft = (event) ->
     $scope.action.left = window.draggedPill

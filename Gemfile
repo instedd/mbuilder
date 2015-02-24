@@ -54,6 +54,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'pry-byebug'
   gem 'faker'
+  gem 'fakefs', :require => 'fakefs/safe'
   gem 'machinist'
   gem 'capistrano', '2.14.2'
   gem 'rvm-capistrano'

@@ -178,7 +178,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     $scope.$emit 'dragStart'
 
   $scope.fieldDragStart = (fieldGuid, event) ->
-    window.draggedPill = {kind: 'field_value', guid: fieldGuid}
+    window.draggedPill = {kind: 'field_ref', guid: fieldGuid}
     event.dataTransfer.setData("Text", $scope.lookupFieldName(fieldGuid))
     $scope.$emit 'dragStart'
 
@@ -203,8 +203,10 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     body.removeClass('dragging-table').removeClass('dragging-pill').removeClass('dragging-action')
 
   $scope.dragOverUnboundPill = (pill, event) ->
+    event.dataTransfer.allowEffect = "link"
+    event.dataTransfer.dropEffect = "link"
     event.preventDefault()
-    true
+    false
 
   $scope.dropOverUnboundPill = (pill, event) ->
     $scope.$emit 'dragEnd'
@@ -212,11 +214,13 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     $scope.replacePills(pill.guid, window.draggedPill)
 
   $scope.dragOverUnboundTable = (tableGuid, event) ->
-    return false unless window.draggedPill
-    return false if window.draggedPill.kind != 'table_ref'
+    return true unless window.draggedPill
+    return true if window.draggedPill.kind != 'table_ref'
 
+    event.dataTransfer.allowEffect = "link"
+    event.dataTransfer.dropEffect = "link"
     event.preventDefault()
-    true
+    false
 
   $scope.dropOverUnboundTable = (loop_action, tableGuid, event) ->
     $scope.tableAndFieldRebinds.push kind: 'table', from: tableGuid, to: window.draggedPill.guid
@@ -231,11 +235,13 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     event.stopPropagation()
 
   $scope.dragOverUnboundField = (fieldGuid, event) ->
-    return false unless window.draggedPill
-    return false if window.draggedPill.kind != 'field_ref'
+    return true unless window.draggedPill
+    return true if window.draggedPill.kind != 'field_ref'
 
+    event.dataTransfer.allowEffect = "link"
+    event.dataTransfer.dropEffect = "link"
     event.preventDefault()
-    true
+    false
 
   $scope.dropOverUnboundField = (destinationPillGuid, event) ->
     draggedPillGuid = window.draggedPill.guid
@@ -254,8 +260,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     event.stopPropagation()
 
   $scope.dragOverBoard = (event) ->
-    event.preventDefault()
-    false
+    true
 
   $scope.dropOverBoard = (event) ->
     window.draggedPill = null
@@ -264,6 +269,9 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     $scope.$emit 'dragEnd'
     $(event.target).removeClass('drop-preview')
     false
+
+  $scope.dragEnd = (event) ->
+    $scope.$emit 'dragEnd'
 
   $scope.hidePopups = ->
     if $scope.validValuesPopup.field

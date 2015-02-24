@@ -1,21 +1,22 @@
 class Tables::Hub < Table
-  attr_reader :name, :guid, :fields, :path
+  attr_reader :name, :guid, :fields, :path, :protocol
 
-  def initialize(name, guid, fields, path)
+  def initialize(name, guid, fields, path, protocol)
     @name = name
     @guid = guid
     @fields = fields
     @path = path
+    @protocol = protocol || %w(query update insert)
   end
 
   generate_equals :name, :guid, :fields, :path
 
   def as_json
-    super.merge(path: path, readonly: true)
+    super.merge(path: path, protocol: protocol, readonly: true)
   end
 
   def self.from_hash(hash)
-    new hash['name'], hash['guid'], TableFields::Hub.from_list(hash['fields']), hash['path']
+    new hash['name'], hash['guid'], TableFields::Hub.from_list(hash['fields']), hash['path'], hash['protocol']
   end
 
   def select_field_in(context, restrictions, field, group_by, aggregate)

@@ -5,7 +5,7 @@
   mbuilder
 
 - content_for :app_logo do
-  - image_tag "/assets/instedd-bootstrap/header/logos/mbuilder.png"
+  = image_tag "/assets/instedd-bootstrap/header/logos/mbuilder.png"
   :javascript
     window.hub_url = "#{HubClient.current.url}"
 

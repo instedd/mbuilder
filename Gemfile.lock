@@ -21,7 +21,7 @@ GIT
 
 GIT
   remote: git://github.com/instedd/ruby-hub_client.git
-  revision: 661ccf2ba7261afb11c8d9675b1eae2205cc0ac8
+  revision: c8e18e94a668d5477d7a545c7887c491f6c7ac90
   branch: master
   specs:
     hub_client (0.0.1)
@@ -167,6 +167,7 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    fakefs (0.6.5)
     faker (1.0.1)
       i18n (~> 0.4)
     faraday (0.8.8)
@@ -354,6 +355,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise
   elasticsearch
+  fakefs
   faker
   foreman
   guid

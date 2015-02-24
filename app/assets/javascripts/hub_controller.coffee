@@ -16,6 +16,7 @@ angular.module('mbuilder').controller 'HubController', ['$scope', '$http', 'HubA
             new_field.valid_values = existing_field.valid_values
 
         table.fields = new_fields
+        table.protocol = data.protocol
 
   $scope.openEntitySetPicker = (path) ->
     HubApi.openPicker('entity_set')
@@ -41,6 +42,7 @@ angular.module('mbuilder').controller 'HubController', ['$scope', '$http', 'HubA
           editmode: false
           focusmode: false
           readonly: true
+          protocol: data.protocol
 
   $scope.build_fields = (data) ->
     fields = []

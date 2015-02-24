@@ -527,6 +527,36 @@ body {
       pointer-events: none
     }
 
+    /* for not insertable or updateable tables, pills should not be highlighted while dragging a pill ... */
+    .table.immutable {
+      .pill:not(.table-ref) {
+        border-color: transparent;
+        background-color: transparent;
+
+        &.drop-preview {
+          background: transparent;
+          color: #999;
+        }
+      }
+      /* ... except already bound pills */
+      .pill.bound:not(.table-ref) {
+        border-color: #1e86c8;
+        background-color: #cae3f1;
+
+        &.drop-preview {
+          background: darken(#cae3f1, 15%);
+          color: $white;
+        }
+      }
+
+      .pill.new,
+      .pill.literal,
+      .pill.literal span,
+      .pill.field {
+        color: #999;
+      }
+    }
+
     .space-between-actions {
       height: 34px;
       position: relative;
@@ -702,6 +732,15 @@ th .ellipsis {
     margin-top: -3px;
     height: 18px !important;
   }
+  &.literal select {
+    background: none;
+    border: none;
+    width: auto;
+    position: relative;
+    top: -3px;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .action:hover,
@@ -760,6 +799,12 @@ th .ellipsis {
     }
   }
 
+}
+
+.table.immutable {
+  .pill.new {
+    display: none;
+  }
 }
 
 //-------------------- Classes -----------------------
