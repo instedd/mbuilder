@@ -25,8 +25,8 @@ class Tables::Importer
     end
 
     # Validate that all rows have the same length
-    rows = read_csv
-    rows.size > 1 and rows.all? {|row| row.size == rows[0].size}
+    rows = read_csv rescue []
+    rows.size >= 1 and rows.all? {|row| row.size == rows[0].size}
     # TODO: report reason for invalid file
   end
 
@@ -68,7 +68,8 @@ class Tables::Importer
 
   def find_table_record(elastic_record, field_guid, value)
     value = value.to_f_if_looks_like_number
-    candidates = elastic_record.where(field_guid => value).to_a
+    # this might fail is the field is mapped in ES as numeric, hence the rescue
+    candidates = elastic_record.where(field_guid => value).to_a rescue []
     candidates.detect do |candidate|
       candidate.properties[field_guid] == value
     end
@@ -103,6 +104,7 @@ class Tables::Importer
     new_imported_fields = prepare_column_specs
     if new_table?
       @table = Tables::Local.new table_name, Guid.new.to_s, new_imported_fields
+      application.tables ||= []
       application.tables << @table
     else
       @table = application.find_table(@table.guid)
@@ -124,7 +126,14 @@ class Tables::Importer
     rows = read_csv
     rows.drop(1).each do |row|
       # Lookup record to update if using a column as identifier
-      record = find_table_record(elastic_record, identifier_spec[:field], row[identifier_index]) if identifier_index
+      if identifier_index
+        # skip rows with empty identifier
+        if row[identifier_index].blank?
+          failed += 1
+          next
+        end
+        record = find_table_record(elastic_record, identifier_spec[:field], row[identifier_index])
+      end
       record = elastic_record.new if record.nil?
 
       row.each_with_index do |cell, i|

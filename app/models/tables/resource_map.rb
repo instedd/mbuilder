@@ -11,7 +11,7 @@ class Tables::ResourceMap < Table
   generate_equals :name, :guid, :fields, :id
 
   def as_json
-    super.merge(id: id, readonly: true)
+    super.merge(id: id, protocol: %w(query update insert), readonly: true)
   end
 
   def self.from_hash(hash)

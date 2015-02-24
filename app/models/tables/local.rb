@@ -9,6 +9,10 @@ class Tables::Local < Table
 
   generate_equals :name, :guid, :fields
 
+  def as_json
+    super.merge(protocol: %w(query update insert))
+  end
+
   def self.from_hash(hash)
     new hash['name'], hash['guid'], TableFields::Local.from_list(hash['fields'])
   end

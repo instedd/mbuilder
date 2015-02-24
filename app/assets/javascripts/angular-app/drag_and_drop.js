@@ -6,8 +6,8 @@ module = window.angular.module('drag-and-drop', []);
       link: function(scope, element, attrs) {
         var attrHandler = $parse(attrs[event_name]);
         var handler = function(e) {
-          scope.$apply(function() {
-            attrHandler(scope, { $event: e });
+          return scope.$apply(function() {
+            return attrHandler(scope, { $event: e });
           });
         };
         element[0].addEventListener(event_name, handler, false);

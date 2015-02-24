@@ -1,8 +1,37 @@
 require "spec_helper"
+require "fakefs/spec_helpers"
 
 describe Tables::Importer do
   let(:user) { User.make }
   let(:application) { new_application "Users: Phone, Name" }
+
+  describe "save_csv" do
+    include FakeFS::SpecHelpers
+
+    before(:each) do
+      @importer = Tables::Importer.new user, application, nil
+      FileUtils.mkdir_p Tables::Importer::TmpDir
+    end
+
+    it "should succeed with a valid CSV file" do
+      valid_file = double()
+      valid_file.stub(:read) { "foo,bar\n1,2\n" }
+      @importer.save_csv(valid_file).should be_true
+      File.file?(@importer.csv_filename).should be_true
+    end
+
+    it "should return false for an empty file" do
+      empty_file = double()
+      empty_file.stub(:read) { '' }
+      @importer.save_csv(empty_file).should be_false
+    end
+
+    it "should return false for an invalid CSV file" do
+      invalid_file = double()
+      invalid_file.stub(:read) { "foo,bar\n\"\"\"\"\n" }
+      @importer.save_csv(invalid_file).should be_false
+    end
+  end
 
   describe "guess_column_specs" do
     context "for a new table" do
@@ -103,6 +132,17 @@ describe Tables::Importer do
       application.elastic_record_for(new_table).count.should == 1
     end
 
+    it "should create a table in an empty application" do
+      empty_app = Application.make
+      @importer = Tables::Importer.new user, empty_app, nil
+      @importer.table_name = "NewTable"
+      @importer.rows = [['foo', 'bar'], ['abc', 123]]
+      @importer.guess_column_specs!
+
+      @importer.execute!
+      empty_app.tables.count.should == 1
+    end
+
     it "should update existing table" do
       @importer = Tables::Importer.new user, application, application.tables.first
       @importer.rows = [['Name', 'Email'], ['foo', 'a@b.com']]
@@ -118,24 +158,46 @@ describe Tables::Importer do
       application.elastic_record_for(@importer.table).count.should == 1
     end
 
-    it "should update records when using an identifier column" do
-      table = application.tables.first
-      users = application.elastic_record_for table
-      users.create [{'phone' => 123.0, 'name' => 'foo'}, {'phone' => 456.0, 'name' => 'bar'}]
+    context "updates using an identifier column" do
+      before(:each) do
+        @table = application.tables.first
+        @users = application.elastic_record_for @table
+        @users.create [{'phone' => 123.0, 'name' => 'foo'}, {'phone' => 456.0, 'name' => 'bar'}]
 
-      @importer = Tables::Importer.new user, application, table
-      @importer.rows = [['Phone', 'Name'], [456, 'quux']]
-      col_specs = @importer.guess_column_specs
-      col_specs[0][:action] = 'existing_identifier'
-      @importer.column_specs = col_specs
+        @importer = Tables::Importer.new user, application, @table
+        @importer.rows = [['Phone', 'Name'], [456, 'quux']]
+        col_specs = @importer.guess_column_specs
+        col_specs[0][:action] = 'existing_identifier'
+        @importer.column_specs = col_specs
+      end
 
-      result = @importer.execute!
-      result[:inserted].should == 0
-      result[:updated].should == 1
+      it "should succeed" do
+        result = @importer.execute!
+        result[:inserted].should == 0
+        result[:updated].should == 1
 
-      users.count.should == 2
-      rows = users.all.to_a.map {|record| [record.properties['phone'], record.properties['name']]}
-      rows.sort_by(&:first).should == [[123, 'foo'], [456, 'quux']]
+        @users.count.should == 2
+        rows = @users.all.to_a.map {|record| [record.properties['phone'], record.properties['name']]}
+        rows.sort_by(&:first).should == [[123, 'foo'], [456, 'quux']]
+      end
+
+      it "should ignore rows with blank identifier" do
+        @importer.rows = [['Phone', 'Name'], ['', 'quux']]
+
+        result = @importer.execute!
+        result[:inserted].should == 0
+        result[:updated].should == 0
+        result[:failed].should == 1
+      end
+
+      it "should fail for rows that have an invalid identifier" do
+        @importer.rows = [['Phone', 'Name'], ['foo', 'quux']]
+
+        result = @importer.execute!
+        result[:inserted].should == 0
+        result[:updated].should == 0
+        result[:failed].should == 1
+      end
     end
   end
 end

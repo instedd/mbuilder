@@ -6,7 +6,7 @@
 
   %div{'ng-controller' => 'ExternalTriggerController', 'ng-init' => external_trigger_to_angular(application, external_trigger)}
     %div{'ng-controller' => 'TriggerController'}
-      .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)'}
+      .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)', dragend: 'dragEnd($event)'}
         .span6
           %label{for: :name} Trigger name
           %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name", class: 'span12 n'}

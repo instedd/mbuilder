@@ -61,10 +61,12 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', ($scop
     $scope.action.recipientEditable = 'true'
 
   $scope.dragOverRecipient = (event) ->
-    return false unless window.draggedPill
+    return true unless window.draggedPill
 
+    event.dataTransfer.allowedEffect = "link"
+    event.dataTransfer.dropEffect = "link"
     event.preventDefault()
-    true
+    false
 
   $scope.dropOverRecipient = (event) ->
     return if window.draggedPill == null

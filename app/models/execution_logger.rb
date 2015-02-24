@@ -67,13 +67,13 @@ class ExecutionLogger < ActiveRecord::Base
   end
 
   def find_table(guid)
-    application.find_table(guid)
+    application.find_table(guid) rescue nil
   end
 
   def map_properties(table, properties)
     Hash[properties.map do |key, value|
-      field = table.find_field(key)
-      [field.name, value]
+      field_name = table.find_field(key).name rescue '???'
+      [field_name, value]
     end]
   end
 
@@ -84,7 +84,7 @@ class ExecutionLogger < ActiveRecord::Base
         kind, table_guid, properties = action
         table = find_table(table_guid)
         named_properties = map_properties(table, properties)
-        "Create #{table.name} with: #{named_properties}"
+        "Create #{table.name rescue '???'} with: #{named_properties}"
       when :hub_invoke
         kind, path, params = action
         "Invoke hub action #{path} with #{params}"
@@ -93,12 +93,12 @@ class ExecutionLogger < ActiveRecord::Base
         table = find_table(table_guid)
         old_named_properties = map_properties(table, old_properties)
         new_named_properties = map_properties(table, new_properties)
-        "Update #{table.name} where #{old_named_properties} with #{new_named_properties}"
+        "Update #{table.name rescue '???'} where #{old_named_properties} with #{new_named_properties}"
       when :invalid_value
         kind, table_guid, field_guid, value = action
         table = find_table(table_guid)
-        field = table.find_field(field_guid)
-        "Tried to insert invalid value '#{value}' into #{table.name} #{field.name}"
+        field = table.find_field(field_guid) rescue nil
+        "Tried to insert invalid value '#{value}' into #{table.name rescue '???'} #{field.name rescue '???'}"
       when :info, :error, :warning
         severity, description = action
         "#{severity.to_s.titleize}: #{description}"

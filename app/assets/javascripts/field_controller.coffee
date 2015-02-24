@@ -1,12 +1,14 @@
 angular.module('mbuilder').controller 'FieldController', ['$scope', '$timeout', ($scope, $timeout) ->
   $scope.dragOverName = (event) ->
-    return false unless window.draggedPill
+    return true unless window.draggedPill
 
     if window.draggedPill.kind == 'table_ref'
-      false
-    else
-      event.preventDefault()
       true
+    else
+      event.dataTransfer.allowedEffect = "link"
+      event.dataTransfer.dropEffect = "link"
+      event.preventDefault()
+      false
 
   $scope.dropOverName = (event) ->
     return if window.draggedPill == null
@@ -14,13 +16,15 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', '$timeout', 
     window.draggedPill = null
 
   $scope.dragOverValue = (event) ->
-    return false unless window.draggedPill
+    return true unless window.draggedPill
 
     if window.draggedPill.kind == 'table_ref'
-      false
-    else
-      event.preventDefault()
       true
+    else
+      event.dataTransfer.allowedEffect = "link"
+      event.dataTransfer.dropEffect = "link"
+      event.preventDefault()
+      false
 
   $scope.dropOverValue = (event) ->
     return if window.draggedPill == null
