@@ -1,6 +1,8 @@
 .action-content{'ng-controller' => 'ExternalServiceActionController'}
   .action-icon
-    %i.i40-conditional
+    %i.i40-condition
+  %div
+    {{name}}
   %div
     Input:
     %ul.unstyled
@@ -13,6 +15,6 @@
     Output:
     %ul.unstyled
       %li(ng-repeat='pill in parameters')
-        %span {{pill.name}}
+        %span {{outputPillName(pill)}}
         \=
         %span(ng-include src='pillTemplateFor(pill)')

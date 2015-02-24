@@ -11,7 +11,6 @@ class Actions::ExternalService < Action
 
   def execute(context)
     pills.value_in(context)
-    binding.pry
     # TODO call external service, fill params, extract response
     #context.hub_action_invoke path, pills.value_in(context)
   end

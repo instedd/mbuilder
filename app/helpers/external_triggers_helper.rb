@@ -24,6 +24,8 @@ module ExternalTriggersHelper
       str << "tables=[];"
     end
 
+    str << "external_services=#{application.external_services.map(&:as_json).to_json_oj};"
+
     db = application.simulate_triggers_execution_excluding trigger
 
     str << "db=#{db.to_json_oj};"

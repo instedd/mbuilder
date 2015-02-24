@@ -57,6 +57,14 @@ class ExternalService < ActiveRecord::Base
     end
   end
 
+  def as_json
+    {
+      name: name,
+      guid: guid,
+      steps: external_service_steps.map(&:as_json)
+    }
+  end
+
   class GlobalVariable
     attr_accessor :name, :display_name, :value
 

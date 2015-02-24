@@ -16,6 +16,17 @@ class ExternalServiceStep < ActiveRecord::Base
     external_service.to_absolute_url callback_url
   end
 
+  def as_json
+    {
+      name: name,
+      display_name: display_name,
+      guid: guid,
+      variables: variables,
+      type: response_type,
+      response_variables: response_variables
+    }
+  end
+
   class Variable < Struct.new(:name, :display_name)
     def valid?(parent, field)
       unless self.name =~ /^[a-zA-Z_][a-zA-Z0-9_]*$/

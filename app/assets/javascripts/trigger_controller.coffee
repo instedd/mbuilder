@@ -96,8 +96,17 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
   $scope.lookupPill = (pill) ->
     pill
 
-  # $scope.allPills = -> subclass responsibility
-  # $scope.implicitPills = -> subclass responsibility
+  $scope.allPills = ->
+    # parent scope is specialized for each type of trigger
+    outputPills().concat $scope.$parent.allPills()
+
+  outputPills = ->
+    pills = []
+    $scope.visitActions($scope.actions, (() -> null), (action) ->
+      if action.kind == 'external_service'
+        pills = pills.concat action.parameters
+    )
+    pills
 
   $scope.lookupTable = (guid) ->
     _.find $scope.tables, (table) -> table.guid == guid
@@ -387,4 +396,34 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
   $scope.ifAggregateDescription = (aggregate) ->
     aggregate = !!aggregate
     _.find($scope.ifAggregates, (a) -> a.id == aggregate).desc
+
+  $scope.findExternalService = (guid) ->
+    for external_service in $scope.external_services
+      for step in external_service.steps
+        if step.guid == guid
+          return step
+    null
+
+  $scope.addExternalServiceAction = (step) ->
+    action =
+      kind: 'external_service'
+      guid: step.guid
+      pills: {}
+      parameters: []
+
+    _.map step.variables, (v) ->
+      action.pills[v.name] = {
+        kind: 'literal'
+        guid: window.guid()
+        text: ''
+      }
+
+    action.parameters = _.map step.response_variables, (v) -> {
+      kind: 'parameter'
+      name: v.name
+      guid: window.guid()
+    }
+
+    $scope.actions.push(action)
+
 ]

@@ -1,28 +1,45 @@
 angular.module('mbuilder')
 
 .controller('ExternalServiceActionController', ['$scope', ($scope) ->
-  debugger
-  # TODO lookup external service and setup variables
+  external_service = $scope.findExternalService($scope.action.guid)
+
+  $scope.name = external_service.display_name
   $scope.pills = $scope.action.pills
   $scope.parameters = $scope.action.parameters
 
-  $scope.variables = [
-    {name: 'var1', display_name: 'Variable 1'},
-    {name: 'var2', display_name: 'Variable 2'}
-  ]
+  $scope.allPills = ->
+    $scope.parameters
+
+  $scope.variables = _.map external_service.variables, (v) -> {
+    name: v.name,
+    display_name: v.display_name
+  }
+
+  $scope.outputPillName = (pill) ->
+    output = _.find external_service.response_variables, (v) -> v.name == pill.name
+    output?.display_name
 ])
 
 .controller('ExternalServiceActionVariableController', ['$scope', ($scope) ->
   $scope.pill = $scope.$parent.pills[$scope.variable.name]
 
   $scope.dragOverVariable = (event) ->
-    if window.draggedPill
-      event.preventDefault()
+    return true unless window.draggedPill
+
+    if _.contains($scope.parameters, window.draggedPill)
       true
     else
+      event.preventDefault()
       false
 
   $scope.dropOverVariable = (event) ->
     $scope.pill = window.draggedPill
     $scope.$parent.pills[$scope.variable.name] = $scope.pill
 ])
+
+.controller('AddExternalServiceController', ['$scope', ($scope) ->
+  $scope.select = (step) ->
+    $scope.addExternalServiceAction(step)
+    $scope.hidePopups()
+])
+
