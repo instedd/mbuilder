@@ -58,4 +58,5 @@ group :development, :test do
   gem 'capistrano', '2.14.2'
   gem 'rvm-capistrano'
   gem 'timecop'
+  gem 'rails-dev-tweaks'
 end

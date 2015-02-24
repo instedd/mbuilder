@@ -260,6 +260,9 @@ GEM
       activesupport (= 3.2.21)
       bundler (~> 1.0)
       railties (= 3.2.21)
+    rails-dev-tweaks (1.2.0)
+      actionpack (>= 3.1)
+      railties (>= 3.1)
     rails_config (0.4.2)
       activesupport (>= 3.0)
     railties (3.2.21)
@@ -371,6 +374,7 @@ DEPENDENCIES
   pry-byebug
   rack-cors
   rails (~> 3.2.17)
+  rails-dev-tweaks
   rails_config
   recurring_select!
   resource_map_api_client!
