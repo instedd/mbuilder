@@ -14,7 +14,7 @@
   %div
     Output:
     %ul.unstyled
-      %li(ng-repeat='pill in parameters')
+      %li(ng-repeat='pill in results')
         %span {{outputPillName(pill)}}
         \=
         %span(ng-include src='pillTemplateFor(pill)')

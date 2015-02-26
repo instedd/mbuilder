@@ -1,18 +1,17 @@
 class Actions::ExternalService < Action
-  attr_accessor :guid, :pills, :parameters
+  attr_accessor :guid, :pills, :results
 
-  def initialize(guid, pills, parameters)
+  def initialize(guid, pills, results)
     @guid = guid
     @pills = pills
-    @parameters = parameters
+    @results = results
   end
 
-  generate_equals :guid, :pills, :parameters
+  generate_equals :guid, :pills, :results
 
   def execute(context)
     pills.value_in(context)
-    # TODO call external service, fill params, extract response
-    #context.hub_action_invoke path, pills.value_in(context)
+    # TODO call external service, fill params using pills, extract response, and save results into context for future consumption
   end
 
   def as_json
@@ -20,19 +19,19 @@ class Actions::ExternalService < Action
       kind: 'external_service',
       guid: guid,
       pills: pills.as_json,
-      parameters: parameters.as_json
+      results: results.as_json
     }
   end
 
   def self.from_hash(hash)
-    new hash['guid'], pills_from_hash(hash['pills']), params_from_list(hash['parameters'])
+    new hash['guid'], pills_from_hash(hash['pills']), results_from_list(hash['results'])
   end
 
   def self.pills_from_hash(hash)
     hash.inject({}){ |r, (k,v)| r[k] = Pill.from_hash(v); r }
   end
 
-  def self.params_from_list(list)
-    list.map{|x| Pills::ParameterPill.from_hash(x)}
+  def self.results_from_list(list)
+    list.map{|x| Pills::ResultPill.from_hash(x)}
   end
 end

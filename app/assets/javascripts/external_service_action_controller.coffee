@@ -5,10 +5,10 @@ angular.module('mbuilder')
 
   $scope.name = external_service.display_name
   $scope.pills = $scope.action.pills
-  $scope.parameters = $scope.action.parameters
+  $scope.results = $scope.action.results
 
   $scope.allPills = ->
-    $scope.parameters
+    $scope.results
 
   $scope.variables = _.map external_service.variables, (v) -> {
     name: v.name,
@@ -26,7 +26,8 @@ angular.module('mbuilder')
   $scope.dragOverVariable = (event) ->
     return true unless window.draggedPill
 
-    if _.contains($scope.parameters, window.draggedPill)
+    if _.findWhere($scope.results, {guid: window.draggedPill.guid})
+      # cannot bind a result from self to a parameter
       true
     else
       event.preventDefault()

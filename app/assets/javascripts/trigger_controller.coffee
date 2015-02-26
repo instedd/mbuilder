@@ -80,7 +80,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     switch pill.kind
       when 'field_value'
         $scope.lookupJoinedFieldName(pill.guid)
-      when 'parameter'
+      when 'parameter', 'result'
         pill = $scope.lookupPillByGuid(pill.guid)
         pill?.name
       else
@@ -104,7 +104,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     pills = []
     $scope.visitActions($scope.actions, (() -> null), (action) ->
       if action.kind == 'external_service'
-        pills = pills.concat action.parameters
+        pills = pills.concat action.results
     )
     pills
 
@@ -144,6 +144,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
         return 'field_value' if $scope.fieldExists(pill.guid)
       when 'parameter'
         return 'parameter' if $scope.lookupPillByGuid(pill.guid)
+      when 'result'
+        return 'result' if $scope.lookupPillByGuid(pill.guid)
       else
         return 'placeholder' if $scope.lookupPillByGuid(pill.guid)
     'unbound'
@@ -417,7 +419,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
       kind: 'external_service'
       guid: step.guid
       pills: {}
-      parameters: []
+      results: []
 
     _.map step.variables, (v) ->
       action.pills[v.name] = {
@@ -426,8 +428,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
         text: ''
       }
 
-    action.parameters = _.map step.response_variables, (v) -> {
-      kind: 'parameter'
+    action.results = _.map step.response_variables, (v) -> {
+      kind: 'result'
       name: v.name
       guid: window.guid()
     }
