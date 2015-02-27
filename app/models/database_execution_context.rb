@@ -202,6 +202,20 @@ class DatabaseExecutionContext < ExecutionContext
     @logger.hub_invoke(path, params)
   end
 
+  def external_service_invoke(service_step_guid, params)
+    external_service_step = application.find_external_service_step(service_step_guid)
+    url = external_service_step.interpolate(external_service_step.absolute_callback_url, params)
+
+    @logger.external_service_invoke(service_step_guid, params)
+    response = RestClient.post url, params
+    if external_service_step.response_type == "none"
+      # ignore response if the step should not return variables
+      nil
+    else
+      JSON.parse response
+    end
+  end
+
   def resource_map_api
     @resource_map_api ||= ResourceMap::Api.trusted(application.user.email, ResourceMap::Config.url, ResourceMap::Config.use_https)
   end

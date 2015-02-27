@@ -10,8 +10,11 @@ class Actions::ExternalService < Action
   generate_equals :guid, :pills, :results
 
   def execute(context)
-    pills.value_in(context)
-    # TODO call external service, fill params using pills, extract response, and save results into context for future consumption
+    response = context.external_service_invoke(guid, pills.value_in(context))
+
+    @results.each do |result_pill|
+      context.assign_result_value result_pill.guid, response[result_pill.name]
+    end
   end
 
   def as_json

@@ -27,6 +27,16 @@ class ExternalServiceStep < ActiveRecord::Base
     }
   end
 
+  def interpolate text, params = {}
+    globals = Hash[external_service.global_variables.map do |global|
+      [global.name, global.value]
+    end]
+    params = globals.merge params
+    text.gsub /{\w+}/ do |key|
+      params[key[1..-2]]
+    end
+  end
+
   class Variable < Struct.new(:name, :display_name)
     def valid?(parent, field)
       unless self.name =~ /^[a-zA-Z_][a-zA-Z0-9_]*$/

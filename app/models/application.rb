@@ -35,6 +35,10 @@ class Application < ActiveRecord::Base
     simulate_execution_of(message_triggers - [trigger])
   end
 
+  def find_external_service_step(guid)
+    external_service_steps.includes(:external_service).find_by_guid(guid)
+  end
+
   def find_table(guid)
     table = tables.find { |table| table.guid == guid }
     raise ActiveRecord::RecordNotFound.new("There is no table with id \"#{guid}\"") unless table

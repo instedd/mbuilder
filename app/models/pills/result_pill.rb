@@ -10,7 +10,7 @@ class Pills::ResultPill < Pill
   generate_equals :guid, :name
 
   def value_in(context)
-    # FIXME: add result values to execution context
+    context.result_value(guid)
   end
 
   def self.from_hash(hash)
