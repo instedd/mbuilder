@@ -20,11 +20,38 @@ class ExternalServiceStep < ActiveRecord::Base
     {
       name: name,
       display_name: display_name,
+      icon: icon,
       guid: guid,
       variables: variables,
       type: response_type,
       response_variables: response_variables
     }
+  end
+
+  def export
+    {
+      name: name,
+      display_name: display_name,
+      icon: icon,
+      callback_url: callback_url,
+      guid: guid,
+      variables: variables,
+      response_type: response_type,
+      response_variables: response_variables
+    }
+  end
+
+  def self.import(hash)
+    step = new
+    step.name = hash['name']
+    step.display_name = hash['display_name']
+    step.icon = hash['icon']
+    step.callback_url = hash['callback_url']
+    step.guid = hash['guid']
+    step.response_type = hash['response_type']
+    step.variables = (hash['variables'] || []).map {|v| Variable.new v['name'], v['display_name']}
+    step.response_variables = (hash['response_variables'] || []).map {|v| Variable.new v['name'], v['display_name']}
+    step
   end
 
   def interpolate text, params = {}

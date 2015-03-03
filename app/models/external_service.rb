@@ -17,7 +17,7 @@ class ExternalService < ActiveRecord::Base
     # fill a base url with the url used to download the manifest
     self.url = "http://#{self.url}" unless self.url.match(/^(http|https):\/\//)
     uri = URI.parse(self.url)
-    self.base_url = "#{uri.scheme}://#{uri.host}#{':' + uri.port.to_s if uri.port != 80}"
+    self.base_url = "#{uri.scheme}://#{uri.host}#{':' + uri.port.to_s if uri.port != 80}" unless self.base_url
   end
 
   def update_manifest!
@@ -63,6 +63,33 @@ class ExternalService < ActiveRecord::Base
       guid: guid,
       steps: external_service_steps.map(&:as_json)
     }
+  end
+
+  def export
+    {
+      name: name,
+      guid: guid,
+      url: url,
+      base_url: base_url,
+      global_variables: global_variables,
+      steps: external_service_steps.map(&:export)
+    }
+  end
+
+  def self.from_list(list)
+    return nil if list == nil
+    list.map do |hash|
+      import hash
+    end
+  end
+
+  def self.import(hash)
+    external_service = new url: hash['url'], base_url: hash['base_url']
+    external_service.name = hash['name']
+    external_service.guid = hash['guid']
+    external_service.global_variables = (hash['global_variables'] || []).map {|v| GlobalVariable.new v}
+    external_service.external_service_steps = (hash['steps'] || []).map {|s| ExternalServiceStep.import s}
+    external_service
   end
 
   class GlobalVariable
