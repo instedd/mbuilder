@@ -17,3 +17,5 @@
 db/cstore/*
 
 config/guisso.yml
+
+.ruby-gemset
