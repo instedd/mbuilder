@@ -45,7 +45,7 @@ class Tables::ResourceMap < Table
     mapped_properties = Hash[properties.map do |field_guid, value|
       [find_field(field_guid).id, value]
     end]
-    context.update_many_local(self, restrictions, mapped_properties)
+    context.update_many_resource_map(self, restrictions, mapped_properties)
   end
 
   private

@@ -73,7 +73,6 @@ class DatabaseExecutionContext < ExecutionContext
 
   def update_many_resource_map(table, restrictions, properties)
     collection = resource_map_api.collections.find(table.id)
-    resource_map_field = table.find_field(field).id
     mapped_restrictions = restrictions.map(&:clone).each do |restriction|
       restriction[:field] = table.find_field(restriction[:field]).id
     end
