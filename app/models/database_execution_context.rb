@@ -77,7 +77,8 @@ class DatabaseExecutionContext < ExecutionContext
       restriction[:field] = table.find_field(restriction[:field]).id
     end
     resource_map_restrictions = restrictions_to_resource_map(mapped_restrictions, collection)
-    collection.sites.where(resource_map_restrictions).update(properties)
+    resource_map_properties = replace_field_codes_for_resource_map(properties, collection)
+    collection.sites.where(resource_map_restrictions).update(resource_map_properties)
   end
 
   def update_many_hub(table, restrictions, properties)
@@ -107,6 +108,7 @@ class DatabaseExecutionContext < ExecutionContext
 
     results = sites.map do |site|
       if reserved? field.id
+        field_code = 'long' if field_code == 'lng'
         site.data[field_code]
       else
         if mapping
@@ -213,5 +215,17 @@ class DatabaseExecutionContext < ExecutionContext
     restrictions.each_with_object({}) do |restriction, hash|
       hash[field_restriction_to_api_query restriction, collection] = restriction[:value].user_friendly
     end
+  end
+
+  def replace_field_codes_for_resource_map(properties, collection)
+    replaced_properties = {"properties" => {}}
+    properties.each do |code, value|
+      if reserved? code
+        replaced_properties[field_code_of(code, collection)] = value
+      else
+        replaced_properties["properties"][field_code_of(code, collection)] = value
+      end
+    end
+    replaced_properties
   end
 end
