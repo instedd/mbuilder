@@ -193,7 +193,7 @@ class DatabaseExecutionContext < ExecutionContext
   # This works for both local tables and hub entity sets
   def local_field_values(original_entity, properties, field, aggregate)
     if !original_entity.group_by || original_entity.group_by == field
-      return [properties[field]]
+      return properties[field]
     end
 
     entity = original_entity.clone
