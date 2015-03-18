@@ -32,4 +32,8 @@ class Tables::Local < Table
   def update_many(context, restrictions, properties)
     context.update_many_local(self, restrictions, properties)
   end
+
+  def field_values(context, entity, properties, field, aggregate)
+    context.local_field_values(entity, properties, field, aggregate)
+  end
 end

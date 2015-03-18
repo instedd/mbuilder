@@ -48,6 +48,10 @@ class Tables::ResourceMap < Table
     context.update_many_resource_map(self, restrictions, mapped_properties)
   end
 
+  def field_values(context, entity, properties, field, aggregate)
+    context.resource_map_field_values(properties, field, aggregate)
+  end
+
   private
 
   def resource_map_api

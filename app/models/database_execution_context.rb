@@ -173,6 +173,36 @@ class DatabaseExecutionContext < ExecutionContext
     end
   end
 
+  def field_values(entity, properties, field, aggregate)
+    table = application.table_of(field)
+    table.field_values(self, entity, properties, field, aggregate)
+  end
+
+  def resource_map_field_values(site, field, aggregate)
+    table = application.table_of(field)
+    collection = resource_map_api.collections.find(table.id)
+    field_id = table.find_field(field).id
+    field_code = field_code_of(field_id, collection)
+    if reserved? field_code
+      site.send(field_code)
+    else
+      site.properties[field_code]
+    end
+  end
+
+  # This works for both local tables and hub entity sets
+  def local_field_values(original_entity, properties, field, aggregate)
+    if !original_entity.group_by || original_entity.group_by == field
+      return [properties[field]]
+    end
+
+    entity = original_entity.clone
+    properties.each do |name, value|
+      entity.eq(name, value)
+    end
+    entity.field_values(field, aggregate)
+  end
+
   def reserved? field
     ['name', 'lat', 'lng'].include? field
   end

@@ -35,6 +35,10 @@ class Tables::Hub < Table
     context.update_many_hub(self, restrictions, properties)
   end
 
+  def field_values(context, entity, properties, field, aggregate)
+    context.local_field_values(entity, properties, field, aggregate)
+  end
+
   def restrictions_to_hub(restrictions)
     restrictions.each_with_object({}) do |restriction, hash|
       hash[find_field(restriction[:field]).name] = restriction[:value].user_friendly
