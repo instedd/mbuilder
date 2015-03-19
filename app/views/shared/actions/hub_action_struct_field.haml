@@ -1,5 +1,9 @@
 {{field.label()}}
 
+%span(ng-show='field.canBeRemoved()')
+  %a.delete-field(href='javascript:' ng-click='removeField()')
+    x
+
 %ul
   %li(ng-repeat='field in field.fields()' ng-controller='HubActionArgController')
     %span(ng-include src='fieldViewFor(field)' )
