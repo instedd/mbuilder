@@ -16,6 +16,10 @@ class LogsListing < Listings::Base
     log.trigger.name rescue ''
   end
 
+  column :trigger_type do |log|
+    log.trigger_type.gsub('Trigger', '')
+  end
+
   column :message_from do |log|
     log.message_from.try :without_protocol
   end
