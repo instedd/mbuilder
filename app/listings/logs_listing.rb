@@ -3,7 +3,7 @@ class LogsListing < Listings::Base
 
   model do
     @application = Application.find(params[:application_id])
-    @application.logs.order 'created_at DESC'
+    @application.logs.includes(:trigger).order('created_at DESC')
   end
 
   scope 'All', :all, default: true
