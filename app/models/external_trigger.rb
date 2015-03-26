@@ -10,6 +10,8 @@ class ExternalTrigger < Trigger
 
   symbolize :auth_method, :in => [:basic_auth, :auth_token, :oauth], :scopes => true, :default => :basic_auth, :scopes => :shallow
 
+  scope :enabled, -> { where(enabled: true) }
+
   def ==(other)
     other.is_a?(ExternalTrigger) && name == other.name && actions == other.actions && parameters.as_json == other.parameters.as_json && auth_method == other.auth_method
   end

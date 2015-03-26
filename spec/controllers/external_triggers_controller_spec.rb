@@ -25,4 +25,18 @@ describe ExternalTriggersController do
     assert_data "users", {"phone" => Time.now.strftime("%Y%m%d").to_f}
     Timecop.return
   end
+
+  it "should not run a disabled trigger" do
+    trigger = new_external_trigger do
+      params :phone
+      create_entity "users.phone = {?phone}"
+    end
+
+    trigger.enabled = false
+    trigger.save!
+
+    post :run, application_id: application.id, trigger_name: trigger.name, phone: 1234, format: :json
+
+    assert_data "users", []
+  end
 end
