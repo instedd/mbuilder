@@ -41,6 +41,7 @@ class PeriodicTask < Trigger
   end
 
   def schedule_job
+    return unless self.enabled
     schedule_job_for next_occurrence(Time.now)
   end
 
