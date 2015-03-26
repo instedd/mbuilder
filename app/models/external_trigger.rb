@@ -34,6 +34,7 @@ class ExternalTrigger < Trigger
 
   def self.from_hash(hash)
     new name: hash["name"],
+      enabled: hash["enabled"],
       auth_method: hash["auth_method"],
       actions: Action.from_list(hash["actions"]),
       parameters: hash["parameters"].map{|parameter_hash| Pills::ParameterPill.from_hash(parameter_hash)}
@@ -42,6 +43,7 @@ class ExternalTrigger < Trigger
   def as_json
     {
       name: name,
+      enabled: enabled,
       parameters: parameters,
       kind: kind,
       auth_method: auth_method,

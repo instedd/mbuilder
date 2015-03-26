@@ -24,12 +24,13 @@ class PeriodicTask < Trigger
 
     schedule = IceCube::Schedule.from_hash(hash['schedule'])
 
-    new name: hash["name"], actions: Action.from_list(hash["actions"]), schedule: schedule
+    new name: hash["name"], enabled: hash["enabled"], actions: Action.from_list(hash["actions"]), schedule: schedule
   end
 
   def as_json
     {
       name: name,
+      enabled: enabled,
       kind: kind,
       actions: actions.map(&:as_json),
       schedule: schedule.as_json

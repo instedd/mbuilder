@@ -4,6 +4,7 @@ module MessageTriggersHelper
     str << "applicationId=#{trigger.application_id.to_json};"
     str << "id=#{trigger.id.to_json_oj};"
     str << "name=#{trigger.name.to_json_oj};"
+    str << "enabled=#{trigger.enabled.to_json_oj};"
 
     if trigger.message
       from = trigger.message.from
