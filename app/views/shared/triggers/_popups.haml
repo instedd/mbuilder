@@ -26,3 +26,12 @@
 %div#if-aggregates.popup{'ng-controller' => 'IfAggregatesController'}
   %div{'ng-repeat' => 'operator in ifAggregates'}
     %a{'href' => 'javascript:', 'ng-class' => '{ selected: ifAggregatesPopup.action.all == operator.id }', 'ng-click' => 'select(operator)'} {{operator.desc}}
+
+#add-external-service.popup{'ng-controller' => 'AddExternalServiceController'}
+  %ul
+    %li{'ng-repeat' => 'external_service in external_services'}
+      {{external_service.name}}
+      %ul
+        %li{'ng-repeat' => 'step in external_service.steps'}
+          %a{'href' => 'javascript:', 'ng-click' => 'select(step)'}
+            {{step.display_name}}

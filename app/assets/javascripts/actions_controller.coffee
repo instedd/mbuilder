@@ -146,6 +146,9 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
               $scope.actions.push(action)
       )
 
+  $scope.showAddExternalServicePopup = (event) ->
+    $scope.showPopup '#add-external-service', event
+
   $scope.deleteAction = (index) ->
     action = $scope.actions[index]
     if action.kind == 'foreach'

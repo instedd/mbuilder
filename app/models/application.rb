@@ -8,6 +8,8 @@ class Application < ActiveRecord::Base
   has_many :validation_triggers, dependent: :destroy
   has_many :channels, dependent: :destroy
   has_many :logs, class_name: :ExecutionLogger, dependent: :destroy
+  has_many :external_services, dependent: :destroy
+  has_many :external_service_steps, :through => :external_services
 
   validates_presence_of :user, :name, :time_zone
 
@@ -31,6 +33,10 @@ class Application < ActiveRecord::Base
 
   def simulate_triggers_execution_excluding trigger
     simulate_execution_of(message_triggers - [trigger])
+  end
+
+  def find_external_service_step(guid)
+    external_service_steps.includes(:external_service).find_by_guid(guid)
   end
 
   def find_table(guid)
@@ -109,7 +115,8 @@ class Application < ActiveRecord::Base
       message_triggers: message_triggers,
       periodic_tasks: periodic_tasks,
       validation_triggers: validation_triggers,
-      external_triggers: external_triggers
+      external_triggers: external_triggers,
+      external_services: external_services.map(&:export)
     }
 
     file.write data.to_json_oj
@@ -123,6 +130,7 @@ class Application < ActiveRecord::Base
     self.periodic_tasks = PeriodicTask.from_list(data["periodic_tasks"])
     self.validation_triggers = ValidationTrigger.from_list(data["validation_triggers"])
     self.external_triggers = ExternalTrigger.from_list(data["external_triggers"])
+    self.external_services = ExternalService.from_list(data["external_services"])
 
     save!
   end

@@ -20,6 +20,7 @@ gem "tire"
 gem "elasticsearch"
 gem 'rack-cors', :require => 'rack/cors'
 gem 'symbolize'
+gem 'rest-client'
 
 gem "ice_cube"
 gem 'recurring_select', git: "https://github.com/instedd/recurring_select", branch: 'instedd'
@@ -58,4 +59,5 @@ group :development, :test do
   gem 'capistrano', '2.14.2'
   gem 'rvm-capistrano'
   gem 'timecop'
+  gem 'rails-dev-tweaks'
 end

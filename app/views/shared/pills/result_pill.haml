@@ -1,0 +1,3 @@
+.pill-container
+  .pill.bound{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}'}, 'data-tooltip-content' =>'{{lookupPillName(pill)}}', 'ng-class' => '{ellipsis: (lookupPillName(pill).length > 20)}'}<>
+    {{lookupPillName(pill)}}
