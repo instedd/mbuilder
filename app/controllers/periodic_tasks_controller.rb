@@ -35,6 +35,7 @@ class PeriodicTasksController < MbuilderApplicationController
     data = JSON.parse request.raw_post
 
     periodic_task.name = data['name']
+    periodic_task.enabled = data['enabled']
     periodic_task.actions = Action.from_list(data['actions'])
     periodic_task.update_schedule_with IceCube::Rule.from_hash(JSON.parse data['schedule']), Time.parse(data['scheduleTime'])
 

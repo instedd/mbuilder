@@ -29,6 +29,7 @@ angular.module('mbuilder').controller 'ExternalTriggerController', ['$scope', '$
   $scope.save = ->
     data =
       name: $scope.name
+      enabled: $scope.enabled
       tables: $scope.tables
       parameters: $scope.parameters
       actions: $scope.actions

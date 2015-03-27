@@ -2,6 +2,11 @@
   %div{'ng-controller' => 'TriggerController', 'dragend' => 'dragEnd($event)'}
     %div.row-fluid
       %div.span6
+        .checkbox
+          %label
+            %input{'ng-model' => '$parent.enabled', type: :checkbox, name: :enabled}
+            Enabled
+        %br
         %div
           %label{for: :name} Trigger name
           %input.n.span12#name{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name"}

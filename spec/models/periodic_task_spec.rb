@@ -145,4 +145,15 @@ describe "PeriodicTask" do
 
     Delayed::Job.count.should eq(0)
   end
+
+  it "should not schedule job if disabled" do
+    task = new_periodic_task do
+      rule IceCube::Rule.daily
+    end
+
+    task.enabled = false
+    task.save!
+
+    Delayed::Job.count.should eq(0)
+  end
 end

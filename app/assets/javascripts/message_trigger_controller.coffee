@@ -98,6 +98,7 @@ angular.module('mbuilder').controller 'MessageTriggerController', ['$scope', '$h
   $scope.save = ->
     data =
       name: $scope.name
+      enabled: $scope.enabled
       tables: $scope.tables
       message:
         from: $scope.from

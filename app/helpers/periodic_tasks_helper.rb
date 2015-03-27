@@ -5,6 +5,7 @@ module PeriodicTasksHelper
     str << "applicationId=#{trigger.application_id.to_json_oj};"
     str << "id=#{trigger.id.to_json_oj};"
     str << "name=#{trigger.name.to_json_oj};"
+    str << "enabled=#{trigger.enabled.to_json_oj};"
 
     if trigger.actions
       str << "actions=#{trigger.actions.map(&:as_json).to_json_oj};"

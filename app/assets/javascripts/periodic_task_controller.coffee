@@ -13,6 +13,7 @@ angular.module('mbuilder').controller 'PeriodicTaskController', ['$scope', '$htt
   $scope.save = ->
     data =
       name: $scope.name
+      enabled: $scope.enabled
       tables: $scope.tables
       schedule: $('#scheduleRule').val()
       scheduleTime: $scope.scheduleTime

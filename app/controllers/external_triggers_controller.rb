@@ -43,9 +43,9 @@ class ExternalTriggersController < MbuilderApplicationController
   end
 
   def run
-    trigger = application.external_triggers.find_by_name(params['trigger_name'])
-
     logger = ExecutionLogger.new(application: application)
+
+    trigger = application.external_triggers.enabled.find_by_name!(params['trigger_name'])
 
     logger.info "Executing trigger '#{trigger.name}'"
     logger.trigger = trigger
@@ -68,7 +68,7 @@ class ExternalTriggersController < MbuilderApplicationController
   rescue ActiveRecord::RecordNotFound => e
     logger.error_no_trigger
     logger.save!
-    render_json trigger.errors.full_messages.join("\n"), status: 404
+    head 404
   end
 
   private
@@ -77,6 +77,7 @@ class ExternalTriggersController < MbuilderApplicationController
     data = JSON.parse request.raw_post
 
     trigger.name = data['name']
+    trigger.enabled = data['enabled']
     trigger.auth_method = data['auth_method']
     trigger.parameters = Pill.from_list(data['parameters'])
     trigger.actions = Action.from_list(data['actions'])
