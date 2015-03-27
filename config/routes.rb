@@ -12,6 +12,7 @@ Mbuilder::Application.routes.draw do
     resources :external_triggers
     resources :messages, only: :create
     resources :logs, only: :index
+    resources :contacts, only: [:index, :show]
 
     get :data
     resources :tables, only: [] do

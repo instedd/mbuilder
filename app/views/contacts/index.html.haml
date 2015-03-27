@@ -1,0 +1,5 @@
+.row-fluid
+  .span6
+    - simple_list :contact, title: 'Contacts', icon: :folder do
+      - @contacts.each do |contact|
+        - simple_list_item contact, application_contact_path(application, contact)
