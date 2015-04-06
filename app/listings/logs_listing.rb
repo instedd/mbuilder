@@ -3,7 +3,7 @@ class LogsListing < Listings::Base
 
   model do
     @application = Application.find(params[:application_id])
-    @application.logs.order 'created_at DESC'
+    @application.logs.includes(:trigger).order('created_at DESC')
   end
 
   scope 'All', :all, default: true
@@ -12,8 +12,14 @@ class LogsListing < Listings::Base
 
   sortable true
 
+  filter :trigger_type
+
   column :trigger do |log|
     log.trigger.name rescue ''
+  end
+
+  column :trigger_type do |log|
+    log.trigger_type
   end
 
   column :message_from do |log|
