@@ -12,12 +12,14 @@ class LogsListing < Listings::Base
 
   sortable true
 
+  filter :trigger_type
+
   column :trigger do |log|
     log.trigger.name rescue ''
   end
 
   column :trigger_type do |log|
-    log.trigger_type.gsub('Trigger', '')
+    log.trigger_type
   end
 
   column :message_from do |log|
