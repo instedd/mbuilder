@@ -1,5 +1,5 @@
 class MessageTrigger < Trigger
-  attr_accessible :name, :message, :actions
+  attr_accessible :name, :message, :actions, :enabled
 
   belongs_to :application
 

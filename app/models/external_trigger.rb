@@ -2,7 +2,7 @@ class ExternalTrigger < Trigger
   include Rails.application.routes.url_helpers
 
   belongs_to :application
-  attr_accessible :actions, :name, :parameters, :auth_method
+  attr_accessible :actions, :name, :parameters, :auth_method, :enabled
   validates_presence_of :name
   validates_uniqueness_of :name, scope: :application_id
   serialize :parameters

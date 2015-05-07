@@ -1,5 +1,5 @@
 class PeriodicTask < Trigger
-  attr_accessible :name, :actions, :schedule
+  attr_accessible :name, :actions, :schedule, :enabled
 
   belongs_to :application
 
