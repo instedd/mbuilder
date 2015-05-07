@@ -169,7 +169,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     $scope.$emit 'dragStart'
 
   $scope.fieldDragStart = (fieldGuid, event) ->
-    window.draggedPill = {kind: 'field_ref', guid: fieldGuid}
+    window.draggedPill = {kind: 'field_value', guid: fieldGuid}
     event.dataTransfer.setData("Text", $scope.lookupFieldName(fieldGuid))
     $scope.$emit 'dragStart'
 
@@ -227,7 +227,7 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
 
   $scope.dragOverUnboundField = (fieldGuid, event) ->
     return true unless window.draggedPill
-    return true if window.draggedPill.kind != 'field_ref'
+    return true if window.draggedPill.kind != 'field_value'
 
     event.dataTransfer.allowEffect = "link"
     event.dataTransfer.dropEffect = "link"
