@@ -289,7 +289,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
         false
 
   $scope.pillMentionsTable = (pill, table) ->
-    if pill.kind == 'field_ref' || pill.kind == 'field_value'
+    if pill.kind == 'field_value'
       targetTable = $scope.lookupTableByField(pill.guid)
       return targetTable?.guid == table.guid
     else
@@ -342,7 +342,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     switch action.left.kind
       when 'placeholder'
         false
-      when 'field_ref', 'field_value'
+      when 'field_value'
         table = $scope.lookupTableByField(action.left.guid)
         if table && $scope.tableIsUsedAsForeach(table.guid)
           false
