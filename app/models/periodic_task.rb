@@ -54,12 +54,21 @@ class PeriodicTask < Trigger
   end
 
   def execute_at scheduled_time
-    context = DatabaseExecutionContext.new(application, PeriodicTaskPlaceholderSolver.new(application, Time.now), ExecutionLogger.new(application: application, trigger: self))
-    context.execute self
-    schedule_job_for next_occurrence(scheduled_time)
-    if context.messages.present?
-      nuntium = Pigeon::Nuntium.from_config
-      nuntium.send_ao context.messages
+    logger = ExecutionLogger.new(application: application, trigger: self)
+
+    logger.info "Executing trigger '#{self.name}'"
+    begin
+      context = DatabaseExecutionContext.new(application, PeriodicTaskPlaceholderSolver.new(application, Time.now), logger)
+      context.execute self
+      schedule_job_for next_occurrence(scheduled_time)
+      if context.messages.present?
+        nuntium = Pigeon::Nuntium.from_config
+        nuntium.send_ao context.messages
+      end
+    rescue Exception => e
+      logger.error(e.message)
+    ensure
+      logger.save!
     end
     context
   end

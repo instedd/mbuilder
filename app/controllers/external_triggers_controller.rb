@@ -56,8 +56,6 @@ class ExternalTriggersController < MbuilderApplicationController
         nuntium.send_ao @context.messages
       end
     rescue Exception => e
-      puts e.message
-      puts e.backtrace
       logger.error(e.message)
     ensure
       logger.save!
