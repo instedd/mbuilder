@@ -26,4 +26,22 @@ describe ExternalTrigger do
       :name=>{:label=>"Name", :type=>"string"}
     })
   end
+
+  it "should validates paremeters name" do
+    trigger = unsaved_external_trigger do
+      params [""]
+    end
+
+    trigger.should_not be_valid
+    trigger.errors.full_messages.first.should eq("Parameter name can't be blank")
+  end
+
+  it "should validates paremeters uniqueness" do
+    trigger = unsaved_external_trigger do
+      params [:a, :a]
+    end
+
+    trigger.should_not be_valid
+    trigger.errors.full_messages.first.should eq("Parameters name must be unique")
+  end
 end

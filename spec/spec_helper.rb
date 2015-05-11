@@ -84,6 +84,10 @@ RSpec.configure do |config|
     instance_eval_trigger_helper(&block).external_trigger
   end
 
+  def unsaved_external_trigger(&block)
+    instance_eval_trigger_helper(&block).external_trigger_unsaved
+  end
+
   def instance_eval_trigger_helper(&block)
     helper = TriggerHelper.new(application)
     helper.instance_eval(&block)

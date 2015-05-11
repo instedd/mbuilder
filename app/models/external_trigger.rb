@@ -5,6 +5,7 @@ class ExternalTrigger < Trigger
   attr_accessible :actions, :name, :parameters, :auth_method, :enabled
   validates_presence_of :name
   validates_uniqueness_of :name, scope: :application_id
+  validate :parameters_with_uniq_non_blank_name
   serialize :parameters
   serialize :actions
 
@@ -53,5 +54,21 @@ class ExternalTrigger < Trigger
 
   def trigger_run_url
     url_for(controller: 'external_triggers', action:'run', format: :json, application_id: application_id, trigger_name: name, host: Settings.host)
+  end
+
+  def parameters_with_uniq_non_blank_name
+    return unless parameters
+
+    if parameters_name.any? { |n| n.blank? }
+      errors.add(:parameter_name, "can't be blank")
+    end
+
+    if parameters_name.length != parameters_name.uniq.length
+      errors.add(:parameters_name, "must be unique")
+    end
+  end
+
+  def parameters_name
+    parameters.map &:name
   end
 end
