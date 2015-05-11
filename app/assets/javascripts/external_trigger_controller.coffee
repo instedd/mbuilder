@@ -8,7 +8,8 @@ angular.module('mbuilder').controller 'ExternalTriggerController', ['$scope', '$
   $scope.addParameter = ->
     $scope.parameters.push kind: 'parameter', name: '', guid: window.guid()
 
-  $scope.deleteParameter = (index) ->
+  $scope.removeParameter = (pill) ->
+    index = _.indexOf($scope.parameters, pill)
     $scope.parameters.splice(index, 1)
 
   $scope.makeNotEditable = (event) ->

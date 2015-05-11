@@ -80,7 +80,10 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     switch pill.kind
       when 'field_value'
         $scope.lookupJoinedFieldName(pill.guid)
-      when 'parameter', 'result'
+      when 'parameter'
+        pill = $scope.lookupPillByGuid(pill.guid)
+        "#{pill?.name || 'parameter'}_value"
+      when 'result'
         pill = $scope.lookupPillByGuid(pill.guid)
         pill?.name
       else

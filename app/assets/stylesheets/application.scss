@@ -1175,3 +1175,11 @@ table.graygrad.import-specs {
   }
 }
 
+.remove_pill {
+  display: none;
+  cursor: auto;
+}
+
+.parameters_declaration .remove_pill {
+  display: inline;
+}
