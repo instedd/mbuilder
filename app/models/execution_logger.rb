@@ -82,7 +82,7 @@ class ExecutionLogger < ActiveRecord::Base
   def map_properties(table, properties)
     Hash[properties.map do |key, value|
       field_name = table.find_field(key).name rescue '???'
-      [field_name, value]
+      [field_name, value.user_friendly]
     end]
   end
 
