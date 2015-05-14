@@ -484,4 +484,5 @@ class PillInputController
       @pillInput.trigger('pillinput:changed')
 
 
-window.PillInput = PillInput
+root = exports ? window
+root.PillInput = PillInput
