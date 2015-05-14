@@ -743,9 +743,18 @@ th .ellipsis {
   }
 }
 
+.remove_pill {
+  display: none;
+  cursor: auto;
+}
+
 .action:hover,
 .table:hover,
 .message-container:hover {
+
+  .removable_pills .remove_pill {
+    display: inline;
+  }
 
   .pill {
 
@@ -1173,13 +1182,4 @@ table.graygrad.import-specs {
       padding-bottom: 5px;
     }
   }
-}
-
-.remove_pill {
-  display: none;
-  cursor: auto;
-}
-
-.parameters_declaration .remove_pill {
-  display: inline;
 }
