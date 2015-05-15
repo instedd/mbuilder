@@ -64,7 +64,7 @@ angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http
 
       for new_field in new_fields
         existing_field = _.detect table.fields, (f) -> eqp(f, new_field, 'id') and eqp(f, new_field, 'value') and eqp(f, new_field, 'modifier')
-        console.log new_field, existing_field
+        # console.log new_field, existing_field
         if existing_field
           new_field.guid = existing_field.guid
         else

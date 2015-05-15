@@ -1,7 +1,5 @@
 angular.module('mbuilder').controller 'HubController', ['$scope', '$http', 'HubApi', ($scope, $http, HubApi) ->
 
-  $scope.new_hub_data_path = "connectors/1d5fc682-a580-6337-dfd9-f2361238b76f/indices/hub_unicef/types/patients"
-
   $scope.$on 'updateCollection', (event, table) ->
     return unless table.kind == 'hub'
 

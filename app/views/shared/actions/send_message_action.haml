@@ -10,6 +10,5 @@
       %span.removable_pills{dragover: 'dragOverRecipient($event)', drop: 'dropOverRecipient($event)', 'dragenter' => 'dragEnterRecipient($event)', 'dragleave' => 'dragLeaveRecipient($event)'}
         %span(ng-include src='pillTemplateFor(pill)')
 
-    {{action.recipient}}
     %hr
     %textpad(model='action.message')
