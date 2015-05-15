@@ -123,10 +123,10 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     action =
       kind: 'if'
       all: true,
-      left: {}
+      left: $scope.newPill() # TODO should define how to write literal proba
       op: '=='
       right: [
-        {kind: 'literal', guid: window.guid(), text: ''},
+        $scope.newEmptyLiteralPill() # TODO migrate to newPill
       ]
       actions: []
 
