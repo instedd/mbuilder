@@ -105,7 +105,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     action =
       kind: 'send_message'
       message: []
-      recipient: $scope.newPill() # TODO migrate text -> literal in database
+      recipient: $scope.newPill()
       messageeditable: 'false'
       recipienteditable: 'false'
 
@@ -123,7 +123,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     action =
       kind: 'if'
       all: true,
-      left: $scope.newPill() # TODO should define how to write literal proba
+      left: $scope.newPill() # TODO should define how to write literal probaly
       op: '=='
       right: [
         $scope.newEmptyLiteralPill() # TODO migrate to newPill
