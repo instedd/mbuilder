@@ -157,9 +157,6 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     status = $scope.lookupPillStatus(field)
     $scope.fieldNameFor(status)
 
-  $scope.pieceTemplateFor = (kind) ->
-    "#{kind}_piece"
-
   $scope.fieldNameFor = (status) ->
     "#{status}_pill"
 
