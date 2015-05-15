@@ -1,6 +1,6 @@
 angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScope', 'HubApi', ($scope, $rootScope, HubApi) ->
 
-  $scope.addNewValuePlaceholder = 'define'
+  $scope.addNewValuePlaceholder = 'define value'
 
   tableIsUsedInAnCreateOrSelectAction = (tableGuid) ->
     _.any $scope.actions, (action) ->
