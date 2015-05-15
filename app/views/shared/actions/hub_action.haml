@@ -1,7 +1,7 @@
 .action-content{'ng-controller' => 'HubActionController'}
   .action-icon
     %i.i40-condition
-  %div
+  %div.removable_pills
     Execute the following Hub action
     %ul.breadcrumb
       %li(ng-repeat='p in action.selection.parents' ng-class='{active: $last}')

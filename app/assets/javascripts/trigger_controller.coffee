@@ -76,6 +76,23 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
 
     true
 
+  $scope.addNewValuePlaceholder = 'new value'
+
+  $scope.addNewValue = ->
+    console.error('Not implemented')
+
+  $scope.removePill = (pill) ->
+    console.error('Not implemented')
+
+  $scope.newPill = () ->
+    { kind: 'new' }
+
+  $scope.newEmptyLiteralPill = () ->
+    { kind: 'literal', guid: window.guid(), text: '' }
+
+  $scope.newFocusedEmptyLiteralPill = () ->
+    { kind: 'literal', guid: window.guid(), text: '', editmode: true }
+
   $scope.lookupPillName = (pill) ->
     switch pill.kind
       when 'field_value'

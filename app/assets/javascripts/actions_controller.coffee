@@ -1,5 +1,7 @@
 angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScope', 'HubApi', ($scope, $rootScope, HubApi) ->
 
+  $scope.addNewValuePlaceholder = 'define'
+
   tableIsUsedInAnCreateOrSelectAction = (tableGuid) ->
     _.any $scope.actions, (action) ->
       (action.kind == 'select_entity' || action.kind == 'create_entity') && action.table == tableGuid
@@ -103,7 +105,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     action =
       kind: 'send_message'
       message: []
-      recipient: {kind: 'new'} # {kind: 'literal', guid: window.guid(), text: ''} # TODO migrate text -> literal in database
+      recipient: $scope.newPill() # TODO migrate text -> literal in database
       messageeditable: 'false'
       recipienteditable: 'false'
 
@@ -141,10 +143,17 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
                 path: path
                 selection: selection
                 reflect: result.toJson()
-                pills: result.visitArgs -> {kind: 'literal', guid: window.guid(), text: ''}
+                pills: result.visitArgs (field) ->
+                  $scope.defaultPillForHubField(field)
 
               $scope.actions.push(action)
       )
+
+  $scope.defaultPillForHubField = (field) ->
+    if !field.isStruct() and field.isEnum()
+      $scope.newEmptyLiteralPill()
+    else
+      $scope.newPill()
 
   $scope.showAddExternalServicePopup = (event) ->
     $scope.showPopup '#add-external-service', event

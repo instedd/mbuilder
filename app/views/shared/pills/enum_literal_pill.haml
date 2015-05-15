@@ -1,5 +1,3 @@
 .pill-container
   .pill.literal{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', 'ng-repeat' => 'literal in [lookupPill(pill)]', 'data-trigger'=> "{if(pill.text.length > 20){'focus'} else{'manual'}}", 'data-unique' => "1", data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}', text: '{{pill.text}}'}, 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)'}
     %select{'ng-model' => 'literal.text', 'ng-options' => 'item.value as item.label for item in enumOptions()'}
-    %a.remove_pill{href: 'javascript:', 'ng-click' => 'removePill(pill)'}
-      %i.icon-remove
