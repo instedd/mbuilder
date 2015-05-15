@@ -20,7 +20,7 @@ angular.module('mbuilder')
     output?.display_name
 ])
 
-.controller('ExternalServiceActionVariableController', ['$scope', ($scope) ->
+.controller('ExternalServiceActionVariableController', ['$scope', '$timeout', ($scope, $timeout) ->
   $scope.pill = $scope.$parent.pills[$scope.variable.name]
 
   $scope.dragOverVariable = (event) ->
@@ -36,6 +36,14 @@ angular.module('mbuilder')
   $scope.dropOverVariable = (event) ->
     $scope.pill = window.draggedPill
     $scope.$parent.pills[$scope.variable.name] = $scope.pill
+
+  $scope.addNewValue = ->
+    $scope.pill = $scope.$parent.pills[$scope.variable.name] = $scope.newFocusedEmptyLiteralPill()
+    $timeout ->
+      $scope.$broadcast 'makeEditable'
+
+  $scope.removePill = (pill) ->
+    $scope.pill = $scope.$parent.pills[$scope.variable.name] = $scope.newPill()
 ])
 
 .controller('AddExternalServiceController', ['$scope', ($scope) ->

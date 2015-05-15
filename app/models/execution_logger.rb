@@ -96,12 +96,12 @@ class ExecutionLogger < ActiveRecord::Base
         "Create #{table.name rescue '???'} with: #{named_properties}"
       when :hub_invoke
         kind, path, params = action
-        "Invoke hub action #{path} with #{params}"
+        "Invoke hub action #{path} with #{params.user_friendly}"
       when :external_service_invoke
         kind, service_guid, params = action
         service_step = find_external_service(service_guid)
         service_name = "#{service_step.external_service.name} :: #{service_step.name}" rescue '???'
-        "Invoke external service #{service_name} with #{params}"
+        "Invoke external service #{service_name} with #{params.user_friendly}"
       when :update
         kind, table_guid, id, old_properties, new_properties = action
         table = find_table(table_guid)

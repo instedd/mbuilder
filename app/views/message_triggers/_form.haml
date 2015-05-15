@@ -22,8 +22,6 @@
             %div
               %patternpad
 
-            /.message-area{contenteditable: '{{contenteditable}}', 'ng-blur' => 'makeNotEditable($event)', 'ng-mousedown' => 'makeEditable($event)', 'ng-mouseup' => 'parseMessage($event)', 'preserve-ng-repeat' => true}
-            /%span.piece-container{'ng-repeat' => 'piece in pieces', 'ng-include' => true, 'src' => 'pieceTemplateFor(piece.kind)'}<>
             .received-at
               %strong Received at:
               .pill.bound{draggable: 'true', dragstart: 'receivedAtDragStart($event)'}

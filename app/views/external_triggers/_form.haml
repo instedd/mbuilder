@@ -32,11 +32,11 @@
             = icon_link_to :'icf-help', 'Help', 'http://github.com/instedd/mbuilder/wiki/invoke_external_triggers', target: '_blank'
           %label{for: :message} When a post to this url (or direct call via hub or verboice)
           %br
-          .message-container
+          .message-container(ng-controller='ExternalTriggerParametersController')
             .from
               %strong
                 = "#{root_url}external/application/#{application.id}/trigger/{{$parent.nameForUrl()}}?"
-              %span.parameters_declaration{'ng-repeat' => 'pill in parameters'}
+              %span.removable_pills{'ng-repeat' => 'pill in parameters'}
                 %input.n{:'ng-model'=>"pill.name", :type=>"text", :placeholder=>"parameter", :'pu-elastic-input' => true}
                 \=
                 %span(ng-include src='pillTemplateFor(pill)')

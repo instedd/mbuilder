@@ -15,7 +15,7 @@ angular.module('mbuilder')
     e.stopPropagation()
 ])
 
-.controller('HubActionArgController', ['$scope', ($scope) ->
+.controller('HubActionArgController', ['$scope', '$timeout', ($scope, $timeout) ->
   if $scope.field.isStruct()
     $scope.pills = $scope.$parent.pills[$scope.field.name()]
     $scope.new_field = { name : '' }
@@ -51,12 +51,21 @@ angular.module('mbuilder')
     if f.isStruct()
       $scope.pills[$scope.new_field.name] = {}
     else
-      $scope.pills[$scope.new_field.name] = {kind: 'literal', guid: window.guid(), text: ''}
+      $scope.pills[$scope.new_field.name] = $scope.newPill()
     $scope.$emit 'updateActionReflect'
     $scope.new_field.name = ''
 
   $scope.removeField = ->
     $scope.field.remove()
     $scope.$emit 'updateActionReflect'
+
+  $scope.addNewValue = ->
+    $scope.pill = $scope.$parent.pills[$scope.field.name()] = $scope.newFocusedEmptyLiteralPill()
+
+    $timeout ->
+      $scope.$broadcast 'makeEditable'
+
+  $scope.removePill = (pill) ->
+    $scope.pill = $scope.$parent.pills[$scope.field.name()] = $scope.defaultPillForHubField($scope.field)
 
 ])

@@ -676,6 +676,7 @@ th .ellipsis {
   }
 
   &.bound, &.placeholder {
+    color: #0088cc;
     border: 1px solid transparent;
     margin-left: 4px;
     margin-right: 4px;
@@ -721,9 +722,6 @@ th .ellipsis {
     margin-right: 4px;
     height: 20px !important;
     cursor: move;
-    span {
-      color: #aaa;
-    }
   }
 
   &.literal input {
@@ -743,9 +741,18 @@ th .ellipsis {
   }
 }
 
+.remove_pill {
+  display: none;
+  cursor: auto;
+}
+
 .action:hover,
 .table:hover,
 .message-container:hover {
+
+  .removable_pills .remove_pill {
+    display: inline;
+  }
 
   .pill {
 
@@ -1173,13 +1180,4 @@ table.graygrad.import-specs {
       padding-bottom: 5px;
     }
   }
-}
-
-.remove_pill {
-  display: none;
-  cursor: auto;
-}
-
-.parameters_declaration .remove_pill {
-  display: inline;
 }
