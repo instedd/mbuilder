@@ -103,7 +103,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     action =
       kind: 'send_message'
       message: []
-      recipient: {kind: 'literal', guid: window.guid(), text: ''} # TODO migrate text -> literal in database
+      recipient: {kind: 'new'} # {kind: 'literal', guid: window.guid(), text: ''} # TODO migrate text -> literal in database
       messageeditable: 'false'
       recipienteditable: 'false'
 

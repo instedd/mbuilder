@@ -149,6 +149,8 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
         return 'parameter' if $scope.lookupPillByGuid(pill.guid)
       when 'result'
         return 'result' if $scope.lookupPillByGuid(pill.guid)
+      when 'new'
+        return 'new'
       else
         return 'placeholder' if $scope.lookupPillByGuid(pill.guid)
     'unbound'

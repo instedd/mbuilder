@@ -1,2 +1,4 @@
 .pill.unbound{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', dragover: 'dragOverUnboundPill(pill, $event)', drop: 'dropOverUnboundPill(pill, $event)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}'}, 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)'}
   ???
+  %a.remove_pill{href: 'javascript:', 'ng-click' => 'removePill(pill)'}
+    %i.icon-remove
