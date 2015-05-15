@@ -11,9 +11,9 @@ angular.module('mbuilder').controller 'SendMessageController', ['$scope', '$time
 
   $scope.addNewValue = ->
     # the only pill that can be removed is the action.recipient
-    $scope.action.recipient = {kind: 'literal', guid: window.guid(), text: '', editmode: true}
+    $scope.action.recipient = $scope.newFocusedEmptyLiteralPill()
     $timeout ->
-      $scope.$broadcast 'makeEditable',
+      $scope.$broadcast 'makeEditable'
 
   $scope.pillTemplateFor = (pill) ->
     if pill.kind == 'text'
