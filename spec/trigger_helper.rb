@@ -72,7 +72,7 @@ class TriggerHelper
   def send_message(recipient, text)
     case recipient
     when /'(.+)'/
-      recipient = {'kind' => 'text', 'guid' => $1}
+      recipient = {'kind' => 'literal', 'guid' => "uuid-$1", 'text' => $1}
     when /\*(.+)/
       recipient = {'kind' => 'field_value', 'guid' => $1}
     when /\{(phone_number|invalid_value)\}/
