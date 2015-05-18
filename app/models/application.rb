@@ -18,6 +18,10 @@ class Application < ActiveRecord::Base
 
   serialize :tables
 
+  def tz
+    ActiveSupport::TimeZone.new(self.time_zone)
+  end
+
   def accept_message(message)
     Executor.new(self).execute(message)
   end

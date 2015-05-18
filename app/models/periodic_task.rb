@@ -74,7 +74,8 @@ class PeriodicTask < Trigger
   end
 
   def default_schedule
-    s = IceCube::Schedule.new
+    s = IceCube::Schedule.new(application.tz.now)
+    # s.add_recurrence_rule IceCube::Rule.daily
     s.add_recurrence_rule IceCube::Rule.weekly.day(:monday, :wednesday, :friday)
     s
   end
@@ -89,20 +90,15 @@ class PeriodicTask < Trigger
     self.schedule = s
   end
 
+  def start_time_in_app_time_zone
+    self.schedule.start_time.in_time_zone(application.tz)
+  end
+
   private
 
   def next_occurrence(from_time)
-    # shift start time to applications time_zone
-    self.schedule.start_time = in_time_zone(self.schedule.start_time)
+    self.schedule.start_time = self.schedule.start_time
     self.schedule.next_occurrence from_time
-  end
-
-  def in_time_zone(time)
-    time_zone.local_to_utc(time)
-  end
-
-  def time_zone
-    ActiveSupport::TimeZone.new(application.time_zone)
   end
 
   def set_default_schedule
