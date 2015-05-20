@@ -30,6 +30,20 @@ describe "Select entity" do
       select_entity "users.name = *user"
       send_message "*phone", "{*keyword}" # use stored tag value
     end
+
+    new_trigger do
+      message "my name"
+      select_entity "users.phone = {phone_number}"
+      send_message "{phone_number}", "{*name}"
+    end
+  end
+
+  it "shold select single" do
+    accept_message "sms://1111", "register John"
+    ctx = accept_message "sms://1111", "my name"
+
+    ctx.messages.should include({from: "app://mbuilder", to: "sms://1111", body: "John", :"mbuilder-application" => application.id})
+    ctx.messages.count.should eq(1)
   end
 
   it "should select many" do

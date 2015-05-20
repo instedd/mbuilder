@@ -55,7 +55,7 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def update_many_local(table, restrictions, properties)
-    results = TireHelper.perform_search(application.tire_search(table.guid), restrictions)
+    results = ElasticSearchSelector.new.perform_search(application.local_search(table.guid), restrictions)
 
     now = Tire.format_date(Time.now)
 
@@ -93,7 +93,7 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def select_local_field(table, restrictions, field, group_by, aggregate)
-    ElasticSearchSelector.for(restrictions, field, group_by, aggregate).select(application.tire_search table)
+    ElasticSearchSelector.for(restrictions, field, group_by, aggregate).select(application.local_search(table))
   end
 
   def select_resource_map_field(table, restrictions, field, group_by, aggregate)
@@ -140,7 +140,7 @@ class DatabaseExecutionContext < ExecutionContext
   def each_local_value(table, restrictions, group_by, &block)
     if group_by
       grouped = ElasticSearchSelectors::Grouped.new(restrictions, group_by, group_by, nil)
-      values = grouped.select(application.tire_search(table))
+      values = grouped.select(application.local_search(table))
       values.each do |value|
         block.call({group_by => value})
       end

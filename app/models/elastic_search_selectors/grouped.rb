@@ -8,13 +8,17 @@ class ElasticSearchSelectors::Grouped < ElasticSearchSelector
 
   def select(search)
     group_by = @group_by
-    results = perform_search(search, @restrictions) do |search|
-      search.facet ("#{group_by}_facet") do
-        terms group_by
-      end
+    results = perform_search_raw(search, @restrictions) do |search|
+      search[:aggregations] = {
+        "#{group_by}_aggregation" => {
+          terms: {
+            field: group_by
+          }
+        }
+      }
     end
-    results.facets["#{group_by}_facet"]['terms'].sort_by { |a| a['term'] }.map do |result|
-      result['term'].user_friendly
+    results['aggregations']["#{group_by}_aggregation"]["buckets"].sort_by { |a| a['key'] }.map do |result|
+      result['key'].user_friendly
     end
   end
 

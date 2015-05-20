@@ -9,7 +9,7 @@ module TireHelper
     search.perform.results
   end
 
-  def apply_restrictions_to(search, restrictions)
+  def build_query(restrictions)
     return unless restrictions.present?
 
     musts = []
@@ -33,8 +33,12 @@ module TireHelper
       end
     end
 
+    query
+  end
+
+  def apply_restrictions_to(search, restrictions)
     search.query do |q|
-      q.value = query
+      q.value = build_query(restrictions)
     end
   end
 end

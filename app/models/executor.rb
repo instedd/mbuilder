@@ -27,6 +27,8 @@ class Executor
           @messages.concat context.messages
         rescue Exception => e
           @logger.error(e.message)
+          # for development only
+          raise e if Rails.env.test?
         ensure
           @logger.save!
         end

@@ -85,6 +85,10 @@ class Application < ActiveRecord::Base
     Tire::Search::Search.new tire_index.name, type: table
   end
 
+  def local_search(table)
+    LocalSearch.new tire_index.name, table
+  end
+
   def rebind_tables_and_fields(table_and_field_rebinds)
     all_triggers = message_triggers.all + validation_triggers.all + periodic_tasks.all
 
