@@ -22,9 +22,7 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def insert_local(table, properties)
-    now = Tire.format_date(Time.now)
-
-    @application.local_search(table).create properties: properties, created_at: now, updated_at: now
+    @application.local_search(table).create properties
     @index.refresh
 
     @logger.insert_values(table, properties)
@@ -57,13 +55,11 @@ class DatabaseExecutionContext < ExecutionContext
   def update_many_local(table, restrictions, properties)
     results = ElasticSearchSelector.new.perform_search(application.local_search(table.guid), restrictions)
 
-    now = Tire.format_date(Time.now)
-
     results.each do |result|
       old_properties = result["_source"]["properties"]
       new_properties = old_properties.merge(properties)
 
-      @application.local_search(table.guid).update result["_id"], properties: new_properties, updated_at: now
+      @application.local_search(table.guid).update result["_id"], new_properties
 
       @logger.update_values(table.guid, result["_id"], old_properties, new_properties)
     end

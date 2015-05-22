@@ -20,10 +20,26 @@ class LocalSearch
   end
 
   def create(attributes)
-    client.create options.merge body: attributes
+    now = change_timestamp
+    client.create options.merge body: {
+      properties: attributes,
+      created_at: now,
+      updated_at: now
+    }
   end
 
   def update(id, attributes)
-    client.update options.merge id: id, body: { doc: attributes }
+    client.update options.merge id: id, body: {
+      doc: {
+        properties: attributes,
+        updated_at: change_timestamp
+      }
+    }
+  end
+
+  private
+
+  def change_timestamp
+    Time.now.utc.iso8601
   end
 end

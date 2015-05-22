@@ -138,8 +138,7 @@ RSpec.configure do |config|
     data = data[0] if data.length == 1 && data[0].is_a?(Array)
 
     data.to_f_if_looks_like_number.each do |properties|
-      now = Tire.format_date(Time.now)
-      application.local_search(table).create properties: properties, created_at: now, updated_at: now
+      application.local_search(table).create properties
     end
     application.local_index.refresh
   end

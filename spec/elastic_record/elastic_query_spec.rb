@@ -12,7 +12,6 @@ describe "ElasticQuery" do
       {"age" => 20, "name" => "bar"},
       {"age" => 30, "name" => "bar"},
     ]
-    (Elasticsearch::Client.new log: false).indices.refresh index: application.local_index.name
   end
 
   after(:each) { Timecop.return }
@@ -210,7 +209,6 @@ describe "ElasticQuery" do
       {"age" => 20, "name" => "bar2"},
       {"age" => 30, "name" => "bar3"},
     ]
-    (Elasticsearch::Client.new log: false).indices.refresh index: application.local_index.name
 
     results = users.where('age >= 20').order("age desc").order("name desc")
     results.to_a.map(&:properties).should eq([
@@ -230,7 +228,6 @@ describe "ElasticQuery" do
       {"age" => 20, "name" => "bar2"},
       {"age" => 30, "name" => "bar3"},
     ]
-    (Elasticsearch::Client.new log: false).indices.refresh index: application.local_index.name
 
     results = users.where('name >= foo').order("age desc").order("name desc")
     results.to_a.map(&:properties).should eq([
@@ -250,7 +247,6 @@ describe "ElasticQuery" do
       {"age" => 20, "name" => "bar2"},
       {"age" => 30, "name" => "bar3"},
     ]
-    (Elasticsearch::Client.new log: false).indices.refresh index: application.local_index.name
 
     results = users.where('created_at >= ?', Time.utc(2013, 9, 17, 6, 30, 0)).order("age desc").order("name desc")
     results.to_a.map(&:properties).should eq([
