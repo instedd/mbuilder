@@ -14,7 +14,7 @@ class Application < ActiveRecord::Base
   validates_presence_of :user, :name, :time_zone
 
   after_save :create_index
-  before_destroy :delete_tire_index
+  before_destroy :delete_local_index
 
   serialize :tables
 
@@ -53,8 +53,8 @@ class Application < ActiveRecord::Base
     tables.find { |table| table.name == name }
   end
 
-  def tire_index(create_if_not_exists = true)
-    index = Tire.index(tire_name)
+  def local_index(create_if_not_exists = true)
+    index = LocalIndex.new(local_index_name)
     if create_if_not_exists && !index.exists?
       index.create(settings: {
         index: {
@@ -73,16 +73,16 @@ class Application < ActiveRecord::Base
     index
   end
 
-  def delete_tire_index
-    tire_index.delete
+  def delete_local_index
+    local_index.delete
   end
 
   def create_index
-    tire_index(true)
+    local_index(true)
   end
 
-  def tire_search(table)
-    Tire::Search::Search.new tire_index.name, type: table
+  def local_search(table)
+    LocalSearch.new local_index, table
   end
 
   def rebind_tables_and_fields(table_and_field_rebinds)
@@ -144,7 +144,7 @@ class Application < ActiveRecord::Base
   end
 
   def elastic_record_for(table)
-    ElasticRecord.for(self.tire_index.name, table.guid)
+    ElasticRecord.for(self.local_index.name, table.guid)
   end
 
   def rebuild_local_tables
@@ -154,7 +154,7 @@ class Application < ActiveRecord::Base
       data[table.guid] = record_class.all.map(&:as_json)
     end
 
-    self.delete_tire_index
+    self.delete_local_index
 
     local_tables.each do |table|
       # ElasticRecord clases are not catched since index is recreated
@@ -164,11 +164,11 @@ class Application < ActiveRecord::Base
   end
 
   if Rails.env.test?
-    def tire_name
+    def local_index_name
       "mbuilder_test_application_#{id}"
     end
   else
-    def tire_name
+    def local_index_name
       "mbuilder_application_#{id}"
     end
   end

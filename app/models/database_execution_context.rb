@@ -1,7 +1,7 @@
 class DatabaseExecutionContext < ExecutionContext
   def initialize(application, placeholder_solver, logger)
     super
-    @index = application.tire_index
+    @index = application.local_index
   end
 
   def self.execute(application, trigger, placeholder_solver, logger)
@@ -22,9 +22,7 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def insert_local(table, properties)
-    now = Tire.format_date(Time.now)
-
-    @index.store type: table, properties: properties, created_at: now, updated_at: now
+    @application.local_search(table).create properties
     @index.refresh
 
     @logger.insert_values(table, properties)
@@ -55,15 +53,13 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def update_many_local(table, restrictions, properties)
-    results = TireHelper.perform_search(application.tire_search(table.guid), restrictions)
+    local_search = @application.local_search(table.guid)
 
-    now = Tire.format_date(Time.now)
-
-    results.each do |result|
+    local_search.paged_query(restrictions) do |result|
       old_properties = result["_source"]["properties"]
       new_properties = old_properties.merge(properties)
 
-      @index.store type: table.guid, id: result["_id"], properties: new_properties, updated_at: now
+      local_search.update result["_id"], new_properties
 
       @logger.update_values(table.guid, result["_id"], old_properties, new_properties)
     end
@@ -93,7 +89,7 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def select_local_field(table, restrictions, field, group_by, aggregate)
-    ElasticSearchSelector.for(restrictions, field, group_by, aggregate).select(application.tire_search table)
+    ElasticSearchSelector.for(restrictions, field, group_by, aggregate).select(application.local_search(table))
   end
 
   def select_resource_map_field(table, restrictions, field, group_by, aggregate)
@@ -140,7 +136,7 @@ class DatabaseExecutionContext < ExecutionContext
   def each_local_value(table, restrictions, group_by, &block)
     if group_by
       grouped = ElasticSearchSelectors::Grouped.new(restrictions, group_by, group_by, nil)
-      values = grouped.select(application.tire_search(table))
+      values = grouped.select(application.local_search(table))
       values.each do |value|
         block.call({group_by => value})
       end

@@ -7,9 +7,8 @@ class ElasticSearchSelectors::Aggregated < ElasticSearchSelector
   end
 
   def select(search)
-    results = perform_search(search, @restrictions)
-    value = results.map do |result|
-      result["_source"]["properties"][@field].user_friendly
+    value = search.all_entities(@restrictions).map do |result|
+      result[@field].user_friendly
     end
     Aggregator.new(@aggregate).apply_to value
   end

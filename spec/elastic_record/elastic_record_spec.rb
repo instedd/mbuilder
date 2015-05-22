@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "ElasticRecord" do
   let!(:application) { new_application "users: Age, Name" }
-  let(:users) { ElasticRecord.for application.tire_index.name, 'users' }
+  let(:users) { ElasticRecord.for application.local_index.name, 'users' }
 
   describe "create" do
     it "should create single object" do
@@ -52,7 +52,7 @@ describe "ElasticRecord" do
     json = users.all.map(&:as_json)
 
     other_app = new_application "users: Age, Name"
-    other_users = ElasticRecord.for other_app.tire_index.name, 'users'
+    other_users = ElasticRecord.for other_app.local_index.name, 'users'
 
     other_users.create json
 
