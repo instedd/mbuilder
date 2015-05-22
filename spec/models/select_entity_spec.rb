@@ -60,6 +60,17 @@ describe "Select entity" do
     ctx.messages.count.should eq(2)
   end
 
+  it "should select a lot of many" do
+    25.times do |n|
+      accept_message "sms://1111", "register John#{n}"
+      accept_message "sms://4444", "tag Blue John#{n}"
+    end
+
+    $BREAK = true
+    ctx = accept_message "sms://4444", "alert Blue"
+    ctx.messages.count.should eq(25)
+  end
+
   it "should select case insensitive" do
     accept_message "sms://1111", "register John"
     accept_message "sms://2222", "register Sally"
