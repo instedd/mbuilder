@@ -11,8 +11,8 @@ class ElasticSearchSelectors::GroupedByAndAggregated < ElasticSearchSelector
     field = @field
     aggregate = @aggregate
 
-    results = perform_search_raw(search, @restrictions) do |search|
-      search[:aggregations] = {
+    results = search.raw_query @restrictions, {
+      aggregations: {
         "#{group_by}_aggregation" => {
           terms: {
             field: group_by,
@@ -26,7 +26,7 @@ class ElasticSearchSelectors::GroupedByAndAggregated < ElasticSearchSelector
           }
         }
       }
-    end
+    }
 
     results["aggregations"]["#{group_by}_aggregation"]['buckets'].sort_by { |a| a['key'] }.map do |result|
       result["#{field}_#{aggregate}"]["value"].user_friendly

@@ -148,10 +148,8 @@ RSpec.configure do |config|
 
     index = application.local_index(false)
     if index.exists?
-      results = application.local_search(table).entities
+      results = application.local_search(table).all_entities
       results.length.should eq(data.length)
-
-      results = results.map { |result| result["_source"]["properties"] }
 
       assert_sets_equal results, data
     else

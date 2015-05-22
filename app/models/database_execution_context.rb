@@ -53,13 +53,13 @@ class DatabaseExecutionContext < ExecutionContext
   end
 
   def update_many_local(table, restrictions, properties)
-    results = ElasticSearchSelector.new.perform_search(application.local_search(table.guid), restrictions)
+    local_search = @application.local_search(table.guid)
 
-    results.each do |result|
+    local_search.paged_query(restrictions) do |result|
       old_properties = result["_source"]["properties"]
       new_properties = old_properties.merge(properties)
 
-      @application.local_search(table.guid).update result["_id"], new_properties
+      local_search.update result["_id"], new_properties
 
       @logger.update_values(table.guid, result["_id"], old_properties, new_properties)
     end

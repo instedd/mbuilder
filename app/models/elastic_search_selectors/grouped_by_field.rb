@@ -7,8 +7,7 @@ class ElasticSearchSelectors::GroupedByField < ElasticSearchSelector
   end
 
   def select(search)
-    perform_search(search, @restrictions).
-      map { |result| result["_source"]["properties"] }.
+    search.all_entities(@restrictions).
       group_by { |result| result[@group_by] }.
       sort_by { |key, value| key }.
       map { |key, value| ArrayWrapper.new(value.map { |a| a[@field]}) }

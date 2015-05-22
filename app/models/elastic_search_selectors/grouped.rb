@@ -8,15 +8,17 @@ class ElasticSearchSelectors::Grouped < ElasticSearchSelector
 
   def select(search)
     group_by = @group_by
-    results = perform_search_raw(search, @restrictions) do |search|
-      search[:aggregations] = {
+
+    results = search.raw_query @restrictions, {
+      aggregations: {
         "#{group_by}_aggregation" => {
           terms: {
             field: group_by
           }
         }
       }
-    end
+    }
+
     results['aggregations']["#{group_by}_aggregation"]["buckets"].sort_by { |a| a['key'] }.map do |result|
       result['key'].user_friendly
     end
