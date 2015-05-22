@@ -16,7 +16,7 @@ gem 'underscore-rails'
 gem 'decent_exposure'
 gem 'instedd-pigeon', git: "https://bitbucket.org/instedd/pigeon.git", branch: 'master', :require => 'pigeon'
 gem 'ng-rails-csrf'
-gem "elasticsearch"
+gem 'elasticsearch'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'symbolize'
 gem 'rest-client'
