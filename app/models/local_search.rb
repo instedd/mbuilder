@@ -1,21 +1,29 @@
 class LocalSearch
-  def initialize(index, type)
-    @index = index
+  def initialize(local_index, type)
+    @local_index = local_index
     @type = type
   end
 
   def client
-    Elasticsearch::Client.new log: false
+    @local_index.client
   end
 
   def options
     {
-      index: @index,
+      index: @local_index.name,
       type: @type
     }
   end
 
   def entities(restrictions = {})
     ElasticSearchSelector.new.perform_search(self, restrictions)
+  end
+
+  def create(attributes)
+    client.create options.merge body: attributes
+  end
+
+  def update(id, attributes)
+    client.update options.merge id: id, body: { doc: attributes }
   end
 end

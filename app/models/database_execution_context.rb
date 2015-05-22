@@ -1,7 +1,7 @@
 class DatabaseExecutionContext < ExecutionContext
   def initialize(application, placeholder_solver, logger)
     super
-    @index = application.tire_index
+    @index = application.local_index
   end
 
   def self.execute(application, trigger, placeholder_solver, logger)
@@ -24,7 +24,7 @@ class DatabaseExecutionContext < ExecutionContext
   def insert_local(table, properties)
     now = Tire.format_date(Time.now)
 
-    @index.store type: table, properties: properties, created_at: now, updated_at: now
+    @application.local_search(table).create properties: properties, created_at: now, updated_at: now
     @index.refresh
 
     @logger.insert_values(table, properties)
@@ -63,7 +63,7 @@ class DatabaseExecutionContext < ExecutionContext
       old_properties = result["_source"]["properties"]
       new_properties = old_properties.merge(properties)
 
-      @index.store type: table.guid, id: result["_id"], properties: new_properties, updated_at: now
+      @application.local_search(table.guid).update result["_id"], properties: new_properties, updated_at: now
 
       @logger.update_values(table.guid, result["_id"], old_properties, new_properties)
     end

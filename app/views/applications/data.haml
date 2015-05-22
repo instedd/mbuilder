@@ -7,7 +7,7 @@
       .file-upload
         = icon_link_to :'icf-arrow', 'Choose a file', '#'
         = file_field_tag 'file', class: 'choose'
-  = render_listing "es__#{application.id}__#{application.tire_name}__#{table.guid}".to_sym
+  = render_listing "es__#{application.id}__#{application.local_index_name}__#{table.guid}".to_sym
 
   %hr
 

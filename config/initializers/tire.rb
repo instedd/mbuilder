@@ -1,5 +1,3 @@
-Tire::Configuration.wrapper Hash
-
 module Tire
   def self.parse_date(date)
     Time.parse(date)

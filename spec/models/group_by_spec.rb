@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe "Aggregate functions" do
-  context "Tire" do
+  context "Elasticsearch" do
     let(:application) { new_application "Users: Age, Name, Gender" }
 
     before(:each) do
