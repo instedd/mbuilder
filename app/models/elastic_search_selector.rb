@@ -8,7 +8,7 @@ class ElasticSearchSelector
 
   def perform_search(search, restrictions)
     items = []
-    query = TireHelper.build_query(restrictions)
+    query = build_query(restrictions)
 
     body = {}
     body[:query] = query if query
@@ -34,7 +34,7 @@ class ElasticSearchSelector
   end
 
   def perform_search_raw(search, restrictions)
-    query = TireHelper.build_query(restrictions)
+    query = build_query(restrictions)
 
     body = {}
     body[:query] = query if query
@@ -43,8 +43,37 @@ class ElasticSearchSelector
 
     results = search.client.search(search.options.merge({ body: body }))
 
-    # TODO pagination?
+    # aggregated results do not need to be paginated
 
     results
+  end
+
+  private
+
+  def build_query(restrictions)
+    return unless restrictions.present?
+
+    musts = []
+    query = { bool: { must: musts } }
+
+    restrictions.each do |restriction|
+      case restriction[:op]
+      when :eq
+        values = Array(restriction[:value]).map &:to_s
+
+        if values.count == 1
+          musts << { match: { restriction[:field] => values.first } }
+        else
+          shoulds = []
+          match_any_value = { bool: { should: shoulds, minimum_should_match: 1 } }
+          musts << match_any_value
+          values.each do |v|
+            shoulds << { match: { restriction[:field] => v } }
+          end
+        end
+      end
+    end
+
+    query
   end
 end

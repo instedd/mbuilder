@@ -81,10 +81,6 @@ class Application < ActiveRecord::Base
     tire_index(true)
   end
 
-  def tire_search(table)
-    Tire::Search::Search.new tire_index.name, type: table
-  end
-
   def local_search(table)
     LocalSearch.new tire_index.name, table
   end

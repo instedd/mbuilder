@@ -14,4 +14,8 @@ class LocalSearch
       type: @type
     }
   end
+
+  def entities(restrictions = {})
+    ElasticSearchSelector.new.perform_search(self, restrictions)
+  end
 end

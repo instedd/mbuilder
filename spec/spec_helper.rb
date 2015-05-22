@@ -149,7 +149,7 @@ RSpec.configure do |config|
 
     index = application.tire_index(false)
     if index.exists?
-      results = application.tire_search(table).perform.results
+      results = application.local_search(table).entities
       results.length.should eq(data.length)
 
       results = results.map { |result| result["_source"]["properties"] }
