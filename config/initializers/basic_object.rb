@@ -16,14 +16,14 @@
 # along with Verboice.  If not, see <http://www.gnu.org/licenses/>.
 
 class BasicObject
-  # def self.subclasses
-  #   @subclasses ||= []
-  # end
+  def self.subclasses
+    @subclasses ||= []
+  end
 
-  # def self.inherited a_subclass
-  #   subclasses << a_subclass
-  #   super
-  # end
+  def self.inherited a_subclass
+    subclasses << a_subclass
+    super
+  end
 
   def self.all_leaf_subclasses
     all_subclasses.select do |a_class|
