@@ -37,3 +37,11 @@ Mbuilder::Application.configure do
 
   config.action_mailer.default_url_options = { host: Settings.host }
 end
+
+class_reloader = ActiveSupport::FileUpdateChecker.new(Dir.glob("#{Rails.root}/app/**/*.rb")) do
+  Rails.application.eager_load!
+end
+
+ActionDispatch::Reloader.to_prepare do
+  class_reloader.execute_if_updated
+end
