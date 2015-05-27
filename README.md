@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/instedd/mbuilder.svg?branch=master)](https://travis-ci.org/instedd/mbuilder)
+
 # mBuilder
 
 [mBuilder](http://mbuilder.instedd.org) is an ideal tool if you need to build flexible SMS apps and don’t want to spend lots of time building something custom from scratch.
