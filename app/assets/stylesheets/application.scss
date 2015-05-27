@@ -1084,6 +1084,11 @@ input:-moz-placeholder { font-style: italic; }
     &.warning i {
       @extend .i40-error;
     }
+
+    &.hub_invoke i, &.external_service_invoke i {
+      @extend .i40-extdata;
+    }
+
     &:first-child {
       background: none;
     }
