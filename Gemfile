@@ -33,7 +33,7 @@ gem 'alto_guisso_rails', github: "instedd/alto_guisso_rails", branch: 'master'
 
 gem 'resource_map_api_client', git: "https://bitbucket.org/instedd/resource_map_api_client.git", branch: 'master'
 
-gem 'listings', github: "manastech/listings", branch: 'master'
+gem 'listings'
 
 gem 'oj'
 gem 'guid'

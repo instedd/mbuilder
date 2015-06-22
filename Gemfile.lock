@@ -28,18 +28,6 @@ GIT
       rest-client
 
 GIT
-  remote: git://github.com/manastech/listings.git
-  revision: c14e91aaa70edaf009896f3e022ed0fa34fc49ce
-  branch: master
-  specs:
-    listings (0.0.2)
-      bootstrap-kaminari-views
-      haml-rails
-      kaminari
-      rails
-      sass-rails
-
-GIT
   remote: https://bitbucket.org/instedd/instedd-bootstrap.git
   revision: 9d7387772279cb324a8851f297952fe13e0c3185
   branch: master
@@ -198,6 +186,12 @@ GEM
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    listings (0.1.3)
+      bootstrap-kaminari-views
+      haml-rails
+      kaminari
+      rails
+      sass-rails
     machinist (1.0.6)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -355,7 +349,7 @@ DEPENDENCIES
   instedd-bootstrap!
   instedd-pigeon!
   jquery-rails
-  listings!
+  listings
   machinist
   mysql2
   newrelic_rpm

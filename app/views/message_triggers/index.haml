@@ -17,8 +17,6 @@
         .span12.box-list
           = icon_link_to :'icf-arrow', trigger.name, edit_application_periodic_task_path(application, trigger)
 
-  / = render_listing :periodic_tasks
-
 - if validation_triggers.present?
   .row-fluid
     .span12
@@ -29,8 +27,6 @@
         .span12.box-list
           = icon_link_to :'icf-arrow', trigger.field_name, application_validation_trigger_path(application, trigger.field_guid)
 
-  / = render_listing :validation_triggers
-
 - if external_triggers.present?
   .row-fluid
     .span12
@@ -40,8 +36,6 @@
       .row-fluid
         .span12.box-list
           = icon_link_to :'icf-arrow', trigger.name, edit_application_external_trigger_path(application, trigger)
-
-  / = render_listing :external_triggers
 
 - if external_triggers.present? || validation_triggers.present? || periodic_tasks.present? || message_triggers.present?
   .row-fluid
