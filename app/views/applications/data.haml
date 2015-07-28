@@ -1,13 +1,19 @@
 - @data.each do |table|
   %h4{style: 'display: inline-block'}=table.name
-  = link_to "Add new record", new_application_table_record_path(application.id, table.guid), class: 'btn btn-default', style: 'margin-left: 20px'
-  .table-import-collapsible
-    - collapsible_form_for upload_application_tables_path(application, table_guid: table.guid), icon: 'import', title: 'Import CSV', description: 'Select a CSV file to import data from', submit: 'Import', id: "import-table-#{table.guid}" do |f|
-      %input#choose-file{:disabled => "disabled", :placeholder => "Choose File"}/
-      .file-upload
-        = icon_link_to :'icf-arrow', 'Choose a file', '#'
-        = file_field_tag 'file', class: 'choose'
-  = render_listing "es__#{application.id}__#{application.local_index_name}__#{table.guid}".to_sym
+
+  %div
+    = icon_link_to 'icf-add', "Add new record", new_application_table_record_path(application.id, table.guid)
+
+    .table-import-collapsible
+      - collapsible_form_for upload_application_tables_path(application, table_guid: table.guid), icon: 'import', title: 'Import CSV', description: 'Select a CSV file to import data from', submit: 'Import', id: "import-table-#{table.guid}" do |f|
+        %input#choose-file{:disabled => "disabled", :placeholder => "Choose File"}/
+        .file-upload
+          = icon_link_to :'icf-arrow', 'Choose a file', '#'
+          = file_field_tag 'file', class: 'choose'
+    %br
+    %br
+
+    = render_listing "es__#{application.id}__#{application.local_index_name}__#{table.guid}".to_sym
 
   %hr
 
