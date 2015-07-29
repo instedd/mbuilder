@@ -36,12 +36,19 @@ Mbuilder::Application.configure do
   config.assets.debug = false
 
   config.action_mailer.default_url_options = { host: Settings.host }
-end
 
-class_reloader = ActiveSupport::FileUpdateChecker.new(Dir.glob("#{Rails.root}/app/**/*.rb")) do
-  Rails.application.eager_load!
-end
+  # See http://alisdair.mcdiarmid.org/2013/02/02/fixing-rails-auto-loading-for-serialized-objects.html
+  # Eager load all value objects, as they may be instantiated from
+  # YAML before the symbol is referenced
+  config.before_initialize do |app|
+    app.config.paths.add 'app/models', :eager_load => true
+  end
 
-ActionDispatch::Reloader.to_prepare do
-  class_reloader.execute_if_updated
+  # # Reload cached/serialized classes before every request (in development
+  # # mode) or on startup (in production mode)
+  config.to_prepare do
+    Dir[ File.expand_path(Rails.root.join("app/models/**/*.rb")) ].each do |file|
+      require_dependency file
+    end
+  end
 end

@@ -69,10 +69,6 @@ module Mbuilder
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    config.after_initialize do
-      Rails.application.eager_load!
-    end
-
     config.middleware.use Rack::Cors do
       allow do
         origins '*'
