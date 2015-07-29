@@ -1,9 +1,8 @@
-{{field.label()}}
-\ :
+{{field.label()}}:
 
 %span{dragover: 'dragOverHubOperand($event)', drop: 'dropOverHubOperand($event)', 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)'}
   %span(ng-include src='pillTemplateFor(pill)')
 
-  %span(ng-show='field.canBeRemoved()')
+  %span.show-on-action-hover(ng-show='field.canBeRemoved()')
     %a(href='javascript:' ng-click='removeField()')
-      x
+      remove field

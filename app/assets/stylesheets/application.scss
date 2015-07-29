@@ -155,6 +155,10 @@ a.delete {
   background: #e8e7e7 !important;
 }
 
+ul.no-bullet {
+  list-style: none;
+}
+
 .action-container {
   @include border-radius(3px);
   @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
@@ -224,6 +228,20 @@ a.delete {
       background-position-y: -40px;
     }
   }
+
+  // use .show-on-action-hover to hide element unles the direct container action is .hover
+  .show-on-action-hover {
+    visibility: hidden;
+  }
+
+  &.hover .show-on-action-hover {
+    visibility: visible;
+  }
+
+  &.hover .action .show-on-action-hover {
+    visibility: hidden; // hide if the hover action is not the direct parent
+  }
+  //
 
   &.hover > .delete {
     display: block;
