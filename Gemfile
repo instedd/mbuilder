@@ -38,7 +38,7 @@ gem 'listings'
 gem 'oj'
 gem 'guid'
 
-gem 'instedd-bootstrap', git: "https://bitbucket.org/instedd/instedd-bootstrap.git", branch: 'master'
+gem 'instedd-bootstrap', github: "instedd/instedd-bootstrap", branch: 'master'
 gem 'hub_client', github: 'instedd/ruby-hub_client', branch: 'master'
 
 group :assets do

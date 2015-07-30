@@ -20,23 +20,22 @@ GIT
       ruby-openid
 
 GIT
+  remote: git://github.com/instedd/instedd-bootstrap.git
+  revision: de96be4064fc8ef85a9eb226c79fccd8671959a1
+  branch: master
+  specs:
+    instedd-bootstrap (0.0.1)
+      bootstrap-sass (~> 2.3.2)
+      rails
+      sass-rails
+
+GIT
   remote: git://github.com/instedd/ruby-hub_client.git
-  revision: 9a0846193be5c9ff655af5d51de94139897ac4a4
+  revision: c7a25923bd3d51fa32c541c69401396aa2a17a4a
   branch: master
   specs:
     hub_client (0.0.1)
       rest-client
-
-GIT
-  remote: https://bitbucket.org/instedd/instedd-bootstrap.git
-  revision: 9d7387772279cb324a8851f297952fe13e0c3185
-  branch: master
-  specs:
-    instedd-bootstrap (0.0.1)
-      bootstrap-sass
-      bootstrap-sass (~> 2.3.2)
-      rails
-      sass-rails
 
 GIT
   remote: https://bitbucket.org/instedd/pigeon.git
