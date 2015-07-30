@@ -1,7 +1,7 @@
 angular.module('mbuilder').controller 'ResourceMapController', ['$scope', '$http', ($scope, $http) ->
   $scope.listCollections = (event) ->
     $scope.loading = true
-    $scope.showPopup '#add-resource-map-collection', event
+    $scope.collections = []
 
     call = $http.get("/resource_map/collections.json")
     call.success (data, status, headers, config) ->

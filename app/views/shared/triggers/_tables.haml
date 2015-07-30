@@ -41,15 +41,15 @@
   %div
     = icon_link_to :'icf-add', 'New data', 'javascript:', {'ng-click' => 'newTable()'}
     %br
-    %br
-    %div{'ng-controller' => 'ResourceMapController'}
-      = icon_link_to :'icf-connect', 'Add a Resource Map collection', 'javascript:', {'ng-click' => 'listCollections($event)'}
-      %div#add-resource-map-collection.popup
-        %div{'ng-show' => 'loading'}
-          Loading...
-        %div{'ng-hide' => 'loading'}
-          %div{'ng-repeat' => 'collection in collections'}
-            %a{'href' => 'javascript:', 'ng-click' => 'addCollection(collection)'} {{collection.name}}
+
+    .btn-group{'ng-controller' => 'ResourceMapController'}
+      = icon_link_to :'icf-connect', 'Add a Resource Map collection', '#', class: 'btn btn-link dropdown-toggle', :'data-toggle' => "dropdown", :'ng-click' => 'listCollections($event)'
+      %ul.dropdown-menu
+        %li{'ng-show' => 'loading'}
+          %a{'href' => '#'} Loading...
+        %li{'ng-repeat' => 'collection in collections'}
+          %a{'href' => 'javascript:', 'ng-click' => 'addCollection(collection)'} {{collection.name}}
+
     %br
     %div{'ng-controller' => 'HubController'}
       = icon_link_to :'icf-connect', 'Add data from Hub', 'javascript:', {'ng-click' => 'openEntitySetPicker()'}
