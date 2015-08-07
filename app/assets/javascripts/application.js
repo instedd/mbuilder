@@ -57,9 +57,11 @@ $(function(){
     var element = $(target).closest(matcher);
     if (element.length == 0) {
       $(matcher + '.hover').removeClass('hover');
+      $(matcher + '.child-on-hover').removeClass('child-on-hover');
     } else if (!element.hasClass(matcher)) {
       $(matcher + '.hover').removeClass('hover');
-      element.addClass('hover');
+      element.addClass('hover').addClass('child-on-hover');
+      $(element).parents(matcher).addClass('child-on-hover');
     }
   }
 
@@ -78,4 +80,3 @@ $(function(){
     changeClosestHoverColumn(e.target);
   });
 });
-

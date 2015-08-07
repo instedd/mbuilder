@@ -198,7 +198,7 @@ ul.no-bullet {
   }
 }
 .action {
-  padding: 19px 0 10px 10px;
+  padding: 17px 0 27px 10px;
   cursor: move;
   position: relative;
 
@@ -230,16 +230,30 @@ ul.no-bullet {
   }
 
   // use .show-on-action-hover to hide element unles the direct container action is .hover
-  .show-on-action-hover {
+  .show-on-action-hover, .show-on-child-action-on-hover-no-drag {
     visibility: hidden;
   }
 
-  &.hover .show-on-action-hover {
+  &.hover .show-on-action-hover, &.child-on-hover .show-on-child-action-on-hover-no-drag {
     visibility: visible;
   }
 
   &.hover .action .show-on-action-hover {
     visibility: hidden; // hide if the hover action is not the direct parent
+  }
+
+  .force-visible {
+    visibility: visible !important;
+  }
+
+  .dragging-action &, .dragging-action &, .dragging-action & {
+    .show-on-child-action-on-hover-no-drag {
+      visibility: hidden;
+    }
+
+    .force-visible {
+      visibility: hidden !important;
+    }
   }
   //
 
@@ -329,19 +343,22 @@ ul.no-bullet {
   right: 0px;
   left: 0px;
   opacity: 0;
+  visibility: hidden;
 }
 
 .new-action {
   background: #ffffff;
   border-top: 1px solid #cdcdcd;
   padding: 14px 10px 10px 10px;
-  position: relative;
-  z-index: 1;
 }
 
 .new-sub-action {
-  padding: 14px 20px 10px 20px;
-  position: relative;
+  padding: 0px 20px 0px 42px;
+
+  &.non-empty {
+    position: absolute;
+    bottom: 5px;
+  }
 }
 
 .text {
@@ -484,6 +501,7 @@ body {
     .space-between-actions {
       @include transition(opacity ease 0.3s);
       opacity: 1;
+      visibility: visible;
 
       &:before {
         content:'';
