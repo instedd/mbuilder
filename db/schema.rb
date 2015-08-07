@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150325210449) do
+ActiveRecord::Schema.define(:version => 20150807153632) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(:version => 20150325210449) do
     t.string   "trigger_type"
     t.boolean  "no_trigger"
     t.boolean  "with_errors"
+    t.string   "trigger_name"
   end
 
   add_index "execution_loggers", ["application_id"], :name => "index_execution_loggers_on_application_id"
@@ -99,8 +100,8 @@ ActiveRecord::Schema.define(:version => 20150325210449) do
     t.string   "name"
     t.text     "actions"
     t.text     "parameters"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.string   "auth_method"
     t.boolean  "enabled",        :default => true
   end
@@ -118,8 +119,8 @@ ActiveRecord::Schema.define(:version => 20150325210449) do
   create_table "message_triggers", :force => true do |t|
     t.integer  "application_id"
     t.string   "name"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.text     "message"
     t.text     "actions"
     t.boolean  "enabled",        :default => true
@@ -129,8 +130,8 @@ ActiveRecord::Schema.define(:version => 20150325210449) do
     t.integer  "application_id"
     t.string   "name"
     t.text     "actions"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.text     "schedule"
     t.boolean  "enabled",        :default => true
   end

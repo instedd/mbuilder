@@ -1,12 +1,16 @@
 class ExecutionLogger < ActiveRecord::Base
   belongs_to :application
   belongs_to :trigger, polymorphic: true
-  attr_accessible :actions, :message_to, :message_from, :message_body, :application, :trigger, :no_trigger, :with_errors
+  attr_accessible :actions, :message_to, :message_from, :message_body, :application, :trigger, :no_trigger, :with_errors, :trigger_name
 
   serialize :actions
 
   scope :no_triggers, -> { where(no_trigger: true) }
   scope :with_errors, -> { where(with_errors: true) }
+
+  before_save do
+    self.trigger_name = self.trigger.try &:name
+  end
 
   def message=(message)
     self.message_to = message['to']

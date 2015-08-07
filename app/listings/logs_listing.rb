@@ -5,18 +5,17 @@ class LogsListing < Listings::Base
 
   model do
     @application = Application.find(params[:application_id])
-    @application.logs.includes(:trigger).order('created_at DESC')
+    @application.logs.order('created_at DESC')
   end
 
   scope 'All', :all, default: true
   scope 'No trigger matched', :no_triggers
   scope 'With Errors', :with_errors
 
+  filter :trigger_name, title: 'Trigger'
   filter :trigger_type
 
-  column :trigger do |log|
-    log.trigger.name rescue ''
-  end
+  column :trigger_name, title: 'Trigger', searchable: true
 
   column :trigger_type
 

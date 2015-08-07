@@ -168,5 +168,7 @@ describe "PeriodicTask" do
     wake_up_event.perform
 
     ExecutionLogger.where(trigger_id: trigger).count.should be(1)
+    log = ExecutionLogger.where(trigger_id: trigger).first
+    log.trigger_name.should eq(trigger.name)
   end
 end
