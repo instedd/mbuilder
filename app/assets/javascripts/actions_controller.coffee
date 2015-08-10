@@ -301,6 +301,15 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
     event.stopPropagation()
 
+    # set the opacity of the drag and drop ghost
+    original = $(event.target).closest('.action')
+    original.css('opacity', '0.4')
+    event.dataTransfer.setDragImage(original[0], 0, 0);
+    window.setTimeout ->
+      original.css('opacity', '')
+    , 0
+    #
+
     false
 
   $scope.actionDragEnd = (event) ->
