@@ -344,6 +344,12 @@ ul.no-bullet {
   position: relative;
 }
 
+.new-action, .new-sub-action {
+  .btn-group .dropdown-menu li i {
+    background-color: inherit;
+  }
+}
+
 .text {
   display: inline-block;
 }
