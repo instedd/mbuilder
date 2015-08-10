@@ -60,6 +60,7 @@ $(function(){
       $(matcher + '.child-on-hover').removeClass('child-on-hover');
     } else if (!element.hasClass(matcher)) {
       $(matcher + '.hover').removeClass('hover');
+      $(matcher + '.child-on-hover').removeClass('child-on-hover');
       element.addClass('hover').addClass('child-on-hover');
       $(element).parents(matcher).addClass('child-on-hover');
     }
