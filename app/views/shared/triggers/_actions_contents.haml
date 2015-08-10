@@ -1,6 +1,6 @@
 .space-between-actions{'dragover' => 'dragOverSpaceBetweenActions($event)', 'drop' => 'dropOverSpaceBetweenActions(0, $event)', 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)'}
 .a-container{'ng-repeat' => 'action in actions'}
-  .action{draggable: 'true', dragstart: 'actionDragStart(this, action, $index, $event)', dragend: 'actionDragEnd($event)', 'ng-class' => '{selected: actionIsSelected(action)}', 'class' => '{{action.kind}}'}
+  .action{draggable: 'true', dragstart: 'actionDragStart(this, action, $index, $event)', dragend: 'actionDragEnd($event)', 'class' => '{{action.kind}}'}
     %a.delete{href: 'javascript:', 'ng-click' => 'deleteAction($index)'}
       %i.icf-delete
     %div(ng-include src='actionTemplateFor(action.kind)')
