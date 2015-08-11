@@ -1166,3 +1166,22 @@ table.graygrad.import-specs {
     }
   }
 }
+
+// hub actions
+
+.hub-fields {
+  label {
+    display: inline;
+    line-height: 25px;
+  }
+
+  li {
+    position: relative;
+
+    .remove-field {
+      position: absolute;
+      left: -26px;
+      top: 1px;
+    }
+  }
+}

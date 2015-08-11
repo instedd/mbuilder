@@ -1,17 +1,15 @@
-{{field.label()}}
+= icon_link_to :'icp-remove', '', 'javascript:', class: 'remove-field show-on-action-hover plain', 'ng-show'=>'field.canBeRemoved()', 'ng-click'=>'removeField()'
 
-%span.show-on-action-hover(ng-show='field.canBeRemoved()')
-  %a.delete-field(href='javascript:' ng-click='removeField()')
-    remove field
+%label {{field.label()}}
 
-%ul.no-bullet
+%ul.no-bullet.hub-fields
   %li(ng-repeat='field in field.fields()' ng-controller='HubActionArgController')
     %span(ng-include src='fieldViewFor(field)' )
 
   %li.form-inline(ng-show='field.isOpen()')
     %input.input-small(type='text' ng-model='new_field.name')
     .btn-group
-      %button.btn.btn-small.dropdown-toggle(data-toggle="dropdown")
+      %button.btn.btn-mini.dropdown-toggle(data-toggle="dropdown")
         Add field
         %span.caret
       %ul.dropdown-menu
