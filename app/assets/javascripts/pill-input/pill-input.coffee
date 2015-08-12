@@ -202,7 +202,7 @@ class PillInputController
       element.removeChild(element.firstChild)
 
     # backspace generates spans in chrome
-    $('span', $(element)).contents().unwrap()
+    $('span:not([class])', $(element)).contents().unwrap()
     $('*', $(element)).removeAttr('style')
 
   inputContainsRange : (range) ->
