@@ -1116,8 +1116,8 @@ input:-moz-placeholder { font-style: italic; }
 .i25-condition          { background-position: 0         0; }
 .i25-loop               { background-position: -25px     0; }
 .i25-sms                { background-position: -50px     0; }
-.i25-extdata            { background-position: 0         0; }
-.i25-hub                { background-position: 0         0; }
+.i25-hub                { background-position: -75px     0; }
+.i25-extdata            { background-position: -100px    0; }
 
 
 [class^="i40-"],
@@ -1141,10 +1141,10 @@ input:-moz-placeholder { font-style: italic; }
 .i40-loop               { background-position: -240px    0; }
 .i40-group              { background-position: -280px    0; }
 .i40-extdata            { background-position: -320px    0; }
-.i40-hub                { background-position: -320px    0; }
 .i40-rarrow             { background-position: -360px    0; }
 .i40-error              { background-position: -400px    0; }
 .i40-invalid            { background-position: -440px    0; }
+.i40-hub                { background-position: -480px    0; }
 
 //-------------- Empty Trigers list ------------
 //----------------------------------------------
