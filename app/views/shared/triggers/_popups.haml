@@ -27,11 +27,13 @@
   %div{'ng-repeat' => 'operator in ifAggregates'}
     %a{'href' => 'javascript:', 'ng-class' => '{ selected: ifAggregatesPopup.action.all == operator.id }', 'ng-click' => 'select(operator)'} {{operator.desc}}
 
-#add-external-service.popup{'ng-controller' => 'AddExternalServiceController'}
-  %ul
-    %li{'ng-repeat' => 'external_service in external_services'}
-      {{external_service.name}}
-      %ul
+#add-external-service.dropdown.open.popup{'ng-controller' => 'AddExternalServiceController'}
+  %ul.dropdown-menu
+    %li.disabled{'ng-show' => 'external_services.length == 0'}
+      %a(href="javscript:" ng-click="hidePopups()") None
+    %li.dropdown-submenu{'ng-repeat' => 'external_service in external_services'}
+      %a(href="#") {{external_service.name}}
+      %ul.dropdown-menu
         %li{'ng-repeat' => 'step in external_service.steps'}
           %a{'href' => 'javascript:', 'ng-click' => 'select(step)'}
             {{step.display_name}}

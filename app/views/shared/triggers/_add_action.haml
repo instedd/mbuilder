@@ -1,19 +1,23 @@
 .btn-group
-  = icon_link_to :'icc-add', 'Add step', '#', class: 'btn btn-link blue dropdown-toggle', :'data-toggle' => "dropdown"
+  = icon_link_to :'icc-add', 'Add step', '#', class: 'btn btn-link blue dropdown-toggle', :'data-toggle' => "dropdown", :'ng-click' => 'hidePopups()'
   %ul.dropdown-menu
     %li
       %a{'ng-click' => 'addSendMessageAction()', href: 'javascript:'}
         %i.i25-sms
         %span Send SMS
+    %li
       %a{'ng-click' => 'addLoopAction()', href: 'javascript:'}
         %i.i25-loop
         %span Loop
+    %li
       %a{'ng-click' => 'addIfAction()', href: 'javascript:'}
         %i.i25-condition
         %span Condition
+    %li
       %a{'ng-click' => 'addHubAction()', href: 'javascript:'}
         %i.i25-hub
         %span Hub Action
+    %li.dropdown-submenu
       %a{'ng-click' => 'showAddExternalServicePopup($event)', href: 'javascript:'}
         %i.i25-extdata
         %span External Service

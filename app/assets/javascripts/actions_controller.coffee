@@ -156,7 +156,9 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       $scope.newPill()
 
   $scope.showAddExternalServicePopup = (event) ->
-    $scope.showPopup '#add-external-service', event
+    li = $(event.target).closest('li')
+    offset = li.offset();
+    $scope.showPopup '#add-external-service', event, {top: offset.top, left: offset.left + li.outerWidth()}
 
   $scope.deleteAction = (index) ->
     action = $scope.actions[index]

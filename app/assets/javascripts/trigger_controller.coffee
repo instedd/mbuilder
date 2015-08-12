@@ -364,11 +364,11 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
         otherPill.kind = newPill.kind
         otherPill.guid = newPill.guid
 
-  $scope.showPopup = (id, event) ->
+  $scope.showPopup = (id, event, coordinates = {left: event.originalEvent.pageX, top: event.originalEvent.pageY}) ->
     $scope.hidePopups()
 
     div = $(id)
-    div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
+    div.css coordinates
     div.show()
     event.preventDefault()
     event.stopPropagation()

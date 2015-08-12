@@ -407,6 +407,10 @@ table.fields .input-small {
     font-size: .9em;
     color: #777777;
   }
+
+  &.dropdown.open {
+    padding: 0px; // when bootstrap dropdown are been used as popups
+  }
 }
 
 .popup .selected {
