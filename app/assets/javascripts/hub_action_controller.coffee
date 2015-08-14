@@ -16,6 +16,20 @@ angular.module('mbuilder')
 ])
 
 .controller('HubActionArgController', ['$scope', '$timeout', ($scope, $timeout) ->
+  if $scope.field.canBeRemoved()
+    $scope.name = {
+      model: $scope.field.label(),
+      editmode: false,
+      focusmode: false
+    }
+
+    $scope.$watch 'name.model', (new_value, old_value) ->
+      if new_value != old_value
+        $scope.field.setName(new_value)
+        $scope.pills[new_value] = $scope.pills[old_value]
+        delete $scope.pills[old_value]
+        $scope.$emit 'updateActionReflect'
+
   if $scope.field.isStruct()
     $scope.pills = $scope.$parent.pills[$scope.field.name()]
     $scope.new_field = { name : '' }
