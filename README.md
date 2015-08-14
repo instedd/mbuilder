@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/instedd/mbuilder.svg?branch=master)](https://travis-ci.org/instedd/mbuilder)
+[![Build Status](https://travis-ci.org/instedd/mbuilder.svg?branch=master)](https://travis-ci.org/instedd/mbuilder) [![Stories in Ready](https://badge.waffle.io/instedd/mbuilder.svg?label=ready&title=Ready)](http://waffle.io/instedd/mbuilder)
 
 # mBuilder
 
