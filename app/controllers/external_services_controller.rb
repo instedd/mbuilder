@@ -9,7 +9,16 @@ class ExternalServicesController < MbuilderApplicationController
 
   def create
     if external_service.save
-      external_service.update_manifest!
+      begin
+        external_service.update_manifest!
+      rescue Exception => ex
+        flash.now[:alert] = "Unable to parse manifest"
+        logger.warn ex
+        external_service.destroy
+        render crud_list_new(:external_service, external_service)
+        return
+      end
+
       flash.now[:notice] = "External service created"
       render crud_list_append(:external_service, external_service)
     else
