@@ -14,7 +14,7 @@ Mbuilder::Application.routes.draw do
     resources :logs, only: :index
     resources :contacts, only: [:index, :show]
 
-    resources :external_services, except: [:show] do
+    resources :external_services, except: [:show, :edit, :new] do
       member do
         put :update_manifest
       end

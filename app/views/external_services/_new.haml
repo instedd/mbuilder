@@ -1,0 +1,8 @@
+= instedd_form_for [application, model], remote: true do |f|
+
+  = f.text_field :url, input: { class: 'span12', placeholder: "http://example.com/manifext.json" }
+
+  %hr
+
+  = f.submit 'Save'
+  - crud_list_cancel
