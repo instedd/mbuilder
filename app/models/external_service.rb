@@ -17,7 +17,7 @@ class ExternalService < ActiveRecord::Base
     # fill a base url with the url used to download the manifest
     self.url = "http://#{self.url}" unless self.url.match(/^(http|https):\/\//)
     uri = URI.parse(self.url)
-    self.base_url = "#{uri.scheme}://#{uri.host}#{':' + uri.port.to_s if uri.port != 80}" unless self.base_url
+    self.base_url = "#{uri.scheme}://#{uri.host}#{':' + uri.port.to_s if uri.port != uri.default_port}" unless self.base_url
   end
 
   def update_manifest!
