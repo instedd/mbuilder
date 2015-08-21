@@ -1,5 +1,5 @@
 class MessageTrigger < Trigger
-  attr_accessible :name, :message, :actions
+  attr_accessible :name, :message, :actions, :enabled
 
   belongs_to :application
 
@@ -10,13 +10,16 @@ class MessageTrigger < Trigger
 
   generate_equals :name, :message, :actions
 
+  scope :enabled, -> { where(enabled: true) }
+
   def self.from_hash(hash)
-    new name: hash["name"], message: Message.from_hash(hash["message"]), actions: Action.from_list(hash["actions"])
+    new name: hash["name"], enabled: hash["enabled"], message: Message.from_hash(hash["message"]), actions: Action.from_list(hash["actions"])
   end
 
   def as_json
     {
       name: name,
+      enabled: enabled,
       message: message,
       kind: kind,
       actions: actions.map(&:as_json)

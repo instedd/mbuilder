@@ -16,10 +16,10 @@ gem 'underscore-rails'
 gem 'decent_exposure'
 gem 'instedd-pigeon', git: "https://bitbucket.org/instedd/pigeon.git", branch: 'master', :require => 'pigeon'
 gem 'ng-rails-csrf'
-gem "tire"
-gem "elasticsearch"
+gem 'elasticsearch'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'symbolize'
+gem 'rest-client'
 
 gem "ice_cube"
 gem 'recurring_select', git: "https://github.com/instedd/recurring_select", branch: 'instedd'
@@ -33,12 +33,12 @@ gem 'alto_guisso_rails', github: "instedd/alto_guisso_rails", branch: 'master'
 
 gem 'resource_map_api_client', git: "https://bitbucket.org/instedd/resource_map_api_client.git", branch: 'master'
 
-gem 'listings', github: "manastech/listings", branch: 'master'
+gem 'listings'
 
 gem 'oj'
 gem 'guid'
 
-gem 'instedd-bootstrap', git: "https://bitbucket.org/instedd/instedd-bootstrap.git", branch: 'master'
+gem 'instedd-bootstrap', github: "instedd/instedd-bootstrap", branch: 'master'
 gem 'hub_client', github: 'instedd/ruby-hub_client', branch: 'master'
 
 group :assets do
@@ -58,4 +58,5 @@ group :development, :test do
   gem 'capistrano', '2.15.4'
   gem 'rvm-capistrano'
   gem 'timecop'
+  gem 'rails-dev-tweaks'
 end

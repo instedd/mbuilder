@@ -2,6 +2,11 @@
   %div{'ng-controller' => 'TriggerController', 'dragend' => 'dragEnd($event)'}
     %div.row-fluid
       %div.span6
+        .checkbox
+          %label
+            %input{'ng-model' => '$parent.enabled', type: :checkbox, name: :enabled}
+            Enabled
+        %br
         %div
           %label{for: :name} Trigger name
           %input.n.span12#name{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name"}
@@ -16,6 +21,7 @@
               at:
               .bootstrap-timepicker
                 %input(type="text" ng-model="$parent.scheduleTime" bs-timepicker data-show-meridian="false" data-show-seconds="true" data-minute-step=1)
+              = ActiveSupport::TimeZone.new(application.time_zone).to_s
         .message-container
           .received-at
             %strong Received at:

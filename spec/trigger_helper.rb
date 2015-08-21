@@ -72,7 +72,7 @@ class TriggerHelper
   def send_message(recipient, text)
     case recipient
     when /'(.+)'/
-      recipient = {'kind' => 'text', 'guid' => $1}
+      recipient = {'kind' => 'literal', 'guid' => "uuid-$1", 'text' => $1}
     when /\*(.+)/
       recipient = {'kind' => 'field_value', 'guid' => $1}
     when /\{(phone_number|invalid_value)\}/
@@ -142,10 +142,16 @@ class TriggerHelper
     validation_trigger
   end
 
-  def external_trigger
+  def external_trigger_unsaved
     external_trigger = @application.external_triggers.make_unsaved
     external_trigger.parameters = @parameters
     external_trigger.actions = @actions
+
+    external_trigger
+  end
+
+  def external_trigger
+    external_trigger = external_trigger_unsaved
     external_trigger.save!
 
     external_trigger

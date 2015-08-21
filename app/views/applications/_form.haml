@@ -9,5 +9,10 @@
   %div
     = f.label :name
     = f.text_field :name, autofocus: true
+  %div
+    = f.label :time_zone
+    = f.time_zone_select :time_zone
+    %span.help-block
+      This will be used for displaying and setting up dates and times, for example when scheduling a recurrent action.
 
   = f.submit class: 'btn'

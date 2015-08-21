@@ -8,6 +8,11 @@
     %div{'ng-controller' => 'TriggerController'}
       .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)', dragend: 'dragEnd($event)'}
         .span6
+          .checkbox
+            %label
+              %input{'ng-model' => '$parent.enabled', type: :checkbox, name: :enabled}
+              Enabled
+          %br
           %label{for: :name} Trigger name
           %input{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name", class: 'span12 n'}
           %br
@@ -23,29 +28,28 @@
             %input{'type' => 'radio', 'name' => 'auth_method', 'value' => 'oauth', 'ng-model' => '$parent.authMethod'}
             Oauth: Use this if you are going to call this trigger from another InSTEDD application.
           %br
-          %label{for: :message} When a post to this url is received:
-          .message-container
+          %span.pull-right
+            = icon_link_to :'icf-help', 'Help', 'http://github.com/instedd/mbuilder/wiki/invoke_external_triggers', target: '_blank'
+          %label{for: :message} When a post to this url (or direct call via hub or verboice)
+          %br
+          .message-container(ng-controller='ExternalTriggerParametersController')
             .from
               %strong
-                = "#{root_url}external/application/#{application.id}/trigger/{{$parent.name}}?"
-                %span{'ng-repeat' => 'pill in parameters'}
-                  {{pill.name}}=
-                  %span(ng-include src='pillTemplateFor(pill)')
-                  %span{'ng-show' => '!$last'} &
+                = "#{root_url}external/application/#{application.id}/trigger/{{$parent.nameForUrl()}}?"
+              %span.removable_pills{'ng-repeat' => 'pill in parameters'}
+                %input.n{:'ng-model'=>"pill.name", :type=>"text", :placeholder=>"parameter", :'pu-elastic-input' => true}
+                \=
+                %span(ng-include src='pillTemplateFor(pill)')
+                %span{'ng-show' => '!$last'} &
             %div
-              %span{'ng-repeat' => 'pill in parameters'}
-                %div
-                  %input{:'ng-model'=>"pill.name", :type=>"text"}
-                  \=
-                  %span(ng-include src='pillTemplateFor(pill)')
-                  %a.delete{href: 'javascript:', 'ng-click' => 'deleteParameter($index)'} x
-                .space-between-actions
-              = icon_link_to :'icc-add', 'Add additional parameter', 'javascript:', {:class => 'blue', 'ng-click' => 'addParameter()'}
-              .received-at
-                %strong Received at:
-                .pill.bound{draggable: 'true', dragstart: 'receivedAtDragStart($event)'}
-                  yyyymmdd
+              = icon_link_to :'icc-add', 'Add parameter', 'javascript:', {:class => 'blue', 'ng-click' => 'addParameter()'}
+            .received-at
+              is received at
+              .pill.bound{draggable: 'true', dragstart: 'receivedAtDragStart($event)'}
+                yyyymmdd
           %br
+          do the following:
+
           = render 'shared/triggers/actions'
         = render 'shared/triggers/tables'
 

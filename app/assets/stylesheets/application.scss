@@ -13,7 +13,7 @@
  *= require recurring_select
  *= require pigeon
  *= require bootstrap-timepicker
- *= require pill_input
+ *= require pill-input
  */
 
 @import "instedd-bootstrap";
@@ -108,6 +108,10 @@ a.delete {
   top: 1px;
 }
 
+.action .delete {
+  top: 18px;
+}
+
 .field-header.hover .delete {
   display: block;
 }
@@ -151,10 +155,15 @@ a.delete {
   background: #e8e7e7 !important;
 }
 
+ul.no-bullet {
+  list-style: none;
+}
+
 .action-container {
   @include border-radius(3px);
   @include box-shadow(1px 1px 5px 0px rgba( 0, 0, 0, 0.4 ));
   margin-bottom: 30px;
+  position: relative;
 
   > .space-between-actions + div .action {
     background-image:none !important;
@@ -189,7 +198,7 @@ a.delete {
   }
 }
 .action {
-  padding: 15px 0 10px 10px;
+  padding: 19px 0 10px 10px;
   cursor: move;
   position: relative;
 
@@ -219,6 +228,20 @@ a.delete {
       background-position-y: -40px;
     }
   }
+
+  // use .show-on-action-hover to hide element unles the direct container action is .hover
+  .show-on-action-hover {
+    visibility: hidden;
+  }
+
+  &.hover .show-on-action-hover {
+    visibility: visible;
+  }
+
+  &.hover .action .show-on-action-hover {
+    visibility: hidden; // hide if the hover action is not the direct parent
+  }
+  //
 
   &.hover > .delete {
     display: block;
@@ -253,7 +276,6 @@ a.delete {
   }
   .a-container + .a-container {
     background: url("action-separator-in.png") no-repeat center top;
-    padding-top: 20px;
   }
 }
 
@@ -299,21 +321,33 @@ a.delete {
 }
 
 .space-between-actions {
-  @include transition(all ease 0.3s);
-  height: 0px;
+  @include transition(opacity ease 0.3s);
+  height: 34px;
+  position: absolute;
+  z-index: 100;
+  margin-top: -10px;
+  right: 0px;
+  left: 0px;
+  opacity: 0;
 }
 
 .new-action {
   background: #ffffff;
   border-top: 1px solid #cdcdcd;
-  padding: 10px;
+  padding: 14px 10px 10px 10px;
   position: relative;
   z-index: 1;
 }
 
 .new-sub-action {
-  padding: 10px 20px;
+  padding: 14px 20px 10px 20px;
   position: relative;
+}
+
+.new-action, .new-sub-action {
+  .btn-group .dropdown-menu li i {
+    background-color: inherit;
+  }
 }
 
 .text {
@@ -366,12 +400,16 @@ table.fields .input-small {
   border: 1px solid #eee;
   padding: 4px 10px 4px 10px;
   display: none;
-  z-index: 1;
+  z-index: 200;
   position: absolute;
 
   .description {
     font-size: .9em;
     color: #777777;
+  }
+
+  &.dropdown.open {
+    padding: 0px; // when bootstrap dropdown are been used as popups
   }
 }
 
@@ -450,24 +488,22 @@ body {
 //----------------------------------------------------
 body {
   &.dragging-table,
-  &.dragging-action {
+  &.dragging-action,
+  &.dragging-pill {
 
     .space-between-actions {
-      @include transition(all ease 0.3s);
-      height: 34px;
-      position: relative;
+      @include transition(opacity ease 0.3s);
+      opacity: 1;
 
       &:before {
         content:'';
         display: block;
         margin: 2px 10px;
-        background: #cae3f1;
         height: 14px;
-        @include border-radius(4px);
-        border: 1px dashed #5ba0d3;
+        border-top: 1px dashed #ababab;
         position: absolute;
-        top: 10px;
-        left: 10px;
+        top: 17px;
+        left: 14px;
         right: 10px;
         bottom: 10px;
       }
@@ -476,11 +512,13 @@ body {
         content: 'drop here';
         display: block;
         font-size: 11px;
-        color: #5ba0d3;
+        color: #ababab;
         position: absolute;
-        width: 100%;
         top: 11px;
-        text-align: center;
+        left: 50%;
+        margin-left: -29px;
+        background-color: white;
+        padding: 0px 5px;
       }
     }
   }
@@ -556,37 +594,6 @@ body {
         color: #999;
       }
     }
-
-    .space-between-actions {
-      height: 34px;
-      position: relative;
-
-      &:before {
-        content:'';
-        display: block;
-        margin: 2px 10px;
-        background: #cae3f1;
-        height: 14px;
-        @include border-radius(4px);
-        border: 1px dashed #5ba0d3;
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        right: 10px;
-        bottom: 10px;
-      }
-
-      &:after {
-        content: 'drop here';
-        display: block;
-        font-size: 11px;
-        color: #5ba0d3;
-        position: absolute;
-        width: 100%;
-        top: 11px;
-        text-align: center;
-      }
-    }
   }
 
   &.dragging-table,
@@ -594,10 +601,10 @@ body {
   &.dragging-pill {
     .space-between-actions {
       &.drop-preview:before {
-        background: darken(#cae3f1, 15%);
+        border-top: 1px dashed #5ba0d3;
       }
       &.drop-preview:after {
-        color: $white;
+        color: #5ba0d3;
       }
     }
   }
@@ -676,6 +683,7 @@ th .ellipsis {
   }
 
   &.bound, &.placeholder {
+    color: #0088cc;
     border: 1px solid transparent;
     margin-left: 4px;
     margin-right: 4px;
@@ -721,9 +729,6 @@ th .ellipsis {
     margin-right: 4px;
     height: 20px !important;
     cursor: move;
-    span {
-      color: #aaa;
-    }
   }
 
   &.literal input {
@@ -743,9 +748,18 @@ th .ellipsis {
   }
 }
 
+.remove_pill {
+  display: none;
+  cursor: auto;
+}
+
 .action:hover,
 .table:hover,
 .message-container:hover {
+
+  .removable_pills .remove_pill {
+    display: inline;
+  }
 
   .pill {
 
@@ -1077,6 +1091,11 @@ input:-moz-placeholder { font-style: italic; }
     &.warning i {
       @extend .i40-error;
     }
+
+    &.hub_invoke i, &.external_service_invoke i {
+      @extend .i40-extdata;
+    }
+
     &:first-child {
       background: none;
     }
@@ -1100,7 +1119,9 @@ input:-moz-placeholder { font-style: italic; }
 
 .i25-condition          { background-position: 0         0; }
 .i25-loop               { background-position: -25px     0; }
-.i25-sms               { background-position: -50px     0; }
+.i25-sms                { background-position: -50px     0; }
+.i25-hub                { background-position: -75px     0; }
+.i25-extdata            { background-position: -100px    0; }
 
 
 [class^="i40-"],
@@ -1127,6 +1148,7 @@ input:-moz-placeholder { font-style: italic; }
 .i40-rarrow             { background-position: -360px    0; }
 .i40-error              { background-position: -400px    0; }
 .i40-invalid            { background-position: -440px    0; }
+.i40-hub                { background-position: -480px    0; }
 
 //-------------- Empty Trigers list ------------
 //----------------------------------------------
@@ -1175,3 +1197,6 @@ table.graygrad.import-specs {
   }
 }
 
+.graytext {
+  color: #555555;
+}

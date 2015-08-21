@@ -5,7 +5,7 @@ class Executor
 
   def initialize(application)
     @application = application
-    @triggers = application.message_triggers.all
+    @triggers = application.message_triggers.enabled.all
   end
 
   def execute(message)
@@ -23,12 +23,12 @@ class Executor
         @logger.info "Executing trigger '#{trigger.name}'"
         @matching_triggers << trigger
         begin
-          context = DatabaseExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(message, trigger, match), @logger)
+          context = DatabaseExecutionContext.execute(@application, trigger, MessagePlaceholderSolver.new(@application, message, trigger, match), @logger)
           @messages.concat context.messages
         rescue Exception => e
-          puts e.message
-          puts e.backtrace
           @logger.error(e.message)
+          # for development only
+          raise e if Rails.env.test?
         ensure
           @logger.save!
         end

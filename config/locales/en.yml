@@ -3,3 +3,8 @@
 
 en:
   hello: "Hello world"
+
+  activerecord:
+    attributes:
+      external_service:
+        base_url: Base URL

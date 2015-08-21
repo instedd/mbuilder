@@ -19,6 +19,11 @@ class ApplicationsController < ApplicationController
     @message_count_30_days = application.logs.where('created_at >= ?', 30.days.ago).count
   end
 
+  def new
+    add_breadcrumb 'New application'
+    set_application_tab :new
+  end
+
   def create
     if application.save
       redirect_to application

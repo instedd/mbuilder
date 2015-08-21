@@ -1,7 +1,7 @@
 class RecordsController < ApplicationController
   expose(:application)
   expose(:application_table) { application.find_table(params[:table_id]) }
-  expose(:record_class) { ElasticRecord.for(application.tire_index.name, params[:table_id]) }
+  expose(:record_class) { ElasticRecord.for(application.local_index.name, params[:table_id]) }
   expose(:record) do
     if params[:action] == "new" || params[:action] == "create"
       record_class.new params[:record].to_f_if_looks_like_number

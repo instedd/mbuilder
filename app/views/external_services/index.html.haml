@@ -1,0 +1,10 @@
+.row-fluid
+  .span6
+    %a.btn-icon{:href => "/docs/external_service.json", :target=>"_blank"}
+      %span.ic-wrapper
+        %i.icf-import
+      %span Download a sample manifest
+%br
+.row-fluid
+  .span6
+    - crud_list :external_service, external_services

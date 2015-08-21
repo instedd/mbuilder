@@ -1,14 +1,14 @@
 {{field.label()}}
 
-%span(ng-show='field.canBeRemoved()')
+%span.show-on-action-hover(ng-show='field.canBeRemoved()')
   %a.delete-field(href='javascript:' ng-click='removeField()')
-    x
+    remove field
 
-%ul
+%ul.no-bullet
   %li(ng-repeat='field in field.fields()' ng-controller='HubActionArgController')
     %span(ng-include src='fieldViewFor(field)' )
 
-  %li(ng-show='field.isOpen()')
+  %li.form-inline(ng-show='field.isOpen()')
     %input.input-small(type='text' ng-model='new_field.name')
     .btn-group
       %button.btn.btn-small.dropdown-toggle(data-toggle="dropdown")

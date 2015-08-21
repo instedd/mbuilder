@@ -9,6 +9,7 @@ class ExecutionContext
     @entities_stack = [{}]
     @store_entity_value_visited = [{}]
     @messages = []
+    @results = {}
     @logger = logger
   end
 
@@ -69,6 +70,14 @@ class ExecutionContext
 
   def piece_value(guid)
     subclass_responsibility
+  end
+
+  def result_value(guid)
+    @results[guid]
+  end
+
+  def assign_result_value(guid, value)
+    @results[guid] = value
   end
 
   def entity_field_values(field, aggregate)

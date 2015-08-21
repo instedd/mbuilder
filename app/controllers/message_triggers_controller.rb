@@ -47,6 +47,7 @@ class MessageTriggersController < MbuilderApplicationController
     data = JSON.parse request.raw_post
 
     trigger.name = data['name']
+    trigger.enabled = data['enabled']
     trigger.message = Message.from_hash(data['message'])
     trigger.actions = Action.from_list(data['actions'])
 

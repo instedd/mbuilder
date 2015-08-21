@@ -11,14 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141028164201) do
+ActiveRecord::Schema.define(:version => 20150807153632) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.text     "tables"
+    t.string   "time_zone",  :default => "UTC"
   end
 
   create_table "channels", :force => true do |t|
@@ -58,19 +59,51 @@ ActiveRecord::Schema.define(:version => 20141028164201) do
     t.string   "trigger_type"
     t.boolean  "no_trigger"
     t.boolean  "with_errors"
+    t.string   "trigger_name"
   end
 
   add_index "execution_loggers", ["application_id"], :name => "index_execution_loggers_on_application_id"
   add_index "execution_loggers", ["trigger_id"], :name => "index_execution_loggers_on_trigger_id"
+
+  create_table "external_service_steps", :force => true do |t|
+    t.integer  "external_service_id"
+    t.string   "name"
+    t.string   "display_name"
+    t.string   "icon"
+    t.string   "callback_url"
+    t.text     "variables"
+    t.string   "response_type"
+    t.text     "response_variables"
+    t.string   "guid"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  add_index "external_service_steps", ["external_service_id"], :name => "index_external_service_steps_on_external_service_id"
+
+  create_table "external_services", :force => true do |t|
+    t.integer  "application_id"
+    t.string   "name"
+    t.string   "url"
+    t.text     "data"
+    t.text     "global_settings"
+    t.string   "guid"
+    t.string   "base_url"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "external_services", ["application_id"], :name => "index_external_services_on_application_id"
 
   create_table "external_triggers", :force => true do |t|
     t.integer  "application_id"
     t.string   "name"
     t.text     "actions"
     t.text     "parameters"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.string   "auth_method"
+    t.boolean  "enabled",        :default => true
   end
 
   add_index "external_triggers", ["application_id"], :name => "index_external_triggers_on_application_id"
@@ -86,19 +119,21 @@ ActiveRecord::Schema.define(:version => 20141028164201) do
   create_table "message_triggers", :force => true do |t|
     t.integer  "application_id"
     t.string   "name"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.text     "message"
     t.text     "actions"
+    t.boolean  "enabled",        :default => true
   end
 
   create_table "periodic_tasks", :force => true do |t|
     t.integer  "application_id"
     t.string   "name"
     t.text     "actions"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.text     "schedule"
+    t.boolean  "enabled",        :default => true
   end
 
   create_table "users", :force => true do |t|

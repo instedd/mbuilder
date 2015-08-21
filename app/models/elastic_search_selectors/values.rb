@@ -7,9 +7,9 @@ class ElasticSearchSelectors::Values < ElasticSearchSelector
   end
 
   def select(search)
-    results = perform_search(search, @restrictions)
+    results = search.all_entities(@restrictions)
     value = results.map do |result|
-      result["_source"]["properties"][@field].user_friendly
+      result[@field].user_friendly
     end
   end
 

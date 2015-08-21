@@ -1,0 +1,46 @@
+.pull-right
+  = icon_link_to :'icf-delete', '', application_external_service_path(application, model), method: :delete, remote: true, :'data-confirm' => "Are you sure you want to delete the external service '#{model.name}'?"
+
+= instedd_form_for [application, model], remote: true do |f|
+
+  = f.text_field :name, input: { class: 'span8', :disabled => true, :readonly => true }
+  = f.text_field :url, input: { class: 'span12', placeholder: "http://example.com/manifext.json" }
+
+  = icon_link_to :'icf-sync', 'Update Manifest', update_manifest_application_external_service_path(application, model), :method => :put, remote: true
+
+  %hr
+
+  %p Settings
+  = f.text_field :base_url, input: { class: 'span12' }
+
+  = f.fields_for :global_variables, model.global_variables do |variables_form|
+    = variables_form.hidden_field :name
+    = variables_form.text_field :value, label: { text: variables_form.object.display_name }, input: { class: 'span12' }
+
+  .steps
+    - if model.external_service_steps.any?
+      %p Steps
+
+      - model.external_service_steps.in_groups_of(2).each do |steps|
+        .row-fluid
+          - steps.each do |step|
+            - next unless step
+            .span2
+              .pull-right
+                = icon_link_to "icpl-#{step.icon}", '', '#', {:class => 'flat'}
+            .span4
+              %div= step.display_name
+              - unless step.variables.empty?
+                %div.graytext
+                  &rarr;
+                  = step.variables.map {|variable| variable.display_name }.join ", "
+              - unless step.response_variables.empty?
+                %div.graytext
+                  &larr;
+                  = step.response_variables.map {|variable| variable.display_name }.join ", "
+        %br
+
+  %hr
+
+  = f.submit 'Save'
+  - crud_list_cancel

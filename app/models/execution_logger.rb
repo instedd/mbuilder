@@ -1,12 +1,16 @@
 class ExecutionLogger < ActiveRecord::Base
   belongs_to :application
   belongs_to :trigger, polymorphic: true
-  attr_accessible :actions, :message_to, :message_from, :message_body, :application, :trigger, :no_trigger, :with_errors
+  attr_accessible :actions, :message_to, :message_from, :message_body, :application, :trigger, :no_trigger, :with_errors, :trigger_name
 
   serialize :actions
 
   scope :no_triggers, -> { where(no_trigger: true) }
   scope :with_errors, -> { where(with_errors: true) }
+
+  before_save do
+    self.trigger_name = self.trigger.try &:name
+  end
 
   def message=(message)
     self.message_to = message['to']
@@ -44,6 +48,10 @@ class ExecutionLogger < ActiveRecord::Base
     append_action :hub_invoke, path, params
   end
 
+  def external_service_invoke(service_guid, params)
+    append_action :external_service_invoke, service_guid, params
+  end
+
   def info(description)
     append_action :info, description
   end
@@ -70,10 +78,15 @@ class ExecutionLogger < ActiveRecord::Base
     application.find_table(guid) rescue nil
   end
 
+  def find_external_service(guid)
+    step = application.find_external_service_step(guid)
+
+  end
+
   def map_properties(table, properties)
     Hash[properties.map do |key, value|
       field_name = table.find_field(key).name rescue '???'
-      [field_name, value]
+      [field_name, value.user_friendly]
     end]
   end
 
@@ -87,7 +100,12 @@ class ExecutionLogger < ActiveRecord::Base
         "Create #{table.name rescue '???'} with: #{named_properties}"
       when :hub_invoke
         kind, path, params = action
-        "Invoke hub action #{path} with #{params}"
+        "Invoke hub action #{path} with #{params.user_friendly}"
+      when :external_service_invoke
+        kind, service_guid, params = action
+        service_step = find_external_service(service_guid)
+        service_name = "#{service_step.external_service.name} :: #{service_step.name}" rescue '???'
+        "Invoke external service #{service_name} with #{params.user_friendly}"
       when :update
         kind, table_guid, id, old_properties, new_properties = action
         table = find_table(table_guid)

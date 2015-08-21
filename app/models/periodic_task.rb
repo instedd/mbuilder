@@ -1,5 +1,5 @@
 class PeriodicTask < Trigger
-  attr_accessible :name, :actions, :schedule
+  attr_accessible :name, :actions, :schedule, :enabled
 
   belongs_to :application
 
@@ -20,15 +20,17 @@ class PeriodicTask < Trigger
   end
 
   def self.from_hash(hash)
-    hash['schedule']['start_date'] = Time.parse hash['schedule']['start_date']
+    hash['schedule']['start_date'] = Time.parse(hash['schedule']['start_date'])
+
     schedule = IceCube::Schedule.from_hash(hash['schedule'])
 
-    new name: hash["name"], actions: Action.from_list(hash["actions"]), schedule: schedule
+    new name: hash["name"], enabled: hash["enabled"], actions: Action.from_list(hash["actions"]), schedule: schedule
   end
 
   def as_json
     {
       name: name,
+      enabled: enabled,
       kind: kind,
       actions: actions.map(&:as_json),
       schedule: schedule.as_json
@@ -40,7 +42,8 @@ class PeriodicTask < Trigger
   end
 
   def schedule_job
-    schedule_job_for schedule.next_occurrence Time.now
+    return unless self.enabled
+    schedule_job_for next_occurrence(Time.now)
   end
 
   def schedule_job_for scheduled_time, run_at=nil
@@ -51,18 +54,28 @@ class PeriodicTask < Trigger
   end
 
   def execute_at scheduled_time
-    context = DatabaseExecutionContext.new(application, PeriodicTaskPlaceholderSolver.new(Time.now), ExecutionLogger.new(application: application, trigger: self))
-    context.execute self
-    schedule_job_for schedule.next_occurrence scheduled_time
-    if context.messages.present?
-      nuntium = Pigeon::Nuntium.from_config
-      nuntium.send_ao context.messages
+    logger = ExecutionLogger.new(application: application, trigger: self)
+
+    logger.info "Executing trigger '#{self.name}'"
+    begin
+      context = DatabaseExecutionContext.new(application, PeriodicTaskPlaceholderSolver.new(application, Time.now), logger)
+      context.execute self
+      schedule_job_for next_occurrence(scheduled_time)
+      if context.messages.present?
+        nuntium = Pigeon::Nuntium.from_config
+        nuntium.send_ao context.messages
+      end
+    rescue Exception => e
+      logger.error(e.message)
+    ensure
+      logger.save!
     end
     context
   end
 
   def default_schedule
-    s = IceCube::Schedule.new
+    s = IceCube::Schedule.new(application.tz.now)
+    # s.add_recurrence_rule IceCube::Rule.daily
     s.add_recurrence_rule IceCube::Rule.weekly.day(:monday, :wednesday, :friday)
     s
   end
@@ -77,7 +90,16 @@ class PeriodicTask < Trigger
     self.schedule = s
   end
 
+  def start_time_in_app_time_zone
+    self.schedule.start_time.in_time_zone(application.tz)
+  end
+
   private
+
+  def next_occurrence(from_time)
+    self.schedule.start_time = self.schedule.start_time
+    self.schedule.next_occurrence from_time
+  end
 
   def set_default_schedule
     if new_record? && !self.schedule

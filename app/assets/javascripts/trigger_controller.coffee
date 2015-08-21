@@ -76,11 +76,31 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
 
     true
 
+  $scope.addNewValuePlaceholder = 'new value'
+
+  $scope.addNewValue = ->
+    console.error('Not implemented')
+
+  $scope.removePill = (pill) ->
+    console.error('Not implemented')
+
+  $scope.newPill = () ->
+    { kind: 'new' }
+
+  $scope.newEmptyLiteralPill = () ->
+    { kind: 'literal', guid: window.guid(), text: '' }
+
+  $scope.newFocusedEmptyLiteralPill = () ->
+    { kind: 'literal', guid: window.guid(), text: '', editmode: true }
+
   $scope.lookupPillName = (pill) ->
     switch pill.kind
       when 'field_value'
         $scope.lookupJoinedFieldName(pill.guid)
       when 'parameter'
+        pill = $scope.lookupPillByGuid(pill.guid)
+        "#{pill?.name || 'parameter'}_value"
+      when 'result'
         pill = $scope.lookupPillByGuid(pill.guid)
         pill?.name
       else
@@ -96,8 +116,17 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
   $scope.lookupPill = (pill) ->
     pill
 
-  # $scope.allPills = -> subclass responsibility
-  # $scope.implicitPills = -> subclass responsibility
+  $scope.allPills = ->
+    # parent scope is specialized for each type of trigger
+    outputPills().concat $scope.$parent.allPills()
+
+  outputPills = ->
+    pills = []
+    $scope.visitActions($scope.actions, (() -> null), (action) ->
+      if action.kind == 'external_service'
+        pills = pills.concat action.results
+    )
+    pills
 
   $scope.lookupTable = (guid) ->
     _.find $scope.tables, (table) -> table.guid == guid
@@ -135,6 +164,10 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
         return 'field_value' if $scope.fieldExists(pill.guid)
       when 'parameter'
         return 'parameter' if $scope.lookupPillByGuid(pill.guid)
+      when 'result'
+        return 'result' if $scope.lookupPillByGuid(pill.guid)
+      when 'new'
+        return 'new'
       else
         return 'placeholder' if $scope.lookupPillByGuid(pill.guid)
     'unbound'
@@ -142,9 +175,6 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
   $scope.pillTemplateFor = (field) ->
     status = $scope.lookupPillStatus(field)
     $scope.fieldNameFor(status)
-
-  $scope.pieceTemplateFor = (kind) ->
-    "#{kind}_piece"
 
   $scope.fieldNameFor = (status) ->
     "#{status}_pill"
@@ -270,7 +300,10 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
     $('.popup').hide()
 
   $(window.document).click (event) ->
-    unless $(event.target).closest($('.popup')).length > 0
+    # event.button == 2 checks if this is a right click
+    # this solves the issue with FF that doesnt stop the propagation
+    # of the event that originally triggered the popup
+    unless $(event.target).closest($('.popup')).length > 0 || event.button == 2
       $scope.hidePopups()
 
   $(window.document).keydown (event) ->
@@ -331,11 +364,11 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
         otherPill.kind = newPill.kind
         otherPill.guid = newPill.guid
 
-  $scope.showPopup = (id, event) ->
+  $scope.showPopup = (id, event, coordinates = {left: event.originalEvent.pageX, top: event.originalEvent.pageY}) ->
     $scope.hidePopups()
 
     div = $(id)
-    div.css left: event.originalEvent.pageX, top: event.originalEvent.pageY
+    div.css coordinates
     div.show()
     event.preventDefault()
     event.stopPropagation()
@@ -392,4 +425,34 @@ angular.module('mbuilder').controller 'TriggerController', ['$scope', '$http', '
   $scope.ifAggregateDescription = (aggregate) ->
     aggregate = !!aggregate
     _.find($scope.ifAggregates, (a) -> a.id == aggregate).desc
+
+  $scope.findExternalService = (guid) ->
+    for external_service in $scope.external_services
+      for step in external_service.steps
+        if step.guid == guid
+          return step
+    null
+
+  $scope.addExternalServiceAction = (step) ->
+    action =
+      kind: 'external_service'
+      guid: step.guid
+      pills: {}
+      results: []
+
+    _.map step.variables, (v) ->
+      action.pills[v.name] = {
+        kind: 'literal'
+        guid: window.guid()
+        text: ''
+      }
+
+    action.results = _.map step.response_variables, (v) -> {
+      kind: 'result'
+      name: v.name
+      guid: window.guid()
+    }
+
+    $scope.actions.push(action)
+
 ]

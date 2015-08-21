@@ -4,6 +4,7 @@ module MessageTriggersHelper
     str << "applicationId=#{trigger.application_id.to_json};"
     str << "id=#{trigger.id.to_json_oj};"
     str << "name=#{trigger.name.to_json_oj};"
+    str << "enabled=#{trigger.enabled.to_json_oj};"
 
     if trigger.message
       from = trigger.message.from
@@ -26,6 +27,8 @@ module MessageTriggersHelper
     else
       str << "tables=[];"
     end
+
+    str << "external_services=#{application.external_services.map(&:as_json).to_json_oj};"
 
     db = application.simulate_triggers_execution_excluding trigger
 

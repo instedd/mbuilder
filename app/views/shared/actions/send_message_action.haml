@@ -2,9 +2,13 @@
   .action-icon
     %i.i40-sms
   %div
-    Send this message
-    %br
+    Send SMS to:
+
+    %span{'ng-repeat' => 'pill in [action.recipient]'}
+      / ng-include pillTemplateFor only works if pill is in scope
+      / action.recipient is always a single pill
+      %span.removable_pills{dragover: 'dragOverRecipient($event)', drop: 'dropOverRecipient($event)', 'dragenter' => 'dragEnterRecipient($event)', 'dragleave' => 'dragLeaveRecipient($event)'}
+        %span(ng-include src='pillTemplateFor(pill)')
+
+    %hr
     %textpad(model='action.message')
-    to
-  .message-input{contenteditable: '{{action.recipientEditable}}', 'ng-blur' => 'makeRecipientNotEditable($event)', 'ng-mousedown' => 'makeRecipientEditable($event)', dragover: 'dragOverRecipient($event)', drop: 'dropOverRecipient($event)', 'ng-keydown' => 'handleRecipientKey($event)'}
-    %span.piece-container{'ng-repeat' => 'pill in [action.recipient]', 'ng-include' => true, 'src' => 'pillTemplateFor(pill)'}<>

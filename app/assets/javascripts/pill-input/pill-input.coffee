@@ -202,7 +202,7 @@ class PillInputController
       element.removeChild(element.firstChild)
 
     # backspace generates spans in chrome
-    $('span', $(element)).contents().unwrap()
+    $('span:not([class])', $(element)).contents().unwrap()
     $('*', $(element)).removeAttr('style')
 
   inputContainsRange : (range) ->
@@ -472,7 +472,7 @@ class PillInputController
     input = @getAncestor(INPUT, e.target)
     if input
       wrapper = document.createElement(DIV)
-      wrapper.innerHTML = e.originalEvent.clipboardData.getData(TEXT)
+      wrapper.innerHTML = e.originalEvent.clipboardData.getData(TEXT).replace(/\r?\n/g, ' ')
       elements = @toArray(wrapper.childNodes)
       @insert elements
       range = document.createRange()
@@ -484,4 +484,5 @@ class PillInputController
       @pillInput.trigger('pillinput:changed')
 
 
-window.PillInput = PillInput
+root = exports ? window
+root.PillInput = PillInput

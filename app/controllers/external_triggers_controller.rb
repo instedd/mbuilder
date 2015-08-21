@@ -43,21 +43,19 @@ class ExternalTriggersController < MbuilderApplicationController
   end
 
   def run
-    trigger = application.external_triggers.find_by_name(params['trigger_name'])
-
     logger = ExecutionLogger.new(application: application)
+
+    trigger = application.external_triggers.enabled.find_by_name!(params['trigger_name'])
 
     logger.info "Executing trigger '#{trigger.name}'"
     logger.trigger = trigger
     begin
-      @context = DatabaseExecutionContext.execute(application, trigger, ParameterPlaceholderSolver.new(params, Time.now), logger)
+      @context = DatabaseExecutionContext.execute(application, trigger, ParameterPlaceholderSolver.new(application, params, Time.now.utc), logger)
       if @context.messages.present?
         nuntium = Pigeon::Nuntium.from_config
         nuntium.send_ao @context.messages
       end
     rescue Exception => e
-      puts e.message
-      puts e.backtrace
       logger.error(e.message)
     ensure
       logger.save!
@@ -68,7 +66,7 @@ class ExternalTriggersController < MbuilderApplicationController
   rescue ActiveRecord::RecordNotFound => e
     logger.error_no_trigger
     logger.save!
-    render_json trigger.errors.full_messages.join("\n"), status: 404
+    head 404
   end
 
   private
@@ -77,6 +75,7 @@ class ExternalTriggersController < MbuilderApplicationController
     data = JSON.parse request.raw_post
 
     trigger.name = data['name']
+    trigger.enabled = data['enabled']
     trigger.auth_method = data['auth_method']
     trigger.parameters = Pill.from_list(data['parameters'])
     trigger.actions = Action.from_list(data['actions'])

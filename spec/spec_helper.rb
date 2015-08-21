@@ -38,7 +38,7 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
-  config.after(:all) { Tire.index('*test*').delete }
+  config.after(:all) { LocalIndex.new('*test*').delete }
 
   config.include Devise::TestHelpers, :type => :controller
 
@@ -82,6 +82,10 @@ RSpec.configure do |config|
 
   def new_external_trigger(&block)
     instance_eval_trigger_helper(&block).external_trigger
+  end
+
+  def unsaved_external_trigger(&block)
+    instance_eval_trigger_helper(&block).external_trigger_unsaved
   end
 
   def instance_eval_trigger_helper(&block)
@@ -134,21 +138,18 @@ RSpec.configure do |config|
     data = data[0] if data.length == 1 && data[0].is_a?(Array)
 
     data.to_f_if_looks_like_number.each do |properties|
-      now = Tire.format_date(Time.now)
-      application.tire_index.store type: table, properties: properties, created_at: now, updated_at: now
+      application.local_search(table).create properties
     end
-    application.tire_index.refresh
+    application.local_index.refresh
   end
 
   def assert_data(table, *data)
     data = data[0] if data.length == 1 && data[0].is_a?(Array)
 
-    index = application.tire_index(false)
+    index = application.local_index(false)
     if index.exists?
-      results = application.tire_search(table).perform.results
+      results = application.local_search(table).all_entities
       results.length.should eq(data.length)
-
-      results = results.map { |result| result["_source"]["properties"] }
 
       assert_sets_equal results, data
     else

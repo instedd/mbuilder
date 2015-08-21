@@ -40,8 +40,8 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', '$timeout', 
     $scope.validValuesPopup.field = field
 
     div = $('#valid-values')
-    closest_th = $(event.originalEvent.toElement).closest('th')
-    closest_th_positon = closest_th.position()
+    closest_th = $(event.originalEvent.currentTarget).closest('th')
+    closest_th_positon = closest_th.offset()
     div.css left: closest_th_positon.left, top: closest_th_positon.top + $(closest_th).height()
     div.show()
 

@@ -12,10 +12,6 @@
 
   cursor: text;
 
-  &:empty {
-    background: #EEEEEE !important;
-  }
-
   .pill .arrow {
     margin: 0px 0px 1px 5px;
     cursor: pointer;
@@ -40,4 +36,14 @@
     }
   }
 
+  &.resize {
+    min-height: 100px;
+    resize: both;
+  }
+
+  &.autoexpand {
+    overflow-x: auto;
+    overflow-y: visible;
+    height: auto;
+  }
 }

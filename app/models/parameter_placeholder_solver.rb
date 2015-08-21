@@ -1,5 +1,6 @@
-class ParameterPlaceholderSolver < PlaceholderSolver
-  def initialize(parameters, time)
+class ParameterPlaceholderSolver < ApplicationPlaceholderSolver
+  def initialize(application, parameters, time)
+    super(application)
     @parameters = parameters
     @time = time
   end
@@ -7,7 +8,7 @@ class ParameterPlaceholderSolver < PlaceholderSolver
   def piece_value(guid, trigger)
     case guid
     when 'received_at'
-      @time.strftime("%Y%m%d")
+      format_time @time
     else
       @parameters[trigger.parameters.detect {|parameter| parameter.guid == guid}.name] rescue nil
     end.to_f_if_looks_like_number

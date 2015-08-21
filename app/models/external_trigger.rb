@@ -2,12 +2,16 @@ class ExternalTrigger < Trigger
   include Rails.application.routes.url_helpers
 
   belongs_to :application
-  attr_accessible :actions, :name, :parameters, :auth_method
+  attr_accessible :actions, :name, :parameters, :auth_method, :enabled
+  validates_presence_of :name
   validates_uniqueness_of :name, scope: :application_id
+  validate :parameters_with_uniq_non_blank_name
   serialize :parameters
   serialize :actions
 
   symbolize :auth_method, :in => [:basic_auth, :auth_token, :oauth], :scopes => true, :default => :basic_auth, :scopes => :shallow
+
+  scope :enabled, -> { where(enabled: true) }
 
   def ==(other)
     other.is_a?(ExternalTrigger) && name == other.name && actions == other.actions && parameters.as_json == other.parameters.as_json && auth_method == other.auth_method
@@ -31,6 +35,7 @@ class ExternalTrigger < Trigger
 
   def self.from_hash(hash)
     new name: hash["name"],
+      enabled: hash["enabled"],
       auth_method: hash["auth_method"],
       actions: Action.from_list(hash["actions"]),
       parameters: hash["parameters"].map{|parameter_hash| Pills::ParameterPill.from_hash(parameter_hash)}
@@ -39,6 +44,7 @@ class ExternalTrigger < Trigger
   def as_json
     {
       name: name,
+      enabled: enabled,
       parameters: parameters,
       kind: kind,
       auth_method: auth_method,
@@ -48,5 +54,21 @@ class ExternalTrigger < Trigger
 
   def trigger_run_url
     url_for(controller: 'external_triggers', action:'run', format: :json, application_id: application_id, trigger_name: name, host: Settings.host)
+  end
+
+  def parameters_with_uniq_non_blank_name
+    return unless parameters
+
+    if parameters_name.any? { |n| n.blank? }
+      errors.add(:parameter_name, "can't be blank")
+    end
+
+    if parameters_name.length != parameters_name.uniq.length
+      errors.add(:parameters_name, "must be unique")
+    end
+  end
+
+  def parameters_name
+    parameters.map &:name
   end
 end

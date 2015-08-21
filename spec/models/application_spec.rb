@@ -44,19 +44,20 @@ describe Application do
   end
 
   it "exports and imports an empty application" do
-    app = Application.make
-    hash_app_before = app.to_json
+    Timecop.freeze(Time.now) do
+      app = Application.make
+      hash_app_before = app.to_json
 
-    file = Tempfile.new("app")
-    path = file.path
-    app.export file
-    file.close
+      file = Tempfile.new("app")
+      path = file.path
+      app.export file
+      file.close
 
-    file = File.new(path, "r")
+      file = File.new(path, "r")
+      app.import! file
 
-    app.import! file
-
-    app.to_json.should eq(hash_app_before)
+      app.to_json.should eq(hash_app_before)
+    end
   end
 
   it "rebuilds local tables data" do

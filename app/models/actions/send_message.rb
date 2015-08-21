@@ -52,7 +52,20 @@ class Actions::SendMessage < Action
       kind: kind,
       # We add an empty text pill at the end so the user can place the cursor there
       message: message.as_json,
-      recipient: recipient.as_json,
+      recipient: to_literal_if_text(recipient).as_json,
     }
+  end
+
+  private
+
+  def to_literal_if_text(pill)
+    # initially text pills were used to store the recipient
+    # now literals pills are the way to go.
+    # in order to avoid a data migration coupled to classes we lazy migrate data of the send message step.
+    if pill.kind == 'text'
+      Pills::LiteralPill.new(Guid.new.to_s, pill.guid)
+    else
+      pill
+    end
   end
 end

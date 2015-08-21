@@ -145,4 +145,30 @@ describe "PeriodicTask" do
 
     Delayed::Job.count.should eq(0)
   end
+
+  it "should not schedule job if disabled" do
+    task = new_periodic_task do
+      rule IceCube::Rule.daily
+    end
+
+    task.enabled = false
+    task.save!
+
+    Delayed::Job.count.should eq(0)
+  end
+
+  it "should save logs" do
+    trigger = new_periodic_task do
+      rule IceCube::Rule.daily
+    end
+    trigger.save!
+
+    job = Delayed::Job.first
+    wake_up_event = YAML.load(job.handler)
+    wake_up_event.perform
+
+    ExecutionLogger.where(trigger_id: trigger).count.should be(1)
+    log = ExecutionLogger.where(trigger_id: trigger).first
+    log.trigger_name.should eq(trigger.name)
+  end
 end

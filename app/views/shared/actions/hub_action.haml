@@ -1,7 +1,7 @@
 .action-content{'ng-controller' => 'HubActionController'}
   .action-icon
-    %i.i40-condition
-  %div
+    %i.i40-hub
+  %div.removable_pills
     Execute the following Hub action
     %ul.breadcrumb
       %li(ng-repeat='p in action.selection.parents' ng-class='{active: $last}')
@@ -15,5 +15,3 @@
         %hr(ng-hide='$first || !field.isStruct()')
 
         %span(ng-include src='fieldViewFor(field)' )
-
-

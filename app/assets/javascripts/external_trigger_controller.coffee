@@ -8,7 +8,8 @@ angular.module('mbuilder').controller 'ExternalTriggerController', ['$scope', '$
   $scope.addParameter = ->
     $scope.parameters.push kind: 'parameter', name: '', guid: window.guid()
 
-  $scope.deleteParameter = (index) ->
+  $scope.removeParameter = (pill) ->
+    index = _.indexOf($scope.parameters, pill)
     $scope.parameters.splice(index, 1)
 
   $scope.makeNotEditable = (event) ->
@@ -23,9 +24,13 @@ angular.module('mbuilder').controller 'ExternalTriggerController', ['$scope', '$
     event.dataTransfer.setData("Text", 'yyyymmdd')
     $scope.$broadcast 'dragStart'
 
+  $scope.nameForUrl = () ->
+    encodeURIComponent($scope.name)
+
   $scope.save = ->
     data =
       name: $scope.name
+      enabled: $scope.enabled
       tables: $scope.tables
       parameters: $scope.parameters
       actions: $scope.actions
