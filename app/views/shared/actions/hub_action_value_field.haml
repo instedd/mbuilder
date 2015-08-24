@@ -1,9 +1,9 @@
 = icon_link_to :'icp-remove', '', 'javascript:', class: 'remove-field show-on-action-hover plain', 'ng-show'=>'field.canBeRemoved()', 'ng-click'=>'removeField()'
 
-%span{'ng-show' => 'field.canBeRemoved()'}
+%label{'ng-show' => 'field.canBeRemoved()'}
   %editable-input{'model' => 'name.model', 'editmode' => 'name.editmode', 'focusmode' => 'name.focusmode'}:
-%show{'ng-hide' => 'field.canBeRemoved()'}
-  %label {{field.label()}}:
+%label{'ng-hide' => 'field.canBeRemoved()'}
+  %span {{field.label()}}:
 
 %span{dragover: 'dragOverHubOperand($event)', drop: 'dropOverHubOperand($event)', 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)'}
   %span(ng-include src='pillTemplateFor(pill)')

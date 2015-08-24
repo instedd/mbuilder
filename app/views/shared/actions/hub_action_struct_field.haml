@@ -1,6 +1,9 @@
 = icon_link_to :'icp-remove', '', 'javascript:', class: 'remove-field show-on-action-hover plain', 'ng-show'=>'field.canBeRemoved()', 'ng-click'=>'removeField()'
 
-%label {{field.label()}}
+%label{'ng-show' => 'field.canBeRemoved()'}
+  %editable-input{'model' => 'name.model', 'editmode' => 'name.editmode', 'focusmode' => 'name.focusmode'}:
+%label{'ng-hide' => 'field.canBeRemoved()'}
+  %span {{field.label()}}:
 
 %ul.no-bullet.hub-fields
   %li(ng-repeat='field in field.fields()' ng-controller='HubActionArgController')

@@ -10,8 +10,24 @@ angular.module('mbuilder')
     else
       'hub_action_value_field'
 
+
+  $scope.referenced_pill = ->
+    navigate = (obj, path) ->
+      for key in path
+        obj = obj[key]
+      obj
+
+    $scope.reflect.visitArgs (f) =>
+      navigate($scope.pills, f.path())
+
   $scope.$on 'updateActionReflect', (e) ->
     $scope.action.reflect = $scope.reflect.toJson()
+
+    # keep only pills defined in the reflect.
+    # in case pill are removed
+    $scope.pills = $scope.action.pills = $scope.referenced_pill()
+    $scope.$broadcast 'reflectUpdated'
+
     e.stopPropagation()
 ])
 
@@ -35,6 +51,9 @@ angular.module('mbuilder')
     $scope.new_field = { name : '' }
   else
     $scope.pill = $scope.$parent.pills[$scope.field.name()]
+
+  $scope.$on 'reflectUpdated', ->
+    $scope.pills = $scope.$parent.pills[$scope.field.name()]
 
   $scope.dragOverHubOperand = (event) ->
     if window.draggedPill
