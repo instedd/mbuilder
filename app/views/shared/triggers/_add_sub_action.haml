@@ -1,3 +1,2 @@
-.new-sub-action{'ng-show' => 'actionIsSelected(action) || action.actions.length == 0'}
+.new-sub-action.show-on-child-action-on-hover-no-drag{'ng-class' => '{"force-visible": action.actions.length == 0, "non-empty": action.actions.length > 0}'}
   = render 'shared/triggers/add_action'
-.new-sub-action{'ng-hide' => 'actionIsSelected(action) || action.actions.length == 0'}

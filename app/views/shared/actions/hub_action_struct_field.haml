@@ -1,20 +1,19 @@
-{{field.label()}}
+= icon_link_to :'icp-remove', '', 'javascript:', class: 'remove-field show-on-action-hover plain', 'ng-show'=>'field.canBeRemoved()', 'ng-click'=>'removeField()'
 
-%span.show-on-action-hover(ng-show='field.canBeRemoved()')
-  %a.delete-field(href='javascript:' ng-click='removeField()')
-    remove field
+%label{'ng-show' => 'field.canBeRemoved()'}
+  %editable-input{'model' => 'name.model', 'editmode' => 'name.editmode', 'focusmode' => 'name.focusmode'}:
+%label{'ng-hide' => 'field.canBeRemoved()'}
+  %span {{field.label()}}:
 
-%ul.no-bullet
+%ul.no-bullet.hub-fields
   %li(ng-repeat='field in field.fields()' ng-controller='HubActionArgController')
     %span(ng-include src='fieldViewFor(field)' )
 
-  %li.form-inline(ng-show='field.isOpen()')
-    %input.input-small(type='text' ng-model='new_field.name')
-    .btn-group
-      %button.btn.btn-small.dropdown-toggle(data-toggle="dropdown")
-        Add field
-        %span.caret
+  %li(ng-show='field.isOpen()')
+    .btn-group.add-field.show-on-action-hover
+      = icon_link_to :'icp-add', '', 'javascript:', class: 'plain dropdown-toggle', :'data-toggle' => "dropdown"
       %ul.dropdown-menu
         %li
           %a(href='javascript:' ng-click='addField("string")') Add value field
           %a(href='javascript:' ng-click='addField("struct")') Add struct field
+    %label &nbsp;

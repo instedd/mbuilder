@@ -170,35 +170,10 @@ ul.no-bullet {
   }
   > .a-container > .action {
     background: url("action-separator.png") no-repeat center top;
-
-    &.selected {
-      background-color: #cae3f1;
-      + .space-between-actions {
-        /*background-color: #cae3f1;*/
-        position: relative;
-        &:after {
-          content:'';
-          display: block;
-          position: absolute;
-          left: 50%;
-          margin-left: -17px;
-          bottom: -7px;
-          width: 0;
-          height: 0;
-          border-style: solid;
-          border-width: 7px 15px 0 15px;
-          border-color: #cae3f1 transparent transparent transparent;
-        }
-      }
-      .pill {
-        background: #ffffff;
-        border-color: #cdcccc;
-      }
-    }
   }
 }
 .action {
-  padding: 19px 0 10px 10px;
+  padding: 17px 0 27px 10px;
   cursor: move;
   position: relative;
 
@@ -210,36 +185,31 @@ ul.no-bullet {
     }
   }
 
-  &.selected {
-    background: #cae3f1;
-
-    i[class^="i25-"] {
-      background-position-y: -25px;
-      background-color: #cae3f1;
-    }
-
-    // otherwise style of icons in dropdown menu where affected if the action is selected
-    .dropdown-menu i[class^="i25-"] {
-      background-position-y: 0px;
-      background-color: transparent;
-    }
-
-    i[class^="i40-"] {
-      background-position-y: -40px;
-    }
-  }
-
   // use .show-on-action-hover to hide element unles the direct container action is .hover
-  .show-on-action-hover {
+  .show-on-action-hover, .show-on-child-action-on-hover-no-drag {
     visibility: hidden;
   }
 
-  &.hover .show-on-action-hover {
+  &.hover .show-on-action-hover, &.child-on-hover .show-on-child-action-on-hover-no-drag {
     visibility: visible;
   }
 
   &.hover .action .show-on-action-hover {
     visibility: hidden; // hide if the hover action is not the direct parent
+  }
+
+  .force-visible {
+    visibility: visible !important;
+  }
+
+  .dragging-action &, .dragging-action &, .dragging-action & {
+    .show-on-child-action-on-hover-no-drag {
+      visibility: hidden;
+    }
+
+    .force-visible {
+      visibility: hidden !important;
+    }
   }
   //
 
@@ -329,19 +299,28 @@ ul.no-bullet {
   right: 0px;
   left: 0px;
   opacity: 0;
+  visibility: hidden;
 }
 
 .new-action {
   background: #ffffff;
   border-top: 1px solid #cdcdcd;
   padding: 14px 10px 10px 10px;
-  position: relative;
-  z-index: 1;
 }
 
 .new-sub-action {
-  padding: 14px 20px 10px 20px;
-  position: relative;
+  padding: 0px 20px 0px 42px;
+
+  &.non-empty {
+    position: absolute;
+    bottom: 5px;
+  }
+}
+
+.new-action, .new-sub-action {
+  .btn-group .dropdown-menu li i {
+    background-color: inherit;
+  }
 }
 
 .new-action, .new-sub-action {
@@ -494,6 +473,7 @@ body {
     .space-between-actions {
       @include transition(opacity ease 0.3s);
       opacity: 1;
+      visibility: visible;
 
       &:before {
         content:'';
@@ -1199,4 +1179,28 @@ table.graygrad.import-specs {
 
 .graytext {
   color: #555555;
+}
+
+// hub actions
+
+.hub-fields {
+  label {
+    display: inline;
+    line-height: 25px;
+  }
+
+  li {
+    position: relative;
+
+    .remove-field, .add-field {
+      position: absolute;
+      left: -26px;
+      top: 1px;
+    }
+  }
+}
+
+// editable input
+.action {
+  editable-input { cursor: text; }
 }

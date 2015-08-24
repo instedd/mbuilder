@@ -62,14 +62,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     mustCreate = false
     actions = $scope.actions
     index = -1
-    if $scope.selectedAction
-      index = _.indexOf($scope.actions, $scope.selectedAction)
-      if index >= 0
-        if $scope.selectedAction.kind == 'foreach'
-          actions = $scope.selectedAction.actions
-          index = -1
-        mustCreate = true
-    else if !$scope.action
+    if !$scope.action
       mustCreate = true
 
     if mustCreate
@@ -174,9 +167,6 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
 
   $scope.deleteActionWithoutConfirmation = (index) ->
     action = $scope.actions[index]
-
-    if action == $scope.selectedAction
-      $scope.selectedAction = null
 
     $scope.actions.splice(index, 1)
 
@@ -312,6 +302,15 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
     $scope.$emit 'dragStart'
 
     event.stopPropagation()
+
+    # set the opacity of the drag and drop ghost
+    original = $(event.target).closest('.action')
+    original.css('opacity', '0.4')
+    event.dataTransfer.setDragImage(original[0], 0, 0);
+    window.setTimeout ->
+      original.css('opacity', '')
+    , 0
+    #
 
     false
 

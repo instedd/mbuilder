@@ -9,7 +9,7 @@
           %span
           {{p.label}}
 
-    %ul.unstyled
+    %ul.unstyled.hub-fields
       %li(ng-repeat='field in reflect.args()' ng-controller='HubActionArgController')
 
         %hr(ng-hide='$first || !field.isStruct()')
