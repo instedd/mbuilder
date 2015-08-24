@@ -9,13 +9,11 @@
   %li(ng-repeat='field in field.fields()' ng-controller='HubActionArgController')
     %span(ng-include src='fieldViewFor(field)' )
 
-  %li.form-inline(ng-show='field.isOpen()')
-    %input.input-small(type='text' ng-model='new_field.name')
-    .btn-group
-      %button.btn.btn-mini.dropdown-toggle(data-toggle="dropdown")
-        Add field
-        %span.caret
+  %li(ng-show='field.isOpen()')
+    .btn-group.add-field.show-on-action-hover
+      = icon_link_to :'icp-add', '', 'javascript:', class: 'plain dropdown-toggle', :'data-toggle' => "dropdown"
       %ul.dropdown-menu
         %li
           %a(href='javascript:' ng-click='addField("string")') Add value field
           %a(href='javascript:' ng-click='addField("struct")') Add struct field
+    %label &nbsp;

@@ -34,26 +34,38 @@ angular.module('mbuilder')
 .controller('HubActionArgController', ['$scope', '$timeout', ($scope, $timeout) ->
   if $scope.field.canBeRemoved()
     $scope.name = {
-      model: $scope.field.label(),
+      model: $scope.field.name(),
       editmode: false,
       focusmode: false
     }
 
-    $scope.$watch 'name.model', (new_value, old_value) ->
-      if new_value != old_value
-        $scope.field.setName(new_value)
-        $scope.pills[new_value] = $scope.pills[old_value]
-        delete $scope.pills[old_value]
+    initial_name = $scope.field.name()
+
+    $scope.$watch 'name.editmode', (new_value, old_value) ->
+      if new_value != old_value && new_value == false
+        $scope.field.setName($scope.name.model)
+        target_pills = if $scope.field.isStruct()
+          $scope.$parent.pills
+        else
+          $scope.pills
+        target_pills[$scope.name.model] = target_pills[initial_name]
+        initial_name = $scope.name.model
         $scope.$emit 'updateActionReflect'
 
-  if $scope.field.isStruct()
-    $scope.pills = $scope.$parent.pills[$scope.field.name()]
-    $scope.new_field = { name : '' }
-  else
-    $scope.pill = $scope.$parent.pills[$scope.field.name()]
+    $scope.$on 'edit-field-name', (e, field_name) ->
+      if $scope.name.model == field_name
+        $scope.$broadcast('makeEditable')
+        e.preventDefault();
 
-  $scope.$on 'reflectUpdated', ->
-    $scope.pills = $scope.$parent.pills[$scope.field.name()]
+  get_pill_from_parent = ->
+    return unless $scope.$parent.pills
+    if $scope.field.isStruct()
+      $scope.pills = $scope.$parent.pills[$scope.field.name()]
+    else
+      $scope.pill = $scope.$parent.pills[$scope.field.name()]
+
+  get_pill_from_parent()
+  $scope.$on 'reflectUpdated', get_pill_from_parent
 
   $scope.dragOverHubOperand = (event) ->
     if window.draggedPill
@@ -79,14 +91,31 @@ angular.module('mbuilder')
     $scope.$parent.pills[$scope.field.name()] = $scope.pill
 
   $scope.addField = (type) ->
-    return unless $scope.new_field.name and !$scope.pills[$scope.new_field.name]
-    f = $scope.field.addOpenField($scope.new_field.name, type)
+    field_exists = (name) ->
+      for f in $scope.field.fields()
+        return true if f.name() == name
+      return false
+
+    next_field_name = () ->
+      new_field_name_prefix = 'new_field_'
+      new_field_name_counter = 1
+      while field_exists("#{new_field_name_prefix}#{new_field_name_counter}")
+        new_field_name_counter += 1
+      return "#{new_field_name_prefix}#{new_field_name_counter}"
+
+    new_field_name = next_field_name()
+
+    f = $scope.field.addOpenField(new_field_name, type)
     if f.isStruct()
-      $scope.pills[$scope.new_field.name] = {}
+      $scope.pills[new_field_name] = {}
     else
-      $scope.pills[$scope.new_field.name] = $scope.newPill()
+      $scope.pills[new_field_name] = $scope.newPill()
+
+
     $scope.$emit 'updateActionReflect'
-    $scope.new_field.name = ''
+    $timeout ->
+      $scope.$broadcast 'edit-field-name', new_field_name
+    , 0
 
   $scope.removeField = ->
     $scope.field.remove()
