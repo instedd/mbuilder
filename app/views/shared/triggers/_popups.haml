@@ -29,8 +29,8 @@
 
 #add-external-service.dropdown.open.popup{'ng-controller' => 'AddExternalServiceController'}
   %ul.dropdown-menu
-    %li.disabled{'ng-show' => 'external_services.length == 0'}
-      %a(href="javscript:" ng-click="hidePopups()") None
+    %li{'ng-show' => 'external_services.length == 0'}
+      = link_to 'Register new', application_external_services_path(application), target: '_blank', :'ng-click' => "hidePopups()"
     %li.dropdown-submenu{'ng-repeat' => 'external_service in external_services'}
       %a(href="#") {{external_service.name}}
       %ul.dropdown-menu
