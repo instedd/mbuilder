@@ -3,7 +3,7 @@
     %i.i40-hub
   %div.removable_pills
     Execute the following Hub action
-    %ul.breadcrumb
+    %ul.breadcrumb.flat
       %li(ng-repeat='p in action.selection.parents' ng-class='{active: $last}')
         %a(href='javascript:' class='{{p.kind}}')
           %span
