@@ -1,75 +1,18 @@
-- if message_triggers.present?
-  .row-fluid
-    .span12
-      %h4 Message Triggers
-    - message_triggers.each do |trigger|
-      .row-fluid
-        .span12.box-list
-          = icon_link_to :'icf-arrow', trigger.name, edit_application_message_trigger_path(application, trigger)
+.row-fluid
+  .span8
+    - simple_list :message_trigger, icon: :'trigger-message', create_path: new_application_message_trigger_path(application) do
+      - message_triggers.each do |trigger|
+        - simple_list_item trigger.name, edit_application_message_trigger_path(application, trigger)
 
-- if periodic_tasks.present?
-  .row-fluid
-    .span12
-      %h4 Periodic Tasks
+    - simple_list :periodic_task, icon: :'trigger-date', create_path: new_application_periodic_task_path(application) do
+      - periodic_tasks.each do |trigger|
+        - simple_list_item trigger.name, edit_application_periodic_task_path(application, trigger)
 
-    - periodic_tasks.each do |trigger|
-      .row-fluid
-        .span12.box-list
-          = icon_link_to :'icf-arrow', trigger.name, edit_application_periodic_task_path(application, trigger)
+    - simple_list :external_trigger, icon: :'trigger-external', create_path: new_application_external_trigger_path(application) do
+      - external_triggers.each do |trigger|
+        - simple_list_item trigger.name, edit_application_external_trigger_path(application, trigger)
 
-- if validation_triggers.present?
-  .row-fluid
-    .span12
-      %h4 Validation Triggers
-
-    - validation_triggers.each do |trigger|
-      .row-fluid
-        .span12.box-list
-          = icon_link_to :'icf-arrow', trigger.field_name, application_validation_trigger_path(application, trigger.field_guid)
-
-- if external_triggers.present?
-  .row-fluid
-    .span12
-      %h4 External Triggers
-
-    - external_triggers.each do |trigger|
-      .row-fluid
-        .span12.box-list
-          = icon_link_to :'icf-arrow', trigger.name, edit_application_external_trigger_path(application, trigger)
-
-- if external_triggers.present? || validation_triggers.present? || periodic_tasks.present? || message_triggers.present?
-  .row-fluid
-    .span12
-      = icon_link_to :'icc-add', 'Add Trigger', '#', class: "add-trigger blue"
-      .triggers-menu
-        = link_to new_application_message_trigger_path(application) do
-          = image_tag "trigger-message.png"
-          Message trigger
-        = link_to new_application_periodic_task_path(application) do
-          = image_tag "trigger-date.png"
-          Periodic task
-        / Validations triggers are created from another trigger
-        / %a{:href => "#"}
-        /   = image_tag "trigger-validation.png"
-        /   Validation trigger
-        = link_to new_application_external_trigger_path(application) do
-          = image_tag "trigger-external.png"
-          External Trigger
-- else
-  .empty-triggers
-    .row-fluid
-      .span12
-        = image_tag "trigger-new.png"
-        %p
-          You have no triggers yet,
-          %br add a trigger
-        .add-new-trigger
-          = link_to new_application_message_trigger_path(application) do
-            = image_tag "trigger-message.png"
-            Message trigger
-          = link_to new_application_periodic_task_path(application) do
-            = image_tag "trigger-date.png"
-            Periodic task
-          = link_to new_application_external_trigger_path(application) do
-            = image_tag "trigger-external.png"
-            External Trigger
+    - if validation_triggers.present?
+      - simple_list :validation_trigger do
+        - validation_triggers.each do |trigger|
+          - simple_list_item trigger.field_name, application_validation_trigger_path(application, trigger)
