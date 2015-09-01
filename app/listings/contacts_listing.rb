@@ -5,7 +5,7 @@ class ContactsListing < Listings::Base
     Contact.where(application_id: params[:application_id])
   end
 
-  column :address, title: 'Phone number' do |_,address|
+  column :address, title: 'Phone number', searchable: true do |_,address|
     address.without_protocol
   end
 
@@ -18,7 +18,13 @@ class ContactsListing < Listings::Base
   end
 
   column '', class: 'button-column' do |contact|
-    icon_link_to :'icf-arrow', '', application_contact_path(application, contact.address.without_protocol) if format == :html
+    if format == :html
+      link_to application_contact_path(params[:application_id], contact.address.without_protocol), class: 'btn-icon' do
+        content_tag :span, '', 'class' => 'ic-wrapper' do
+          content_tag :i, '', 'class' => 'icf-arrow'
+        end
+      end
+    end
   end
 
   export :csv, :xls
