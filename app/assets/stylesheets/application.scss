@@ -1209,3 +1209,7 @@ table.graygrad td.button-column {
 .action {
   editable-input { cursor: text; }
 }
+
+#trigger_enabled.on-off + label {
+  margin-top: 3px;
+}

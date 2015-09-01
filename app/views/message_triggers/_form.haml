@@ -2,13 +2,13 @@
   %div{'ng-controller' => 'TriggerController'}
     .row-fluid{dragover: 'dragOverBoard($event)', drop: 'dropOverBoard($event)', dragend: 'dragEnd($event)'}
       .span6
-        .checkbox
-          %label
-            %input{'ng-model' => '$parent.enabled', type: :checkbox, name: :enabled}
-            Enabled
-        %br
         %label{for: :name} Trigger name
-        %input.n.span12#name{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name"}
+        .row-fluid
+          .span11
+            %input.span12#name{'ng-model' => '$parent.name', type: :text, name: :name, autofocus: true, placeholder: "Give your trigger a name"}
+          .span1
+            %input.on-off{'ng-model' => '$parent.enabled', type: :checkbox, name: :enabled, :id => "trigger_enabled"}
+            %label{:for => "trigger_enabled"}
         %br
         %br
         %div
