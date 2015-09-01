@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150807153632) do
+ActiveRecord::Schema.define(:version => 20150901172044) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -28,6 +28,15 @@ ActiveRecord::Schema.define(:version => 20150807153632) do
     t.string   "pigeon_name"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+  end
+
+  create_table "contacts", :force => true do |t|
+    t.string   "address"
+    t.integer  "application_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.datetime "last_incoming_at"
+    t.datetime "last_outgoing_at"
   end
 
   create_table "delayed_jobs", :force => true do |t|

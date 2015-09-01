@@ -44,6 +44,8 @@ class Executor
 
     @logger.save!
 
+    Contact.record_incoming_message(@application, message['from'])
+
     self
   end
 end
