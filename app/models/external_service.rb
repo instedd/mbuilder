@@ -8,6 +8,14 @@ class ExternalService < ActiveRecord::Base
 
   validates :guid, presence: true, uniqueness: { scope: :application_id }
   validates :url, presence: true
+  validate do
+    return if url.blank?
+    begin
+      Net::HTTP.get(URI(add_http_if_missing(url)))
+    rescue
+      errors.add(:url, "can't get url")
+    end
+  end
 
   after_initialize do
     self.guid ||= Guid.new.to_s
@@ -15,7 +23,7 @@ class ExternalService < ActiveRecord::Base
 
   before_create do
     # fill a base url with the url used to download the manifest
-    self.url = "http://#{self.url}" unless self.url.match(/^(http|https):\/\//)
+    self.url = add_http_if_missing(self.url)
     uri = URI.parse(self.url)
     self.base_url = "#{uri.scheme}://#{uri.host}#{':' + uri.port.to_s if uri.port != uri.default_port}" unless self.base_url
   end
@@ -103,6 +111,16 @@ class ExternalService < ActiveRecord::Base
 
     def persisted?
       false
+    end
+  end
+
+  private
+
+  def add_http_if_missing(url)
+    if url.match(/^(http|https):\/\//)
+      url
+    else
+      "http://#{url}"
     end
   end
 end
