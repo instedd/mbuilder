@@ -69,6 +69,14 @@ module Mbuilder
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    # # Reload cached/serialized classes before every request (in development
+    # # mode) or on startup (in production mode)
+    config.to_prepare do
+      Dir[ File.expand_path(Rails.root.join("app/models/**/*.rb")) ].each do |file|
+        require_dependency file
+      end
+    end
+
     config.middleware.use Rack::Cors do
       allow do
         origins '*'
