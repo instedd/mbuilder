@@ -40,6 +40,7 @@ gem 'guid'
 
 gem 'instedd-bootstrap', github: "instedd/instedd-bootstrap", branch: 'master'
 gem 'hub_client', github: 'instedd/ruby-hub_client', branch: 'master'
+gem 'instedd_telemetry', github: 'instedd/telemetry_rails', branch: 'master'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
