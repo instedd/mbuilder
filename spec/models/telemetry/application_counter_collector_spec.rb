@@ -1,14 +1,6 @@
 require 'spec_helper'
 
-describe Telemetry::ApplicationCountCollector do
-  let(:to) { Time.now }
-  let(:from) { to - 7.days }
-  let(:period) do
-    period = InsteddTelemetry::Period.new
-    period.beginning = from
-    period.end = to
-    period
-  end
+describe Telemetry::ApplicationCountCollector, telemetry: true do
 
   it 'counts applications' do
     Application.make created_at: to - 1.day
@@ -26,4 +18,5 @@ describe Telemetry::ApplicationCountCollector do
       }]
     })
   end
+  
 end

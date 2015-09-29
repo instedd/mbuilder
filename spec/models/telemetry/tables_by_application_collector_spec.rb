@@ -1,14 +1,6 @@
 require 'spec_helper'
 
-describe Telemetry::TablesByApplicationCollector do
-  let(:to) { Time.now }
-  let(:from) { to - 7.days }
-  let(:period) do
-    period = InsteddTelemetry::Period.new
-    period.beginning = from
-    period.end = to
-    period
-  end
+describe Telemetry::TablesByApplicationCollector, telemetry: true do
 
   it 'counts tables by application' do
     table = Tables::Local.new('test table', '1234-5', [])
@@ -41,4 +33,5 @@ describe Telemetry::TablesByApplicationCollector do
       value: 0
     })
   end
+  
 end
