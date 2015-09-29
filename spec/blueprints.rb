@@ -19,6 +19,7 @@ end
 Application.blueprint do
   user
   name
+  time_zone "Athens"
 end
 
 MessageTrigger.blueprint do
