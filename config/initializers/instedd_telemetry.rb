@@ -7,4 +7,5 @@ InsteddTelemetry.setup do |config|
 
   # Add custom collectors to Telemetry
   config.add_collector Telemetry::ApplicationCountCollector
+  config.add_collector Telemetry::ChannelsByKindCollector
 end

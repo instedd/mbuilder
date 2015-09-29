@@ -39,3 +39,8 @@ end
 ValidationTrigger.blueprint do
   application
 end
+
+Channel.blueprint do
+  application
+  name
+end

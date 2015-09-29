@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150928163761) do
+ActiveRecord::Schema.define(:version => 20150929144139) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20150928163761) do
     t.string   "pigeon_name"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.string   "kind"
   end
 
   create_table "contacts", :force => true do |t|
