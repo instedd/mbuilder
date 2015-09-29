@@ -6,5 +6,5 @@ InsteddTelemetry.setup do |config|
   # config.api_port = 8089
 
   # Add custom collectors to Telemetry
-  # config.add_collector Telemetry::ActiveUsersCollector
+  config.add_collector Telemetry::ApplicationCountCollector
 end
