@@ -171,4 +171,18 @@ describe "PeriodicTask" do
     log = ExecutionLogger.where(trigger_id: trigger).first
     log.trigger_name.should eq(trigger.name)
   end
+
+  it 'reports execution to telemetry' do
+    trigger = new_periodic_task do
+      rule IceCube::Rule.daily
+    end
+    trigger.save!
+
+    job = Delayed::Job.first
+    wake_up_event = YAML.load(job.handler)
+
+    InsteddTelemetry.should_receive(:counter_add).with('trigger_execution', {type: 'periodic'}, 1)
+
+    wake_up_event.perform
+  end
 end

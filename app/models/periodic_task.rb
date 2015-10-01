@@ -94,6 +94,10 @@ class PeriodicTask < Trigger
     self.schedule.start_time.in_time_zone(application.tz)
   end
 
+  def self.type_name
+    'periodic'
+  end
+
   private
 
   def next_occurrence(from_time)

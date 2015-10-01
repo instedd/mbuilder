@@ -20,5 +20,14 @@ class Trigger < ActiveRecord::Base
     actions.each do |action|
       action.execute(context)
     end
+    report_execution
+  end
+
+  def report_execution
+    InsteddTelemetry.counter_add 'trigger_execution', {type: self.class.type_name}, 1
+  end
+
+  def self.type_name
+    @name ||= self.name.downcase.gsub(/trigger/, '')
   end
 end

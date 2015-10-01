@@ -44,4 +44,11 @@ describe ExternalTrigger do
     trigger.should_not be_valid
     trigger.errors.full_messages.first.should eq("Parameters name must be unique")
   end
+
+  it 'reports execution to telemetry' do
+    InsteddTelemetry.should_receive(:counter_add).with('trigger_execution', {type: 'external'}, 1)
+
+    external_trigger.actions = []
+    external_trigger.execute(nil)
+  end
 end
