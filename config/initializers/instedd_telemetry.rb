@@ -10,4 +10,5 @@ InsteddTelemetry.setup do |config|
   config.add_collector Telemetry::ChannelsByKindCollector
   config.add_collector Telemetry::TriggersByTypeCollector
   config.add_collector Telemetry::TablesByApplicationCollector
+  config.add_collector Telemetry::ColumnsByTableCollector
 end
