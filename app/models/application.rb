@@ -15,6 +15,7 @@ class Application < ActiveRecord::Base
   validates_presence_of :user, :name, :time_zone
 
   after_save :create_index
+  after_save :touch_lifespan
   before_destroy :delete_local_index
 
   serialize :tables
@@ -162,6 +163,10 @@ class Application < ActiveRecord::Base
       record_class = elastic_record_for(table)
       record_class.create data[table.guid]
     end
+  end
+
+  def touch_lifespan
+    Telemetry::Lifespan.touch_application(self)
   end
 
   if Rails.env.test?

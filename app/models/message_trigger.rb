@@ -12,6 +12,8 @@ class MessageTrigger < Trigger
 
   scope :enabled, -> { where(enabled: true) }
 
+  after_save :touch_application_lifespan
+
   def self.from_hash(hash)
     new name: hash["name"], enabled: hash["enabled"], message: Message.from_hash(hash["message"]), actions: Action.from_list(hash["actions"])
   end

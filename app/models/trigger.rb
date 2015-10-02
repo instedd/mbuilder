@@ -25,6 +25,7 @@ class Trigger < ActiveRecord::Base
 
   def report_execution
     InsteddTelemetry.counter_add 'trigger_execution', {type: self.class.type_name}, 1
+    Telemetry::Lifespan.touch_application(self.application)
   end
 
   def self.type_name
