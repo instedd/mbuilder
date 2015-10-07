@@ -1,9 +1,14 @@
 InsteddTelemetry.setup do |config|
-  # Telemetry server URL
-  # config.server_url = "http://telemetry.instedd.org"
 
-  # Telemetry remote API port
-  # config.api_port = 8089
+  # Load settings from yml
+  config_path = File.join(Rails.root, 'config', 'telemetry.yml')
+  custom_config = File.exists?(config_path) ? YAML.load_file(config_path) : nil
+
+  if custom_config.present?
+    custom_config.each do |k,v|
+      config.send("#{k}=", v)
+    end
+  end
 
   # Add custom collectors to Telemetry
   config.add_collector Telemetry::ApplicationCountCollector
