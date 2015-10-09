@@ -4,8 +4,11 @@ class Telemetry::RowsByTableCollector
 
     Application.where('created_at < ?', period.end).find_each do |application|
       application.local_tables.each do |table|
-        elastic_record = application.elastic_record_for(table)
-        rows_by_table[table.guid] = elastic_record.count
+        begin
+          elastic_record = application.elastic_record_for(table)
+          rows_by_table[table.guid] = elastic_record.count
+        rescue
+        end
       end
     end
 

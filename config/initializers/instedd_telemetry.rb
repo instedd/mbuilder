@@ -1,14 +1,11 @@
 InsteddTelemetry.setup do |config|
 
   # Load settings from yml
-  config_path = File.join(Rails.root, 'config', 'telemetry.yml')
-  custom_config = File.exists?(config_path) ? YAML.load_file(config_path) : nil
+  custom_config = Rails.configuration.telemetry_configuration rescue {}
 
-  if custom_config.present?
-    custom_config.each do |k,v|
-      config.send("#{k}=", v)
-    end
-  end
+  conf.server_url           = custom_config[:server_url]                   if custom_config.include? :server_url
+  conf.period_size          = custom_config[:period_size_days].days        if custom_config.include? :period_size_days
+  conf.process_run_interval = custom_config[:run_interval_minutes].minutes if custom_config.include? :run_interval_minutes
 
   # Add custom collectors to Telemetry
   config.add_collector Telemetry::ApplicationCountCollector

@@ -5,7 +5,10 @@ module Telemetry::ColumnsByTableCollector
     Application.where('created_at < ?', period.end).find_each do |application|
       if application.tables.present?
         application.tables.each do |table|
-          columns_by_table[table.guid] = table.fields.count
+          begin
+            columns_by_table[table.guid] = table.fields.count
+          rescue
+          end
         end
       end
     end
