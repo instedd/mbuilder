@@ -20,3 +20,6 @@ config/guisso.yml
 config/settings.local.yml
 
 .ruby-gemset
+
+*.sublime-project
+*.sublime-workspace
