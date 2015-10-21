@@ -14,6 +14,7 @@ class PeriodicTask < Trigger
   after_initialize :set_default_schedule
 
   after_save :touch_application_lifespan
+  after_destroy :touch_application_lifespan
 
   after_destroy :remove_existing_jobs
 

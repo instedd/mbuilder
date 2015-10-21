@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Contact do
+  include_examples 'application lifespan', described_class
+
   describe "automatic registration" do
     let(:application) { new_application "" }
 

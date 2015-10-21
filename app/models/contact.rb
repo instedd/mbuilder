@@ -3,6 +3,7 @@ class Contact < ActiveRecord::Base
   belongs_to :application
 
   after_save :touch_application_lifespan
+  after_destroy :touch_application_lifespan
 
   def self.record_outgoing_message_at(application, address, time)
     contact = application.contacts.find_or_initialize_by_address(address.with_protocol("sms"))

@@ -8,6 +8,7 @@ Sham.define do
   password { Faker::Name.name }
   username { Faker::Internet.user_name }
   address { Faker::PhoneNumber.phone_number }
+  url { Faker::Internet.url }
 end
 
 User.blueprint do
@@ -50,4 +51,9 @@ end
 Contact.blueprint do
   application
   address
+end
+
+ExternalService.blueprint do
+  application
+  url
 end

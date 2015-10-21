@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   has_many :identities, dependent: :destroy
 
   after_save :touch_lifespan
+  after_destroy :touch_lifespan
 
   private
 

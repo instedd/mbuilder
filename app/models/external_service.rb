@@ -29,6 +29,7 @@ class ExternalService < ActiveRecord::Base
   end
 
   after_save :touch_application_lifespan
+  after_destroy :touch_application_lifespan
 
   def update_manifest!
     response = RestClient.get self.url

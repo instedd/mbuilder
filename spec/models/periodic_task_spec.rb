@@ -1,5 +1,6 @@
 require "spec_helper"
-describe "PeriodicTask" do
+
+describe PeriodicTask do
 
   before (:each) { Timecop.freeze(Time.utc(2013, 9, 17, 6, 0, 0)) }
   after (:each) { Timecop.return }
@@ -184,5 +185,34 @@ describe "PeriodicTask" do
     InsteddTelemetry.should_receive(:counter_add).with('trigger_execution', {type: 'periodic'}, 1)
 
     wake_up_event.perform
+  end
+
+  describe 'telemetry', telemetry: true do
+    let!(:application) { Application.make }
+
+    it 'updates the application lifespan when created' do
+      periodic_task = new_periodic_task_for application
+
+      Telemetry::Lifespan.should_receive(:touch_application).with(application)
+
+      periodic_task.save
+    end
+
+    it 'updates the application lifespan when updated' do
+      periodic_task =create_periodic_task_for application
+
+      Telemetry::Lifespan.should_receive(:touch_application).with(application)
+
+      periodic_task.touch
+      periodic_task.save
+    end
+
+    it 'updates the application lifespan when destroyed' do
+      periodic_task = create_periodic_task_for application
+
+      Telemetry::Lifespan.should_receive(:touch_application).with(application)
+
+      periodic_task.destroy
+    end
   end
 end

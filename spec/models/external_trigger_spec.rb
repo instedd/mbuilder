@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe ExternalTrigger do
+  include_examples 'application lifespan', described_class
+
   let(:application) { Application.make name: "App Name" }
   let(:external_trigger) { ExternalTrigger.make name: "Trigger Name", application: application }
 

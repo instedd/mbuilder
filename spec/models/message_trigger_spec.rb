@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe MessageTrigger do
+  include_examples 'application lifespan', described_class
+  
   let(:trigger) { MessageTrigger.make actions: [] }
   let(:context) { nil }
 

@@ -16,6 +16,7 @@ class Application < ActiveRecord::Base
 
   after_save :create_index
   after_save :touch_lifespan
+  after_destroy :touch_lifespan
   before_destroy :delete_local_index
 
   serialize :tables
