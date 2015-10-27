@@ -3,7 +3,7 @@ class Telemetry::NumbersByApplicationAndCountryCollector
     data = {}
 
     Contact.where('address IS NOT NULL AND created_at < ?', period.end).select('DISTINCT address, application_id').find_each do |contact|
-      country_code = InsteddTelemetry::Util.country_code(contact.address)
+      country_code = InsteddTelemetry::Util.country_code(contact.address.without_protocol)
       if country_code.present?
         data[contact.application_id] ||= Hash.new(0)
         data[contact.application_id][country_code] += 1

@@ -6,15 +6,15 @@ describe Telemetry::NumbersByApplicationAndCountryCollector, telemetry: true do
     application1 = Application.make
     application2 = Application.make
 
-    Contact.make application: application1, address: '541166667777', created_at: to - 1.day
-    Contact.make application: application1, address: '541155557777', created_at: to - 2.days
-    Contact.make application: application1, address: '85523211344', created_at: to - 5.days
-    Contact.make application: application1, address: '85523211344', created_at: to - 100.days
+    Contact.make application: application1, address: 'sms://541166667777', created_at: to - 1.day
+    Contact.make application: application1, address: 'sms://541155557777', created_at: to - 2.days
+    Contact.make application: application1, address: 'sms://85523211344', created_at: to - 5.days
+    Contact.make application: application1, address: 'sms://85523211344', created_at: to - 100.days
 
-    Contact.make application: application1, address: '541155557777', created_at: to - 8.days
-    Contact.make application: application1, address: '541155558888', created_at: to + 1.day
-    Contact.make application: application2, address: '85523211355', created_at: to - 31.days
-    Contact.make application: application2, address: '123', created_at: to - 1.day
+    Contact.make application: application1, address: 'sms://541155557777', created_at: to - 8.days
+    Contact.make application: application1, address: 'sms://541155558888', created_at: to + 1.day
+    Contact.make application: application2, address: 'sms://85523211355', created_at: to - 31.days
+    Contact.make application: application2, address: 'sms://123', created_at: to - 1.day
 
     stats = Telemetry::NumbersByApplicationAndCountryCollector.collect_stats period
     counters = stats[:counters]
