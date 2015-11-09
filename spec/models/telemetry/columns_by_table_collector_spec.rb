@@ -46,4 +46,23 @@ describe Telemetry::ColumnsByTableCollector, telemetry: true do
     })
   end
 
+  it 'counts tables with 0 columns' do
+    table_1 = Tables::Local.new('table 1', SecureRandom.uuid, [])
+    table_2 = Tables::Local.new('table 2', SecureRandom.uuid, [])
+
+    application_1 = Application.make created_at: to - 5.days, tables: [table_1]
+    application_2 = Application.make created_at: to + 1.day, tables: [table_2]
+
+    stats = Telemetry::ColumnsByTableCollector.collect_stats period
+    counters = stats[:counters]
+
+    counters.size.should eq(1)
+
+    counters.should include({
+      metric: 'columns_by_table',
+      key: {table_guid: table_1.guid},
+      value: 0
+    })
+  end
+
 end

@@ -64,4 +64,26 @@ describe Telemetry::RowsByTableCollector, telemetry: true do
     })
   end
 
+  it 'counts tables with 0 rows' do
+    field_1 = TableFields::Local.new('field 1', SecureRandom.uuid, nil)
+    table_1 = Tables::Local.new('table 1', SecureRandom.uuid, [field_1])
+
+    field_2 = TableFields::Local.new('field 2', SecureRandom.uuid, nil)
+    table_2 = Tables::Local.new('table 2', SecureRandom.uuid, [field_2])
+
+    application_1 = Application.make created_at: to - 5.days, tables: [table_1]
+    application_2 = Application.make created_at: to + 1.day, tables: [table_2]
+
+    stats = Telemetry::RowsByTableCollector.collect_stats period
+    counters = stats[:counters]
+
+    counters.size.should eq(1)
+
+    counters.should include({
+      metric: 'rows_by_table',
+      key: {table_guid: table_1.guid},
+      value: 0
+    })
+  end
+
 end
