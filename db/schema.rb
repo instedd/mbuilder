@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150901172044) do
+ActiveRecord::Schema.define(:version => 20151113143805) do
 
   create_table "applications", :force => true do |t|
     t.integer  "user_id"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20150901172044) do
     t.string   "pigeon_name"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.string   "kind"
   end
 
   create_table "contacts", :force => true do |t|
@@ -123,6 +124,44 @@ ActiveRecord::Schema.define(:version => 20150901172044) do
     t.string   "token"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "instedd_telemetry_counters", :force => true do |t|
+    t.integer "period_id"
+    t.string  "bucket"
+    t.text    "key_attributes"
+    t.integer "count",          :default => 0
+  end
+
+  create_table "instedd_telemetry_periods", :force => true do |t|
+    t.datetime "beginning"
+    t.datetime "end"
+    t.datetime "stats_sent_at"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.string   "lock_owner"
+    t.datetime "lock_expiration"
+  end
+
+  create_table "instedd_telemetry_set_occurrences", :force => true do |t|
+    t.integer "period_id"
+    t.string  "bucket"
+    t.text    "key_attributes"
+    t.string  "element"
+  end
+
+  create_table "instedd_telemetry_settings", :force => true do |t|
+    t.string "key"
+    t.string "value"
+  end
+
+  add_index "instedd_telemetry_settings", ["key"], :name => "index_instedd_telemetry_settings_on_key", :unique => true
+
+  create_table "instedd_telemetry_timespans", :force => true do |t|
+    t.string   "bucket"
+    t.text     "key_attributes"
+    t.datetime "since"
+    t.datetime "until"
   end
 
   create_table "message_triggers", :force => true do |t|

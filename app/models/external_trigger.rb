@@ -13,6 +13,9 @@ class ExternalTrigger < Trigger
 
   scope :enabled, -> { where(enabled: true) }
 
+  after_save :touch_application_lifespan
+  after_destroy :touch_application_lifespan
+
   def ==(other)
     other.is_a?(ExternalTrigger) && name == other.name && actions == other.actions && parameters.as_json == other.parameters.as_json && auth_method == other.auth_method
   end

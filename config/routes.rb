@@ -1,4 +1,6 @@
 Mbuilder::Application.routes.draw do
+  mount InsteddTelemetry::Engine => '/instedd_telemetry'
+
   get "logs/index"
 
   devise_for :users, controllers: {omniauth_callbacks: 'omniauth_callbacks'}

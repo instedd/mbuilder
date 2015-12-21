@@ -12,4 +12,13 @@ class User < ActiveRecord::Base
 
   has_many :applications, dependent: :destroy
   has_many :identities, dependent: :destroy
+
+  after_save :touch_lifespan
+  after_destroy :touch_lifespan
+
+  private
+
+  def touch_lifespan
+    Telemetry::Lifespan.touch_user(self)
+  end
 end

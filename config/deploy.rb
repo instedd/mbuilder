@@ -23,7 +23,7 @@ namespace :deploy do
   end
 
   task :symlink_configs, :roles => :app do
-    %W(database.yml guisso.yml nuntium.yml resource_map.yml newrelic.yml settings.yml hub.yml).each do |file|
+    %W(database.yml guisso.yml nuntium.yml resource_map.yml newrelic.yml settings.yml hub.yml telemetry.yml).each do |file|
       run "test -e #{shared_path}/#{file} && ln -nfs #{shared_path}/#{file} #{release_path}/config/ || true"
     end
   end

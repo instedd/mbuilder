@@ -5,4 +5,7 @@ class Channel < ActiveRecord::Base
 
   validates_presence_of :application
   validates_presence_of :name
+
+  after_save :touch_application_lifespan
+  after_destroy :touch_application_lifespan
 end

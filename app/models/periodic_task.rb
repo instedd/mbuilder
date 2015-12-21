@@ -13,6 +13,9 @@ class PeriodicTask < Trigger
 
   after_initialize :set_default_schedule
 
+  after_save :touch_application_lifespan
+  after_destroy :touch_application_lifespan
+
   after_destroy :remove_existing_jobs
 
   def ==(other)
@@ -92,6 +95,10 @@ class PeriodicTask < Trigger
 
   def start_time_in_app_time_zone
     self.schedule.start_time.in_time_zone(application.tz)
+  end
+
+  def self.type_name
+    'periodic'
   end
 
   private

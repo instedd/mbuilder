@@ -7,6 +7,8 @@ Sham.define do
   email { Faker::Internet.email }
   password { Faker::Name.name }
   username { Faker::Internet.user_name }
+  address { Faker::PhoneNumber.phone_number }
+  url { Faker::Internet.url }
 end
 
 User.blueprint do
@@ -19,6 +21,7 @@ end
 Application.blueprint do
   user
   name
+  time_zone "Athens"
 end
 
 MessageTrigger.blueprint do
@@ -38,4 +41,19 @@ end
 
 ValidationTrigger.blueprint do
   application
+end
+
+Channel.blueprint do
+  application
+  name
+end
+
+Contact.blueprint do
+  application
+  address
+end
+
+ExternalService.blueprint do
+  application
+  url
 end

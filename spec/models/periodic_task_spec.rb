@@ -1,5 +1,6 @@
 require "spec_helper"
-describe "PeriodicTask" do
+
+describe PeriodicTask do
 
   before (:each) { Timecop.freeze(Time.utc(2013, 9, 17, 6, 0, 0)) }
   after (:each) { Timecop.return }
@@ -170,5 +171,48 @@ describe "PeriodicTask" do
     ExecutionLogger.where(trigger_id: trigger).count.should be(1)
     log = ExecutionLogger.where(trigger_id: trigger).first
     log.trigger_name.should eq(trigger.name)
+  end
+
+  it 'reports execution to telemetry' do
+    trigger = new_periodic_task do
+      rule IceCube::Rule.daily
+    end
+    trigger.save!
+
+    job = Delayed::Job.first
+    wake_up_event = YAML.load(job.handler)
+
+    InsteddTelemetry.should_receive(:counter_add).with('trigger_execution', {type: 'periodic'}, 1)
+
+    wake_up_event.perform
+  end
+
+  describe 'telemetry', telemetry: true do
+    let!(:application) { Application.make }
+
+    it 'updates the application lifespan when created' do
+      periodic_task = new_periodic_task_for application
+
+      Telemetry::Lifespan.should_receive(:touch_application).with(application)
+
+      periodic_task.save
+    end
+
+    it 'updates the application lifespan when updated' do
+      periodic_task =create_periodic_task_for application
+
+      Telemetry::Lifespan.should_receive(:touch_application).with(application)
+
+      periodic_task.touch
+      periodic_task.save
+    end
+
+    it 'updates the application lifespan when destroyed' do
+      periodic_task = create_periodic_task_for application
+
+      Telemetry::Lifespan.should_receive(:touch_application).with(application)
+
+      periodic_task.destroy
+    end
   end
 end

@@ -69,4 +69,31 @@ describe Application do
     users = application.elastic_record_for application.find_table_by_name('Users')
     users.count.should eq(2)
   end
+
+  describe 'telemetry' do
+    it 'updates the application lifespan when created' do
+      application = Application.make_unsaved
+
+      Telemetry::Lifespan.should_receive(:touch_application).with(application)
+
+      application.save
+    end
+
+    it 'updates the application lifespan when updated' do
+      application = Application.make
+
+      Telemetry::Lifespan.should_receive(:touch_application).with(application)
+
+      application.touch
+      application.save
+    end
+
+    it 'updates the application lifespan when destroyed' do
+      application = Application.make
+
+      Telemetry::Lifespan.should_receive(:touch_application).with(application)
+
+      application.destroy
+    end
+  end
 end

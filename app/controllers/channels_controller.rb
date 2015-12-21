@@ -32,6 +32,7 @@ class ChannelsController < MbuilderApplicationController
         [{ 'name' => 'mbuilder-application', 'value' => application.id }],
       name: "mbuilder_#{Time.now.strftime("%Y%m%d%H%M%S")}"
     channel.pigeon_name = @pigeon_channel.name
+    channel.kind = @pigeon_channel.kind
 
     if save_channels
       redirect_to application_channels_path(application)
