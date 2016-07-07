@@ -94,13 +94,13 @@ class LocalSearch
         values = Array(restriction[:value]).map &:to_s
 
         if values.count == 1
-          musts << { match: { restriction[:field] => values.first } }
+          musts << { match: { ElasticQuery.field_name(restriction[:field]) => values.first } }
         else
           shoulds = []
           match_any_value = { bool: { should: shoulds, minimum_should_match: 1 } }
           musts << match_any_value
           values.each do |v|
-            shoulds << { match: { restriction[:field] => v } }
+            shoulds << { match: { ElasticQuery.field_name(restriction[:field]) => v } }
           end
         end
       end

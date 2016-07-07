@@ -13,7 +13,7 @@ class ElasticSearchSelectors::Grouped < ElasticSearchSelector
       aggregations: {
         "#{group_by}_aggregation" => {
           terms: {
-            field: group_by
+            field: ElasticQuery.field_name(group_by)
           }
         }
       }
