@@ -8,7 +8,7 @@
       .logic-table-name{draggable: 'true', dragstart: 'tableDragStart(table.guid, $event)'}
         %div{'ng-hide' => 'table.readonly'}
           .pill-container
-            %editable-input{'model' => 'table.name', 'e+1-(234)-567-8912ditmode' => 'table.editmode', 'focusmode' => 'table.focusmode'}
+            %editable-input{'model' => 'table.name', 'editmode' => 'table.editmode', 'focusmode' => 'table.focusmode'}
         %span{'ng-show' => 'table.readonly'}
           {{table.name}} (from {{table.kind}})
           %a.refresh{href: 'javascript:', 'ng-click' => 'updateCollection(table)'}
