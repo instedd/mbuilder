@@ -1,3 +1,14 @@
+.pill .arrow {
+  margin: 0px 0px 1px 5px;
+  cursor: pointer;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 4px 0 4px;
+  border-color: #000000 transparent transparent transparent;
+}
+
 .pillInput {
   vertical-align: top;
   border: 1px #CCCCCC solid;
@@ -11,17 +22,6 @@
   line-height: 26px;
 
   cursor: text;
-
-  .pill .arrow {
-    margin: 0px 0px 1px 5px;
-    cursor: pointer;
-    display: inline-block;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 7px 4px 0 4px;
-    border-color: #000000 transparent transparent transparent;
-  }
 
   &.rtl .pill .arrow {
     margin: 0px 5px 0px 0px;
