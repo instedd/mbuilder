@@ -30,6 +30,12 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', '$timeout', 
     return if window.draggedPill == null
     $scope.$emit 'pillOverFieldValue', pill: window.draggedPill, field: $scope.pill, table: $scope.table
 
+  $scope.dragEnterPlaceholder = (event) ->
+    $(event.target).addClass('drop-preview')
+
+  $scope.dragLeavePlaceholder = (event) ->
+    $(event.target).removeClass('drop-preview')
+
   $scope.addNewValue = ->
     $scope.$emit 'pillOverFieldValue', pill: {kind: 'literal', guid: window.guid(), text: '', editmode: true}, field: $scope.pill, table: $scope.table
     $timeout ->

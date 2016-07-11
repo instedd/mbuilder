@@ -502,6 +502,35 @@ body {
         padding: 0px 5px;
       }
     }
+
+    .field-header .pill-container .pill {
+      border: 1px dashed #aaaaaa;
+      background-color: #efefef;
+      position: relative;
+      left: -1px;
+      @include border-radius(15px);
+
+      &.drop-preview {
+        background: darken(#dddddd, 15%);
+        color: $white;
+      }
+    }
+
+    .show-when-dragging {
+      display: block;
+    }
+
+    .hide-when-dragging {
+      display: none;
+    }
+  }
+
+  .hide-when-dragging {
+    display: block;
+  }
+
+  .show-when-dragging {
+    display: none;
   }
 
   &.dragging-table {
