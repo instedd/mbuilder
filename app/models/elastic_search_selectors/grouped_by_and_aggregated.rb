@@ -15,12 +15,12 @@ class ElasticSearchSelectors::GroupedByAndAggregated < ElasticSearchSelector
       aggregations: {
         "#{group_by}_aggregation" => {
           terms: {
-            field: group_by,
+            field: ElasticQuery.field_name(group_by),
           },
           aggregations: {
             "#{field}_#{aggregate}" => {
               es_aggregation(aggregate) => {
-                field: field
+                field: ElasticQuery.field_name(field)
               }
             }
           }

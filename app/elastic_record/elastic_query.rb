@@ -39,7 +39,7 @@ class ElasticQuery
         end
         {
           range: {
-            matcher[1] => {
+            ElasticQuery.field_name(matcher[1]) => {
               gte: operand
             }
           }
@@ -160,9 +160,9 @@ class ElasticQuery
         { match_all: {} }
       when 1
         k, v = query_options.first
-        { match: {k.to_s => {query: v}}}
+        { match: {ElasticQuery.field_name(k) => {query: v}}}
       else
-        { bool: { must: (query_options.map { |k, v| { match: { k.to_s => v.to_single } } }) } }
+        { bool: { must: (query_options.map { |k, v| { match: { ElasticQuery.field_name(k) => v.to_single } } }) } }
       end
 
       body = { query: query }
@@ -183,7 +183,7 @@ class ElasticQuery
       unless @order.empty?
         body[:sort] = @order.map do |sort|
           field, direction = sort.split(' ')
-          {field => direction}
+          {ElasticQuery.field_name(field) => direction}
         end.flatten
       end
 
@@ -206,4 +206,13 @@ class ElasticQuery
     new_record
   end
 
+  def self.field_name(name)
+    name = name.to_s
+    case name
+    when "created_at", "updated_at"
+      name
+    else
+      "properties.#{name}"
+    end
+  end
 end
