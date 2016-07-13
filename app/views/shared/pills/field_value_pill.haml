@@ -1,7 +1,7 @@
 .pill-container
-  .pill.field{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', 'ng-click' => 'addNewValue()', 'ng-right-click' => 'tryShowAggregateFunctionsPopup(pill, $scope, $event)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}', aggregate: '{{pill.aggregate}}'}, 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)', 'ng-class' => '{ellipsis: (lookupPillName(pill).length > 20)}', 'data-tooltip-content' =>'{{lookupPillName(pill)}}'}
-    %span.aggregate {{aggregateLabel(pill.aggregate)}}
+  .pill.field{contenteditable: 'false', draggable: 'true', dragstart: 'dragPill(pill)', 'ng-click' => 'addNewValue()', 'ng-right-click' => 'tryShowAggregateFunctionsPopup(pill, $event)', data: {kind: '{{pill.kind}}', guid: '{{pill.guid}}', aggregate: '{{pill.aggregate}}'}, 'dragenter' => 'dragEnterPlaceholder($event)', 'dragleave' => 'dragLeavePlaceholder($event)', 'ng-class' => '{ellipsis: (lookupPillName(pill).length > 20)}', 'data-tooltip-content' =>'{{lookupPillName(pill)}}'}
+    %span.aggregate {{aggregateLabel(lookupPill(pill).aggregate)}}
     {{lookupPillName(pill)}}
-    %span.arrow{'ng-click' => 'tryShowAggregateFunctionsPopup(pill, $scope, $event)'}
+    %span.arrow{'ng-click' => 'tryShowAggregateFunctionsPopup(pill, $event)'}
     %a.remove_pill{href: 'javascript:', 'ng-click' => 'removePill(pill)'}
       %i.icon-remove

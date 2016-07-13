@@ -369,4 +369,7 @@ angular.module('mbuilder').controller 'ActionsController', ['$scope', '$rootScop
       scope = scope.$parent
     false
 
+  $scope.tryShowAggregateFunctionsPopup = (pill, event) ->
+    $scope.showAggregateFunctionsPopup pill, $scope, event
+
 ]

@@ -57,4 +57,12 @@ angular.module('mbuilder').controller 'FieldController', ['$scope', '$timeout', 
 
     event.preventDefault()
     event.stopPropagation()
+
+  $scope.$on 'AggregateFuncionSelected', (e) ->
+    $scope.$emit 'pillOverFieldValue', pill: $scope.aggregateFunctionPopup.pill, field: $scope.pill, table: $scope.table
+    e.stopPropagation()
+
+  $scope.tryShowAggregateFunctionsPopup = (pill, event) ->
+    realPill = $scope.lookupPill(pill)
+    $scope.showAggregateFunctionsPopup realPill, $scope, event
 ]
