@@ -24,4 +24,8 @@ class NewEntity
   def table
     @table
   end
+
+  def field_values(field, aggregate)
+    @context.select_table_field(@table, [], field, nil, aggregate)
+  end
 end

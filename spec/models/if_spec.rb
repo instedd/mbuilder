@@ -111,6 +111,19 @@ describe "If" do
     assert_sets_equal ctx.messages, []
   end
 
+  it "can use field name in if after create entity (#335)" do
+    new_trigger do
+      message "hello"
+      create_entity "users.name = {phone_number}"
+      if_all("*name equals 'a'") do
+        send_message "'1234'", "Hi"
+      end
+    end
+
+    ctx = accept_message 'sms://1234', 'hello'
+    ctx.messages.length.should eq(1)
+  end
+
   describe "Operator" do
     let(:op) { Actions::If::Operator }
 
