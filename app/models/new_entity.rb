@@ -1,4 +1,6 @@
 class NewEntity
+  attr_accessor :group_by
+
   def initialize(context, table)
     @context = context
     @table = table
@@ -26,6 +28,6 @@ class NewEntity
   end
 
   def field_values(field, aggregate)
-    @context.select_table_field(@table, [], field, nil, aggregate)
+    @context.select_table_field(@table, [], field, group_by, aggregate)
   end
 end

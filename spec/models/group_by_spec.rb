@@ -52,6 +52,15 @@ describe "Aggregate functions" do
       context = accept_message 'sms://1234', 'foo'
       context.messages.should eq([{from: "app://mbuilder", to: "sms://1111", body: "bar, foo: [10, 80], [10, 20]", :"mbuilder-application" => application.id}])
     end
+
+    it "can group by field after creating entity (#334)" do
+      new_trigger do
+        message "hello"
+        create_entity "users.name = {phone_number}"
+        group_by "users.name"
+      end
+      accept_message 'sms://1234', 'hello'
+    end
   end
 
   context "Memory" do
