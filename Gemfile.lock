@@ -214,7 +214,7 @@ GEM
     mini_portile2 (2.0.0)
     multi_json (1.10.1)
     multipart-post (2.0.0)
-    mysql2 (0.3.11)
+    mysql2 (0.3.21)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -367,7 +367,7 @@ DEPENDENCIES
   jquery-rails
   listings
   machinist
-  mysql2
+  mysql2 (~> 0.3.18)
   newrelic_rpm
   ng-rails-csrf
   oj
