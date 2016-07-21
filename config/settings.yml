@@ -1,1 +1,27 @@
 host: localhost:3000
+
+guisso:
+  enabled: true
+  url: http://login.instedd.org
+  client_id:
+  client_secret:
+
+hub:
+  url: http://hub-stg.instedd.org
+  connector_guid:
+  token:
+
+nuntium:
+  url: http://nuntium.instedd.org
+  account:
+  application:
+  password:
+  incoming_username: fill_me
+  incoming_password: fill_me
+
+resourcemap:
+  url: resourcemap.instedd.org
+  use_https: true
+
+telemetry:
+  server_url: http://localhost

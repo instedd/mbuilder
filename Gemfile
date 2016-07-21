@@ -5,7 +5,7 @@ gem 'mysql2', '~> 0.3.18'
 
 gem 'newrelic_rpm'
 
-gem 'rails_config'
+gem 'config'
 gem 'jquery-rails'
 gem 'devise'
 gem 'omniauth'

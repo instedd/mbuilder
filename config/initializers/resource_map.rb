@@ -1,5 +1,5 @@
 module ResourceMap::Config
-  Data = YAML.load_file "#{Rails.root}/config/resource_map.yml"
+  Data = Settings.resourcemap
 
   def self.url
     Data["url"]

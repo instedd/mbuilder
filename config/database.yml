@@ -15,9 +15,4 @@ test:
   password:
 
 production:
-  adapter: mysql2
-  encoding: utf8
-  database: mbuilder
-  pool: 5
-  username: root
-  password:
+  url: <%= ENV['DATABASE_URL'] %>
