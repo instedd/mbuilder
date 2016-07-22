@@ -1,0 +1,28 @@
+db:
+  image: mysql:5.6.31
+  environment:
+    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+elasticsearch:
+  image: elasticsearch:2.3.4
+
+web:
+  build: .
+  links:
+    - db
+    - elasticsearch
+  environment:
+    RAILS_ENV: production
+    DATABASE_URL: mysql://root@db/mbuilder
+  ports:
+    - 80
+
+delayed_job:
+  build: .
+  links:
+    - db
+    - elasticsearch
+  command: bundle exec rake jobs:work
+  environment:
+    RAILS_ENV: production
+    DATABASE_URL: mysql://root@db/mbuilder
