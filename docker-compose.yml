@@ -13,7 +13,7 @@ web:
     - elasticsearch
   environment:
     RAILS_ENV: production
-    DATABASE_URL: mysql://root@db/mbuilder
+    DATABASE_URL: mysql2://root@db/mbuilder
   ports:
     - 80
 
@@ -25,4 +25,4 @@ delayed_job:
   command: bundle exec rake jobs:work
   environment:
     RAILS_ENV: production
-    DATABASE_URL: mysql://root@db/mbuilder
+    DATABASE_URL: mysql2://root@db/mbuilder
