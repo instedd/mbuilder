@@ -21,6 +21,6 @@ class String
   end
 
   def is_number_like?
-    self =~ /\A-?\d+(\.\d+)?\Z/
+    self =~ /\A(\+|\-)?\d+(\.\d+)?\Z/
   end
 end
