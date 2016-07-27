@@ -18,4 +18,5 @@ InsteddTelemetry.setup do |config|
   config.add_collector Telemetry::ColumnsByTableCollector
   config.add_collector Telemetry::NumbersByApplicationAndCountryCollector
   config.add_collector Telemetry::RowsByTableCollector
+  config.add_collector Telemetry::AccountsCollector
 end
