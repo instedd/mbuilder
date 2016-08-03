@@ -53,6 +53,9 @@ class ValidationTriggersController < MbuilderApplicationController
     @field_guid = params[:id]
     @validation_trigger = application.validation_triggers.find_by_field_guid @field_guid
     unless @validation_trigger
+      @validation_trigger = application.validation_triggers.find_by_id @field_guid
+    end
+    unless @validation_trigger
       @validation_trigger = application.validation_triggers.new field_guid: @field_guid
     end
     @validation_trigger.application = application

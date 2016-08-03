@@ -13,6 +13,6 @@
         - simple_list_item trigger.name, edit_application_external_trigger_path(application, trigger)
 
     - if validation_triggers.present?
-      - simple_list :validation_trigger do
+      - simple_list :validation_trigger, icon: :'trigger-external' do
         - validation_triggers.each do |trigger|
           - simple_list_item trigger.field_name, application_validation_trigger_path(application, trigger)
