@@ -1,28 +1,41 @@
-db:
-  image: mysql:5.6.31
-  environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+version: '2.0'
 
-elasticsearch:
-  image: elasticsearch:2.3.4
+services:
+  db:
+    image: mysql:5.6
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - db:/var/lib/mysql
 
-web:
-  build: .
-  links:
-    - db
-    - elasticsearch
-  environment:
-    RAILS_ENV: production
-    DATABASE_URL: mysql2://root@db/mbuilder
-  ports:
-    - 80
+  elasticsearch:
+    image: elasticsearch:2.3
+    command: elasticsearch -Des.network.host=0.0.0.0
+    volumes:
+      - elastic:/usr/share/elasticsearch/data
 
-delayed_job:
-  build: .
-  links:
-    - db
-    - elasticsearch
-  command: bundle exec rake jobs:work
-  environment:
-    RAILS_ENV: production
-    DATABASE_URL: mysql2://root@db/mbuilder
+  web: &rails
+    image: instedd/nginx-rails:2.0
+    environment:
+      RAILS_ENV:
+      ELASTICSEARCH_URL: 'http://elasticsearch:9200'
+      DATABASE_HOST: 'db'
+    volumes:
+      - .:/app
+      - bundle:/usr/local/bundle
+    depends_on:
+      - db
+      - elasticsearch
+    command: 'rails server'
+    ports:
+      - 3000:3000
+
+  jobs_work:
+    <<: *rails
+    command: 'rake jobs:work'
+    ports: []
+
+volumes:
+  db:
+  bundle:
+  elastic:
