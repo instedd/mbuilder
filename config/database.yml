@@ -1,5 +1,6 @@
 development:
   adapter: mysql2
+  host: <%= ENV["DATABASE_HOST"] %>
   encoding: utf8
   database: mbuilder_development
   pool: 5
@@ -8,6 +9,7 @@ development:
 
 test:
   adapter: mysql2
+  host: <%= ENV["DATABASE_HOST"] %>
   encoding: utf8
   database: mbuilder_test
   pool: 5
