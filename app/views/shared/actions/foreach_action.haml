@@ -1,7 +1,7 @@
 .foreach{'ng-controller' => 'ActionsController', 'ng-init' => 'actions=action.actions;action=action'}
   %div
     %i.i25-loop
-    Foreach
+    For each row in
     = render 'shared/table'
   = render 'shared/triggers/actions_contents'
   = render 'shared/triggers/add_sub_action'
