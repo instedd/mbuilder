@@ -6,7 +6,7 @@ ADD Gemfile.lock /app/
 RUN bundle install --jobs 3 --deployment --without development test
 
 # Default environment settings
-ENV POIROT_STDOUT truee
+ENV POIROT_STDOUT true
 ENV POIROT_SUPPRESS_RAILS_LOG true
 ENV PUMA_OPTIONS "--preload -w 4"
 
