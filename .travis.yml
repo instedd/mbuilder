@@ -11,6 +11,7 @@ before_install:
   - docker-compose run --rm --no-deps web bundle install
   - docker-compose up -d db elasticsearch
   - docker-compose run --rm --no-deps web rake db:setup
+  - docker-compose run --rm --no-deps web rake db:test:prepare
 script:
   - docker-compose run --rm web bundle exec rspec
 notifications:
