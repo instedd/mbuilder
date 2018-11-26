@@ -21,8 +21,7 @@ services:
       ELASTICSEARCH_URL: 'http://elasticsearch:9200'
       DATABASE_HOST: 'db'
     volumes:
-      - .:/app
-      - bundle:/usr/local/bundle
+      - ~/cache/bundle:/usr/local/bundle
     depends_on:
       - db
       - elasticsearch
