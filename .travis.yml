@@ -1,6 +1,5 @@
 language: ruby
 cache:
-  - bundler
   directories:
     - ~/cache
 services:
