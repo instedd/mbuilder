@@ -3,7 +3,7 @@ Mbuilder::Application.routes.draw do
 
   get "logs/index"
 
-  devise_for :users, controllers: {omniauth_callbacks: 'omniauth_callbacks'}
+  devise_for :users, controllers: {omniauth_callbacks: 'omniauth_callbacks', sessions: 'sessions'}
   guisso_for :user
 
   resources :applications do
