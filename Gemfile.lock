@@ -1,53 +1,4 @@
 GIT
-  remote: git://github.com/instedd/alto_guisso.git
-  revision: 6d72573c211f45ff95d36847af733449acdfa04a
-  branch: master
-  specs:
-    alto_guisso (0.0.2)
-      rack-oauth2
-
-GIT
-  remote: git://github.com/instedd/alto_guisso_rails.git
-  revision: bd944d08c59e5835285f0d956fb1fb00402fc385
-  branch: master
-  specs:
-    alto_guisso_rails (0.0.1)
-      alto_guisso
-      omniauth
-      omniauth-openid
-      rack-oauth2
-      rails (>= 3.0)
-      ruby-openid
-
-GIT
-  remote: git://github.com/instedd/instedd-bootstrap.git
-  revision: f7677c0a25064c5feb9e199be739253ec8973b3a
-  branch: master
-  specs:
-    instedd-bootstrap (0.0.1)
-      bootstrap-sass (~> 2.3.2)
-      rails
-      sass-rails
-
-GIT
-  remote: git://github.com/instedd/ruby-hub_client.git
-  revision: 9fef94a685e4ba16a9826e00cc22fd88c3a0cef9
-  branch: master
-  specs:
-    hub_client (0.0.1)
-      rest-client
-
-GIT
-  remote: git://github.com/instedd/telemetry_rails.git
-  revision: cc25f9b8bf6cbafa92f9012c72a9da7e5675d392
-  branch: master
-  specs:
-    instedd_telemetry (0.0.1)
-      global_phone
-      global_phone_dbgen
-      rails
-
-GIT
   remote: https://bitbucket.org/instedd/pigeon.git
   revision: 50f5268e3690071937cdcce581a29922ef723bf7
   branch: master
@@ -69,6 +20,37 @@ GIT
       memoist
 
 GIT
+  remote: https://github.com/instedd/alto_guisso
+  revision: 6d72573c211f45ff95d36847af733449acdfa04a
+  branch: master
+  specs:
+    alto_guisso (0.0.2)
+      rack-oauth2
+
+GIT
+  remote: https://github.com/instedd/alto_guisso_rails
+  revision: bd944d08c59e5835285f0d956fb1fb00402fc385
+  branch: master
+  specs:
+    alto_guisso_rails (0.0.1)
+      alto_guisso
+      omniauth
+      omniauth-openid
+      rack-oauth2
+      rails (>= 3.0)
+      ruby-openid
+
+GIT
+  remote: https://github.com/instedd/instedd-bootstrap
+  revision: f7677c0a25064c5feb9e199be739253ec8973b3a
+  branch: master
+  specs:
+    instedd-bootstrap (0.0.1)
+      bootstrap-sass (~> 2.3.2)
+      rails
+      sass-rails
+
+GIT
   remote: https://github.com/instedd/recurring_select
   revision: a20ad65f609239cd9d37dd8904dc9a43726cef31
   branch: instedd
@@ -79,6 +61,24 @@ GIT
       jquery-rails (>= 3.0)
       rails (>= 3.2)
       sass-rails (>= 3.1)
+
+GIT
+  remote: https://github.com/instedd/ruby-hub_client
+  revision: 9fef94a685e4ba16a9826e00cc22fd88c3a0cef9
+  branch: master
+  specs:
+    hub_client (0.0.1)
+      rest-client
+
+GIT
+  remote: https://github.com/instedd/telemetry_rails
+  revision: cc25f9b8bf6cbafa92f9012c72a9da7e5675d392
+  branch: master
+  specs:
+    instedd_telemetry (0.0.1)
+      global_phone
+      global_phone_dbgen
+      rails
 
 GEM
   remote: https://rubygems.org/
