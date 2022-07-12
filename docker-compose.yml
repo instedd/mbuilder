@@ -1,0 +1,42 @@
+version: '2.0'
+
+services:
+  db:
+    image: mysql:5.5
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - db:/var/lib/mysql
+  
+  elasticsearch:
+    image: elasticsearch:1.7.5
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+
+  web: &rails
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      DATABASE_HOST: 'db'
+      ELASTICSEARCH_URL: 'http://elasticsearch:9200'
+    volumes:
+      - .:/app
+      - bundle:/usr/local/bundle
+    tmpfs: /app/tmp
+    depends_on:
+      - db
+      - elasticsearch
+    command: rails server -b 0.0.0.0 -p 80
+    ports:
+      - 80
+
+  delayed:
+    <<: *rails
+    command: "bundle exec rake jobs:work"
+    ports: []
+
+volumes:
+  db:
+  bundle:
+  elasticsearch:

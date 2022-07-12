@@ -59,7 +59,7 @@ group :development, :test do
   gem 'fakefs', :require => 'fakefs/safe'
   gem 'machinist'
   gem 'capistrano', '2.15.4'
-  gem 'rvm-capistrano'
+  gem 'rvm-capistrano', require: false
   gem 'timecop'
   gem 'rails-dev-tweaks'
 end
