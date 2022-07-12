@@ -17,7 +17,11 @@ mBuilder is a Ruby on Rails application. It uses/depends on:
 * **guisso** (optional) in order to integrate with InSTEDD's Single Sign-On. [more](http://login.instedd.org)
 * **resourcemap** (optional) in order to read/write data to resourcemap collections. [more](http://resourcemap.instedd.org)
 
-## Setup
+## Docker Development
+
+You can set up a `docker-compose`-based development environment by running the `./dev-setup.sh` script on the repo's root. Then `docker-compose up` to start all the services.
+
+## Local Setup
 
 1. Checkout
 2. Setup rails project as usual. `$ bundle && rails db:create db:schema:load`
